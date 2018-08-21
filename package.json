@@ -1,0 +1,16 @@
+{
+  "name": "SchoolDiscordBot",
+  "version": "1.0.0",
+  "description": "School discord bot for mananging discord server",
+  "main": "src/index.js",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "moment": "^2.22.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "author": "Matěj Cajthaml",
+  "license": "CC BY-NC-ND"
+}
