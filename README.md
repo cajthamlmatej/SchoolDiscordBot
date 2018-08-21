@@ -7,7 +7,7 @@ This repo is just read-only, it will be hard for you to make it work - this bot 
   - Mute for time
   - Role by reaction click
   - Automatic voting system
-  - Event/tasks managment (older than 7 are moved off)
+  - Event/tasks managment (older than 7 days are moved off)
   - Fun.
 
 
