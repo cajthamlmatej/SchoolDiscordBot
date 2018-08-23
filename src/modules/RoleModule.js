@@ -43,7 +43,7 @@ class RoleModule extends Module {
         let channel = matches[0];
 
         let roleId = this.channelToRoles[channel];
-        let member = reactionMessage.message.guild.members.find(user => user.id == user.id);
+        let member = reactionMessage.message.guild.members.find(u => u.id == user.id);
 
         if (member.roles.find(role => role.id == roleId) != undefined)
             return;
@@ -63,7 +63,7 @@ class RoleModule extends Module {
         let channel = matches[0];
 
         let roleId = this.channelToRoles[channel];
-        let member = reactionMessage.message.guild.members.find(user => user.id == user.id);
+        let member = reactionMessage.message.guild.members.find(u => u.id == user.id);
 
         if (member.roles.find(role => role.id == roleId) == undefined)
             return;
