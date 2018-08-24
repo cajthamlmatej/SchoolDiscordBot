@@ -11,6 +11,7 @@ class RoleModule extends Module {
     init(client, settings, commands) {
         this.channel = client.channels.find(channel => channel.id === settings.channels["role"]);
         this.channelToRoles = settings["channels-to-roles"];
+        this.roles = settings.roles;
         
         this.channel.fetchMessages({ limit: 30 })
             .then(messages => {
@@ -35,43 +36,41 @@ class RoleModule extends Module {
     }
 
     reactionAdd(reactionMessage, user) {
-        if (reactionMessage.message.channel.id != this.channel.id)
+        let message = reactionMessage.message;
+        if (message.channel.id != this.channel.id)
             return;
 
+        let guild = message.guild;
         var matches = [];
-        reactionMessage.message.content.replace(/\<#(.*?)\>/gm, function (m, p1) { matches.push(p1); });
+        message.content.replace(/\<#(.*?)\>/gm, function (m, p1) { matches.push(p1); });
+
         let channel = matches[0];
+        let roleId = this.roles[this.channelToRoles[channel]];
+        guild.fetchMember(user).then(member => {
+            if (member.roles.find(role => role.id == roleId) != undefined)
+                return;
 
-        let roleId = this.channelToRoles[channel];
-        let member = reactionMessage.message.guild.members.find(u => u.id == user.id);
-
-        if (member.roles.find(role => role.id == roleId) != undefined)
-            return;
-
-        let role = reactionMessage.message.guild.roles.find(role => role.id ==  roleId);
-
-        member.addRole(role)
-            .catch(console.error);
+            member.addRole(roleId);
+        }).catch(console.error);
     }
 
     reactionRemove(reactionMessage, user) {
-        if (reactionMessage.message.channel.id != this.channel.id)
+        let message = reactionMessage.message;
+        if (message.channel.id != this.channel.id)
             return;
 
+        let guild = message.guild;
         var matches = [];
-        reactionMessage.message.content.replace(/\<#(.*?)\>/gm, function (m, p1) { matches.push(p1); });
+        message.content.replace(/\<#(.*?)\>/gm, function (m, p1) { matches.push(p1); });
+
         let channel = matches[0];
+        let roleId = this.roles[this.channelToRoles[channel]];
+        guild.fetchMember(user).then(member => {
+            if (member.roles.find(role => role.id == roleId) == undefined)
+                return;
 
-        let roleId = this.channelToRoles[channel];
-        let member = reactionMessage.message.guild.members.find(u => u.id == user.id);
-
-        if (member.roles.find(role => role.id == roleId) == undefined)
-            return;
-
-            let role = reactionMessage.message.guild.roles.find(role => role.id ==  roleId);
-
-        member.removeRole(role)
-            .catch(console.error);
+            member.removeRole(roleId);
+        }).catch(console.error);
     }
 
 }
