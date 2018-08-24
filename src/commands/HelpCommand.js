@@ -13,24 +13,49 @@ class VoteStartCommand extends Command {
     getHelp(){
         return "Zobrazí tuto nápovědu.";
     }
+    getGroup(){
+        return "main";
+    }
+    getRoles(){
+        return ["member"];
+    }
 
     init(client, settings, commands) {
-        this.channel = client.channels.find(channel => channel.id === settings.channels["admin-bot"]);
-        this.prefix = settings.prefix;
+        this.settings = settings;
         this.commands = commands;
     }
 
-    call(args){
+    call(args, channel){
         let embed = new Discord.RichEmbed()
             .setTitle("💼 | Nápověda k používání bota")
             .setColor(0x9b59b6);
         
-        Object.values(this.commands).forEach(command => {
-            embed.addField(this.prefix + command.getUsage(), command.getHelp())
+        let groups = {};
+        Object.keys(this.settings["commands-groups"]).forEach(group => {
+            groups[group] = [];
         });
+
+        Object.values(this.commands).forEach(command => {
+            groups[command.getGroup()].push(command);
+        });
+
+        let help = "";
+        Object.keys(groups).forEach(groupName => {
+            let commands = groups[groupName];
+
+            help += this.settings["commands-groups"][groupName] + "\n";
+            commands.forEach(command => {
+                help += "**" + this.settings.prefix + command.getUsage() + "** - " + command.getHelp() + "\n";
+            });
+
+            help += "\n"
+        });
+
         
-        this.channel.send(embed).catch(console.error);
-        return true;
+        embed.setDescription(help);
+    
+        channel.send(embed).catch(console.error);
+        return false;
     }
 
 }

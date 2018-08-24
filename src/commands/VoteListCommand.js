@@ -11,16 +11,17 @@ class VoteListCommand extends Command {
     getUsage(){
         return "votelist"
     }
+    getGroup(){
+        return "vote";
+    }
     getHelp(){
         return "Vypíše list všech hlasování."
     }
 
     init(client, settings, commands) {
-        this.channel = client.channels.find(channel => channel.id === settings.channels["admin-bot"]);
     }
 
-    call(args){
-        let name = args[0];
+    call(args, channel){
         let votes = fs.readFileSync("./temp/votes.json", "utf8");
         let votesObject = JSON.parse(votes);
 
@@ -40,8 +41,8 @@ class VoteListCommand extends Command {
             .setDescription(list)
             .setColor(0xe67e22)
         
-        this.channel.send(embed);
-        return true;
+        channel.send(embed);
+        return false;
     }
 
 }

@@ -17,17 +17,26 @@ class SSPSBot {
             this.ready();
         });
         this.client.on("message", (message) => {
+            if(message.guild == null || message.guild.id != this.settings.guild)
+                return;
+
             this.message(message);
             Object.values(this.modules).forEach(module => {
                 module.event("message", {message: message});
             })
         });
         this.client.on("messageReactionAdd", (reactionMessage, user) => {
+            if(reactionMessage.message.guild == null || reactionMessage.message.guild.id != this.settings.guild)
+                return;
+
             Object.values(this.modules).forEach(module => {
                 module.event("messageReactionAdd", {reactionMessage: reactionMessage, user: user});
             })
         });
         this.client.on("messageReactionRemove", (reactionMessage, user) => {
+            if(reactionMessage.message.guild == null || reactionMessage.message.guild.id != this.settings.guild)
+                return;
+
             Object.values(this.modules).forEach(module => {
                 module.event("messageReactionRemove", {reactionMessage: reactionMessage, user: user});
             })
@@ -54,36 +63,44 @@ class SSPSBot {
     }
 
     message(message) {
+        if(!message.content.startsWith(this.settings.prefix))
+            return;
+
         if(message.author.id == this.client.user.id)
             return;
 
-        if(message.channel.id != this.settings.channels["admin-bot"])
-            return;
-
-        if(!message.content.startsWith(this.settings.prefix)){
-            //message.delete();
-            return;
-        }
-        
         let args = message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/gm);
 
         let cmd = args[0].replace(this.settings.prefix, "");
+        let command = this.commands[cmd];
 
-        if(this.commands[cmd] == undefined){
-            //message.delete();
+        if(command == undefined)
             return;
-        }
-
-        args.shift();
-        for(var i = 0; i < args.length; i++)
-        {
-            args[i] = args[i].replace(/"/gm, '').replace(/'/gm, '');
-        }
         
-        let deleteMessage = this.commands[cmd].call(args);
-
-        if(deleteMessage)
-            message.delete();
+        let roles = command.getRoles();
+        let havePermissions = false;
+        let guild = message.guild;
+        guild.fetchMember(message.author)
+            .then(member => {
+                roles.forEach(r => {
+                    if(member.roles.find(role => role.id == this.settings[r+ "-role"]))
+                        havePermissions = true;
+                });
+        
+                if(!havePermissions)
+                    return;
+        
+                args.shift();
+                for(var i = 0; i < args.length; i++)
+                {
+                    args[i] = args[i].replace(/"/gm, '').replace(/'/gm, '');
+                }
+                
+                let deleteMessage = this.commands[cmd].call(args, message.channel, message.author);
+        
+                if(deleteMessage)
+                    message.delete();
+            }).catch(console.error);
     }
 }
 

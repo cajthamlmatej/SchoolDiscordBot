@@ -6,11 +6,11 @@ const moment = require('moment');
 class MuteModule extends Module {
 
     getName() {
-        return "eventmodule";
+        return "mutemodule";
     }
 
     init(client, settings, commands) {
-        this.guild = client.channels.find(channel => channel.id === settings.channels["admin-bot"]).guild;
+        this.guild = client.channels.find(channel => channel.id === settings.channels["vote"]).guild;
         this.muteRole = settings["mute-role"];
 
         this.tick();
@@ -32,10 +32,7 @@ class MuteModule extends Module {
                 toRemove.push(userId);
 
                 this.guild.fetchMember(userId).then(member => {
-                    member.removeRoles(member.roles).then(member => {
-                        member.addRoles(mute.roles);
-                        member.removeRole(this.muteRole);
-                    });
+                    member.setRoles(mute.roles);
                 });
             }
         });

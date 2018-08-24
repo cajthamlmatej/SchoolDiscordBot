@@ -1,3 +1,5 @@
+const Discord = require('discord.js');
+
 class Command {
 
     init(client, settings, commands){
@@ -13,7 +15,33 @@ class Command {
     }
 
     getUsage(){
-        throw new Error('You have to implement the method getHelp!');
+        throw new Error('You have to implement the method getUsage!');
+    }
+
+    getGroup(){
+        throw new Error('You have to implement the method getGroup!');
+    }
+
+    getRoles(){
+        return ["moderator"];
+    }
+
+    sendHelp(channel){
+        const embed = new Discord.RichEmbed()
+            .setTitle("❗ | Příliš málo argumentů")
+            .setDescription("Použití příkazu: `" + this.getUsage() + "`")
+            .setColor(0xe74c3c);
+
+        channel.send(embed);
+    }
+
+    sendError(channel, reason){
+        const embed = new Discord.RichEmbed()
+            .setTitle("❗ | Při odesílání příkazu nastala chyba")
+            .setDescription(reason)
+            .setColor(0xe74c3c);
+
+        channel.send(embed);
     }
 
     call(args) {

@@ -9,23 +9,30 @@ class PurgeCommand extends Command {
         return "purge";
     }
     getUsage() {
-        return "purge <id channelu> <počet zpráv>"
+        return "purge <počet zpráv>"
+    }
+    getGroup(){
+        return "manage";
     }
     getHelp() {
-        return "Smaže zadaný počet zpráv v zadanném channelu."
+        return "Smaže zadaný počet zpráv v aktuálním channelu."
     }
 
     init(client, settings, commands) {
-        this.guild = client.channels.find(channel => channel.id === settings.channels["admin-bot"]).guild;
     }
 
-    call(args){
-        let channel = this.guild.channels.find(c => c.id == args[0]);
-
-        let count = args[1];
-
-        if(count <= 0 || count > 100)
+    call(args, channel){
+        if(args.length != 1){
+            this.sendHelp(channel);
             return;
+        }
+
+        let count = args[0];
+
+        if(count <= 0 || count > 100){
+            this.sendError(channel, "Zadaný počet zpráv, které se mají smazat není správný. Minimum zpráv je 1 a nejvíce je 100.")
+            return;
+        }
         
         channel.fetchMessages({ limit: count })
             .then(messages => {

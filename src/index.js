@@ -23,7 +23,7 @@ fs.readFile('./settings/settings.json', (err, fileContents) => {
 
         let commandFile = require("./commands/" + file);
         let command = new commandFile();
-
+        
         commands[command.getName()] = command;
     });
   

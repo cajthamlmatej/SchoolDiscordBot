@@ -10,18 +10,25 @@ class UnMuteCommand extends Command {
     getUsage() {
         return "unmute <jméno člena>"
     }
+    getGroup(){
+        return "manage";
+    }
     getHelp() {
         return "Zruší umlčení člena."
     }
 
     init(client, settings, commands) {
-        this.channel = client.channels.find(channel => channel.id === settings.channels["admin-bot"]);
         this.muteRole = settings["mute-role"];
     }
 
-    call(args){
+    call(args, channel){
+        if(args.length != 1){
+            this.sendHelp(channel);
+            return;
+        }
+        
         let valid = [];
-        this.channel.guild.members.forEach(member => {
+        channel.guild.members.forEach(member => {
             let name = member.nickname == undefined ? member.user.username : member.nickname;
 
             if(name.toLowerCase().includes(args[0].toLowerCase())){
@@ -44,15 +51,10 @@ class UnMuteCommand extends Command {
                 .setDescription("Určete jméno člena více podrobně.\n"+list)
                 .setColor(0xe67e22)
                 
-            this.channel.send(embed);
+            channel.send(embed);
             return;
-        } else if(valid.length <= 0){
-            const embed = new Discord.RichEmbed()
-                .setTitle("🔇 | Nikoho s tímto jménem jsme nenašli")
-                .setDescription("Zkontrolujte diakritiku a správnost jména.")
-                .setColor(0xe74c3c)
-                
-            this.channel.send(embed);
+        } else if(valid.length <= 0){            
+            this.sendError(channel, "Nikoho s tímto jménem jsme nenašli. Zkontrolujte diakritiku a správnost jména.");
             return;
         }
 
@@ -63,20 +65,12 @@ class UnMuteCommand extends Command {
         let mute = mutesObject["mutes"][member.user.id];
 
         if(mute == undefined){
-            const embed = new Discord.RichEmbed()
-                .setTitle("🔇 | Člen není umlčený")
-                .setDescription("Vámi zvolený člen není umlčený.")
-                .setColor(0xe74c3c)
-                
-            this.channel.send(embed);
+            this.sendError(channel, "Vámi zvolený člen není umlčený.");
             return;
         }
 
-        this.channel.guild.fetchMember(member.user.id).then(member => {
-            member.removeRoles(member.roles).then(member => {
-                member.addRoles(mute.roles);
-                member.removeRole(this.muteRole);
-            });
+        channel.guild.fetchMember(member.user.id).then(member => {
+            member.setRoles(mute.roles);
         });
         
         delete mutesObject["mutes"][member.user.id];
@@ -88,8 +82,8 @@ class UnMuteCommand extends Command {
             .setDescription(member.user.username + " již není umlčen.")
             .setColor(0xe67e22);
 
-        this.channel.send(embed);
-        return false;
+        channel.send(embed);
+        return true;
     }
 
 }
