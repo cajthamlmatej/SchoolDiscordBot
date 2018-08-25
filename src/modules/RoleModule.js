@@ -11,6 +11,7 @@ class RoleModule extends Module {
     init(client, settings, commands) {
         this.channel = client.channels.find(channel => channel.id === settings.channels["role"]);
         this.channelToRoles = settings["channels-to-roles"];
+        this.rolelockRole = settings["rolelock-role"];
         this.roles = settings.roles;
         
         this.channel.fetchMessages({ limit: 30 })
@@ -47,6 +48,9 @@ class RoleModule extends Module {
         let channel = matches[0];
         let roleId = this.roles[this.channelToRoles[channel]];
         guild.fetchMember(user).then(member => {
+            if(member.roles.find(role => role.id == this.rolelockRole) != undefined)
+                return;
+            
             if (member.roles.find(role => role.id == roleId) != undefined)
                 return;
 
@@ -66,6 +70,9 @@ class RoleModule extends Module {
         let channel = matches[0];
         let roleId = this.roles[this.channelToRoles[channel]];
         guild.fetchMember(user).then(member => {
+            if(member.roles.find(role => role.id == this.rolelockRole) != undefined)
+                return;
+            
             if (member.roles.find(role => role.id == roleId) == undefined)
                 return;
 

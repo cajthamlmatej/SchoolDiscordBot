@@ -20,6 +20,7 @@ class MuteCommand extends Command {
 
     init(client, settings, commands) {
         this.muteRole = settings["mute-role"];
+        this.moderatorRole = settings["moderator-role"];
     }
 
     call(args, channel){
@@ -72,6 +73,11 @@ class MuteCommand extends Command {
 
         if(mutesObject["mutes"][member.user.id] != undefined){
             this.sendError(channel, "Vámi zvolený člen je již umlčený.");
+            return;
+        }
+
+        if(member.roles.find(r => r.id == this.moderatorRole) != undefined){
+            this.sendError(channel, "Vámi zvolený člen je moderátor. Nemůžete umlčet moderátora.");
             return;
         }
         

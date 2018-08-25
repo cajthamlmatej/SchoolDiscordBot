@@ -40,12 +40,20 @@ class VoteStartCommand extends Command {
         });
 
         let help = "";
+        help += "Příkazy, které může používat člen jsou označeny **__takto__**.\n\n";
+
         Object.keys(groups).forEach(groupName => {
             let commands = groups[groupName];
 
             help += this.settings["commands-groups"][groupName] + "\n";
             commands.forEach(command => {
-                help += "**" + this.settings.prefix + command.getUsage() + "** - " + command.getHelp() + "\n";
+                let name;
+                if(command.getRoles().includes("member"))
+                    name = "**__" + this.settings.prefix + command.getUsage() + "__**";
+                else
+                    name = "**" + this.settings.prefix + command.getUsage() + "**";
+
+                help += name + " - " + command.getHelp() + "\n";
             });
 
             help += "\n"

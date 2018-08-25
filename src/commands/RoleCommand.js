@@ -21,6 +21,7 @@ class RoleCommand extends Command {
 
     init(client, settings, commands) {
         this.roles = settings.roles;
+        this.rolelockRole = settings["rolelock-role"];
     }
 
     call(args, channel, user){
@@ -47,6 +48,9 @@ class RoleCommand extends Command {
         let guild = channel.guild;
 
         guild.fetchMember(user).then(member => {
+            if(member.roles.find(r => r.id == this.rolelockRole) != undefined)
+                return;
+            
             let roleId = this.roles[role];
             if(member.roles.find(r => r.id == roleId) != undefined){
                 member.removeRole(roleId).catch(console.error);

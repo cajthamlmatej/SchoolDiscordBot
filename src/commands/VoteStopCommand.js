@@ -30,7 +30,6 @@ class VoteStopCommand extends Command {
         let name = args[0];
         let votes = fs.readFileSync("./temp/votes.json", "utf8");
         let votesObject = JSON.parse(votes);
-        let name = args[0];
 
         let vote = votesObject["votes"][name];
 
