@@ -9,7 +9,7 @@ class VoteStartCommand extends Command {
         return "votestart";
     }
     getUsage(){
-        return "votestart <jméno hlasování> <popis hlasování>"
+        return "votestart <global/private> <jméno hlasování> <popis hlasování> [možnosti rozdělene středníkem]"
     }
     getGroup(){
         return "vote";
@@ -20,37 +20,75 @@ class VoteStartCommand extends Command {
 
     init(client, settings, commands) {
         this.voteChannel = client.channels.find(channel => channel.id === settings.channels["vote"]);
+        this.emojis = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣", "🔟"];
     }
 
     call(args, channel){
-        if(args.length != 2){
+        if(args.length < 3 && arg.length > 4){
             this.sendHelp(channel);
+            return;
+        }
+
+        let type = args[0];
+        if(!["global", "private"].includes(type)){
+            this.sendError(channel, "První argument musí být zda se jedná o globální (global) nebo o soukromé (private) hlasování.");
             return;
         }
 
         let votes = fs.readFileSync("./temp/votes.json", "utf8");
         let votesObject = JSON.parse(votes);
 
-        let name = args[0];
+        let name = args[1];
         
         if(votesObject["votes"][name] != undefined){
             this.sendError(channel, "Hlasování s tímto jménem již existuje, zvolte prosím jiné jméno.");
             return;
         }
 
-        let description = args[1];
+        let description = args[2];
+        let options = {"👍": "ANO", "👎": "NE"};
+
+        if(args.length != 3){
+            let argOptions = args[3].split(";");
+
+            if(argOptions.length > 10){
+                this.sendError(channel, "Zadal jste více možností (>10) než je možné. Zadejte menší počet.");
+                return;
+            }
+
+            options = {};
+
+            let i = 0;
+            argOptions.forEach(option => {
+                options[this.emojis[i]] = option;   
+                
+                i++;
+            });
+        }
+
+        let optionsString = "";
+
+        Object.keys(options).forEach(optionEmoji => {
+            optionsString += optionEmoji + " pro **" + options[optionEmoji] + "**\n";
+        });
 
         let embed = new Discord.RichEmbed()
             .setTitle("📆 | Nové hlasování")
-            .setDescription(description + "\n\nhlasujte pomocí reakcí 👍 pro **ANO** a 👎 pro **NE**")
+            .setDescription(description + "\n\nhlasujte pomocí reakce pro možnosti: \n" + optionsString)
             .setColor(0xe67e22);
 
-        this.voteChannel.send(embed).then(message => {
-            message.react("👍").then(reaction => {
-                message.react("👎");
+        let voteChannel = channel;
+
+        if(type == "global")
+            voteChannel = this.voteChannel;
+
+        voteChannel.send(embed).then(message => {
+            let result = Promise.resolve();
+            Object.keys(options).forEach(option => {
+                result = result.then(() => message.react(option));
             });
-            
-            votesObject["votes"][name] = {"id": message.id, "description": description};
+
+            votesObject["votes"][name] = {"id": message.id, "description": description, "options": options, "channel": voteChannel.id};
 
             fs.writeFileSync("./temp/votes.json", JSON.stringify(votesObject));
         }).catch(console.error);

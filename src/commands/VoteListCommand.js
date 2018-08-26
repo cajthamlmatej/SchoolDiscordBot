@@ -15,13 +15,13 @@ class VoteListCommand extends Command {
         return "vote";
     }
     getHelp(){
-        return "Vypíše list všech hlasování."
+        return "Vypíše list všech hlasování do **DM**."
     }
 
     init(client, settings, commands) {
     }
 
-    call(args, channel){
+    call(args, channel, user){
         let votes = fs.readFileSync("./temp/votes.json", "utf8");
         let votesObject = JSON.parse(votes);
 
@@ -30,7 +30,7 @@ class VoteListCommand extends Command {
         Object.keys(votesObject["votes"]).forEach(voteKey => {
             let vote = votesObject["votes"][voteKey];
 
-            list += "\n**" + voteKey + "** - " + vote["description"];
+            list += "\n**" + voteKey + "**";
         });
 
         list += "\n"
@@ -41,7 +41,7 @@ class VoteListCommand extends Command {
             .setDescription(list)
             .setColor(0xe67e22)
         
-        channel.send(embed);
+        user.createDM().then(dm => dm.send(embed)).catch(console.error);
         return false;
     }
 

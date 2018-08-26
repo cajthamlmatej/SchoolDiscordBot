@@ -18,7 +18,7 @@ class VoteStopCommand extends Command {
     }
 
     init(client, settings, commands) {
-        this.voteChannel = client.channels.find(channel => channel.id === settings.channels["vote"]);
+        this.client = client;
     }
 
     call(args, channel){
@@ -39,34 +39,53 @@ class VoteStopCommand extends Command {
         }
         let voteMessageId = vote["id"];
 
-        this.voteChannel.fetchMessage(voteMessageId).then(message => {                
-            let yesReactions = message.reactions.find(reaction => reaction.emoji.name === "👍");
-            let yesCount = yesReactions.count - 1;
-            let noReactions = message.reactions.find(reaction => reaction.emoji.name === "👎");
-            let noCount = noReactions.count - 1;
+        this.client.channels.find(c => c.id == vote["channel"]).fetchMessage(voteMessageId).then(message => {        
+            let reactions = message.reactions;
+            let reactionCount = 0;
+            let winningCount = 0;
+            let winningEmoji = "";
 
-            let allReactions = yesCount + noCount;
-            let today = new Date();
+            reactions.forEach(reaction => {
+                reactionCount += reaction.count - 1;
+            });
+            
+            let votesString = "";
+            let weight = 100 / reactionCount;
+            
+            reactions.forEach(reaction => {
+                let count = reaction.count - 1;
+
+                if(count > winningCount){
+                    winningCount = count;
+                    winningEmoji = reaction.emoji + "";
+                }
+
+                votesString += "`" + (count) + " hlasů (" + this.addZero(((count) * weight)) + "%)` " + reaction.emoji + " " + vote["options"][reaction.emoji] + "\n";
+            });
 
             const embed = new Discord.RichEmbed()
                 .setTitle("📆 | Konec hlasování \"" + name + "\"")
                 .setDescription(vote["description"])
                 .setColor(0xe67e22)
-                .addField("🖐 Počet hlasů", allReactions, true)
-                .addField("💪 Váha jednoho hlasu", 100 / allReactions + "%", true)
+                .addField("☝ Hlasy", votesString, true)
                 .addBlankField()
-                .addField("👍 Hlasů pro ANO", yesCount, true)
-                .addField("👎 Hlasů pro NE", noCount, true)
-                .addBlankField()
-                .addField("👌 Procent potřeba pro schválení", "> 50%", true)
-                .addField("👍 Pro v procentech", 100 / allReactions * yesCount + "%", true)
-                .addBlankField()
-                .addField("Výsledek", 100 / allReactions * yesCount > 50 ? "**SCHVÁLENO**" : "**NESCHÁVELNO**");;
+                .addField("🖐 Statistiky", "**Počet hlasů**: " + reactionCount + "\n**Váha jednoho hlasu**: " + weight+ "%\n", true)
+                .addField("👍 Výsledek", "Vyhrála možnost **" + winningEmoji + " " + vote["options"][winningEmoji] + "**", true);
             
-            this.voteChannel.send(embed);
+            this.client.channels.find(c => c.id == vote["channel"]).send(embed);
         }).catch(console.error);
 
         return false;
+    }
+
+    addZero(i){
+        if (i < 10){
+            return "00" + i; 
+        } else if(i < 100){
+            return "0" + i;
+        }
+
+        return i;
     }
 }
 
