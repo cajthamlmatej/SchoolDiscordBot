@@ -71,7 +71,7 @@ class SSPSBot {
 
         let args = message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/gm);
 
-        let cmd = args[0].replace(this.settings.prefix, "");
+        let cmd = args[0].replace(this.settings.prefix, "").toLowerCase();
         let command = this.commands[cmd];
 
         if(command == undefined)

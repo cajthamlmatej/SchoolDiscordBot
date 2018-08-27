@@ -1,6 +1,6 @@
 {
   "name": "SchoolDiscordBot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "School discord bot for mananging discord server",
   "main": "src/index.js",
   "dependencies": {
