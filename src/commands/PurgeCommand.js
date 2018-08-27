@@ -18,7 +18,7 @@ class PurgeCommand extends Command {
         return "Smaže zadaný počet zpráv v aktuálním channelu."
     }
 
-    init(client, settings, commands) {
+    init(bot) {
     }
 
     call(args, channel){

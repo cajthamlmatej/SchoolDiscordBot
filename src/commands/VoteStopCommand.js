@@ -17,8 +17,8 @@ class VoteStopCommand extends Command {
         return "Ukončí hlasování, zobrazí statistiky a výsledek hlasování."
     }
 
-    init(client, settings, commands) {
-        this.client = client;
+    init(bot) {
+        this.client = bot.client;
     }
 
     call(args, channel){

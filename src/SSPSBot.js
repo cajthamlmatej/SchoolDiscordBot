@@ -52,11 +52,11 @@ class SSPSBot {
 
         Object.values(this.commands).forEach(command => {
             console.log("Init command " + command.getName());
-            command.init(this.client, this.settings, this.commands, this.modules); 
+            command.init(this); 
         });
         Object.values(this.modules).forEach(module => {
             console.log("Init module " + module.getName());
-            module.init(this.client, this.settings, this.commands); 
+            module.init(this); 
         })
 
         console.log("Bot " + this.name + " started.");
@@ -83,7 +83,7 @@ class SSPSBot {
         guild.fetchMember(message.author)
             .then(member => {
                 roles.forEach(r => {
-                    if(member.roles.find(role => role.id == this.settings[r+ "-role"]))
+                    if(member.roles.find(role => role.id == this.settings[r + "-role"]))
                         havePermissions = true;
                 });
         

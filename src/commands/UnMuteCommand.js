@@ -17,8 +17,8 @@ class UnMuteCommand extends Command {
         return "Zruší umlčení člena."
     }
 
-    init(client, settings, commands) {
-        this.muteRole = settings["mute-role"];
+    init(bot) {
+        this.muteRole = bot.settings["mute-role"];
     }
 
     call(args, channel){

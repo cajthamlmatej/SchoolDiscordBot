@@ -18,9 +18,9 @@ class MuteCommand extends Command {
         return "Umlčí **člena** na zadaný počet minut."
     }
 
-    init(client, settings, commands) {
-        this.muteRole = settings["mute-role"];
-        this.moderatorRole = settings["moderator-role"];
+    init(bot) {
+        this.muteRole = bot.settings["mute-role"];
+        this.moderatorRole = bot.settings["moderator-role"];
     }
 
     call(args, channel){

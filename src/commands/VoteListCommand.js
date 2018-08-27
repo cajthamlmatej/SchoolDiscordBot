@@ -18,7 +18,7 @@ class VoteListCommand extends Command {
         return "Vypíše list všech hlasování do **DM**."
     }
 
-    init(client, settings, commands) {
+    init(bot) {
     }
 
     call(args, channel, user){

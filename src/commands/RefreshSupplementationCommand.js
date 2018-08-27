@@ -18,12 +18,11 @@ class RefreshSupplementationCommand extends Command {
         return "Okamžitě zkontroluje a upraví suplování."
     }
 
-    init(client, settings, commands, modules) {
-        this.supplementationModule = modules["supplementationmodule"];
+    init(bot) {
+        this.supplementationModule = bot.modules["supplementationmodule"];
     }
 
     call(args, channel){
-        console.log("ahoj");
         this.supplementationModule.tick();
 
         const embed = new Discord.RichEmbed()

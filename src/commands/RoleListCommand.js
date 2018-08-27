@@ -21,8 +21,8 @@ class RoleListCommand extends Command {
         return "Vypíše seznam rolí."
     }
 
-    init(client, settings, commands) {
-        this.roles = settings.roles;
+    init(bot) {
+        this.roles = bot.settings.roles;
     }
 
     call(args, channel){

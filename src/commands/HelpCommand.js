@@ -20,9 +20,10 @@ class VoteStartCommand extends Command {
         return ["member"];
     }
 
-    init(client, settings, commands) {
-        this.settings = settings;
-        this.commands = commands;
+    init(bot) {
+        this.commandsGroups = bot.settings["command-groups"];
+        this.prefix = bot.settings["prefix"];
+        this.commands = bot.commands;
     }
 
     call(args, channel){
@@ -31,7 +32,7 @@ class VoteStartCommand extends Command {
             .setColor(0x9b59b6);
         
         let groups = {};
-        Object.keys(this.settings["commands-groups"]).forEach(group => {
+        Object.keys(this.commandsGroups).forEach(group => {
             groups[group] = [];
         });
 
@@ -45,13 +46,13 @@ class VoteStartCommand extends Command {
         Object.keys(groups).forEach(groupName => {
             let commands = groups[groupName];
 
-            help += this.settings["commands-groups"][groupName] + "\n";
+            help += this.commandsGroups[groupName] + "\n";
             commands.forEach(command => {
                 let name;
                 if(command.getRoles().includes("member"))
-                    name = "**__" + this.settings.prefix + command.getUsage() + "__**";
+                    name = "**__" + this.prefix + command.getUsage() + "__**";
                 else
-                    name = "**" + this.settings.prefix + command.getUsage() + "**";
+                    name = "**" + this.prefix + command.getUsage() + "**";
 
                 help += name + " - " + command.getHelp() + "\n";
             });

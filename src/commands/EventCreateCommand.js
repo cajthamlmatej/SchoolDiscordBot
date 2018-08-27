@@ -18,10 +18,10 @@ class EventCreateCommand extends Command {
         return "Vytvoří událost/úkol, který se po týdnu archívuje."
     }
 
-    init(client, settings, commands) {
-        this.eventChannel = client.channels.find(channel => channel.id === settings.channels["event"]);
+    init(bot) {
+        this.eventChannel = bot.client.channels.find(channel => channel.id === settings.channels["event"]);
 
-        this.roles = settings.roles;
+        this.roles = bot.settings.roles;
     }
 
     call(args, channel){

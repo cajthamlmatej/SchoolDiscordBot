@@ -19,9 +19,9 @@ class RoleCommand extends Command {
         return "Přidá nebo odebere zadanou roli."
     }
 
-    init(client, settings, commands) {
-        this.roles = settings.roles;
-        this.rolelockRole = settings["rolelock-role"];
+    init(bot) {
+        this.roles = bot.settings.roles;
+        this.rolelockRole = bot.settings["rolelock-role"];
     }
 
     call(args, channel, user){
