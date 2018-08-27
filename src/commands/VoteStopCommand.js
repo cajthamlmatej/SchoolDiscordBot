@@ -34,7 +34,7 @@ class VoteStopCommand extends Command {
         let vote = votesObject["votes"][name];
 
         if(vote == undefined){
-            this.sendError(channel, "Hlasování s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazel votelist.");
+            this.sendError(channel, "Hlasování s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazem votelist.");
             return;
         }
         let voteMessageId = vote["id"];
@@ -42,8 +42,6 @@ class VoteStopCommand extends Command {
         this.client.channels.find(c => c.id == vote["channel"]).fetchMessage(voteMessageId).then(message => {        
             let reactions = message.reactions;
             let reactionCount = 0;
-            let winningCount = 0;
-            let winningEmoji = "";
 
             reactions.forEach(reaction => {
                 if(vote["options"][reaction.emoji] == undefined)
@@ -54,6 +52,8 @@ class VoteStopCommand extends Command {
             
             let votesString = "";
             let weight = 100 / reactionCount;
+
+            let votes = {};
             
             reactions.forEach(reaction => {
                 if(vote["options"][reaction.emoji] == undefined)
@@ -61,13 +61,37 @@ class VoteStopCommand extends Command {
                     
                 let count = reaction.count - 1;
 
-                if(count > winningCount){
-                    winningCount = count;
-                    winningEmoji = reaction.emoji + "";
-                }
+                votes[reaction.emoji] = count;
 
                 votesString += "`" + (count) + " hlasů (" + this.addZero(((count) * weight)) + "%)` " + reaction.emoji + " " + vote["options"][reaction.emoji] + "\n";
             });
+
+            let sortedVotes = Object.keys(votes).sort(function(a, b) { return votes[b] - votes[a]; });
+            let winners = [];
+            winners.push(sortedVotes[0]);
+
+            sortedVotes.forEach(vote => {
+                if(votes[winners[0]] === votes[vote]){
+                    winners.push(vote);
+                }
+            });
+
+            let winningChoice = "";
+
+            if(winners.length === 1){
+                winningChoice = "Vyhrála možnost **" + winningEmoji + " " + vote["options"][winningEmoji] + "**";
+            }else {
+                let choiceString = "";
+
+                winners.forEach(winner => {
+                    choiceString += winner + " " + vote["options"][winner];
+                    if(winners[winners.length - 1] != winner){
+                        choiceString += ", ";
+                    }
+                });
+
+                winningChoice = "Vyhrály možnosti **" + choiceString + "**";
+            }
 
             const embed = new Discord.RichEmbed()
                 .setTitle("📆 | Konec hlasování \"" + name + "\"")
@@ -76,7 +100,7 @@ class VoteStopCommand extends Command {
                 .addField("☝ Hlasy", votesString, true)
                 .addBlankField()
                 .addField("🖐 Statistiky", "**Počet hlasů**: " + reactionCount + "\n**Váha jednoho hlasu**: " + weight+ "%\n", true)
-                .addField("👍 Výsledek", "Vyhrála možnost **" + winningEmoji + " " + vote["options"][winningEmoji] + "**", true);
+                .addField("👍 Výsledek", winningChoice, true);
             
             this.client.channels.find(c => c.id == vote["channel"]).send(embed);
         }).catch(console.error);
