@@ -24,8 +24,6 @@ class VoteStartCommand extends Command {
         this.commandsGroups = bot.settings["commands-groups"];
         this.prefix = bot.settings["prefix"];
         this.commands = bot.commands;
-
-        console.log(bot);
     }
 
     call(args, channel){
