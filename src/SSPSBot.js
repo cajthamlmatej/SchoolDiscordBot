@@ -52,7 +52,7 @@ class SSPSBot {
 
         Object.values(this.commands).forEach(command => {
             console.log("Init command " + command.getName());
-            command.init(this.client, this.settings, this.commands); 
+            command.init(this.client, this.settings, this.commands, this.modules); 
         });
         Object.values(this.modules).forEach(module => {
             console.log("Init module " + module.getName());
