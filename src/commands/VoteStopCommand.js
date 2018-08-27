@@ -46,6 +46,9 @@ class VoteStopCommand extends Command {
             let winningEmoji = "";
 
             reactions.forEach(reaction => {
+                if(vote["options"][reaction.emoji] == undefined)
+                    return;
+                
                 reactionCount += reaction.count - 1;
             });
             
@@ -53,6 +56,9 @@ class VoteStopCommand extends Command {
             let weight = 100 / reactionCount;
             
             reactions.forEach(reaction => {
+                if(vote["options"][reaction.emoji] == undefined)
+                    return;
+                    
                 let count = reaction.count - 1;
 
                 if(count > winningCount){

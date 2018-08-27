@@ -24,7 +24,7 @@ class VoteStartCommand extends Command {
     }
 
     call(args, channel){
-        if(args.length < 3 && arg.length > 4){
+        if(args.length < 3 && args.length > 4){
             this.sendHelp(channel);
             return;
         }
