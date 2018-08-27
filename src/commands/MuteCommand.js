@@ -21,6 +21,7 @@ class MuteCommand extends Command {
     init(bot) {
         this.muteRole = bot.settings["mute-role"];
         this.moderatorRole = bot.settings["moderator-role"];
+        this.maxMuteLength = bot.settings["max-mute-length"];
     }
 
     call(args, channel){
@@ -61,8 +62,8 @@ class MuteCommand extends Command {
         }
 
         let minutes = args[1];
-        if(minutes <= 0 || minutes >= 1440){
-            this.sendError(channel, "Nesprávný počet minut. Počet minut k umlčení není správný, minimum minut je 1 a nejvíce je 1440.");
+        if(minutes <= 0 || minutes >= this.maxMuteLength){
+            this.sendError(channel, "Nesprávný počet minut. Počet minut k umlčení není správný, minimum minut je 1 a nejvíce je " + this.maxMuteLength + ".");
             return;
         }
 
