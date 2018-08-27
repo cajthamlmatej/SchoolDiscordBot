@@ -19,7 +19,7 @@ class EventCreateCommand extends Command {
     }
 
     init(bot) {
-        this.eventChannel = bot.client.channels.find(channel => channel.id === settings.channels["event"]);
+        this.eventChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels["event"]);
 
         this.roles = bot.settings.roles;
     }

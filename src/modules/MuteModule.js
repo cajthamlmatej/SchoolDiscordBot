@@ -9,9 +9,9 @@ class MuteModule extends Module {
         return "mutemodule";
     }
 
-    init(client, settings, commands) {
-        this.guild = client.channels.find(channel => channel.id === settings.channels["vote"]).guild;
-        this.muteRole = settings["mute-role"];
+    init(bot) {
+        this.guild = bot.client.channels.find(channel => channel.id === bot.settings.channels["vote"]).guild;
+        this.muteRole = bot.settings["mute-role"];
 
         this.tick();
         setInterval(() => this.tick(), 10000);

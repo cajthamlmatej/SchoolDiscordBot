@@ -11,14 +11,14 @@ class SupplementationModule extends Module {
         return "supplementationmodule";
     }
 
-    init(client, settings, commands) {
+    init(bot) {
         this.webOptions = {
             host: 'ssps.cz',
             path: '/student/'
         }
-        this.client = client;
-        this.supplementationHighlight = settings["supplementation-highlight"];
-        this.channel = settings["channels"]["supplementation"];
+        this.client = bot.client;
+        this.supplementationHighlight = bot.settings["supplementation-highlight"];
+        this.channel = bot.settings["channels"]["supplementation"];
         this.tick();
         setInterval(() => this.tick(), 1800000);
     }

@@ -6,8 +6,8 @@ class AutoReactionModule extends Module {
         return "autoreactionmodule";
     }
 
-    init(client, settings, commands) {
-        this.settings = settings["auto-reaction"];
+    init(bot) {
+        this.settings = bot.settings["auto-reaction"];
     }
 
     event(name, args){

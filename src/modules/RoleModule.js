@@ -8,11 +8,11 @@ class RoleModule extends Module {
         return "rolemodule";
     }
 
-    init(client, settings, commands) {
-        this.channel = client.channels.find(channel => channel.id === settings.channels["role"]);
-        this.channelToRoles = settings["channels-to-roles"];
-        this.rolelockRole = settings["rolelock-role"];
-        this.roles = settings.roles;
+    init(bot) {
+        this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels["role"]);
+        this.channelToRoles = bot.settings["channels-to-roles"];
+        this.rolelockRole = bot.settings["rolelock-role"];
+        this.roles = bot.settings.roles;
         
         this.channel.fetchMessages({ limit: 30 })
             .then(messages => {

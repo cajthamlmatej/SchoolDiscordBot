@@ -19,7 +19,7 @@ class VoteStartCommand extends Command {
     }
 
     init(bot) {
-        this.voteChannel = bot.client.channels.find(channel => channel.id === settings.channels["vote"]);
+        this.voteChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels["vote"]);
         this.emojis = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣", "🔟"];
     }
 

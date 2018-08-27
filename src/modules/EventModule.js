@@ -9,9 +9,9 @@ class EventModule extends Module {
         return "eventmodule";
     }
 
-    init(client, settings, commands) {
-        this.channel = client.channels.find(channel => channel.id === settings.channels["event"]);
-        this.archiveChannel = client.channels.find(channel => channel.id === settings.channels["event-archive"]);
+    init(bot) {
+        this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels["event"]);
+        this.archiveChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels["event-archive"]);
 
 
         this.tick();
