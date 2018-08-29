@@ -12,24 +12,23 @@ class EventModule extends Module {
     init(bot) {
         this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels["event"]);
         this.archiveChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels["event-archive"]);
+        this.roles = bot.settings.roles;
 
+        this.tempFile = "./temp/events.json";
 
         this.tick();
         setInterval(() => this.tick(), 1800000);
     }
 
     tick(){
-        let events = fs.readFileSync("./temp/events.json", "utf8");
-        let eventsObject = JSON.parse(events);
-
+        let events = this.getEvents(); 
         let toRemove = [];
 
-        Object.keys(eventsObject["events"]).forEach(messageId => {
-            let to = eventsObject["events"][messageId];
+        Object.keys(events).forEach(messageId => {
+            let to = events[messageId];
             let todayDate = moment();
             let eventDate = moment(to, "D. M. YYYY");
 
-            console.log(todayDate.diff(eventDate, "days"));
             if(todayDate.diff(eventDate, "days") > 7){
                 this.channel.fetchMessage(messageId)
                     .then(message => {
@@ -42,11 +41,51 @@ class EventModule extends Module {
             }
         });
 
-        toRemove.forEach(remove => {
-            delete eventsObject["events"][remove];
+        this.removeEventsFromFile(toRemove);
+    }
+
+    addEvent(type, from, to, role, place, subject, description){
+        let embed = new Discord.RichEmbed()
+            .setTitle("🕜 | " + (type == "udalost") ? "Nová událost" : "Nový úkol")
+            .setDescription(description)
+            .setColor(0xe67e22);
+
+        embed.addField("Skupina", this.channel.guild.roles.find(r => r.id == this.roles[role]), true);
+        embed.addField("Předmět", subject == "all" ? "?" : subject, true);
+        
+        embed.addField(from == to ? "Datum" : "Od kdy do kdy", from == to ? to : (from + " do " + to), true);
+        embed.addField("Místo", place == "all" ? "Škola" : place);
+        
+        this.channel.send(embed).then(message => {
+            this.addEventToFile(message.id, to);
+        });
+    }
+
+    addEventToFile(messageId, toDate){
+        let events = fs.readFileSync(this.tempFile, "utf8");
+        let eventsObject = JSON.parse(events);
+
+        eventsObject["events"][messageId] = toDate;
+
+        fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
+    }
+
+    removeEventsFromFile(es){
+        let events = fs.readFileSync(this.tempFile, "utf8");
+        let eventsObject = JSON.parse(events);
+
+        es.forEach(event => {
+            delete eventsObject["events"][event];
         });
 
-        fs.writeFileSync("./temp/events.json", JSON.stringify(eventsObject));
+        fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
+    }
+
+    getEvents(){
+        let events = fs.readFileSync(this.tempFile, "utf8");
+        let eventsObject = JSON.parse(events);
+
+        return eventsObject["events"];
     }
 
     event(name, args){

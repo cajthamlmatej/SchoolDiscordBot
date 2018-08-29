@@ -1,25 +1,25 @@
-
 const Command = require("./Command");
 const Discord = require('discord.js');
 const fs = require('fs');
 
-class VoteDeleteCommand extends Command {
+class VoteEndCommand extends Command {
 
     getName() {
-        return "votedelete";
+        return "voteend";
     }
     getUsage(){
-        return "votedelete <jméno hlasování>"
+        return "voteend <jméno hlasování>"
     }
     getGroup(){
         return "vote";
     }
     getHelp(){
-        return "Smaže hlasování z paměti."
+        return "Ukončí hlasování, zobrazí statistiky a výsledek hlasování."
     }
 
     init(bot) {
         this.voteModule = bot.modules["votemodule"];
+        this.client = bot.client;
     }
 
     call(args, channel){
@@ -29,16 +29,16 @@ class VoteDeleteCommand extends Command {
         }
 
         let name = args[0];
-        
+
         if(!this.voteModule.exists(name)){
             this.sendError(channel, "Hlasování s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazem votelist.");
             return;
         }
 
-        this.voteModule.deleteVote(name, channel);
+        this.voteModule.endVote(name);
+
         return false;
     }
-
 }
 
-module.exports = VoteDeleteCommand;
+module.exports = VoteEndCommand;

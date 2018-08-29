@@ -109,6 +109,17 @@ class SupplementationModule extends Module {
         request.end();
     }
 
+    refresh(channel){
+        this.tick();
+
+        const embed = new Discord.RichEmbed()
+            .setTitle("👓 | Suplování bylo aktualizováno.")
+            .setDescription("Suplování bylo aktualizováno dle webových stránek školy.")
+            .setColor(0xe67e22);
+
+        channel.send(embed);
+    }
+
     event(name, args){
 
     }

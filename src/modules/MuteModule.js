@@ -12,36 +12,108 @@ class MuteModule extends Module {
     init(bot) {
         this.guild = bot.client.channels.find(channel => channel.id === bot.settings.channels["vote"]).guild;
         this.muteRole = bot.settings["mute-role"];
+        this.moderatorRole = bot.settings["moderator-role"];
+
+        this.tempFile = "./temp/mutes.json";
 
         this.tick();
         setInterval(() => this.tick(), 10000);
     }
 
     tick(){
-        let mutes = fs.readFileSync("./temp/mutes.json", "utf8");
-        let mutesObject = JSON.parse(mutes); 
-
+        let mutes = this.getMutes();
         let toRemove = [];
 
-        Object.keys(mutesObject["mutes"]).forEach(userId => {
-            let mute = mutesObject["mutes"][userId];
+        Object.keys(mutes).forEach(userId => {
+            let mute = mutes[userId];
             let current = moment().format("X");
             let expiration = mute.expiration;
 
             if(current > expiration){
                 toRemove.push(userId);
 
-                this.guild.fetchMember(userId).then(member => {
-                    member.setRoles(mute.roles);
-                });
+                this.setMuteRoles(userId, mute.roles);
             }
         });
 
-        toRemove.forEach(remove => {
-            delete mutesObject["mutes"][remove];
+        this.removeMutesFromFile(toRemove);
+    }
+
+    addMute(member, lengthInMinutes, reason){
+        let mutes = fs.readFileSync(this.tempFile, "utf8");
+        let mutesObject = JSON.parse(mutes); 
+
+        let expiration = moment().add(lengthInMinutes, "m").format("X");
+        let roles = [];
+ 
+        member.roles.forEach(role => {
+            roles.push(role.id);
         });
 
-        fs.writeFileSync("./temp/mutes.json", JSON.stringify(mutesObject));
+        member.setRoles([this.muteRole]).then(member => {
+            mutesObject["mutes"][member.user.id] = {expiration: expiration, reason: reason, roles: roles};
+
+            fs.writeFileSync(this.tempFile, JSON.stringify(mutesObject));
+        }).catch(console.error);
+    }
+
+    setMuteRoles(userId, muteRoles){
+        this.guild.fetchMember(userId).then(member => {
+            member.setRoles(muteRoles);
+        });
+
+    }
+
+    removeMute(member){
+        let mute = this.getMute(member.user.id);
+        this.setMuteRoles(member.user.id, mute.roles);
+
+        this.removeMuteFromFile(member.user.id);
+    }
+
+    getMutes(){
+        let mutes = fs.readFileSync(this.tempFile, "utf8");
+        let mutesObject = JSON.parse(mutes);
+
+        return mutesObject["mutes"];
+    }
+
+    getMute(userId){
+        let mutes = fs.readFileSync(this.tempFile, "utf8");
+        let mutesObject = JSON.parse(mutes);
+
+        return mutesObject["mutes"][userId];
+    }
+
+    removeMuteFromFile(userId){
+        let mutes = fs.readFileSync(this.tempFile, "utf8");
+        let mutesObject = JSON.parse(mutes);
+
+        delete mutesObject["mutes"][userId];
+
+        fs.writeFileSync(this.tempFile, JSON.stringify(mutesObject));
+    }
+    
+    removeMutesFromFile(ms){
+        let mutes = fs.readFileSync(this.tempFile, "utf8");
+        let mutesObject = JSON.parse(mutes);
+
+        ms.forEach(mute => {
+            delete mutesObject["mutes"][mute];
+        });
+
+        fs.writeFileSync(this.tempFile, JSON.stringify(mutesObject));
+    }
+
+    isMuted(member){
+        let mutes = fs.readFileSync(this.tempFile, "utf8");
+        let mutesObject = JSON.parse(mutes); 
+
+        return mutesObject["mutes"][member.user.id] != undefined;
+    }
+
+    canBeMuted(member){
+        return member.roles.find(r => r.id == this.moderatorRole) == undefined;
     }
 
     event(name, args){

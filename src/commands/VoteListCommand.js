@@ -19,29 +19,11 @@ class VoteListCommand extends Command {
     }
 
     init(bot) {
+        this.voteModule = bot.modules["votemodule"];
     }
 
     call(args, channel, user){
-        let votes = fs.readFileSync("./temp/votes.json", "utf8");
-        let votesObject = JSON.parse(votes);
-
-        let list = "";
-
-        Object.keys(votesObject["votes"]).forEach(voteKey => {
-            let vote = votesObject["votes"][voteKey];
-
-            list += "\n**" + voteKey + "**";
-        });
-
-        list += "\n"
-
-     
-        const embed = new Discord.RichEmbed()
-            .setTitle("📆 | Seznam všech hlasování")
-            .setDescription(list)
-            .setColor(0xe67e22)
-        
-        user.createDM().then(dm => dm.send(embed)).catch(console.error);
+        this.voteModule.printVoteList(user);
         return false;
     }
 

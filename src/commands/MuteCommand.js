@@ -19,9 +19,8 @@ class MuteCommand extends Command {
     }
 
     init(bot) {
-        this.muteRole = bot.settings["mute-role"];
-        this.moderatorRole = bot.settings["moderator-role"];
         this.maxMuteLength = bot.settings["max-mute-length"];
+        this.muteModule = bot.modules["mutemodule"];
     }
 
     call(args, channel){
@@ -69,51 +68,39 @@ class MuteCommand extends Command {
 
         let member = valid[0];
 
-        let mutes = fs.readFileSync("./temp/mutes.json", "utf8");
-        let mutesObject = JSON.parse(mutes); 
-
-        if(mutesObject["mutes"][member.user.id] != undefined){
+        if(this.muteModule.isMuted(member)){
             this.sendError(channel, "Vámi zvolený člen je již umlčený.");
             return;
         }
 
-        if(member.roles.find(r => r.id == this.moderatorRole) != undefined){
+        if(this.muteModule.canBeMuted(member)){
             this.sendError(channel, "Vámi zvolený člen je moderátor. Nemůžete umlčet moderátora.");
             return;
         }
         
         let reason = args[2];
-        let expiration = moment().add(minutes, "m").format("X");
-        let roles = [];
+        
+        const embedDM = new Discord.RichEmbed()
+            .setTitle("🔇 | Byl jste umlčen")
+            .setDescription("Na serveru jste byl umlčen.")
+            .setColor(0xe67e22)
+            .addField("Čas", minutes + " minut", true)
+            .addField("Důvod", reason, false);
 
-        member.roles.forEach(role => {
-            roles.push(role.id);
+        const embed = new Discord.RichEmbed()
+            .setTitle("🔇 | " + member.user.username + " byl umlčen")
+            .setDescription("Na serveru byl umlčen " + member.user.username + ".")
+            .setColor(0xe67e22)
+            .addField("Čas", minutes + " minut", true)
+            .addField("Důvod", reason, false);
+
+        member.createDM().then(channel => {
+            channel.send(embedDM);
         });
+        
+        channel.send(embed);
 
-        member.setRoles([this.muteRole]).then(member => {
-            const embedDM = new Discord.RichEmbed()
-                .setTitle("🔇 | Byl jste umlčen")
-                .setDescription("Na serveru jste byl umlčen.")
-                .setColor(0xe67e22)
-                .addField("Čas", minutes + " minut", true)
-                .addField("Důvod", reason, false);
-
-            const embed = new Discord.RichEmbed()
-                .setTitle("🔇 | " + member.user.username + " byl umlčen")
-                .setDescription("Na serveru byl umlčen " + member.user.username + ".")
-                .setColor(0xe67e22)
-                .addField("Čas", minutes + " minut", true)
-                .addField("Důvod", reason, false);
-
-            member.createDM().then(channel => {
-                channel.send(embedDM);
-            });
-            channel.send(embed);
-
-            mutesObject["mutes"][member.user.id] = {expiration: expiration, reason: reason, roles: roles};
-
-            fs.writeFileSync("./temp/mutes.json", JSON.stringify(mutesObject));
-        }).catch(console.error);
+        this.muteModule.addMute(member, minutes, reason);
 
         return true;
     }

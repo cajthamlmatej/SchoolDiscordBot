@@ -22,25 +22,11 @@ class RoleListCommand extends Command {
     }
 
     init(bot) {
-        this.roles = bot.settings.roles;
+        this.roleModule = bot.modules["rolemodule"];
     }
 
     call(args, channel){
-        let list = "";
-        let roles = channel.guild.roles;
-
-        Object.keys(this.roles).forEach(shortcut => {
-            let roleId = this.roles[shortcut];
-
-            list += "`" + shortcut + "` - " + roles.find(role => role.id == roleId) + "\n";
-        });
-
-        let embed = new Discord.RichEmbed()
-            .setTitle("👥 | Seznam rolí")
-            .setDescription(list)
-            .setColor(0xe67e22);
-
-        channel.send(embed);
+        this.roleModule.printRoleList(channel);
         return false;
     }
 

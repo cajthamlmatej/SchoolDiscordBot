@@ -18,7 +18,7 @@ class UnMuteCommand extends Command {
     }
 
     init(bot) {
-        this.muteRole = bot.settings["mute-role"];
+        this.muteModule = bot.modules["mutemodule"];
     }
 
     call(args, channel){
@@ -60,22 +60,12 @@ class UnMuteCommand extends Command {
 
         let member = valid[0];
 
-        let mutes = fs.readFileSync("./temp/mutes.json", "utf8");
-        let mutesObject = JSON.parse(mutes); 
-        let mute = mutesObject["mutes"][member.user.id];
-
-        if(mute == undefined){
+        if(!this.muteModule.isMuted(member)){
             this.sendError(channel, "Vámi zvolený člen není umlčený.");
             return;
         }
-
-        channel.guild.fetchMember(member.user.id).then(member => {
-            member.setRoles(mute.roles);
-        });
         
-        delete mutesObject["mutes"][member.user.id];
-        
-        fs.writeFileSync("./temp/mutes.json", JSON.stringify(mutesObject));
+        this.muteModule.removeMute(member);
 
         const embed = new Discord.RichEmbed()
             .setTitle("🔇 | " + member.user.username + " byl odmlčen")

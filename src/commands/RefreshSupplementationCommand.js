@@ -23,14 +23,7 @@ class RefreshSupplementationCommand extends Command {
     }
 
     call(args, channel){
-        this.supplementationModule.tick();
-
-        const embed = new Discord.RichEmbed()
-            .setTitle("👓 | Suplování bylo aktualizováno.")
-            .setDescription("Suplování bylo aktualizováno dle webových stránek školy.")
-            .setColor(0xe67e22);
-
-        channel.send(embed);
+        this.supplementationModule.refresh(channel);
 
         return false;
     }

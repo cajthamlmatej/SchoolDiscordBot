@@ -20,8 +20,7 @@ class RoleCommand extends Command {
     }
 
     init(bot) {
-        this.roles = bot.settings.roles;
-        this.rolelockRole = bot.settings["rolelock-role"];
+        this.roleModule = bot.modules["rolemodule"];
     }
 
     call(args, channel, user){
@@ -31,48 +30,20 @@ class RoleCommand extends Command {
         }
 
         let role = args[0];
-        let roles = Object.keys(this.roles);
 
-        if(!roles.includes(role)){
+        if(!this.roleModule.isRole(role)){
             this.sendError(channel, "Žádnou roli s tímto jménem jsme nenašli. Seznam všech rolí vypíšete pomocí příkazu rolelist.")
 
             return;
         }
         
-        if(role == "member"){
+        if(!this.roleModule.canBeAssigned(role)){
             this.sendError(channel, "Nemůžete si odebrat zákládni roli pro členství.")
 
             return;
         }
         
-        let guild = channel.guild;
-
-        guild.fetchMember(user).then(member => {
-            if(member.roles.find(r => r.id == this.rolelockRole) != undefined)
-                return;
-            
-            let roleId = this.roles[role];
-            if(member.roles.find(r => r.id == roleId) != undefined){
-                member.removeRole(roleId).catch(console.error);
-
-                const embed = new Discord.RichEmbed()
-                    .setTitle("✅ | Role odebrána")
-                    .setDescription("Role " + role + " byla odebrána od tvého účtu.")
-                    .setColor(0xe67e22);
-
-                channel.send(embed);
-            } else {
-                member.addRole(roleId).catch(console.error);
-
-                const embed = new Discord.RichEmbed()
-                    .setTitle("✅ | Role přiřazena")
-                    .setDescription("Role " + role + " byla přiřazena k tvému účtu.")
-                    .setColor(0xe67e22);
-
-                channel.send(embed);
-            }
-        }).catch(console.error);
-
+        this.roleModule.addRole(user, role, channel);
         return false;
     }
 

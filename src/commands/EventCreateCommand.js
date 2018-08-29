@@ -19,7 +19,7 @@ class EventCreateCommand extends Command {
     }
 
     init(bot) {
-        this.eventChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels["event"]);
+        this.eventModule = bot.modules["eventmodule"];
 
         this.roles = bot.settings.roles;
     }
@@ -51,30 +51,11 @@ class EventCreateCommand extends Command {
             return;
         }
         
-
         let place = args[4];
         let subject = args[5];
         let description = args[6];
      
-        let embed = new Discord.RichEmbed()
-            .setTitle("🕜 | " + (type == "udalost") ? "Nová událost" : "Nový úkol")
-            .setDescription(description)
-            .setColor(0xe67e22);
-
-        embed.addField("Skupina", channel.guild.roles.find(role => role.id == this.roles[role]), true);
-        embed.addField("Předmět", subject == "all" ? "?" : subject, true);
-        
-        embed.addField(from == to ? "Datum" : "Od kdy do kdy", from == to ? to : (from + " do " + to), true);
-        embed.addField("Místo", place == "all" ? "Škola" : place);
-        
-        this.eventChannel.send(embed).then(message => {
-            let events = fs.readFileSync("./temp/events.json", "utf8");
-            let eventsObject = JSON.parse(events);
-
-            eventsObject["events"][message.id] = to;
-
-            fs.writeFileSync("./temp/events.json", JSON.stringify(eventsObject));
-        });
+        this.eventModule.addEvent(type, from, to, role, place, subject, description);
 
         return false;
     }
