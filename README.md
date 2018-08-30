@@ -7,7 +7,9 @@ This repo is just read-only, it will be hard for you to make it work - this bot 
   - Mute for time
   - Role by reaction click
   - Automatic voting system
-  - Event/tasks managment (older than 7 days are moved off)
+  - Event/tasks managment (older than 7 days are moved to different channel)
+  - Supplementation logging
+  - Auto-reaction in specified channels/emojis
   - Fun.
 
 
@@ -29,7 +31,10 @@ After cloning and installing dependencies, copy config.template.json to config.j
   "mute-role": "mute role id",
   "moderator-role": "moderator role id",
   "member-role": "member role id",
+  "rolelock-role": "role lock role id",
   "guild": "guild id",
+  "supplementation-highlight": "highlight for supplementation",
+  "max-mute-length": "max mute length in minutes",
   "channels": {
     "vote": "channel id for voting",
     "event": "channel id for event",
@@ -38,7 +43,7 @@ After cloning and installing dependencies, copy config.template.json to config.j
     "event-archive": "channel id for event archives"
   },
   "roles": {
-    "role shortcut": "role id",
+    "role shortcut": "role id"
   },
   "channels-to-roles": {
     "channel id": "role to add"
@@ -58,7 +63,6 @@ After cloning and installing dependencies, copy config.template.json to config.j
     }
   }
 }
-
 ```
 
 You can start bot with command: 

@@ -1,24 +1,38 @@
 {
   "token": "bot token",
   "prefix": "!",
+  "mute-role": "mute role id",
+  "moderator-role": "moderator role id",
+  "member-role": "member role id",
+  "rolelock-role": "role lock role id",
+  "guild": "guild id",
+  "supplementation-highlight": "highlight for supplementation",
+  "max-mute-length": "max mute length in minutes",
   "channels": {
-    "admin-bot": "channel id for managing bot",
     "vote": "channel id for voting",
     "event": "channel id for event",
     "supplementation": "channel id for supplementation",
     "role": "channel id for roles",
-    "event-archive": "channel id for event archives",
-    "dank-memes": "channel id for dank memes"
+    "event-archive": "channel id for event archives"
   },
-  "groups": {
-    "all": "role id for all (member)",
-    "sku1": "role id for group 1 ",
-    "sku2": "role id for group 2",
-    "ang1": "role id for ang 1",
-    "ang2": "role id for ang 2"
+  "roles": {
+    "role shortcut": "role id"
   },
-  "mute-role": "role id for mute",
   "channels-to-roles": {
     "channel id": "role to add"
+  },
+  "commands-groups": {
+    "main": "🔔 Main commands",
+    "school": "🎓 School commands",
+    "vote": "🎟 Commands for voting",
+    "manage": "💾 Commands for managment"
+  },
+  "auto-reaction": {
+    "channels-attachments": {
+      "channel id": "emoji id"
+    },
+    "emojis": {
+      "emoji long id with name": "emoji id"
+    }
   }
 }
