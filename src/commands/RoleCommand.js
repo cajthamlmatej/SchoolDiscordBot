@@ -1,5 +1,4 @@
 const Command = require("./Command");
-const Discord = require('discord.js');
 
 class RoleCommand extends Command {
 

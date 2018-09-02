@@ -1,6 +1,4 @@
 const Command = require("./Command");
-const Discord = require('discord.js');
-const fs = require('fs');
 
 class VoteEndCommand extends Command {
 
