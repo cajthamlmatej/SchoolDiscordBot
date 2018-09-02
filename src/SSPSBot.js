@@ -96,7 +96,7 @@ class SSPSBot {
                     args[i] = args[i].replace(/"/gm, '').replace(/'/gm, '');
                 }
                 
-                let deleteMessage = this.commands[cmd].call(args, message.channel, message.author, message);
+                let deleteMessage = this.commands[cmd].call(args, message.channel, message.author);
         
                 if(deleteMessage)
                     message.delete();
