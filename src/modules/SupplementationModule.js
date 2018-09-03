@@ -48,11 +48,17 @@ class SupplementationModule extends Module {
                 let supples = {}
                 Object.keys(days).forEach(dayName => {
                     let htmlObject = dom.window.document.querySelectorAll(days[dayName])[0];
-                    let list = htmlObject.querySelectorAll("ul")[0];
 
                     supples[dayName] = [];
-                    Object.values(list.children).forEach(item => {
-                        supples[dayName].push(item.textContent.trim());
+                    
+                    Object.values(htmlObject.querySelectorAll(".message-content")[0].children).forEach(item => {
+                        if(item.children.length > 1){
+                            Object.values(item.children).forEach(subItem => {
+                                supples[dayName].push(subItem.textContent.trim());
+                            });
+                        } else {
+                            supples[dayName].push(item.textContent.trim());
+                        }
                     });
                 });
 
