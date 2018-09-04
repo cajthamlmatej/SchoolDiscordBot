@@ -17,10 +17,9 @@ fs.readFile('./settings/settings.json', (err, fileContents) => {
     let commandFiles = fs.readdirSync("./src/commands");
 
     commandFiles.forEach(file => {
-        if(file == "Command.js")
+        if(file == "Command.js" || file == "SubsCommand.js")
             return;
         
-
         let commandFile = require("./commands/" + file);
         let command = new commandFile();
         
