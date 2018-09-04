@@ -6,6 +6,7 @@ class SSPSBot {
         this.settings = settings;
         this.commands = commands;
         this.modules = modules;
+        this.commandsAliases = {};
         
         this.client = new Discord.Client();
     }
@@ -51,7 +52,15 @@ class SSPSBot {
         console.log("Initialiazing commands and modules");
 
         Object.values(this.commands).forEach(command => {
-            console.log("Init command " + command.getName());
+            let commandName = command.getName();
+            
+            command.fetchAliases().forEach(alias => {
+                this.commandsAliases[alias] = commandName; 
+            });
+            
+            this.commandsAliases[commandName] = commandName;
+            
+            console.log("Init command " + commandName);
             command.init(this); 
         });
         Object.values(this.modules).forEach(module => {
@@ -72,7 +81,7 @@ class SSPSBot {
         let args = message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/gm);
 
         let cmd = args[0].replace(this.settings.prefix, "").toLowerCase();
-        let command = this.commands[cmd];
+        let command = this.commands[this.commandsAliases[cmd]];
 
         if(command == undefined)
             return;
@@ -96,7 +105,7 @@ class SSPSBot {
                     args[i] = args[i].replace(/"/gm, '').replace(/'/gm, '');
                 }
                 
-                let deleteMessage = this.commands[cmd].call(args, message.channel, message.author);
+                let deleteMessage = command.call(args, message.channel, message.author);
         
                 if(deleteMessage)
                     message.delete();

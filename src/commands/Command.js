@@ -22,6 +22,14 @@ class Command {
         throw new Error('You have to implement the method getGroup!');
     }
 
+    getAliases(){
+        return [];
+    }
+
+    fetchAliases(){
+        return [this.getName()].concat(this.getAliases());
+    }
+
     getRoles(){
         return ["moderator"];
     }

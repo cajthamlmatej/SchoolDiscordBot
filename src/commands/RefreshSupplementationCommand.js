@@ -15,6 +15,9 @@ class RefreshSupplementationCommand extends Command {
     getHelp() {
         return "Okamžitě zkontroluje a upraví suplování."
     }
+    getAliases(){
+        return [ "refreshs" ];
+    }
 
     init(bot) {
         this.supplementationModule = bot.modules["supplementationmodule"];
