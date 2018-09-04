@@ -49,12 +49,27 @@ class VoteStartCommand extends Command {
             help += this.commandsGroups[groupName] + "\n";
             commands.forEach(command => {
                 let name;
+                
                 if(command.getRoles().includes("member"))
                     name = "**__" + this.prefix + command.getUsage() + "__**";
                 else
                     name = "**" + this.prefix + command.getUsage() + "**";
 
-                help += name + " - " + command.getHelp() + "\n";
+                help += name + " - " + command.getHelp() + " ";
+
+                if(command.getAliases().length > 0){
+                    let aliasesText = "";
+
+                    command.getAliases().forEach(alias => {
+                        aliasesText += alias + ", ";
+                    });
+
+                    aliasesText = aliasesText.replace(/, +$/, '')
+                    
+                    help += "[" + aliasesText + "]";
+                }
+
+                help += "\n";
             });
 
             help += "\n"
