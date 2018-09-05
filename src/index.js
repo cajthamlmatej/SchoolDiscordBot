@@ -1,19 +1,19 @@
 const fs = require('fs');
-const SSPSBot = require("./SSPSBot");
+const SchoolDiscordBot = require("./SchoolDiscordBot");
 
 let settings;
 
-console.log("School Discord Bot started");
-console.log("Opening settings file");
+console.log("School Discord Bot started, author of the bot is Matěj Cajthaml <cajthaml.matej@navarru.cz>.");
+console.log("Opening and reading settings file.");
 
 fs.readFile('./settings/settings.json', (err, fileContents) => {
     if (err) throw err;
 
-    console.log("Reading settings file contents.");
+    console.log("Reading JSON of settings file content.");
     settings = JSON.parse(fileContents);
 
-
-    let commands = {};    
+    let commands = {};
+    console.log("Reading directory with commands.");
     let commandFiles = fs.readdirSync("./src/commands");
 
     commandFiles.forEach(file => {
@@ -27,8 +27,9 @@ fs.readFile('./settings/settings.json', (err, fileContents) => {
     });
   
     let modules = {};    
+    console.log("Reading directory with modules.");
     let moduleFiles = fs.readdirSync("./src/modules");
-
+    
     moduleFiles.forEach(file => {
         if(file == "Module.js")
             return;
@@ -39,7 +40,7 @@ fs.readFile('./settings/settings.json', (err, fileContents) => {
         modules[module.getName()] = module;
     });
 
-    console.log("Creating instances of bot");
-    bot = new SSPSBot(settings, commands, modules);
+    console.log("Creating instance of the School Discord Bot.");
+    bot = new SchoolDiscordBot(settings, commands, modules);
     bot.login();
 });

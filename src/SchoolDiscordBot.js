@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 
-class SSPSBot {
+class SchoolDiscordBot {
     constructor(settings, commands, modules) {
         this.token = settings.token;
         this.settings = settings;
@@ -12,7 +12,7 @@ class SSPSBot {
     }
 
     login() {
-        console.log("Setting bot event's.");
+        console.log("Setting bot events.");
 
         this.client.on("ready", () => {
             this.ready();
@@ -43,17 +43,18 @@ class SSPSBot {
             })
         });
         
-        console.log("Starting bot.");
+        console.log("Login bot to discord.");
         this.client.login(this.token);
     }
 
     ready() {
         this.name = this.client.user.username;
-        console.log("Initialiazing commands and modules");
+        console.log("Loading commands.");
 
         Object.values(this.commands).forEach(command => {
             let commandName = command.getName();
             if(this.settings.commands.disabled.includes(commandName)){
+                console.log("Command " + commandName + " is disabled, not loading it."); 
                 delete this.commands[commandName];
                 return;
             }
@@ -64,20 +65,23 @@ class SSPSBot {
             
             this.commandsAliases[commandName] = commandName;
             
-            console.log("Init command " + commandName);
-            command.init(this); 
+            command.init(this);
+            console.log("Command " + commandName + " loaded."); 
         });
+
+        console.log("Loading modules.");
         Object.values(this.modules).forEach(module => {
             let moduleName = module.getName();
             
             if(this.settings.modules.disabled.includes(moduleName)){
+                console.log("Module " + moduleName + " is disabled, not loading it."); 
                 delete this.modules[moduleName];
                 return;
             }
 
-            console.log("Init module " + moduleName);
             module.init(this); 
-        })
+            console.log("Module " + moduleName + " loaded."); 
+        });
 
         console.log("Bot " + this.name + " started.");
     }
@@ -115,7 +119,8 @@ class SSPSBot {
                 {
                     args[i] = args[i].replace(/"/gm, '').replace(/'/gm, '');
                 }
-                
+        
+                console.log("User " + message.author.username + " used command " + message.content + ".");        
                 let deleteMessage = command.call(args, message.channel, message.author);
         
                 if(deleteMessage)
@@ -124,4 +129,4 @@ class SSPSBot {
     }
 }
 
-module.exports = SSPSBot;
+module.exports = SchoolDiscordBot;
