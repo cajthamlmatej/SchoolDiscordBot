@@ -53,6 +53,10 @@ class SSPSBot {
 
         Object.values(this.commands).forEach(command => {
             let commandName = command.getName();
+            if(this.settings.commands.disabled.includes(commandName)){
+                delete this.commands[commandName];
+                return;
+            }
             
             command.fetchAliases().forEach(alias => {
                 this.commandsAliases[alias] = commandName; 
@@ -64,7 +68,14 @@ class SSPSBot {
             command.init(this); 
         });
         Object.values(this.modules).forEach(module => {
-            console.log("Init module " + module.getName());
+            let moduleName = module.getName();
+            
+            if(this.settings.modules.disabled.includes(moduleName)){
+                delete this.modules[moduleName];
+                return;
+            }
+
+            console.log("Init module " + moduleName);
             module.init(this); 
         })
 
