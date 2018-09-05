@@ -113,6 +113,11 @@ class SchoolDiscordBot {
         this.logChannel.send("```" + this.logString + "```");
     }
 
+    instantLog(message){
+        console.log(message);
+        this.logChannel.send(message);
+    }
+
     message(message) {
         if(!message.content.startsWith(this.settings.prefix))
             return;
@@ -147,7 +152,7 @@ class SchoolDiscordBot {
                     args[i] = args[i].replace(/"/gm, '').replace(/'/gm, '');
                 }
         
-                console.log("User " + message.author.username + " used command " + message.content + ".");        
+                this.instantLog("User " + message.author.username + " used command " + message.content + ".");        
                 let deleteMessage = command.call(args, message.channel, message.author, message);
         
                 if(deleteMessage)
