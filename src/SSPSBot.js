@@ -92,7 +92,7 @@ class SSPSBot {
         guild.fetchMember(message.author)
             .then(member => {
                 roles.forEach(r => {
-                    if(member.roles.find(role => role.id == this.settings[r + "-role"]))
+                    if(member.roles.find(role => role.id == this.settings.roles.permission[r]))
                         havePermissions = true;
                 });
         

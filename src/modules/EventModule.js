@@ -10,9 +10,9 @@ class EventModule extends Module {
     }
 
     init(bot) {
-        this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels["event"]);
+        this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels.event);
         this.archiveChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels["event-archive"]);
-        this.roles = bot.settings.roles;
+        this.roles = bot.settings.roles.mentionable;
 
         this.tempFile = "./temp/events.json";
 

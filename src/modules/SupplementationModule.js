@@ -19,7 +19,7 @@ class SupplementationModule extends Module {
         
         this.client = bot.client;
         this.supplementationConfig = bot.settings["supplementation"];
-        this.channel = bot.settings["channels"]["supplementation"];
+        this.channel = bot.settings.channels.supplementation;
 
         this.tick();
         setInterval(() => this.tick(), this.supplementationConfig.refresh);

@@ -17,7 +17,7 @@ class MuteCommand extends Command {
     }
 
     init(bot) {
-        this.maxMuteLength = bot.settings["max-mute-length"];
+        this.maxMuteLength = bot.settings.mute.max;
         this.muteModule = bot.modules["mutemodule"];
     }
 

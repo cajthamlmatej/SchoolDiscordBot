@@ -9,15 +9,15 @@ class RoleModule extends Module {
     }
 
     init(bot) {
-        this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels["role"]);
-        this.channelToRoles = bot.settings["channels-to-roles"];
-        this.rolelockRole = bot.settings["rolelock-role"];
+        this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels.role);
+        this.rolelockRole = bot.settings.roles.special.rolelock;
         this.roles = bot.settings.roles;
+        this.roleGroups = bot.settings.modules.role.groups;
         
         this.channel.fetchMessages({ limit: 30 })
             .then(messages => {
                 messages.forEach(message => {
-                    if (message.content.includes("✅"))
+                    if (message.mentions.roles.array().length == 0)
                         return;
 
                     message.react("✅");
@@ -41,20 +41,20 @@ class RoleModule extends Module {
         if (message.channel.id != this.channel.id)
             return;
 
-        let guild = message.guild;
-        var matches = [];
-        message.content.replace(/\<#(.*?)\>/gm, function (m, p1) { matches.push(p1); });
+        if(message.mentions.roles.array().length == 0)
+            return;
 
-        let channel = matches[0];
-        let roleId = this.roles[this.channelToRoles[channel]];
+        let role = message.mentions.roles.first();
+        let guild = message.guild;
+
         guild.fetchMember(user).then(member => {
             if(!this.canModifyRoles(member))
                 return;
             
-            if (member.roles.find(role => role.id == roleId) != undefined)
+            if (member.roles.find(r => r.id == role.id) != undefined)
                 return;
 
-            member.addRole(roleId);
+            member.addRole(role);
         }).catch(console.error);
     }
 
@@ -63,20 +63,20 @@ class RoleModule extends Module {
         if (message.channel.id != this.channel.id)
             return;
 
-        let guild = message.guild;
-        var matches = [];
-        message.content.replace(/\<#(.*?)\>/gm, function (m, p1) { matches.push(p1); });
+        if(message.mentions.roles.array().length == 0)
+            return;
 
-        let channel = matches[0];
-        let roleId = this.roles[this.channelToRoles[channel]];
+        let role = message.mentions.roles.first();
+        let guild = message.guild;
+
         guild.fetchMember(user).then(member => {
             if(!this.canModifyRoles(member))
                 return;
             
-            if (member.roles.find(role => role.id == roleId) == undefined)
+            if (member.roles.find(r => r.id == role.id) == undefined)
                 return;
 
-            member.removeRole(roleId);
+            member.removeRole(role);
         }).catch(console.error);
     }
 
@@ -87,7 +87,7 @@ class RoleModule extends Module {
             if(!this.canModifyRoles(member))
                 return;
             
-            let roleId = this.roles[role];
+            let roleId = this.roles.assignable[role];
 
             if(member.roles.find(r => r.id == roleId) != undefined){
                 member.removeRole(roleId).catch(console.error);
@@ -112,19 +112,25 @@ class RoleModule extends Module {
     }
 
     printRoleList(channel){
-        let list = "";
         let roles = channel.guild.roles;
-
-        Object.keys(this.roles).forEach(shortcut => {
-            let roleId = this.roles[shortcut];
-
-            list += "`" + shortcut + "` - " + roles.find(role => role.id == roleId) + "\n";
-        });
 
         let embed = new Discord.RichEmbed()
             .setTitle("👥 | Seznam rolí")
-            .setDescription(list)
             .setColor(0xe67e22);
+
+        Object.keys(this.roles).forEach(groupName => {
+            let list = "";
+            
+            let groupRoles = this.roles[groupName];
+            
+            Object.keys(groupRoles).forEach(roleName => {
+                let roleId = groupRoles[roleName];
+                list += "`" + roleName + "` - " + roles.find(r => r.id == roleId) + "\n";
+            });
+
+            embed.addField(this.roleGroups[groupName], list);
+        });
+
 
         channel.send(embed);
     }
@@ -134,7 +140,7 @@ class RoleModule extends Module {
     }
 
     isRole(name){
-        return Object.keys(this.roles).includes(name);
+        return Object.keys(this.roles.assignable).includes(name);
     }
 
     canBeAssigned(name){

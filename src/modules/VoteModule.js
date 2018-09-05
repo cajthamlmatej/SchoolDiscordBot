@@ -12,7 +12,7 @@ class VoteModule extends Module {
         this.tempFile = "./temp/votes.json";
         this.defaultOptions = {"👍": "ANO", "👎": "NE"};
         this.optionsEmojis = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣", "🔟"];
-        this.voteChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels["vote"]);
+        this.voteChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels.vote);
         this.client = bot.client;
     }
 

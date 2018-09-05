@@ -9,9 +9,9 @@ class MuteModule extends Module {
     }
 
     init(bot) {
-        this.guild = bot.client.channels.find(channel => channel.id === bot.settings.channels["vote"]).guild;
-        this.muteRole = bot.settings["mute-role"];
-        this.moderatorRole = bot.settings["moderator-role"];
+        this.guild = bot.client.channels.find(channel => channel.id === bot.settings.channels.vote).guild;
+        this.muteRole = bot.settings.mute.role;
+        this.moderatorRole = bot.settings.roles.permission.moderator;
 
         this.tempFile = "./temp/mutes.json";
 
