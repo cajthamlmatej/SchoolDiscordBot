@@ -16,11 +16,13 @@ class SupplementationModule extends Module {
             host: 'ssps.cz',
             path: '/student/'
         }
+        
         this.client = bot.client;
-        this.supplementationHighlight = bot.settings["supplementation-highlight"];
+        this.supplementationConfig = bot.settings["supplementation"];
         this.channel = bot.settings["channels"]["supplementation"];
+
         this.tick();
-        setInterval(() => this.tick(), 1800000);
+        setInterval(() => this.tick(), this.supplementationConfig.refresh);
     }
 
     tick(){
@@ -75,7 +77,15 @@ class SupplementationModule extends Module {
                     let suppleString = "";
 
                     supplesList.forEach(supple => {
-                        if(supple.includes(this.supplementationHighlight)){
+                        let includes = false;
+                        
+                        this.supplementationConfig.highlights.forEach(highlight => {
+                            if(supple.includes(highlight)){
+                                includes = true
+                            }
+                        });
+
+                        if(includes){
                             suppleString += "**" + supple + "**\n";
                             return;
                         }
