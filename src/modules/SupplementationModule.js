@@ -97,7 +97,7 @@ class SupplementationModule extends Module {
                     const embed = new Discord.RichEmbed()
                         .setTitle("👓 | Bylo zveřejněno nové suplování na den/dny " + dayName)
                         .setDescription(suppleString)
-                        .setColor(0x1abc9c);
+                        .setColor(0xbadc58);
 
                     if(supplementationsObject["supplementations"][dayName] != undefined){
                         let messageId = supplementationsObject["supplementations"][dayName];
@@ -131,7 +131,7 @@ class SupplementationModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("👓 | Suplování bylo aktualizováno.")
             .setDescription("Suplování bylo aktualizováno dle webových stránek školy.")
-            .setColor(0xe67e22);
+            .setColor(0xbadc58);
 
         channel.send(embed);
     }

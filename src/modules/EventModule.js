@@ -48,7 +48,7 @@ class EventModule extends Module {
         let embed = new Discord.RichEmbed()
             .setTitle("🕜 | " + (type == "udalost") ? "Nová událost" : "Nový úkol")
             .setDescription(description)
-            .setColor(0xe67e22);
+            .setColor(0xbadc58);
 
         embed.addField("Skupina", this.channel.guild.roles.find(r => r.id == this.roles[role]), true);
         embed.addField("Předmět", subject == "all" ? "?" : subject, true);

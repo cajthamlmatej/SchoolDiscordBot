@@ -81,14 +81,14 @@ class MuteCommand extends Command {
         const embedDM = new Discord.RichEmbed()
             .setTitle("🔇 | Byl jste umlčen")
             .setDescription("Na serveru jste byl umlčen.")
-            .setColor(0xe67e22)
+            .setColor(0xf0932b)
             .addField("Čas", minutes + " minut", true)
             .addField("Důvod", reason, false);
 
         const embed = new Discord.RichEmbed()
             .setTitle("🔇 | " + member.user.username + " byl umlčen")
             .setDescription("Na serveru byl umlčen " + member.user.username + ".")
-            .setColor(0xe67e22)
+            .setColor(0xf0932b)
             .addField("Čas", minutes + " minut", true)
             .addField("Důvod", reason, false);
 

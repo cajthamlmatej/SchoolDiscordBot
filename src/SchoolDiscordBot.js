@@ -121,7 +121,7 @@ class SchoolDiscordBot {
                 }
         
                 console.log("User " + message.author.username + " used command " + message.content + ".");        
-                let deleteMessage = command.call(args, message.channel, message.author);
+                let deleteMessage = command.call(args, message.channel, message.author, message);
         
                 if(deleteMessage)
                     message.delete();

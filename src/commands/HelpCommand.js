@@ -30,7 +30,7 @@ class VoteStartCommand extends Command {
     call(args, channel, author, message){
         let embed = new Discord.RichEmbed()
             .setTitle("💼 | Nápověda k používání bota")
-            .setColor(0x9b59b6);
+            .setColor(0xbadc58);
         
         let groups = {};
         Object.keys(this.commandsGroups).forEach(group => {

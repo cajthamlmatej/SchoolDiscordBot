@@ -38,7 +38,7 @@ class Command {
         const embed = new Discord.RichEmbed()
             .setTitle("❗ | Příliš málo argumentů")
             .setDescription("Použití příkazu: `" + this.getUsage() + "`")
-            .setColor(0xe74c3c);
+            .setColor(0xf0932b);
 
         channel.send(embed);
     }
@@ -47,7 +47,7 @@ class Command {
         const embed = new Discord.RichEmbed()
             .setTitle("❗ | Při odesílání příkazu nastala chyba")
             .setDescription(reason)
-            .setColor(0xe74c3c);
+            .setColor(0xeb4d4b);
 
         channel.send(embed);
     }

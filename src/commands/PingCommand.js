@@ -28,7 +28,7 @@ class PingCommand extends Command {
         let embed = new Discord.RichEmbed()
             .setTitle("🏓 | Odezva")
             .setDescription("Odezva bota je " + Math.round(this.client.pings[0]) + "ms")
-            .setColor(0x9b59b6);
+            .setColor(0xbadc58);
 
         channel.send(embed);
         return false;

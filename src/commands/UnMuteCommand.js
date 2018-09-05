@@ -48,7 +48,7 @@ class UnMuteCommand extends Command {
             const embed = new Discord.RichEmbed()
                 .setTitle("🔇 | Seznam všech možných uživatelů")
                 .setDescription("Určete jméno člena více podrobně.\n"+list)
-                .setColor(0xe67e22)
+                .setColor(0xf0932b)
                 
             channel.send(embed);
             return;
@@ -69,7 +69,7 @@ class UnMuteCommand extends Command {
         const embed = new Discord.RichEmbed()
             .setTitle("🔇 | " + member.user.username + " byl odmlčen")
             .setDescription(member.user.username + " již není umlčen.")
-            .setColor(0xe67e22);
+            .setColor(0xbadc58);
 
         channel.send(embed);
         return true;

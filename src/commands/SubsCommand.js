@@ -51,12 +51,12 @@ class SubsCommand extends Command {
             embed = new Discord.RichEmbed()
                 .setTitle("❗ | Příliš málo argumentů")
                 .setDescription("Použití příkazu: `" + this.getUsage() + "`")
-                .setColor(0xe74c3c);
+                .setColor(0xf0932b);
         } else {
             embed = new Discord.RichEmbed()
                 .setTitle("❗ | Příliš málo argumentů")
                 .setDescription("Použití příkazu: `" + this.getName() + " " + subCommandName + " " + this.getSubCommands()[subCommandName].help + "`")
-                .setColor(0xe74c3c);
+                .setColor(0xf0932b);
         }
 
         channel.send(embed);

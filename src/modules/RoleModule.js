@@ -95,7 +95,7 @@ class RoleModule extends Module {
                 const embed = new Discord.RichEmbed()
                     .setTitle("✅ | Role odebrána")
                     .setDescription("Role " + role + " byla odebrána od tvého účtu.")
-                    .setColor(0xe67e22);
+                    .setColor(0xbadc58);
 
                 channel.send(embed);
             } else {
@@ -104,7 +104,7 @@ class RoleModule extends Module {
                 const embed = new Discord.RichEmbed()
                     .setTitle("✅ | Role přiřazena")
                     .setDescription("Role " + role + " byla přiřazena k tvému účtu.")
-                    .setColor(0xe67e22);
+                    .setColor(0xbadc58);
 
                 channel.send(embed);
             }
@@ -116,7 +116,7 @@ class RoleModule extends Module {
 
         let embed = new Discord.RichEmbed()
             .setTitle("👥 | Seznam rolí")
-            .setColor(0xe67e22);
+            .setColor(0xbadc58);
 
         Object.keys(this.roles).forEach(groupName => {
             let list = "";

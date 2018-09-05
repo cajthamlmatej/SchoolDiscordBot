@@ -53,7 +53,7 @@ class VoteModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | Seznam všech hlasování")
             .setDescription(list)
-            .setColor(0xe67e22)
+            .setColor(0xbadc58)
         
         user.createDM().then(dm => dm.send(embed)).catch(console.error);
     }
@@ -67,7 +67,7 @@ class VoteModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | Hlasování bylo smazáno.")
             .setDescription("Hlasování bylo úspěšně smazáno z paměti.")
-            .setColor(0xe67e22);
+            .setColor(0xbadc58);
 
         channel.send(embed);
 
@@ -87,7 +87,7 @@ class VoteModule extends Module {
         let embed = new Discord.RichEmbed()
             .setTitle("📆 | Nové hlasování")
             .setDescription(description + "\n\nhlasujte pomocí reakce pro možnosti: \n" + optionsString)
-            .setColor(0xe67e22);
+            .setColor(0xbadc58);
 
         let voteChannel;
         
@@ -169,7 +169,7 @@ class VoteModule extends Module {
             const embed = new Discord.RichEmbed()
                 .setTitle("📆 | Konec hlasování \"" + name + "\"")
                 .setDescription(vote["description"])
-                .setColor(0xe67e22)
+                .setColor(0xbadc58)
                 .addField("☝ Hlasy", votesString, true)
                 .addBlankField()
                 .addField("🖐 Statistiky", "**Počet hlasů**: " + reactionCount + "\n**Váha jednoho hlasu**: " + weight+ "%\n", true)
