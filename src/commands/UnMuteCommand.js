@@ -15,6 +15,9 @@ class UnMuteCommand extends Command {
     getHelp() {
         return "Zruší umlčení člena."
     }
+    getDependencies(){
+        return [ "mutemodule" ];
+    }
 
     init(bot) {
         this.muteModule = bot.modules["mutemodule"];

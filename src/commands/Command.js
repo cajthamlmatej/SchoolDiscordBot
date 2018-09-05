@@ -26,6 +26,11 @@ class Command {
         return [];
     }
 
+    getDependencies(){
+        return [];
+    }
+
+
     fetchAliases(){
         return [this.getName()].concat(this.getAliases());
     }

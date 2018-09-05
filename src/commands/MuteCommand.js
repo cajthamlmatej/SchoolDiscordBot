@@ -15,6 +15,9 @@ class MuteCommand extends Command {
     getHelp() {
         return "Umlčí **člena** na zadaný počet minut."
     }
+    getDependencies(){
+        return [ "mutemodule" ];
+    }
 
     init(bot) {
         this.maxMuteLength = bot.settings.mute.max;

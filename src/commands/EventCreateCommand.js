@@ -18,6 +18,9 @@ class EventCreateCommand extends Command {
     getAliases(){
         return [ "createev" ];
     }
+    getDependencies(){
+        return [ "eventmodule" ];
+    }
 
     init(bot) {
         this.eventModule = bot.modules["eventmodule"];

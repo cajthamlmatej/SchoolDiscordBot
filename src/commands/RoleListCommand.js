@@ -18,6 +18,9 @@ class RoleListCommand extends Command {
     getHelp() {
         return "Vypíše seznam rolí."
     }
+    getDependencies(){
+        return [ "rolemodule" ];
+    }
 
     init(bot) {
         this.roleModule = bot.modules["rolemodule"];

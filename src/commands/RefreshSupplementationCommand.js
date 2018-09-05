@@ -18,6 +18,9 @@ class RefreshSupplementationCommand extends Command {
     getAliases(){
         return [ "refreshs" ];
     }
+    getDependencies(){
+        return [ "supplementationmodule" ];
+    }
 
     init(bot) {
         this.supplementationModule = bot.modules["supplementationmodule"];

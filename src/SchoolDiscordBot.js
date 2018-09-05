@@ -49,26 +49,7 @@ class SchoolDiscordBot {
 
     ready() {
         this.name = this.client.user.username;
-        console.log("Loading commands.");
-
-        Object.values(this.commands).forEach(command => {
-            let commandName = command.getName();
-            if(this.settings.commands.disabled.includes(commandName)){
-                console.log("Command " + commandName + " is disabled, not loading it."); 
-                delete this.commands[commandName];
-                return;
-            }
-            
-            command.fetchAliases().forEach(alias => {
-                this.commandsAliases[alias] = commandName; 
-            });
-            
-            this.commandsAliases[commandName] = commandName;
-            
-            command.init(this);
-            console.log("Command " + commandName + " loaded."); 
-        });
-
+        
         console.log("Loading modules.");
         Object.values(this.modules).forEach(module => {
             let moduleName = module.getName();
@@ -83,6 +64,40 @@ class SchoolDiscordBot {
             console.log("Module " + moduleName + " loaded."); 
         });
 
+        console.log("Loading commands.");
+        Object.values(this.commands).forEach(command => {
+            let commandName = command.getName();
+            if(this.settings.commands.disabled.includes(commandName)){
+                console.log("Command " + commandName + " is disabled, not loading it."); 
+                delete this.commands[commandName];
+                return;
+            }
+
+            let canBeEnabled = true;
+
+            command.getDependencies().forEach(module => {
+                if(this.modules[module] == undefined){
+                    canBeEnabled = false;
+                }
+            });
+
+            if(!canBeEnabled){
+                console.log("Command " + commandName + " is disabled because dependencies modules are not loaded."); 
+                delete this.commands[commandName];
+                return;
+            }
+            
+            command.fetchAliases().forEach(alias => {
+                this.commandsAliases[alias] = commandName; 
+            });
+            
+            this.commandsAliases[commandName] = commandName;
+            
+            command.init(this);
+            console.log("Command " + commandName + " loaded."); 
+        });
+
+        
         console.log("Bot " + this.name + " started.");
     }
 

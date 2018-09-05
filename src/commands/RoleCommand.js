@@ -17,6 +17,9 @@ class RoleCommand extends Command {
     getHelp() {
         return "Přidá nebo odebere zadanou roli."
     }
+    getDependencies(){
+        return [ "rolemodule" ];
+    }
 
     init(bot) {
         this.roleModule = bot.modules["rolemodule"];

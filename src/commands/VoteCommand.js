@@ -34,6 +34,10 @@ class VoteCommand extends SubsCommand {
     getHelp(){
         return "Command for managing votes.";
     }
+    
+    getDependencies(){
+        return [ "votemodule" ];
+    }
 
     init(bot) {
         this.voteModule = bot.modules["votemodule"];
