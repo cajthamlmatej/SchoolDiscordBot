@@ -23,10 +23,11 @@ class VoteStartCommand extends Command {
     init(bot) {
         this.commandsGroups = bot.settings.commands.groups;
         this.prefix = bot.settings.prefix;
+        this.roles = bot.settings.roles.permission;
         this.commands = bot.commands;
     }
 
-    call(args, channel){
+    call(args, channel, author, message){
         let embed = new Discord.RichEmbed()
             .setTitle("💼 | Nápověda k používání bota")
             .setColor(0x9b59b6);
@@ -41,38 +42,45 @@ class VoteStartCommand extends Command {
         });
 
         let help = "";
-        help += "Příkazy, které může používat člen jsou označeny **__takto__**.\n\n";
+        help += "List of commands that you can execute.\n\n";
+
+        let member = message.member;
+        let memberRoles = member.roles;
 
         Object.keys(groups).forEach(groupName => {
             let commands = groups[groupName];
+            let commandsString = "";
 
-            help += this.commandsGroups[groupName] + "\n";
             commands.forEach(command => {
                 let name;
                 
-                if(command.getRoles().includes("member"))
-                    name = "**__" + this.prefix + command.getUsage() + "__**";
-                else
-                    name = "**" + this.prefix + command.getUsage() + "**";
+                command.getRoles().forEach(role => {
+                    if(memberRoles.find(r => r.id == this.roles[role]) != undefined){
+                        name = "**" + this.prefix + command.getUsage() + "**";
+                        commandsString += name + " - " + command.getHelp() + " ";
 
-                help += name + " - " + command.getHelp() + " ";
+                        if(command.getAliases().length > 0){
+                            let aliasesText = "";
 
-                if(command.getAliases().length > 0){
-                    let aliasesText = "";
+                            command.getAliases().forEach(alias => {
+                                aliasesText += alias + ", ";
+                            });
 
-                    command.getAliases().forEach(alias => {
-                        aliasesText += alias + ", ";
-                    });
+                            aliasesText = aliasesText.replace(/, +$/, '')
+                            
+                            commandsString += "[" + aliasesText + "]";
+                        }
 
-                    aliasesText = aliasesText.replace(/, +$/, '')
-                    
-                    help += "[" + aliasesText + "]";
-                }
-
-                help += "\n";
+                        commandsString += "\n";
+                    }
+                });
             });
 
-            help += "\n"
+            if(commandsString != ""){
+                help += this.commandsGroups[groupName] + "\n";
+                help += commandsString;
+                help += "\n";
+            }
         });
 
         
