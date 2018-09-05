@@ -48,27 +48,29 @@ class SchoolDiscordBot {
     }
 
     ready() {
+        this.logString = "";
+        this.logChannel = this.client.channels.find(c => c.id == this.settings.channels.log);
         this.name = this.client.user.username;
         
-        console.log("Loading modules.");
+        this.log("Loading modules.");
         Object.values(this.modules).forEach(module => {
             let moduleName = module.getName();
             
             if(this.settings.modules.disabled.includes(moduleName)){
-                console.log("Module " + moduleName + " is disabled, not loading it."); 
+                this.log("Module " + moduleName + " is disabled, not loading it."); 
                 delete this.modules[moduleName];
                 return;
             }
 
             module.init(this); 
-            console.log("Module " + moduleName + " loaded."); 
+            this.log("Module " + moduleName + " loaded."); 
         });
 
-        console.log("Loading commands.");
+        this.log("Loading commands.");
         Object.values(this.commands).forEach(command => {
             let commandName = command.getName();
             if(this.settings.commands.disabled.includes(commandName)){
-                console.log("Command " + commandName + " is disabled, not loading it."); 
+                this.log("Command " + commandName + " is disabled, not loading it."); 
                 delete this.commands[commandName];
                 return;
             }
@@ -82,7 +84,7 @@ class SchoolDiscordBot {
             });
 
             if(!canBeEnabled){
-                console.log("Command " + commandName + " is disabled because dependencies modules are not loaded."); 
+                this.log("Command " + commandName + " is disabled because dependencies modules are not loaded."); 
                 delete this.commands[commandName];
                 return;
             }
@@ -94,11 +96,21 @@ class SchoolDiscordBot {
             this.commandsAliases[commandName] = commandName;
             
             command.init(this);
-            console.log("Command " + commandName + " loaded."); 
+            this.log("Command " + commandName + " loaded."); 
         });
 
         
-        console.log("Bot " + this.name + " started.");
+        this.log("Bot " + this.name + " started.");
+        this.sendLog();
+    }
+
+    log(message){
+        console.log(message);
+        this.logString += message + "\n";
+    }
+
+    sendLog(){
+        this.logChannel.send("```" + this.logString + "```");
     }
 
     message(message) {
