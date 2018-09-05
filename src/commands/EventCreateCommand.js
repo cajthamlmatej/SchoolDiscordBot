@@ -15,6 +15,9 @@ class EventCreateCommand extends Command {
     getHelp() {
         return "Vytvoří událost/úkol, který se po týdnu archívuje."
     }
+    getAliases(){
+        return [ "createev" ];
+    }
 
     init(bot) {
         this.eventModule = bot.modules["eventmodule"];
