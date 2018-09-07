@@ -135,7 +135,7 @@ class SupplementationModule extends Module {
                                 message.unpin();
                             }
                         }
-                    });
+                    }).catch();
                 });
             });
         });
