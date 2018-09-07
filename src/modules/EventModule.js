@@ -13,6 +13,7 @@ class EventModule extends Module {
         this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels.event);
         this.archiveChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels["event-archive"]);
         this.roles = bot.settings.roles.mentionable;
+        this.daysToArchive = bot.settings.modules.event.days;
 
         this.tempFile = "./temp/events.json";
 
@@ -29,7 +30,7 @@ class EventModule extends Module {
             let todayDate = moment();
             let eventDate = moment(to, "D. M. YYYY");
 
-            if(todayDate.diff(eventDate, "days") > 7){
+            if(todayDate.diff(eventDate, "days") > this.daysToArchive){
                 this.channel.fetchMessage(messageId)
                     .then(message => {
                         let embed = new Discord.RichEmbed(message.embeds[0]);
