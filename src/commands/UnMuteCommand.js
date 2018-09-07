@@ -20,7 +20,7 @@ class UnMuteCommand extends Command {
     }
 
     init(bot) {
-        this.muteModule = bot.modules["mutemodule"];
+        this.muteModule = bot.modules.mutemodule;
     }
 
     call(args, channel){

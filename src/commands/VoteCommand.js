@@ -40,7 +40,7 @@ class VoteCommand extends SubsCommand {
     }
 
     init(bot) {
-        this.voteModule = bot.modules["votemodule"];
+        this.voteModule = bot.modules.votemodule;
         this.client = bot.client;
     }
 

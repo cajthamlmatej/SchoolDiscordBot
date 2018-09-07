@@ -23,7 +23,7 @@ class RoleListCommand extends Command {
     }
 
     init(bot) {
-        this.roleModule = bot.modules["rolemodule"];
+        this.roleModule = bot.modules.rolemodule;
     }
 
     call(args, channel){

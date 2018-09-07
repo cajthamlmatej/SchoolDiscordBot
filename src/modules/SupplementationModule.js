@@ -18,7 +18,7 @@ class SupplementationModule extends Module {
         }
         
         this.client = bot.client;
-        this.supplementationConfig = bot.settings["supplementation"];
+        this.supplementationConfig = bot.settings.modules.supplementation;
         this.channel = bot.settings.channels.supplementation;
 
         this.tick();

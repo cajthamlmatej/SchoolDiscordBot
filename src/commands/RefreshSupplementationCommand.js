@@ -23,7 +23,7 @@ class RefreshSupplementationCommand extends Command {
     }
 
     init(bot) {
-        this.supplementationModule = bot.modules["supplementationmodule"];
+        this.supplementationModule = bot.modules.supplementationmodule;
     }
 
     call(args, channel){
