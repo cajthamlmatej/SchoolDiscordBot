@@ -73,6 +73,8 @@ class SupplementationModule extends Module {
                 let count = 0;
                 Object.keys(supples).forEach(dayName => {
                     count++;
+
+                    let containsHighlight = false;
                     let supplesList = supples[dayName];
                     let suppleString = "";
 
@@ -87,6 +89,7 @@ class SupplementationModule extends Module {
 
                         if(includes){
                             suppleString += "**" + supple + "**\n";
+                            containsHighlight = true;
                             return;
                         }
                         suppleString += supple + "\n";
@@ -104,11 +107,11 @@ class SupplementationModule extends Module {
 
                         channel.fetchMessage(messageId).then(message => {
                             if(message.embeds[0].description !== suppleString){
-                                message.edit(embed);
+                                message.edit(containsHighlight == true ? "@everyone" : "", embed);
                             }
                         });
                     } else {
-                        channel.send(embed).then(message => {
+                        channel.send(containsHighlight == true ? "@everyone" : "", embed).then(message => {
                             supplementationsObject["supplementations"][dayName] = message.id;
 
                             if(Object.keys(supples).length == count){
@@ -116,6 +119,23 @@ class SupplementationModule extends Module {
                             }
                         });
                     }
+                });
+
+                // pins
+                Object.keys(supplementationsObject["supplementations"]).forEach(day =>{
+                    let messageId = supplementationsObject["supplementations"][day];
+
+                    channel.fetchMessage(messageId).then(message => {    
+                        if(supples[day] != undefined){
+                            if(!message.pinned){
+                                message.pin();
+                            }
+                        } else {
+                            if(message.pinned){
+                                message.unpin();
+                            }
+                        }
+                    });
                 });
             });
         });
@@ -137,7 +157,18 @@ class SupplementationModule extends Module {
     }
 
     event(name, args){
+        if(name != "message")
+            return;
 
+        let message = args.message;
+
+        if(message.channel.id != this.channel)
+            return;
+
+        if(message.type != "PINS_ADD")
+            return;
+
+        message.delete();
     }
 
 }
