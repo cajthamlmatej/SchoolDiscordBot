@@ -46,7 +46,7 @@ class EventModule extends Module {
 
     addEvent(type, from, to, role, place, subject, description){
         let embed = new Discord.RichEmbed()
-            .setTitle("🕜 | " + (type == "udalost") ? "Nová událost" : "Nový úkol")
+            .setTitle("🕜 | " + ((type == "udalost") ? "Nová událost" : "Nový úkol"))
             .setDescription(description)
             .setColor(0xbadc58);
 

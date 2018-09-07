@@ -25,7 +25,7 @@ class EventCreateCommand extends Command {
     init(bot) {
         this.eventModule = bot.modules["eventmodule"];
 
-        this.roles = bot.settings.roles;
+        this.roles = bot.settings.roles.mentionable;;
     }
 
     call(args, channel){
