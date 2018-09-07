@@ -48,29 +48,27 @@ class SchoolDiscordBot {
     }
 
     ready() {
-        this.logString = "";
-        this.logChannel = this.client.channels.find(c => c.id == this.settings.channels.log);
         this.name = this.client.user.username;
         
-        this.log("Loading modules.");
+        console.log("Loading modules.");
         Object.values(this.modules).forEach(module => {
             let moduleName = module.getName();
             
             if(this.settings.modules.disabled.includes(moduleName)){
-                this.log("Module " + moduleName + " is disabled, not loading it."); 
+                console.log("Module " + moduleName + " is disabled, not loading it."); 
                 delete this.modules[moduleName];
                 return;
             }
 
             module.init(this); 
-            this.log("Module " + moduleName + " loaded."); 
+            console.log("Module " + moduleName + " loaded."); 
         });
 
-        this.log("Loading commands.");
+        console.log("Loading commands.");
         Object.values(this.commands).forEach(command => {
             let commandName = command.getName();
             if(this.settings.commands.disabled.includes(commandName)){
-                this.log("Command " + commandName + " is disabled, not loading it."); 
+                console.log("Command " + commandName + " is disabled, not loading it."); 
                 delete this.commands[commandName];
                 return;
             }
@@ -84,7 +82,7 @@ class SchoolDiscordBot {
             });
 
             if(!canBeEnabled){
-                this.log("Command " + commandName + " is disabled because dependencies modules are not loaded."); 
+                console.log("Command " + commandName + " is disabled because dependencies modules are not loaded."); 
                 delete this.commands[commandName];
                 return;
             }
@@ -96,26 +94,11 @@ class SchoolDiscordBot {
             this.commandsAliases[commandName] = commandName;
             
             command.init(this);
-            this.log("Command " + commandName + " loaded."); 
+            console.log("Command " + commandName + " loaded."); 
         });
 
         
-        this.log("Bot " + this.name + " started.");
-        this.sendLog();
-    }
-
-    log(message){
-        console.log(message);
-        this.logString += message + "\n";
-    }
-
-    sendLog(){
-        this.logChannel.send("```" + this.logString + "```");
-    }
-
-    instantLog(message){
-        console.log(message);
-        this.logChannel.send(message);
+        console.log("Bot " + this.name + " started.");
     }
 
     message(message) {
@@ -152,7 +135,7 @@ class SchoolDiscordBot {
                     args[i] = args[i].replace(/"/gm, '').replace(/'/gm, '');
                 }
         
-                this.instantLog("User " + message.author.username + " used command " + message.content + ".");        
+                console.log("User " + message.author.username + " used command " + message.content + ".");        
                 let deleteMessage = command.call(args, message.channel, message.author, message);
         
                 if(deleteMessage)
