@@ -24,7 +24,7 @@ class MuteCommand extends Command {
         this.muteModule = bot.modules["mutemodule"];
     }
 
-    call(args, channel){
+    call(args, channel, user){
         if(args.length != 3){
             this.sendHelp(channel);
             return;
@@ -69,12 +69,17 @@ class MuteCommand extends Command {
 
         let member = valid[0];
 
+        if(member.user.id == user.id){
+            this.sendError(channel, "You can't mute yourself.");
+            return;
+        }
+
         if(this.muteModule.isMuted(member)){
             this.sendError(channel, "Vámi zvolený člen je již umlčený.");
             return;
         }
 
-        if(this.muteModule.canBeMuted(member)){
+        if(!this.muteModule.canBeMuted(member)){
             this.sendError(channel, "Vámi zvolený člen je moderátor. Nemůžete umlčet moderátora.");
             return;
         }
