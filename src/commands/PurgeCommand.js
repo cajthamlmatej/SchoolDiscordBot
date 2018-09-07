@@ -36,7 +36,7 @@ class PurgeCommand extends Command {
         channel.bulkDelete(count).then(messages => {
             let embed = new Discord.RichEmbed()
                 .setTitle("🧙 | Housekeeping!!!")
-                .setDescription(count + " messages have been deleted in this channel.")
+                .setDescription(messages.size + " messages have been deleted in this channel.")
                 .setColor(0xbadc58);
     
             channel.send(embed);
