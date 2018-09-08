@@ -31,14 +31,15 @@ class EventModule extends Module {
             let eventDate = moment(to, "D. M. YYYY");
 
             if(todayDate.diff(eventDate, "days") > this.daysToArchive){
-                this.channel.fetchMessage(messageId)
-                    .then(message => {
-                        let embed = new Discord.RichEmbed(message.embeds[0]);
+                this.channel.fetchMessage(messageId).then(message => {
+                    let embed = new Discord.RichEmbed(message.embeds[0]);
 
-                        this.archiveChannel.send(embed);
-                        message.delete();
-                        toRemove.push(messageId);
-                    }).catch(console.error);
+                    this.archiveChannel.send(embed);
+                    message.delete();
+                    toRemove.push(messageId);
+                }).catch(error => {
+                    // not found, dont do anything
+                });
             }
         });
 

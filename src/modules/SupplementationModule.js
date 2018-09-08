@@ -135,7 +135,9 @@ class SupplementationModule extends Module {
                                 message.unpin();
                             }
                         }
-                    }).catch();
+                    }).catch(error => {
+                        // not found, dont do anything
+                    });
                 });
             });
         });
