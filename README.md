@@ -24,7 +24,7 @@ $ npm install
 
 After cloning and installing dependencies, copy config.template.json to config.json and update values and remove comments.
 
-```json
+```
 {
   "token": "token of the bot that you can get from discord dev portal",
   "prefix": "! - prefix of the bot",
