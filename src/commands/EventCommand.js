@@ -51,23 +51,11 @@ class EventCommand extends SubsCommand {
     callCreate(args, channel, author, message) {
         let name, type, start, end, role, place, subject, description;
         if (args.length == 8) {
-            name = args[0];
-            type = args[1];
-            start = args[2];
-            end = args[3];
-            role = args[4];
-            place = args[5];
-            subject = args[6];
-            description = args[7];
+            console.log(args);
+            [name, type, start, end, role, place, subject, description] = args;
         } else {
-            name = args[0];
-            type = args[1];
-            start = args[2];
-            end = args[2];
-            role = args[3];
-            place = args[4];
-            subject = args[5];
-            description = args[6];
+            [name, type, end, role, place, subject, description] = args;
+            start = end;
         }
 
         if (this.eventModule.exists(name)) {
