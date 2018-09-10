@@ -20,7 +20,7 @@ class SubsCommand extends Command {
         return this.getName() + " <" + list + ">";
     }
 
-    call(args, channel, user) {
+    call(args, channel, author, message) {
         if(args.length <= 0){
             this.sendHelp(channel);
             return;
@@ -42,7 +42,7 @@ class SubsCommand extends Command {
 
         var args = args.slice(1);
 
-        this["call" + subCommandName[0].toUpperCase() + subCommandName.slice(1)](args, channel, user);
+        return this["call" + subCommandName[0].toUpperCase() + subCommandName.slice(1)](args, channel, author, message);
     }
 
     sendHelp(channel, subCommandName){
