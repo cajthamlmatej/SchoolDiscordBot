@@ -38,15 +38,13 @@ class EventModule extends Module {
 
                     this.archiveChannel.send(embed);
                     message.delete();
-                    toRemove.push(name);
                 }).catch(error => {
-                    if(!toRemove.includes(name))
-                        toRemove.push(name);
+                    
                 });
+
+                this.removeEventFromFile(name);
             }
         });
-
-        this.removeEventsFromFile(toRemove);
     }
 
     addEvent(name, type, start, end, role, place, subject, description, attachments){
@@ -108,17 +106,6 @@ class EventModule extends Module {
         let eventsObject = JSON.parse(events);
 
         eventsObject["events"][name] = { message: messageId, values: values };
-
-        fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
-    }
-
-    removeEventsFromFile(es){
-        let events = fs.readFileSync(this.tempFile, "utf8");
-        let eventsObject = JSON.parse(events);
-
-        es.forEach(event => {
-            delete eventsObject["events"][event];
-        });
 
         fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
     }
