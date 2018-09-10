@@ -54,7 +54,7 @@ class VoteCommand extends SubsCommand {
 
         this.voteModule.endVote(name);
 
-        return false;
+        return true;
     }
 
     callStart(args, channel){
@@ -94,12 +94,12 @@ class VoteCommand extends SubsCommand {
 
         this.voteModule.startVote(type, name, description, options, channel);
 
-        return false;
+        return true;
     }
 
     callList(args, channel, user){
         this.voteModule.printVoteList(user);
-        return false;
+        return true;
     }
 
     callDelete(args, channel){
@@ -111,7 +111,7 @@ class VoteCommand extends SubsCommand {
         }
 
         this.voteModule.deleteVote(name, channel);
-        return false;
+        return true;
     }
 }
 

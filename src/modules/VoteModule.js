@@ -47,9 +47,12 @@ class VoteModule extends Module {
             list += "\n**" + voteKey + "**";
         });
 
-        list += "\n"
 
-     
+        if(list == "")
+            list = "No vote exists.";
+        else
+            list += "\n";
+            
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | Seznam všech hlasování")
             .setDescription(list)
