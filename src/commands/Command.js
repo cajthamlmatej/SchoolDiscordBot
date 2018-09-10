@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Translation = require("../Translation");
 
 class Command {
 
@@ -41,17 +42,21 @@ class Command {
 
     sendHelp(channel){
         const embed = new Discord.RichEmbed()
-            .setTitle("❗ | Příliš málo argumentů")
-            .setDescription("Použití příkazu: `" + this.getUsage() + "`")
+            .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
+            .setDescription(Translation.translate("command.usage") + " `" + this.getUsage() + "`")
             .setColor(0xf0932b);
 
         channel.send(embed);
     }
 
-    sendError(channel, reason){
+    sendError(channel, reason, additional){
+        if(additional == undefined)
+            additional = "";
+
+
         const embed = new Discord.RichEmbed()
-            .setTitle("❗ | Při odesílání příkazu nastala chyba")
-            .setDescription(reason)
+            .setTitle("❗ | " + Translation.translate("command.error"))
+            .setDescription(Translation.translate(reason) + " " + additional)
             .setColor(0xeb4d4b);
 
         channel.send(embed);

@@ -1,6 +1,7 @@
 
 const Command = require("./Command");
 const Discord = require('discord.js');
+const Translation = require("../Translation");
 
 class VoteStartCommand extends Command {
 
@@ -29,7 +30,7 @@ class VoteStartCommand extends Command {
 
     call(args, channel, author, message){
         let embed = new Discord.RichEmbed()
-            .setTitle("💼 | Nápověda k používání bota")
+            .setTitle("💼 | " + Translation.translate("command.help.title"))
             .setColor(0xbadc58);
         
         let groups = {};
@@ -41,8 +42,7 @@ class VoteStartCommand extends Command {
             groups[command.getGroup()].push(command);
         });
 
-        let help = "";
-        help += "List of commands that you can execute.\n\n";
+        let help = Translation.translate("command.help.can-execute") + "\n\n";
 
         let member = message.member;
         let memberRoles = member.roles;

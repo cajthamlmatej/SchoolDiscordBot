@@ -48,7 +48,7 @@ class VoteCommand extends SubsCommand {
         let name = args[0];
 
         if(!this.voteModule.exists(name)){
-            this.sendError(channel, "Hlasování s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazem votelist.");
+            this.sendError(channel, "command.vote.dont-exist");
             return;
         }
 
@@ -65,12 +65,12 @@ class VoteCommand extends SubsCommand {
         let optionsEmojis = this.voteModule.optionsEmojis;
 
         if(!["global", "private"].includes(type)){
-            this.sendError(channel, "První argument musí být zda se jedná o globální (global) nebo o soukromé (private) hlasování.");
+            this.sendError(channel, "command.vote.type-not-valid", "private, global");
             return;
         }
         
         if(this.voteModule.exists(name)){
-            this.sendError(channel, "Hlasování s tímto jménem již existuje, zvolte prosím jiné jméno.");
+            this.sendError(channel, "command.vote.already-exists");
             return;
         }
 
@@ -78,7 +78,7 @@ class VoteCommand extends SubsCommand {
             let argOptions = args[3].split(";");
 
             if(argOptions.length > optionsEmojis.length){
-                this.sendError(channel, "Zadal jste více možností (>" + optionsEmojis.length + ") než je možné. Zadejte menší počet.");
+                this.sendError(channel, "command.vote.too-much.options");
                 return;
             }
 
@@ -106,7 +106,7 @@ class VoteCommand extends SubsCommand {
         let name = args[0];
         
         if(!this.voteModule.exists(name)){
-            this.sendError(channel, "Hlasování s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazem votelist.");
+            this.sendError(channel, "command.vote.dont-exist");
             return;
         }
 

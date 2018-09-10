@@ -1,6 +1,7 @@
 
 const Command = require("./Command");
 const Discord = require('discord.js');
+const Translation = require("../Translation");
 
 class PingCommand extends Command {
 
@@ -26,8 +27,8 @@ class PingCommand extends Command {
 
     call(args, channel, author){
         let embed = new Discord.RichEmbed()
-            .setTitle("🏓 | Odezva")
-            .setDescription("Odezva bota je " + Math.round(this.client.pings[0]) + "ms")
+            .setTitle("🏓 | " + Translation.translate("command.ping"))
+            .setDescription(Translation.translate("command.ping.ping") + " " + Math.round(this.client.pings[0]) + "ms")
             .setColor(0xbadc58);
 
         channel.send(embed);

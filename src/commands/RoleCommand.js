@@ -34,13 +34,7 @@ class RoleCommand extends Command {
         let role = args[0];
 
         if(!this.roleModule.isRole(role)){
-            this.sendError(channel, "Žádnou roli s tímto jménem jsme nenašli. Seznam všech rolí vypíšete pomocí příkazu rolelist.")
-
-            return;
-        }
-        
-        if(!this.roleModule.canBeAssigned(role)){
-            this.sendError(channel, "Nemůžete si odebrat zákládni roli pro členství.")
+            this.sendError(channel, "command.role.role-not-found")
 
             return;
         }

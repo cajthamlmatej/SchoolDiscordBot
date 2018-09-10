@@ -59,18 +59,18 @@ class EventCommand extends SubsCommand {
         }
 
         if (this.eventModule.exists(name)) {
-            this.sendError(channel, "Event with this name already exists, please choose different name.");
+            this.sendError(channel, "command.event.already-exists");
             return;
         }
 
         let types = ["event", "task"];
         if (!types.includes(type)) {
-            this.sendError(channel, "Selected type of event is not valid, must be one of: " + types.join(", "));
+            this.sendError(channel, "command.event.type-not-valid", types.join(", "));
             return;
         }
 
         if (!this.eventModule.isMentionableRole(role)) {
-            this.sendError(channel, "Selected role is not valid, choose one of *mentionable* in command `rolelist`.")
+            this.sendError(channel, "command.event.role-not-valid")
             return;
         }
 
@@ -90,25 +90,25 @@ class EventCommand extends SubsCommand {
         let value = args[2];
 
         if (!this.eventModule.exists(name)) {
-            this.sendError(channel, "Event with this name dont exists.");
+            this.sendError(channel, "command.event.dont-exist");
             return;
         }
 
         let types = ["type", "start", "end", "role", "place", "subject", "description"];
         if (!types.includes(type)) {
-            this.sendError(channel, "Selected type of value is not valid, must be one of: " + types.join(", "));
+            this.sendError(channel, "command.event.edit-type-not-valid", types.join(", "));
             return;
         }
 
         if(type == "type"){
             let eventTypes = ["event", "task"];
             if (!eventTypes.includes(value)) {
-                this.sendError(channel, "Selected type of event is not valid, must be one of: " + eventTypes.join(", "));
+                this.sendError(channel, "command.event.type-not-valid", eventTypes.join(", "));
                 return;
             }
         } else if(type == "role"){
             if (!this.eventModule.isMentionableRole(value)) {
-                this.sendError(channel, "Selected role is not valid, choose one of *mentionable* in command `rolelist`.")
+                this.sendError(channel, "command.event.role-not-valid")
                 return;
             }
         } 
@@ -122,7 +122,7 @@ class EventCommand extends SubsCommand {
         let name = args[0];
 
         if (!this.eventModule.exists(name)) {
-            this.sendError(channel, "Event with this name dont exists.");
+            this.sendError(channel, "command.event.dont-exist");
             return;
         }
 

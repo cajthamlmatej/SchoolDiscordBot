@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Command = require("./Command");
+const Translation = require("../Translation");
 
 class SubsCommand extends Command {
 
@@ -49,13 +50,13 @@ class SubsCommand extends Command {
         let embed;
         if(subCommandName == undefined){
             embed = new Discord.RichEmbed()
-                .setTitle("❗ | Příliš málo argumentů")
-                .setDescription("Použití příkazu: `" + this.getUsage() + "`")
+                .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
+                .setDescription(Translation.translate("command.usage") + " `" + this.getUsage() + "`")
                 .setColor(0xf0932b);
         } else {
             embed = new Discord.RichEmbed()
-                .setTitle("❗ | Příliš málo argumentů")
-                .setDescription("Použití příkazu: `" + this.getName() + " " + subCommandName + " " + this.getSubCommands()[subCommandName].help + "`")
+                .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
+                .setDescription(Translation.translate("command.usage") +  " `" + this.getName() + " " + subCommandName + " " + this.getSubCommands()[subCommandName].help + "`")
                 .setColor(0xf0932b);
         }
 

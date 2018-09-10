@@ -1,5 +1,6 @@
 const Command = require("./Command");
 const Discord = require('discord.js');
+const Translation = require("../Translation");
 
 class UnMuteCommand extends Command {
 
@@ -49,29 +50,29 @@ class UnMuteCommand extends Command {
             list += "\n";
          
             const embed = new Discord.RichEmbed()
-                .setTitle("🔇 | Seznam všech možných uživatelů")
-                .setDescription("Určete jméno člena více podrobně.\n"+list)
-                .setColor(0xf0932b)
+                .setTitle("🔇 | " + Translation.translate("command.mute.user-list.title"))
+                .setDescription(Translation.translate("command.mute.user-list") + ".\n"+list)
+                .setColor(0xe67e22)
                 
             channel.send(embed);
             return;
         } else if(valid.length <= 0){            
-            this.sendError(channel, "Nikoho s tímto jménem jsme nenašli. Zkontrolujte diakritiku a správnost jména.");
+            this.sendError(channel, "command.mute.user-not-found");
             return;
         }
 
         let member = valid[0];
 
         if(!this.muteModule.isMuted(member)){
-            this.sendError(channel, "Vámi zvolený člen není umlčený.");
+            this.sendError(channel, "command.mute.not-muted");
             return;
         }
         
         this.muteModule.removeMute(member);
 
         const embed = new Discord.RichEmbed()
-            .setTitle("🔇 | " + member.user.username + " byl odmlčen")
-            .setDescription(member.user.username + " již není umlčen.")
+            .setTitle("🔇 | " + member.user.username + " " + Translation.translate("command.mute.unmuted.title"))
+            .setDescription(member.user.username + " " + Translation.translate("command.mute.unmuted"))
             .setColor(0xbadc58);
 
         channel.send(embed);

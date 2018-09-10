@@ -1,5 +1,6 @@
 const Command = require("./Command");
 const Discord = require('discord.js');
+const Translation = require("../Translation");
 
 class MuteCommand extends Command {
 
@@ -50,55 +51,55 @@ class MuteCommand extends Command {
             list += "\n";
          
             const embed = new Discord.RichEmbed()
-                .setTitle("🔇 | Seznam všech možných uživatelů")
-                .setDescription("Určete jméno člena více podrobně.\n"+list)
+                .setTitle("🔇 | " + Translation.translate("command.mute.user-list.title"))
+                .setDescription(Translation.translate("command.mute.user-list") + ".\n"+list)
                 .setColor(0xe67e22)
                 
             channel.send(embed);
             return;
         } else if(valid.length <= 0){
-            this.sendError(channel, "Nikoho s tímto jménem jsme nenašli. Zkontrolujte diakritiku a správnost jména.");
+            this.sendError(channel, "command.mute.user-not-found");
             return;
         }
 
         let minutes = args[1];
         if(minutes <= 0 || minutes >= this.maxMuteLength){
-            this.sendError(channel, "Nesprávný počet minut. Počet minut k umlčení není správný, minimum minut je 1 a nejvíce je " + this.maxMuteLength + ".");
+            this.sendError(channel, "command.mute.wrong-mute-length", this.maxMuteLength + ".");
             return;
         }
 
         let member = valid[0];
 
         if(member.user.id == user.id){
-            this.sendError(channel, "You can't mute yourself.");
+            this.sendError(channel, "command.mute.self");
             return;
         }
 
         if(this.muteModule.isMuted(member)){
-            this.sendError(channel, "Vámi zvolený člen je již umlčený.");
+            this.sendError(channel, "command.mute.already-muted");
             return;
         }
 
         if(!this.muteModule.canBeMuted(member)){
-            this.sendError(channel, "Vámi zvolený člen je moderátor. Nemůžete umlčet moderátora.");
+            this.sendError(channel, "command.mute.moderator");
             return;
         }
         
         let reason = args[2];
         
         const embedDM = new Discord.RichEmbed()
-            .setTitle("🔇 | Byl jste umlčen")
-            .setDescription("Na serveru jste byl umlčen.")
+            .setTitle("🔇 | " + Translation.translate("command.mute.user-muted-self.title"))
+            .setDescription(Translation.translate("command.mute.user-muted-self"))
             .setColor(0xf0932b)
-            .addField("Čas", minutes + " minut", true)
-            .addField("Důvod", reason, false);
+            .addField(Translation.translate("command.mute.time"), minutes + " " + Translation.translate("command.mute.minutes"), true)
+            .addField(Translation.translate("command.mute.reason"), reason, false);
 
         const embed = new Discord.RichEmbed()
-            .setTitle("🔇 | " + member.user.username + " byl umlčen")
-            .setDescription("Na serveru byl umlčen " + member.user.username + ".")
+            .setTitle("🔇 | " + member.user.username + " " + Translation.translate("command.mute.user-muted.title"))
+            .setDescription(Translation.translate("command.mute.user-muted") + " " + member.user.username + ".")
             .setColor(0xf0932b)
-            .addField("Čas", minutes + " minut", true)
-            .addField("Důvod", reason, false);
+            .addField(Translation.translate("command.mute.time"), minutes + " " + Translation.translate("command.mute.minutes"), true)
+            .addField(Translation.translate("command.mute.reason"), reason, false);
 
         member.createDM().then(channel => {
             channel.send(embedDM);

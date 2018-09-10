@@ -1,6 +1,6 @@
-
 const Command = require("./Command");
 const Discord = require('discord.js');
+const Translation = require("../Translation");
 
 class SayCommand extends Command {
 
@@ -38,7 +38,7 @@ class SayCommand extends Command {
 
 
         const embed = new Discord.RichEmbed()
-            .setTitle("🤐 | Notice!")
+            .setTitle("🤐 | " + Translation.translate("command.notce.notice"))
             .setDescription(message)
             .setFooter(author.username, author.avatarURL)
             .setColor(0xbadc58);

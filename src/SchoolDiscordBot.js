@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Translation = require("./Translation");
 
 class SchoolDiscordBot {
     constructor(settings, commands, modules) {
@@ -48,6 +49,8 @@ class SchoolDiscordBot {
     }
 
     ready() {
+        Translation.setLanguage(this.settings.language);
+
         this.name = this.client.user.username;
         
         console.log("Loading modules.");
