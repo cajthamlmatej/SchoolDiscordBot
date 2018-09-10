@@ -64,17 +64,22 @@ class VoteModule extends Module {
     deleteVote(name, channel){
         let votes = fs.readFileSync(this.tempFile, "utf8");
         let votesObject = JSON.parse(votes);
-        
-        delete votesObject["votes"][name];
+        let vote = votesObject["votes"][name];
 
-        const embed = new Discord.RichEmbed()
-            .setTitle("📆 | Hlasování bylo smazáno.")
-            .setDescription("Hlasování bylo úspěšně smazáno z paměti.")
-            .setColor(0xbadc58);
+        let voteChannel = this.client.channels.find(c => c.id == vote["channel"]);
+        voteChannel.fetchMessage(vote["id"]).then(message => {
+            message.delete();
+            delete votesObject["votes"][name];
 
-        channel.send(embed);
-
-        fs.writeFileSync(this.tempFile, JSON.stringify(votesObject));
+            const embed = new Discord.RichEmbed()
+                .setTitle("📆 | Hlasování bylo smazáno.")
+                .setDescription("Hlasování bylo úspěšně smazáno z paměti.")
+                .setColor(0xbadc58);
+    
+            channel.send(embed);
+    
+            fs.writeFileSync(this.tempFile, JSON.stringify(votesObject));
+        });
     }
 
     startVote(type, name, description, options, channel){
