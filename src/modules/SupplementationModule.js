@@ -134,9 +134,12 @@ class SupplementationModule extends Module {
                             if(message.pinned){
                                 message.unpin();
                             }
+
+                            console.log("Removing supplementation to " + day);
+
+                            delete supplementationsObject["supplementations"][day];
+                            fs.writeFileSync("./temp/supplementations.json", JSON.stringify(supplementationsObject));
                         }
-                    }).catch(error => {
-                        // not found, dont do anything
                     });
                 });
             });
