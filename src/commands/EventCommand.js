@@ -51,7 +51,6 @@ class EventCommand extends SubsCommand {
     callCreate(args, channel, author, message) {
         let name, type, start, end, role, place, subject, description;
         if (args.length == 8) {
-            console.log(args);
             [name, type, start, end, role, place, subject, description] = args;
         } else {
             [name, type, end, role, place, subject, description] = args;
