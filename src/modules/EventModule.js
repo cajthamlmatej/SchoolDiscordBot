@@ -25,10 +25,12 @@ class EventModule extends Module {
         let events = this.getEvents(); 
         let toRemove = [];
 
-        Object.keys(events).forEach(messageId => {
-            let to = events[messageId];
+        Object.keys(events).forEach(name => {
+            let data = events[name];
+            let messageId = data["message"];
+            let end = data.values.end;
             let todayDate = moment();
-            let eventDate = moment(to, "D. M. YYYY");
+            let eventDate = moment(end, "D. M. YYYY");
 
             if(todayDate.diff(eventDate, "days") > this.daysToArchive){
                 this.channel.fetchMessage(messageId).then(message => {
@@ -36,9 +38,10 @@ class EventModule extends Module {
 
                     this.archiveChannel.send(embed);
                     message.delete();
-                    toRemove.push(messageId);
+                    toRemove.push(name);
                 }).catch(error => {
-                    // not found, dont do anything
+                    if(!toRemove.includes(name))
+                        toRemove.push(name);
                 });
             }
         });
@@ -46,31 +49,65 @@ class EventModule extends Module {
         this.removeEventsFromFile(toRemove);
     }
 
-    addEvent(type, from, to, role, place, subject, description, attachments){
-        let embed = new Discord.RichEmbed()
-            .setTitle("🕜 | " + ((type == "udalost") ? "Nová událost" : "Nový úkol"))
-            .setDescription(description)
-            .setColor(0xbadc58);
-
-        embed.addField("Skupina", this.channel.guild.roles.find(r => r.id == this.roles[role]), true);
-        embed.addField("Předmět", subject == "all" ? "?" : subject, true);
-        
-        embed.addField(from == to ? "Datum" : "Od kdy do kdy", from == to ? to : (from + " do " + to), true);
-        embed.addField("Místo", place == "all" ? "Škola" : place);
+    addEvent(name, type, start, end, role, place, subject, description, attachments){
+        let values = {
+            type: type,
+            start: start,
+            end: end,
+            role: role,
+            place: place,
+            subject: subject,
+            description: description
+        };
         
         this.channel.send({
-            embed: embed,
+            embed: this.generateEmbed(values),
             files: attachments
         }).then(message => {
-            this.addEventToFile(message.id, to);
+            this.addEventToFile(message.id, name, values);
         });
     }
 
-    addEventToFile(messageId, toDate){
+    editEvent(name, type, value) {
         let events = fs.readFileSync(this.tempFile, "utf8");
         let eventsObject = JSON.parse(events);
 
-        eventsObject["events"][messageId] = toDate;
+        let event = eventsObject["events"][name];
+        let values = event.values;
+        values[type] = value;
+
+        event.values = values;
+        
+        eventsObject["events"][name] = event;
+        fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
+
+        this.channel.fetchMessage(event.message).then(message => {
+            message.edit({
+                embed: this.generateEmbed(values)
+            });
+        });
+    }
+
+    generateEmbed(values){
+        let embed = new Discord.RichEmbed()
+            .setTitle("🕜 | " + ((values.type == "event") ? "New event" : "New task"))
+            .setDescription(values.description)
+            .setColor(0xbadc58);
+
+        embed.addField("Group", this.channel.guild.roles.find(r => r.id == this.roles[values.role]), true);
+        embed.addField("Subject", values.subject, true);
+        
+        embed.addField(values.start == values.end ? "Date" : "From date to date", values.start == values.end ? values.end : (values.start + " to " + values.end), true);
+        embed.addField("Place", values.place);
+
+        return embed;
+    }
+
+    addEventToFile(messageId, name, values){
+        let events = fs.readFileSync(this.tempFile, "utf8");
+        let eventsObject = JSON.parse(events);
+
+        eventsObject["events"][name] = { message: messageId, values: values };
 
         fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
     }
@@ -86,12 +123,65 @@ class EventModule extends Module {
         fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
     }
 
+    deleteEvent(name){
+        let events = fs.readFileSync(this.tempFile, "utf8");
+        let eventsObject = JSON.parse(events);
+
+        this.channel.fetchMessage(eventsObject["events"][name].message).then(message => {
+            message.delete();
+        });
+
+        this.removeEventFromFile(name);
+    }
+
+    removeEventFromFile(event){
+        let events = fs.readFileSync(this.tempFile, "utf8");
+        let eventsObject = JSON.parse(events);
+
+        delete eventsObject["events"][event];
+
+        fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
+    }
+
     getEvents(){
         let events = fs.readFileSync(this.tempFile, "utf8");
         let eventsObject = JSON.parse(events);
 
         return eventsObject["events"];
     }
+
+    isMentionableRole(roleName){
+        return Object.keys(this.roles).includes(roleName);
+    }
+
+    exists(name){
+        let events = fs.readFileSync(this.tempFile, "utf8");
+        let eventsObject = JSON.parse(events);
+
+        return eventsObject["events"][name] != undefined;
+    }
+
+    printEventList(user){
+        let list = "";
+        let events = this.getEvents();
+
+        Object.keys(events).forEach(eventName => {
+            list += "\n**" + eventName + "**";
+        });
+
+        if(list == "")
+            list = "No events exists.";
+        else
+            list += "\n";
+        
+        const embed = new Discord.RichEmbed()
+            .setTitle("📆 | List of all events")
+            .setDescription(list)
+            .setColor(0xbadc58)
+        
+        user.createDM().then(dm => dm.send(embed)).catch(console.error);
+    }
+
 
     event(name, args){
     }
