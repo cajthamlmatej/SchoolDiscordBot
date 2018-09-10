@@ -46,7 +46,7 @@ class EventModule extends Module {
         this.removeEventsFromFile(toRemove);
     }
 
-    addEvent(type, from, to, role, place, subject, description){
+    addEvent(type, from, to, role, place, subject, description, attachments){
         let embed = new Discord.RichEmbed()
             .setTitle("🕜 | " + ((type == "udalost") ? "Nová událost" : "Nový úkol"))
             .setDescription(description)
@@ -58,7 +58,10 @@ class EventModule extends Module {
         embed.addField(from == to ? "Datum" : "Od kdy do kdy", from == to ? to : (from + " do " + to), true);
         embed.addField("Místo", place == "all" ? "Škola" : place);
         
-        this.channel.send(embed).then(message => {
+        this.channel.send({
+            embed: embed,
+            files: attachments
+        }).then(message => {
             this.addEventToFile(message.id, to);
         });
     }

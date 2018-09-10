@@ -28,7 +28,7 @@ class EventCreateCommand extends Command {
         this.roles = bot.settings.roles.mentionable;
     }
 
-    call(args, channel){
+    call(args, channel, author, message){
         if(args.length != 7){
             this.sendHelp(channel);
             return;
@@ -58,8 +58,14 @@ class EventCreateCommand extends Command {
         let place = args[4];
         let subject = args[5];
         let description = args[6];
+
+        let files = [];
+
+        message.attachments.array().forEach(messageAttachment => {
+            files.push(messageAttachment.url);
+        })
      
-        this.eventModule.addEvent(type, from, to, role, place, subject, description);
+        this.eventModule.addEvent(type, from, to, role, place, subject, description, files);
 
         return false;
     }
