@@ -1,5 +1,6 @@
 const Module = require("./Module");
 const Discord = require('discord.js');
+const Translation = require("../Translation");
 const fs = require('fs');
 const moment = require('moment');
 
@@ -88,14 +89,14 @@ class EventModule extends Module {
 
     generateEmbed(values){
         let embed = new Discord.RichEmbed()
-            .setTitle("🕜 | " + ((values.type == "event") ? "New event" : "New task"))
+            .setTitle("🕜 | " + ((values.type == "event") ? Translation.translate("module.event.new-event") : Translation.translate("module.event.new-task")))
             .setDescription(values.description)
             .setColor(0xbadc58);
 
-        embed.addField("Group", this.channel.guild.roles.find(r => r.id == this.roles[values.role]), true);
-        embed.addField("Subject", values.subject, true);
+        embed.addField(Translation.translate("module.event.group"), this.channel.guild.roles.find(r => r.id == this.roles[values.role]), true);
+        embed.addField(Translation.translate("module.event.subject"), values.subject, true);
         
-        embed.addField(values.start == values.end ? "Date" : "From date to date", values.start == values.end ? values.end : (values.start + " to " + values.end), true);
+        embed.addField(values.start == values.end ? Translation.translate("module.event.date") : Translation.translate("module.event.from-date-to-date"), values.start == values.end ? values.end : (values.start + " " + Translation.translate("module.event.to") + " " + values.end), true);
         embed.addField("Place", values.place);
 
         return embed;
@@ -159,12 +160,12 @@ class EventModule extends Module {
         });
 
         if(list == "")
-            list = "No events exists.";
+            list = Translation.translate("module.event.no-event-exists");
         else
             list += "\n";
         
         const embed = new Discord.RichEmbed()
-            .setTitle("📆 | List of all events")
+            .setTitle("📆 | " + Translation.translate("module.event.list"))
             .setDescription(list)
             .setColor(0xbadc58)
         

@@ -1,4 +1,5 @@
 const SubsCommand = require("./SubsCommand");
+const Translation = require("../Translation");
 
 class VoteCommand extends SubsCommand {
 
@@ -57,7 +58,7 @@ class VoteCommand extends SubsCommand {
         let type = args[0];
         let name = args[1];
         let description = args[2];
-        let options = this.voteModule.defaultOptions;
+        let options = {"👍": Translation.translate("module.vote.yes"), "👎": Translation.translate("module.vote.no")};;
         let optionsEmojis = this.voteModule.optionsEmojis;
 
         if(!["global", "private"].includes(type)){

@@ -1,5 +1,6 @@
 const Module = require("./Module");
 const http = require('http');
+const Translation = require("../Translation");
 const fs = require('fs');
 const jsdom = require("jsdom");
 const Discord = require('discord.js');
@@ -98,7 +99,7 @@ class SupplementationModule extends Module {
                     suppleString = suppleString.replace(/^\s+|\s+$/g, '');
 
                     const embed = new Discord.RichEmbed()
-                        .setTitle("👓 | Bylo zveřejněno nové suplování na den/dny " + dayName)
+                        .setTitle("👓 | " + Translation.translate("module.supplementation.new") + " " + dayName)
                         .setDescription(suppleString)
                         .setColor(0xbadc58);
 
@@ -135,7 +136,7 @@ class SupplementationModule extends Module {
                                 message.unpin();
                             }
 
-                            console.log("Removing supplementation to " + day);
+                            console.log("Removing supplementation fro day " + day);
 
                             delete supplementationsObject["supplementations"][day];
                             fs.writeFileSync("./temp/supplementations.json", JSON.stringify(supplementationsObject));
@@ -154,8 +155,8 @@ class SupplementationModule extends Module {
         this.tick();
 
         const embed = new Discord.RichEmbed()
-            .setTitle("👓 | Suplování bylo aktualizováno.")
-            .setDescription("Suplování bylo aktualizováno dle webových stránek školy.")
+            .setTitle("👓 | " + Translation.translate("module.supplementation.refreshed.title"))
+            .setDescription(Translation.translate("module.supplementation.refreshed"))
             .setColor(0xbadc58);
 
         channel.send(embed);

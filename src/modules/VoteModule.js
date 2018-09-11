@@ -1,5 +1,6 @@
 const Module = require("./Module");
 const Discord = require('discord.js');
+const Translation = require("../Translation");
 const fs = require('fs');
 
 class VoteModule extends Module {
@@ -10,7 +11,6 @@ class VoteModule extends Module {
 
     init(bot) {
         this.tempFile = "./temp/votes.json";
-        this.defaultOptions = {"👍": "ANO", "👎": "NE"};
         this.optionsEmojis = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣", "🔟"];
         this.voteChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels.vote);
         this.client = bot.client;
@@ -49,12 +49,12 @@ class VoteModule extends Module {
 
 
         if(list == "")
-            list = "No vote exists.";
+            list = Translation.translate("module.vote.no-vote-exists");
         else
             list += "\n";
             
         const embed = new Discord.RichEmbed()
-            .setTitle("📆 | Seznam všech hlasování")
+            .setTitle("📆 | " + Translation.translate("module.vote.list"))
             .setDescription(list)
             .setColor(0xbadc58)
         
@@ -72,8 +72,8 @@ class VoteModule extends Module {
             delete votesObject["votes"][name];
 
             const embed = new Discord.RichEmbed()
-                .setTitle("📆 | Hlasování bylo smazáno.")
-                .setDescription("Hlasování bylo úspěšně smazáno z paměti.")
+                .setTitle("📆 | " + Translation.translate("module.vote.deleted.title"))
+                .setDescription(Translation.translate("module.vote.deleted"))
                 .setColor(0xbadc58);
     
             channel.send(embed);
@@ -91,12 +91,12 @@ class VoteModule extends Module {
         let optionsString = "";
 
         Object.keys(options).forEach(optionEmoji => {
-            optionsString += optionEmoji + " pro **" + options[optionEmoji] + "**\n";
+            optionsString += optionEmoji + " " + Translation.translate("module.vote.for") + " **" + options[optionEmoji] + "**\n";
         });
 
         let embed = new Discord.RichEmbed()
-            .setTitle("📆 | Nové hlasování")
-            .setDescription(description + "\n\nhlasujte pomocí reakce pro možnosti: \n" + optionsString)
+            .setTitle("📆 | " + Translation.translate("module.vote.new"))
+            .setDescription(description + "\n\n" + Translation.translate("module.vote.vote") + ": \n" + optionsString)
             .setColor(0xbadc58);
 
         let voteChannel;
@@ -146,7 +146,7 @@ class VoteModule extends Module {
 
                 votes[reaction.emoji] = count;
 
-                votesString += "`" + (count) + " hlasů (" + this.addZero(((count) * weight)) + "%)` " + reaction.emoji + " " + vote["options"][reaction.emoji] + "\n";
+                votesString += "`" + (count) + " " + Translation.translate("module.vote.votes") + " (" + this.addZero(((count) * weight)) + "%)` " + reaction.emoji + " " + vote["options"][reaction.emoji] + "\n";
             });
 
             let sortedVotes = Object.keys(votes).sort(function(a, b) { return votes[b] - votes[a]; });
@@ -162,7 +162,7 @@ class VoteModule extends Module {
             let winningChoice = "";
 
             if(winners.length === 1){
-                winningChoice = "Vyhrála možnost **" + winners[0] + " " + vote["options"][winners[0]] + "**";
+                winningChoice = Translation.translate("module.vote.option-won") + " **" + winners[0] + " " + vote["options"][winners[0]] + "**";
             }else {
                 let choiceString = "";
 
@@ -173,17 +173,17 @@ class VoteModule extends Module {
                     }
                 });
 
-                winningChoice = "Vyhrály možnosti **" + choiceString + "**";
+                winningChoice = Translation.translate("module.vote.options-won") + " **" + choiceString + "**";
             }
 
             const embed = new Discord.RichEmbed()
-                .setTitle("📆 | Konec hlasování \"" + name + "\"")
+                .setTitle("📆 | " + Translation.translate("module.vote.end") + " \"" + name + "\"")
                 .setDescription(vote["description"])
                 .setColor(0xbadc58)
-                .addField("☝ Hlasy", votesString, true)
+                .addField("☝ " + Translation.translate("module.vote.options-votes"), votesString, true)
                 .addBlankField()
-                .addField("🖐 Statistiky", "**Počet hlasů**: " + reactionCount + "\n**Váha jednoho hlasu**: " + weight+ "%\n", true)
-                .addField("👍 Výsledek", winningChoice, true);
+                .addField("🖐 " + Translation.translate("module.vote.stats"), "**" + Translation.translate("module.vote.votes-count") + "**: " + reactionCount + "\n**" + Translation.translate("module.vote.vote-weight") + "**: " + weight+ "%\n", true)
+                .addField("👍 " + Translation.translate("module.vote.result"), winningChoice, true);
             
             channel.send(embed);
         }).catch(console.error);
