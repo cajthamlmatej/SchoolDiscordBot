@@ -34,12 +34,14 @@ class VoteStartCommand extends Command {
             .setColor(0xbadc58);
         
         let groups = {};
-        Object.keys(this.commandsGroups).forEach(group => {
-            groups[group] = [];
-        });
 
         Object.values(this.commands).forEach(command => {
-            groups[command.getGroup()].push(command);
+            let group = command.getGroup();
+            if(groups[group] == undefined){
+                groups[group] = [];
+            }
+
+            groups[group].push(command);
         });
 
         let help = Translation.translate("command.help.can-execute") + "\n\n";
@@ -77,7 +79,7 @@ class VoteStartCommand extends Command {
             });
 
             if(commandsString != ""){
-                help += this.commandsGroups[groupName] + "\n";
+                help += Translation.translate("commands.group." + groupName) + "\n";
                 help += commandsString;
                 help += "\n";
             }

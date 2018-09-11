@@ -1,15 +1,28 @@
 {
+    "roles.group.mentionable": "📢 Označitelné role",
+    "roles.group.assignable": "📛 Přiřaditelné role",
+    "roles.group.special": "☢ Speciální role",
+    "roles.group.permission": "🚫 Role pro práva",
+
+    "commands.group.main": "🔔 Hlavní příkazy",
+    "commands.group.school": "🎓 Školní příkazy",
+    "commands.group.vote": "🎟 Příkazy na hlasování",
+    "commands.group.manage": "💾 Příkazy na správu serveru",
+
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
     "command.error": "Při odesílání příkazu nastala chyba",
+    
     "command.event.already-exists": "Událost s tímto jménem již existuje, zvolte prosím jiné jméno.",
     "command.event.type-not-valid": "Typ události není platný, vyberte jeden z následujících:",
     "command.event.role-not-valid": "Vybraná role není platná, vyberte jednu z *označitelných* rolí v příkazu `rolelist`.",
     "command.event.dont-exist": "Událost s tímto jménem neexistuje.",
     "command.event.edit-type-not-valid": "Vybraná hodnota k editaci není platná, vyberte jednu z následujících:",
     "command.event.wrong-date-format": "Zadané datum není ve správném formátu. Správný formát je \"11. 9. 2018\".",
+    
     "command.help.title": "Nápověda k používání bota",
     "command.help.can-execute": "Seznam příkazů, které můžete použít.",
+    
     "command.mute.user-list.title": "Seznam všech možných uživatelů",
     "command.mute.user-list": "Určete jméno člena více podrobně",
     "command.mute.user-not-found": "Nikoho s tímto jménem jsme nenašli. Zkontrolujte diakritiku a správnost jména.",
@@ -27,15 +40,25 @@
     "command.mute.minutes": "minut",
     "command.mute.unmuted.title": "byl odmlčen",
     "command.mute.unmuted": "již není umlčen.",
+    
     "command.ping": "Odezva",
     "command.ping.ping": "Odezva bota je",
+    
     "command.purge.wrong-message-count": "Zadaný počet zpráv, které se mají smazat není správný. Minimum zpráv je 1 a nejvíce je 100.",
     "command.purge.purged.title": "Uklííííízečka!!!",
     "command.purge.purged": "zpráv bylo smazáno v tomto kanálu.",
+    
     "command.role.role-not-found": "Vybraná role není platná, vyberte jednu z rolí v příkazu `rolelist`.",
+    
     "command.notice.notice": "Oznámení!",
+    
     "command.vote.dont-exist": "Hlasování s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazem votelist.",
     "command.vote.type-not-valid": "Typ hlasování není platný, vyberte jeden z následujících:",
     "command.vote.already-exists": "Hlasování s tímto jménem již existuje, zvolte prosím jiné jméno.",
-    "command.vote.too-much.options": "Zadal jste více možností (> 10) než je možné. Zadejte menší počet."
+    "command.vote.too-much.options": "Zadal jste více možností (> 10) než je možné. Zadejte menší počet.",
+    
+    "command.language.language-not-found": "Jazyk s tímto jménem nebyl nalezen.",
+    "command.language.language-changed.title": "Jazyk bota byl změněn",
+    "command.language.language-changed": "Jazyk bota byl do restartování změněn, nezapomente jej změnit i v configu.",
+    "command.language.language-list": "Seznam jazyků"
 }

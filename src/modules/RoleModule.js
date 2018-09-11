@@ -1,6 +1,7 @@
 const Module = require("./Module");
 const Discord = require('discord.js');
 const fs = require('fs');
+const Translation = require("../Translation");
 
 class RoleModule extends Module {
 
@@ -12,7 +13,6 @@ class RoleModule extends Module {
         this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels.role);
         this.rolelockRole = bot.settings.roles.special.rolelock;
         this.roles = bot.settings.roles;
-        this.roleGroups = bot.settings.modules.role.groups;
         
         this.channel.fetchMessages({ limit: 30 })
             .then(messages => {
@@ -128,7 +128,7 @@ class RoleModule extends Module {
                 list += "`" + roleName + "` - " + roles.find(r => r.id == roleId) + "\n";
             });
 
-            embed.addField(this.roleGroups[groupName], list);
+            embed.addField(Translation.translate("roles.group." + groupName), list);
         });
 
 
