@@ -18,6 +18,26 @@ class Translation {
         let translation = this.languageFile[path];
         return translation == undefined ? "?_" + path : translation;
     }
+
+    static languageExists(language){
+        try {
+            fs.readFileSync("languages/" + language + ".json", "utf8");
+            return true;
+        } catch(e){
+            return false;
+        }
+    }
+
+    static languageList(){
+        let languages = [];
+        let languagesFiles = fs.readdirSync("languages", "utf8");
+
+        languagesFiles.forEach(file => {
+            languages.push(file.replace(".json", ""));
+        });
+
+        return languages;
+    }
      
     static setLanguage(lang){
         this.language = lang;
