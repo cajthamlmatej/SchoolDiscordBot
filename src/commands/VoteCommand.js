@@ -51,9 +51,8 @@ class VoteCommand extends SubsCommand {
     }
 
     callStart(args, channel){
-        let type = args[0];
-        let name = args[1];
-        let description = args[2];
+        let [type, name, description] = args;
+        
         let options = {"👍": Translation.translate("module.vote.yes"), "👎": Translation.translate("module.vote.no")};;
         let optionsEmojis = this.voteModule.optionsEmojis;
 
