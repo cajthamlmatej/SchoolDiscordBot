@@ -17,7 +17,8 @@ class PurgeCommand extends Command {
         
     }
 
-    call(args, channel){
+    call(args, message) {
+        let channel = message.channel;
         if(args.length != 1){
             this.sendHelp(channel);
             return;

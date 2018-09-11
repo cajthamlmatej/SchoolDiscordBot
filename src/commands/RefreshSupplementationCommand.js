@@ -23,7 +23,8 @@ class RefreshSupplementationCommand extends Command {
         this.supplementationModule = bot.modules.supplementationmodule;
     }
 
-    call(args, channel){
+    call(args, message) {
+        let channel = message.channel;
         this.supplementationModule.refresh(channel);
 
         return false;

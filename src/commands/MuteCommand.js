@@ -21,7 +21,8 @@ class MuteCommand extends Command {
         this.muteModule = bot.modules.mutemodule;
     }
 
-    call(args, channel, user){
+    call(args, message) {
+        let channel = message.channel;
         if(args.length != 3){
             this.sendHelp(channel);
             return;

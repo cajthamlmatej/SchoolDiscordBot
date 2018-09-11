@@ -21,7 +21,8 @@ class PingCommand extends Command {
         this.client = bot.client;
     }
 
-    call(args, channel, author){
+    call(args, message) {
+        let channel = message.channel;
         let embed = new Discord.RichEmbed()
             .setTitle("🏓 | " + Translation.translate("command.ping"))
             .setDescription(Translation.translate("command.ping.ping") + " " + Math.round(this.client.pings[0]) + "ms")

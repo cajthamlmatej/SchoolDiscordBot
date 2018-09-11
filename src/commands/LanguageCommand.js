@@ -32,7 +32,8 @@ class LanguageCommand extends SubsCommand {
 
     }
 
-    callList(args, channel, author){
+    callList(args, message) {
+        let channel = message.channel;
         let languages = Translation.languageList();
         
         let list = "";
@@ -48,10 +49,11 @@ class LanguageCommand extends SubsCommand {
             .setDescription(list)
             .setColor(0xbadc58)
         
-        author.createDM().then(dm => dm.send(embed)).catch(error => {});
+        message.author.createDM().then(dm => dm.send(embed)).catch(error => {});
     }
 
-    callChange(args, channel) {
+    callChange(args, message) {
+        let channel = message.channel;
         let language = args[0];
 
         if(!Translation.languageExists(language)){

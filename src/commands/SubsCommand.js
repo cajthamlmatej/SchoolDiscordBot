@@ -8,7 +8,9 @@ class SubsCommand extends Command {
         throw new Error('You have to implement the method getSubCommands!');
     }
 
-    call(args, channel, author, message) {
+    call(args, message) {
+        let channel = message.channel;
+        
         if(args.length <= 0){
             this.sendHelp(channel);
             return;
@@ -30,7 +32,7 @@ class SubsCommand extends Command {
 
         var args = args.slice(1);
 
-        return this["call" + subCommandName[0].toUpperCase() + subCommandName.slice(1)](args, channel, author, message);
+        return this["call" + subCommandName[0].toUpperCase() + subCommandName.slice(1)](args, message);
     }
 
     sendHelp(channel, subCommandName){

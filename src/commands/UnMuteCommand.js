@@ -20,7 +20,8 @@ class UnMuteCommand extends Command {
         this.muteModule = bot.modules.mutemodule;
     }
 
-    call(args, channel){
+    call(args, message) {
+        let channel = message.channel;
         if(args.length != 1){
             this.sendHelp(channel);
             return;

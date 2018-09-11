@@ -41,7 +41,9 @@ class EventCommand extends SubsCommand {
         this.eventModule = bot.modules["eventmodule"];
     }
 
-    callCreate(args, channel, author, message) {
+    callCreate(args, message) {
+        let channel = message.channel;
+
         let name, type, start, end, role, place, subject, description;
         if (args.length == 8) {
             [name, type, start, end, role, place, subject, description] = args;
@@ -81,10 +83,10 @@ class EventCommand extends SubsCommand {
         return true;
     }
 
-    callEdit(args, channel) {
-        let name = args[0];
-        let type = args[1];
-        let value = args[2];
+    callEdit(args, message) {
+        let channel = message.channel;
+        
+        let [name, type, value] = args;
 
         if (!this.eventModule.exists(name)) {
             this.sendError(channel, "command.event.dont-exist");
@@ -115,7 +117,8 @@ class EventCommand extends SubsCommand {
         return true;
     }
 
-    callDelete(args, channel){
+    callDelete(args, message) {
+        let channel = message.channel;
         let name = args[0];
 
         if (!this.eventModule.exists(name)) {
@@ -128,8 +131,8 @@ class EventCommand extends SubsCommand {
         return true;
     }
 
-    callList(args, channel, author){
-        this.eventModule.printEventList(author);
+    callList(args, message) {
+        this.eventModule.printEventList(message.author);
 
         return true;
     }

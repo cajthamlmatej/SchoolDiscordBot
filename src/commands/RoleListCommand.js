@@ -23,7 +23,8 @@ class RoleListCommand extends Command {
         this.roleModule = bot.modules.rolemodule;
     }
 
-    call(args, channel){
+    call(args, message) {
+        let channel = message.channel;
         this.roleModule.printRoleList(channel);
         return false;
     }

@@ -24,7 +24,8 @@ class HelpCommand extends Command {
         this.commands = bot.commands;
     }
 
-    call(args, channel, author, message){
+    call(args, message) {
+        let channel = message.channel;
         let embed = new Discord.RichEmbed()
             .setTitle("💼 | " + Translation.translate("command.help.title"))
             .setColor(0xbadc58);

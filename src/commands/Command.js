@@ -38,7 +38,7 @@ class Command {
     sendHelp(channel){
         const embed = new Discord.RichEmbed()
             .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
-            .setDescription(Translation.translate("command.usage") + " `" + this.getUsage() + "` - " + Translation.translate("commands.help." + cmdName))
+            .setDescription(Translation.translate("command.usage") + " `" + this.getUsage() + "` - " + Translation.translate("commands.help." + this.getName()))
             .setColor(0xf0932b);
 
         channel.send(embed);
@@ -57,7 +57,7 @@ class Command {
         channel.send(embed);
     }
 
-    call(args) {
+    call(args, message) {
         throw new Error('You have to implement the method call!');
     }
 

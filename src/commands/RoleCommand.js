@@ -22,7 +22,8 @@ class RoleCommand extends Command {
         this.roleModule = bot.modules.rolemodule;
     }
 
-    call(args, channel, user){
+    call(args, message) {
+        let channel = message.channel;
         if(args.length != 1){
             this.sendHelp(channel);
             return;
@@ -36,7 +37,7 @@ class RoleCommand extends Command {
             return;
         }
         
-        this.roleModule.addRole(user, role, channel);
+        this.roleModule.addRole(message.author, role, channel);
         return false;
     }
 

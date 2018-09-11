@@ -37,7 +37,8 @@ class VoteCommand extends SubsCommand {
         this.client = bot.client;
     }
 
-    callEnd(args, channel){
+    callEnd(args, message) {
+        let channel = message.channel;
         let name = args[0];
 
         if(!this.voteModule.exists(name)){
@@ -50,7 +51,8 @@ class VoteCommand extends SubsCommand {
         return true;
     }
 
-    callStart(args, channel){
+    callStart(args, message) {
+        let channel = message.channel;
         let [type, name, description] = args;
         
         let options = {"👍": Translation.translate("module.vote.yes"), "👎": Translation.translate("module.vote.no")};;
@@ -89,12 +91,13 @@ class VoteCommand extends SubsCommand {
         return true;
     }
 
-    callList(args, channel, user){
-        this.voteModule.printVoteList(user);
+    callList(args, message) {
+        this.voteModule.printVoteList(message.author);
         return true;
     }
 
-    callDelete(args, channel){
+    callDelete(args, message) {
+        let channel = message.channel;
         let name = args[0];
         
         if(!this.voteModule.exists(name)){
