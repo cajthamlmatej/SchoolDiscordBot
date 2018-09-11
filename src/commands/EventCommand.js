@@ -7,20 +7,16 @@ class EventCommand extends SubsCommand {
     getSubCommands() {
         return {
             "create": {
-                "arguments": 7,
-                "help": "<name> <event/task> [start] <end> <role> <place> <subject> <description>"
+                "arguments": 7
             },
             "edit": {
-                "arguments": 3,
-                "help": "<name> <type/start/end/role/place/subject/description> <value>"
+                "arguments": 3
             },
             "delete": {
-                "arguments": 1,
-                "help": "<name>"
+                "arguments": 1
             },
             "list": {
-                "arguments": 0,
-                "help": ""
+                "arguments": 0
             }
         }
     }

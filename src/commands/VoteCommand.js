@@ -6,20 +6,16 @@ class VoteCommand extends SubsCommand {
     getSubCommands(){
         return {
             "start": {
-                "arguments": 3,
-                "help": "<global/private> <jméno hlasování> <popis hlasování> [možnosti rozdělene středníkem]"
+                "arguments": 3
             },
             "end": {
-                "arguments": 1,
-                "help": "<name>"
+                "arguments": 1
             },
             "list": {
-                "arguments": 0,
-                "help": ""
+                "arguments": 0
             },
             "delete": {
-                "arguments": 1,
-                "help": "<name>"
+                "arguments": 1
             }
         }
     }

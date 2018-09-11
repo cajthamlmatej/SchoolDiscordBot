@@ -8,12 +8,10 @@ class LanguageCommand extends SubsCommand {
     getSubCommands(){
         return {
             "change": {
-                "arguments": 1,
-                "help": "<language>"
+                "arguments": 1
             },
             "list": {
-                "arguments": 0,
-                "help": ""
+                "arguments": 0
             }
         }
     }
