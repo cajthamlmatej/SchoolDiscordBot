@@ -1,5 +1,6 @@
 
 const SubsCommand = require("./SubsCommand");
+const moment = require('moment');
 
 class EventCommand extends SubsCommand {
 
@@ -55,6 +56,11 @@ class EventCommand extends SubsCommand {
         } else {
             [name, type, end, role, place, subject, description] = args;
             start = end;
+        }
+
+        if(!(moment(end, "D. M. YYYY").isValid() || moment(start, "D. M. YYYY").isValid())){
+            this.sendError(channel, "command.event.wrong-date-format");
+            return;
         }
 
         if (this.eventModule.exists(name)) {

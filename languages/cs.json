@@ -7,6 +7,7 @@
     "command.event.role-not-valid": "Vybraná role není platná, vyberte jednu z *označitelných* rolí v příkazu `rolelist`.",
     "command.event.dont-exist": "Událost s tímto jménem neexistuje.",
     "command.event.edit-type-not-valid": "Vybraná hodnota k editaci není platná, vyberte jednu z následujících:",
+    "command.event.wrong-date-format": "Zadané datum není ve správném formátu. Správný formát je \"11. 9. 2018\".",
     "command.help.title": "Nápověda k používání bota",
     "command.help.can-execute": "Seznam příkazů, které můžete použít.",
     "command.mute.user-list.title": "Seznam všech možných uživatelů",
