@@ -116,6 +116,8 @@ class EventModule extends Module {
 
         this.channel.fetchMessage(eventsObject["events"][name].message).then(message => {
             message.delete();
+        }).catch(error => {
+            // Message not found, dont log anything
         });
 
         this.removeEventFromFile(name);

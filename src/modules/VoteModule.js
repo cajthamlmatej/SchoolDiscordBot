@@ -79,6 +79,8 @@ class VoteModule extends Module {
             channel.send(embed);
     
             fs.writeFileSync(this.tempFile, JSON.stringify(votesObject));
+        }).catch(error => {
+            // Message not found, dont log anything
         });
     }
 
