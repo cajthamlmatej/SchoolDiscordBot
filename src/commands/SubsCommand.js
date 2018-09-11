@@ -8,20 +8,6 @@ class SubsCommand extends Command {
         throw new Error('You have to implement the method getSubCommands!');
     }
 
-    /*
-    getUsage() {
-        let subCommands = Object.keys(this.getSubCommands());
-        let list = "";
-
-        subCommands.forEach(command => {
-            list += command + "/";
-        });
-
-        list = list.replace(/\/+$/, '');
-
-        return this.getName() + " <" + list + ">";
-    }*/
-
     call(args, channel, author, message) {
         if(args.length <= 0){
             this.sendHelp(channel);
