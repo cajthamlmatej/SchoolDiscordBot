@@ -28,12 +28,12 @@ class EventModule extends Module {
 
         Object.keys(events).forEach(name => {
             let data = events[name];
-            let messageId = data["message"];
+            let messageId = data.message;
             let end = data.values.end;
             let todayDate = moment();
             let eventDate = moment(end, "D. M. YYYY");
-
-            if(todayDate.diff(eventDate, "days") > this.daysToArchive){
+            
+            if(todayDate.diff(eventDate, "days") >= this.daysToArchive){
                 this.channel.fetchMessage(messageId).then(message => {
                     let embed = new Discord.RichEmbed(message.embeds[0]);
 
