@@ -30,7 +30,12 @@
     "commands.help.vote.start": "Vytvoří hlasování s vyplněnými údaji",
     "commands.help.vote.end": "Ukončí hlasování a vypíše statistiky / jaké možnost/i vyhrál/y",
     "commands.help.vote.delete": "Smaže hlasování a jeho zprávu",
-    "commands.help.vote.list": "Vypíše seznam všechn hlasování",
+    "commands.help.vote.list": "Vypíše seznam všech hlasování",
+    "commands.help.annoucement": "Správa oznámení",
+    "commands.help.annoucement.create": "Vytvoří oznámení s vyplněným textem",
+    "commands.help.annoucement.list": "Vypíše seznam všech oznámení",
+    "commands.help.annoucement.edit": "Upraví hodnotu oznámení vyplněným údajem",
+    "commands.help.annoucement.delete": "Smaže oznámení",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list> <...>",
@@ -49,11 +54,16 @@
     "commands.usage.role": "<role>",
     "commands.usage.rolelist": "",
     "commands.usage.say": "<#kanál> <zpráva>",
-    "commands.usage.vote": "<start/end/delete/list>",
+    "commands.usage.vote": "<start/end/delete/list> <...>",
     "commands.usage.vote.start": "<global/private> <jméno> <popis> [možnosti rozdělené středníkem]",
     "commands.usage.vote.end": "<jméno>",
     "commands.usage.vote.delete": "<jméno>",
     "commands.usage.vote.list": "",
+    "commands.usage.annoucement": "<create/edit/delete/list> <...>",
+    "commands.usage.annoucement.create": "<jméno> <titulek> <oznámení>",
+    "commands.usage.annoucement.list": "",
+    "commands.usage.annoucement.edit": "<jméno> <title/annoucement> <hodnota>",
+    "commands.usage.annoucement.delete": "<jméno>",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
@@ -98,7 +108,7 @@
     
     "command.notice.notice": "Oznámení!",
     
-    "command.vote.dont-exist": "Hlasování s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazem votelist.",
+    "command.vote.dont-exist": "Hlasování s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazem vote list.",
     "command.vote.type-not-valid": "Typ hlasování není platný, vyberte jeden z následujících:",
     "command.vote.already-exists": "Hlasování s tímto jménem již existuje, zvolte prosím jiné jméno.",
     "command.vote.too-much.options": "Zadal jste více možností (> 10) než je možné. Zadejte menší počet.",
@@ -107,6 +117,11 @@
     "command.language.language-changed.title": "Jazyk bota byl změněn",
     "command.language.language-changed": "Jazyk bota byl do restartování změněn, nezapomente jej změnit i v configu.",
     "command.language.language-list": "Seznam jazyků",
+
+    "command.annoucement.dont-exist": "Oznámení s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazem annoucement list.",
+    "command.annoucement.already-exists": "Oznámení s tímto jménem již existuje, zvolte jiné jméno.",
+    "command.annoucement.edit-type-not-valid": "Vybraná hodnota k editaci není platná, vyberte jednu z následujících:",
+    
 
     "module.event.new-event": "Nová událost",
     "module.event.new-task": "Nový úkol",
@@ -144,5 +159,9 @@
     "module.vote.stats": "Statistiky",
     "module.vote.votes-count": "Počet hlasů",
     "module.vote.vote-weight": "Váha jednoho hlasu",
-    "module.vote.result": "Výsledek:"
+    "module.vote.result": "Výsledek:",
+
+    "module.annoucement.no-annoucement-exists": "Žádné oznámení neexistuje.",
+    "module.annoucement.list": "Seznam všech oznámení",
+    "module.annoucement.deleted": "Oznámení bylo smazáno"
 }

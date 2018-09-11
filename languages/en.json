@@ -31,6 +31,11 @@
     "commands.help.vote.end": "Stop vote and show statistics / what option won",
     "commands.help.vote.delete": "Delete vote with entered name",
     "commands.help.vote.list": "Print list of votes",
+    "commands.help.annoucement": "Command for managing annoucements",
+    "commands.help.annoucement.create": "Create annoucement with entered message",
+    "commands.help.annoucement.list": "Print list of annoucements",
+    "commands.help.annoucement.edit": "Edit annoucement value by entered type name and value",
+    "commands.help.annoucement.delete": "Delete annoucement",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list> <...>",
@@ -54,6 +59,11 @@
     "commands.usage.vote.end": "<name>",
     "commands.usage.vote.delete": "<name>",
     "commands.usage.vote.list": "",
+    "commands.usage.annoucement": "<create/edit/delete/list> <...>",
+    "commands.usage.annoucement.create": "<name> <title> <annoucement>",
+    "commands.usage.annoucement.list": "",
+    "commands.usage.annoucement.edit": "<name> <title/annoucement> <value>",
+    "commands.usage.annoucement.delete": "<name>",
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",
@@ -108,6 +118,11 @@
     "command.language.language-changed": "Language of the bot has changed until bot restart, dont forget to change it in config too.",
     "command.language.language-list": "List of languages",
 
+    "command.annoucement.dont-exist": "Annoucement with this name not found, list of all annoucement can be printed by command annoucement list.",
+    "command.annoucement.already-exists": "Annoucement with this name already exists, choose please another name.",
+    "command.annoucement.edit-type-not-valid": "Selected type of value is not valid, must be one of:",
+    
+
     "module.event.new-event": "New event",
     "module.event.new-task": "New task",
     "module.event.group": "Group",
@@ -144,5 +159,9 @@
     "module.vote.stats": "Statistics",
     "module.vote.votes-count": "No. of votes",
     "module.vote.vote-weight": "Weight of one vote",
-    "module.vote.result": "Result:"
+    "module.vote.result": "Result:",
+
+    "module.annoucement.no-annoucement-exists": "No annoucement exists.",
+    "module.annoucement.list": "List of all annoucements",
+    "module.annoucement.deleted": "Annoucement was deleted"
 }

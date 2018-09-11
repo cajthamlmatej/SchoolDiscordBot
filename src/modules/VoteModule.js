@@ -42,8 +42,6 @@ class VoteModule extends Module {
         let votes = this.getVotes();
 
         Object.keys(votes).forEach(voteKey => {
-            let vote = votes[voteKey];
-
             list += "\n**" + voteKey + "**";
         });
 
