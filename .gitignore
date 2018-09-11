@@ -3,3 +3,8 @@ node_modules
 yarn.lock
 package-lock.json
 settings/settings.json
+temp/mutes.json
+temp/events.json
+temp/supplementation.json
+temp/votes.json
+temp/annoucements.json
