@@ -25,11 +25,7 @@ class LanguageCommand extends SubsCommand {
     getGroup() {
         return "manage";
     }
-
-    getHelp() {
-        return "Command for managing language."
-    }
-
+    
     getAliases() {
         return ["lan"];
     }

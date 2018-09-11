@@ -5,18 +5,15 @@ class RoleCommand extends Command {
     getName() {
         return "role";
     }
-    getUsage() {
-        return "role <role>"
-    }
+
     getGroup(){
         return "main";
     }
+    
     getRoles(){
         return ["member"];
     }
-    getHelp() {
-        return "Přidá nebo odebere zadanou roli."
-    }
+    
     getDependencies(){
         return [ "rolemodule" ];
     }

@@ -11,14 +11,6 @@ class Command {
         throw new Error('You have to implement the method getName!');
     }
 
-    getHelp(){
-        throw new Error('You have to implement the method getHelp!');
-    }
-
-    getUsage(){
-        throw new Error('You have to implement the method getUsage!');
-    }
-
     getGroup(){
         throw new Error('You have to implement the method getGroup!');
     }
@@ -31,7 +23,6 @@ class Command {
         return [];
     }
 
-
     fetchAliases(){
         return [this.getName()].concat(this.getAliases());
     }
@@ -40,10 +31,14 @@ class Command {
         return ["moderator"];
     }
 
+    getUsage(){
+        return this.getName() + " " + Translation.translate("commands.usage." + this.getName());
+    }
+
     sendHelp(channel){
         const embed = new Discord.RichEmbed()
             .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
-            .setDescription(Translation.translate("command.usage") + " `" + this.getUsage() + "`")
+            .setDescription(Translation.translate("command.usage") + " `" + this.getUsage() + "` - " + Translation.translate("commands.help." + cmdName))
             .setColor(0xf0932b);
 
         channel.send(embed);

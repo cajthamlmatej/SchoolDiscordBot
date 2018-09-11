@@ -6,18 +6,15 @@ class RoleListCommand extends Command {
     getName() {
         return "rolelist";
     }
-    getUsage() {
-        return "rolelist"
-    }
+    
     getGroup(){
         return "main";
     }
+    
     getRoles(){
         return ["member"];
     }
-    getHelp() {
-        return "Vypíše seznam rolí."
-    }
+
     getDependencies(){
         return [ "rolemodule" ];
     }

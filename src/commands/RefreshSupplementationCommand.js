@@ -6,18 +6,15 @@ class RefreshSupplementationCommand extends Command {
     getName() {
         return "refreshsupplementation";
     }
-    getUsage() {
-        return "refreshsupplementation"
-    }
+
     getGroup(){
         return "school";
     }
-    getHelp() {
-        return "Okamžitě zkontroluje a upraví suplování."
-    }
+    
     getAliases(){
         return [ "refreshs" ];
     }
+    
     getDependencies(){
         return [ "supplementationmodule" ];
     }

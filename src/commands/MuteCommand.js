@@ -7,15 +7,11 @@ class MuteCommand extends Command {
     getName() {
         return "mute";
     }
-    getUsage() {
-        return "mute <jméno člena> <počet minut> <důvod>"
-    }
+
     getGroup(){
         return "manage";
     }
-    getHelp() {
-        return "Umlčí **člena** na zadaný počet minut."
-    }
+    
     getDependencies(){
         return [ "mutemodule" ];
     }

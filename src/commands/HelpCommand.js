@@ -3,20 +3,16 @@ const Command = require("./Command");
 const Discord = require('discord.js');
 const Translation = require("../Translation");
 
-class VoteStartCommand extends Command {
+class HelpCommand extends Command {
 
     getName() {
         return "help";
     }
-    getUsage(){
-        return "help";
-    }
-    getHelp(){
-        return "Zobrazí tuto nápovědu.";
-    }
+
     getGroup(){
         return "main";
     }
+
     getRoles(){
         return ["member"];
     }
@@ -58,20 +54,20 @@ class VoteStartCommand extends Command {
                 
                 command.getRoles().forEach(role => {
                     if(memberRoles.find(r => r.id == this.roles[role]) != undefined){
-                        name = "**" + this.prefix + command.getUsage() + "**";
-                        commandsString += name + " - " + command.getHelp() + " ";
+                        let aliasesText = "";
 
                         if(command.getAliases().length > 0){
-                            let aliasesText = "";
-
                             command.getAliases().forEach(alias => {
                                 aliasesText += alias + ", ";
                             });
 
                             aliasesText = aliasesText.replace(/, +$/, '')
-                            
-                            commandsString += "[" + aliasesText + "]";
                         }
+                        
+                        let cmdName = command.getName();
+
+                        name = "**" + this.prefix + command.getUsage() + (aliasesText != "" ? " [" +aliasesText + "]" : "") +  "**";
+                        commandsString += name + " - " + Translation.translate("commands.help." + cmdName) + " ";
 
                         commandsString += "\n";
                     }
@@ -94,4 +90,4 @@ class VoteStartCommand extends Command {
 
 }
 
-module.exports = VoteStartCommand;
+module.exports = HelpCommand;

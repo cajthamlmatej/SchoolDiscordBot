@@ -8,14 +8,6 @@ class SayCommand extends Command {
         return "say";
     }
     
-    getUsage(){
-        return "say <channel> <message>";
-    }
-
-    getHelp(){
-        return "Say something as bot!";
-    }
-    
     getGroup(){
         return "manage";
     }

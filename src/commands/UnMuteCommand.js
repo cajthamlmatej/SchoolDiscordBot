@@ -7,15 +7,11 @@ class UnMuteCommand extends Command {
     getName() {
         return "unmute";
     }
-    getUsage() {
-        return "unmute <jméno člena>"
-    }
+    
     getGroup(){
         return "manage";
     }
-    getHelp() {
-        return "Zruší umlčení člena."
-    }
+
     getDependencies(){
         return [ "mutemodule" ];
     }

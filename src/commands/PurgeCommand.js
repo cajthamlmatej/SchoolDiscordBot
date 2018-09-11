@@ -8,17 +8,13 @@ class PurgeCommand extends Command {
     getName() {
         return "purge";
     }
-    getUsage() {
-        return "purge <počet zpráv>"
-    }
+    
     getGroup(){
         return "manage";
     }
-    getHelp() {
-        return "Smaže zadaný počet zpráv v aktuálním channelu."
-    }
 
     init(bot) {
+        
     }
 
     call(args, channel){

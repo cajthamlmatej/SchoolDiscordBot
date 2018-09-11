@@ -33,10 +33,6 @@ class EventCommand extends SubsCommand {
         return "school";
     }
 
-    getHelp() {
-        return "Command for managing events."
-    }
-
     getAliases() {
         return ["ev"];
     }

@@ -8,6 +8,7 @@ class SubsCommand extends Command {
         throw new Error('You have to implement the method getSubCommands!');
     }
 
+    /*
     getUsage() {
         let subCommands = Object.keys(this.getSubCommands());
         let list = "";
@@ -19,7 +20,7 @@ class SubsCommand extends Command {
         list = list.replace(/\/+$/, '');
 
         return this.getName() + " <" + list + ">";
-    }
+    }*/
 
     call(args, channel, author, message) {
         if(args.length <= 0){
@@ -56,7 +57,7 @@ class SubsCommand extends Command {
         } else {
             embed = new Discord.RichEmbed()
                 .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
-                .setDescription(Translation.translate("command.usage") +  " `" + this.getName() + " " + subCommandName + " " + this.getSubCommands()[subCommandName].help + "`")
+                .setDescription(Translation.translate("command.usage") +  " `" + this.getName() + " " + subCommandName + " " + Translation.translate("commands.usage." + this.getName() + "." + subCommandName) + "` - " + Translation.translate("commands.help." + this.getName() + "." + subCommandName))
                 .setColor(0xf0932b);
         }
 

@@ -30,10 +30,6 @@ class VoteCommand extends SubsCommand {
     getGroup(){
         return "vote";
     }
-
-    getHelp(){
-        return "Command for managing votes.";
-    }
     
     getDependencies(){
         return [ "votemodule" ];
