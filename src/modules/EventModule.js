@@ -19,7 +19,7 @@ class EventModule extends Module {
         this.tempFile = "./temp/events.json";
 
         this.tick();
-        setInterval(() => this.tick(), 1800000);
+        setInterval(() => this.tick(), bot.settings.modules.event.refresh);
     }
 
     tick(){
