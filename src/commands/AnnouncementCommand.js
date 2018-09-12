@@ -1,5 +1,4 @@
 const SubsCommand = require("./SubsCommand");
-const Translation = require("../Translation");
 
 class AnnouncementCommand extends SubsCommand {
 
@@ -53,7 +52,7 @@ class AnnouncementCommand extends SubsCommand {
         }
 
         if(!this.annoucementModule.annoucementExist(name)){
-            this.sendError(channel, Translation.translate("command.annoucement.dont-exist"));
+            this.sendError(channel, "command.annoucement.dont-exist");
             return;
         }
 
@@ -67,7 +66,7 @@ class AnnouncementCommand extends SubsCommand {
         let name = args[0];
 
         if(!this.annoucementModule.annoucementExist(name)){
-            this.sendError(channel, Translation.translate("command.annoucement.dont-exist"));
+            this.sendError(channel, "command.annoucement.dont-exist");
             return;
         }
 
@@ -82,7 +81,7 @@ class AnnouncementCommand extends SubsCommand {
         let [name, title, annoucement] = args;
 
         if(this.annoucementModule.annoucementExist(name)){
-            this.sendError(channel, Translation.translate("command.annoucement.already-exists"));
+            this.sendError(channel, "command.annoucement.already-exists");
             return;
         }
 
