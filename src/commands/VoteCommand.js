@@ -93,7 +93,7 @@ class VoteCommand extends SubsCommand {
 
     callList(args, message) {
         this.voteModule.printVoteList(message.author);
-        return true;
+        message.react("✅");
     }
 
     callDelete(args, message) {

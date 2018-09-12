@@ -38,6 +38,7 @@ class AnnouncementCommand extends SubsCommand {
     callList(args, message){
         this.annoucementModule.listAnnoucements(message.member);
 
+        message.react("✅");
         return false;
     }
 

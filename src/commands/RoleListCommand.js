@@ -26,6 +26,8 @@ class RoleListCommand extends Command {
     call(args, message) {
         let channel = message.channel;
         this.roleModule.printRoleList(channel);
+        
+        message.react("✅");
         return false;
     }
 

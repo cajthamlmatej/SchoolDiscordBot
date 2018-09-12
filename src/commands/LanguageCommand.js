@@ -50,6 +50,8 @@ class LanguageCommand extends SubsCommand {
             .setColor(0xbadc58)
         
         message.author.createDM().then(dm => dm.send(embed)).catch(error => {});
+    
+        message.react("✅");
     }
 
     callChange(args, message) {

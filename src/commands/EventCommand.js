@@ -134,7 +134,7 @@ class EventCommand extends SubsCommand {
     callList(args, message) {
         this.eventModule.printEventList(message.author);
 
-        return true;
+        message.react("✅");
     }
 }
 
