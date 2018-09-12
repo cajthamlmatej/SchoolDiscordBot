@@ -1,11 +1,22 @@
-const Command = require("./Command");
+const SubsCommand = require("./SubsCommand");
 
-class RoleCommand extends Command {
+class RoleCommand extends SubsCommand {
+
+    getSubCommands(){
+        return {
+            "update": {
+                "arguments": 1
+            },
+            "list": {
+                "arguments": 0
+            }
+        }
+    }
 
     getName() {
         return "role";
     }
-
+    
     getGroup(){
         return "main";
     }
@@ -13,7 +24,7 @@ class RoleCommand extends Command {
     getRoles(){
         return ["member"];
     }
-    
+
     getDependencies(){
         return [ "rolemodule" ];
     }
@@ -22,7 +33,12 @@ class RoleCommand extends Command {
         this.roleModule = bot.modules.rolemodule;
     }
 
-    call(args, message) {
+    callList(args, message) {
+        let channel = message.channel;
+        this.roleModule.printRoleList(channel);
+    }
+
+    callUpdate(args, message) {
         let channel = message.channel;
         if(args.length != 1){
             this.sendHelp(channel);
@@ -37,9 +53,9 @@ class RoleCommand extends Command {
             return;
         }
         
-        this.roleModule.addRole(message.author, role, channel);
-        return false;
+        this.roleModule.updateRole(message.author, role, channel);
     }
+
 
 }
 

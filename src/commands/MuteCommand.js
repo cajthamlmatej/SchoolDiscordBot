@@ -1,8 +1,22 @@
-const Command = require("./Command");
+const SubsCommand = require("./SubsCommand");
 const Discord = require('discord.js');
 const Translation = require("../Translation");
 
-class MuteCommand extends Command {
+class MuteCommand extends SubsCommand {
+
+    getSubCommands(){
+        return {
+            "remove": {
+                "arguments": 1
+            },
+            "add": {
+                "arguments": 3
+            },
+            "list": {
+                "arguments": 0
+            }
+        }
+    }
 
     getName() {
         return "mute";
@@ -21,12 +35,14 @@ class MuteCommand extends Command {
         this.muteModule = bot.modules.mutemodule;
     }
 
-    call(args, message) {
+    callList(args, message){
         let channel = message.channel;
-        if(args.length != 3){
-            this.sendHelp(channel);
-            return;
-        }
+
+        this.muteModule.printRoleList(channel);
+    }
+
+    callAdd(args, message) {
+        let channel = message.channel;
 
         let valid = [];
         channel.guild.members.forEach(member => {
@@ -67,7 +83,7 @@ class MuteCommand extends Command {
 
         let member = valid[0];
 
-        if(member.user.id == user.id){
+        if(member.user.id == message.author.id){
             this.sendError(channel, "command.mute.self");
             return;
         }
@@ -106,6 +122,62 @@ class MuteCommand extends Command {
 
         this.muteModule.addMute(member, minutes, reason);
 
+        return true;
+    }
+
+    callRemove(args, message){
+        let channel = message.channel;
+        if(args.length != 1){
+            this.sendHelp(channel);
+            return;
+        }
+        
+        let valid = [];
+        channel.guild.members.forEach(member => {
+            let name = member.nickname == undefined ? member.user.username : member.nickname;
+
+            if(name.toLowerCase().includes(args[0].toLowerCase())){
+                valid.push(member);    
+            }
+        });
+
+        if(valid.length > 1){
+            let list = "";
+
+            valid.forEach(member => {
+                let name = member.nickname == undefined ? member.user.username : member.nickname;
+                list += "\n**" + name + "**";
+            });
+    
+            list += "\n";
+         
+            const embed = new Discord.RichEmbed()
+                .setTitle("🔇 | " + Translation.translate("command.mute.user-list.title"))
+                .setDescription(Translation.translate("command.mute.user-list") + ".\n"+list)
+                .setColor(0xe67e22)
+                
+            channel.send(embed);
+            return;
+        } else if(valid.length <= 0){            
+            this.sendError(channel, "command.mute.user-not-found");
+            return;
+        }
+
+        let member = valid[0];
+
+        if(!this.muteModule.isMuted(member)){
+            this.sendError(channel, "command.mute.not-muted");
+            return;
+        }
+        
+        this.muteModule.removeMute(member);
+
+        const embed = new Discord.RichEmbed()
+            .setTitle("🔇 | " + member.user.username + " " + Translation.translate("command.mute.unmuted.title"))
+            .setDescription(member.user.username + " " + Translation.translate("command.mute.unmuted"))
+            .setColor(0xbadc58);
+
+        channel.send(embed);
         return true;
     }
 

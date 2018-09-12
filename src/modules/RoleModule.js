@@ -80,7 +80,7 @@ class RoleModule extends Module {
         }).catch(console.error);
     }
 
-    addRole(user, role, channel){
+    updateRole(user, role, channel){
         let guild = channel.guild;
 
         guild.fetchMember(user).then(member => {

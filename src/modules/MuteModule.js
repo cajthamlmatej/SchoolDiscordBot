@@ -1,6 +1,8 @@
 const Module = require("./Module");
 const fs = require('fs');
+const Discord = require('discord.js');
 const moment = require('moment');
+const Translation = require("../Translation");
 
 class MuteModule extends Module {
 
@@ -36,6 +38,32 @@ class MuteModule extends Module {
         });
 
         this.removeMutesFromFile(toRemove);
+    }
+
+    printRoleList(channel){
+        let mutes = this.getMutes();
+
+        let embed = new Discord.RichEmbed()
+            .setTitle("🔇 | " + Translation.translate("module.mute.list"))
+            .setColor(0xbadc58);
+
+        let result = Promise.resolve();
+        Object.keys(mutes).forEach(userId => {
+            let mute = mutes[userId];
+            result = result.then(() => {
+                this.guild.fetchMember(userId).then(member => {
+                    embed.addField(member.nickname, Translation.translate("module.mute.reason") + ": " + mute.reason + "\n" + Translation.translate("module.mute.expiration") + ": " + moment(mute.expiration, "X").format("D. M. Y H:m:s"));
+                });
+            });
+        });
+
+        result.then(() => {
+            if(embed.fields.length <= 0){
+                embed.setDescription("Žádný člen není umlčený.");
+            }
+    
+            channel.send(embed);
+        });
     }
 
     addMute(member, lengthInMinutes, reason){
