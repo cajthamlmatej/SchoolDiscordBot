@@ -136,7 +136,7 @@ class SupplementationModule extends Module {
                                 message.unpin();
                             }
 
-                            console.log("Removing supplementation fro day " + day);
+                            console.log("Removing supplementation for day " + day);
 
                             delete supplementationsObject["supplementations"][day];
                             fs.writeFileSync("./temp/supplementations.json", JSON.stringify(supplementationsObject));
