@@ -1,10 +1,18 @@
-const Command = require("./Command");
+const SubsCommand = require("./SubsCommand");
 const Discord = require('discord.js');
 
-class RefreshSupplementationCommand extends Command {
+class SupplementationCommand extends SubsCommand {
+
+    getSubCommands(){
+        return {
+            "refresh": {
+                "arguments": 0
+            }
+        }
+    }
 
     getName() {
-        return "refreshsupplementation";
+        return "supplementation";
     }
 
     getGroup(){
@@ -12,7 +20,7 @@ class RefreshSupplementationCommand extends Command {
     }
     
     getAliases(){
-        return [ "refreshs" ];
+        return [ "sup" ];
     }
     
     getDependencies(){
@@ -23,7 +31,7 @@ class RefreshSupplementationCommand extends Command {
         this.supplementationModule = bot.modules.supplementationmodule;
     }
 
-    call(args, message) {
+    callRefresh(args, message) {
         let channel = message.channel;
         this.supplementationModule.refresh(channel);
 
@@ -32,4 +40,4 @@ class RefreshSupplementationCommand extends Command {
 
 }
 
-module.exports = RefreshSupplementationCommand;
+module.exports = SupplementationCommand;
