@@ -22,22 +22,22 @@ $ git clone https://github.com/cajthamlmatej/SchoolDiscordBot.git
 $ npm install
 ```
 
-After cloning and installing dependencies, copy config.template.json to config.json and update values and remove comments.
+After cloning and installing dependencies, copy config.template.json to config.json, update values and remove comments.
 
-```
-{
+```{
   "token": "token of the bot that you can get from discord dev portal",
   "prefix": "! - prefix of the bot",
   "guild": "main guild id where bot operates",
+  "language": "en",
   "roles": {
     // groups of roles
     // groups that can be mention with event command
     "mentionable": {
-      "member": "id of the role",
+      "member": "id of the role"
     },
     // groups that can be assign by click on reaction/using command
     "assignable": {
-      "name": "id of the role",
+      "name": "id of the role"
     },
     // special roles, must contain role lock and mute
     "special": {
@@ -57,7 +57,8 @@ After cloning and installing dependencies, copy config.template.json to config.j
     "role": "id of the channel",
     "event": "id of the channel",
     "event-archive": "id of the channel",
-    "news": "id of the channel"
+    "news": "id of the channel",
+    "annoucement": "id of the channel"
   },
   "modules": {
     // auto reaction
@@ -69,15 +70,6 @@ After cloning and installing dependencies, copy config.template.json to config.j
       // react to emoji in any channel with emoji
       "emojis": {
         "<:emojiname:emojiid>": "emoji id"
-      }
-    },
-    "role": {
-      // role groups 
-      "groups": {
-        "mentionable": "Mentionable roles",
-        "assignable": "Assignable roles",
-        "special": "Specail roles",
-        "permission": "Role for permissions"
       }
     },
     "supplementation": {
@@ -98,20 +90,15 @@ After cloning and installing dependencies, copy config.template.json to config.j
     },
     "event": {
       // no. of days of event to move to archive
-      "days": 1
+      "days": 1,
+      // refresh time of events
+      "refresh": 1800000
     },
     "disabled": [
       // ["supplementationmodule"]
     ]
   },
   "commands": {
-    // commands groups
-    "groups": {
-      "main": "🔔 Main commands",
-      "school": "🎓 School commands",
-      "vote": "🎟 Vote commands",
-      "manage": "💾 Commands for managment"
-    },
     "disabled": [
       // ["purge"]
     ]
@@ -124,6 +111,10 @@ You can start bot with command:
 ```sh
 $ npm start
 ```
+
+### How to add language / How to translate bot
+
+If you want to add language (translate bot messages), you just need to copy already existing language file from /language/<language>.json (we recommend to use English - en file). Then save it whatever shortcut name that your language uses and translate all strings. Remember to dont change key paths that bot fetch. After you translate all strings you need to set language shortcut in config, just change `"language"` to your language shortcut. If you think it will be good to have the language in bot files, do pull reqest to git. We will be happy for any contribution.
 
 ### Dependencies
 
