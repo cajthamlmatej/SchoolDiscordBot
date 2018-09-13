@@ -22,8 +22,8 @@ class EventModule extends Module {
         setInterval(() => this.tick(), bot.settings.modules.event.refresh);
     }
 
-    tick(){
-        let events = this.getEvents(); 
+    tick() {
+        let events = this.getEvents();
         let toRemove = [];
 
         Object.keys(events).forEach(name => {
@@ -32,15 +32,15 @@ class EventModule extends Module {
             let end = data.values.end;
             let todayDate = moment();
             let eventDate = moment(end, "D. M. YYYY");
-            
-            if(todayDate.diff(eventDate, "days") >= this.daysToArchive){
+
+            if (todayDate.diff(eventDate, "days") >= this.daysToArchive) {
                 this.channel.fetchMessage(messageId).then(message => {
                     let embed = new Discord.RichEmbed(message.embeds[0]);
 
                     this.archiveChannel.send(embed);
                     message.delete();
                 }).catch(error => {
-                    
+
                 });
 
                 this.removeEventFromFile(name);
@@ -48,7 +48,7 @@ class EventModule extends Module {
         });
     }
 
-    addEvent(name, type, start, end, role, place, subject, description, attachments){
+    addEvent(name, type, start, end, role, place, subject, description, attachments) {
         let values = {
             type: type,
             start: start,
@@ -58,7 +58,7 @@ class EventModule extends Module {
             subject: subject,
             description: description
         };
-        
+
         this.channel.send({
             embed: this.generateEmbed(values),
             files: attachments
@@ -76,7 +76,7 @@ class EventModule extends Module {
         values[type] = value;
 
         event.values = values;
-        
+
         eventsObject["events"][name] = event;
         fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
 
@@ -87,7 +87,7 @@ class EventModule extends Module {
         });
     }
 
-    generateEmbed(values){
+    generateEmbed(values) {
         let embed = new Discord.RichEmbed()
             .setTitle("🕜 | " + ((values.type == "event") ? Translation.translate("module.event.new-event") : Translation.translate("module.event.new-task")))
             .setDescription(values.description)
@@ -95,14 +95,14 @@ class EventModule extends Module {
 
         embed.addField(Translation.translate("module.event.group"), this.channel.guild.roles.find(r => r.id == this.roles[values.role]), true);
         embed.addField(Translation.translate("module.event.subject"), values.subject, true);
-        
+
         embed.addField(values.start == values.end ? Translation.translate("module.event.date") : Translation.translate("module.event.from-date-to-date"), values.start == values.end ? values.end : (values.start + " " + Translation.translate("module.event.to") + " " + values.end), true);
         embed.addField("Place", values.place);
 
         return embed;
     }
 
-    addEventToFile(messageId, name, values){
+    addEventToFile(messageId, name, values) {
         let events = fs.readFileSync(this.tempFile, "utf8");
         let eventsObject = JSON.parse(events);
 
@@ -111,7 +111,7 @@ class EventModule extends Module {
         fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
     }
 
-    deleteEvent(name){
+    deleteEvent(name) {
         let events = fs.readFileSync(this.tempFile, "utf8");
         let eventsObject = JSON.parse(events);
 
@@ -124,7 +124,7 @@ class EventModule extends Module {
         this.removeEventFromFile(name);
     }
 
-    removeEventFromFile(event){
+    removeEventFromFile(event) {
         let events = fs.readFileSync(this.tempFile, "utf8");
         let eventsObject = JSON.parse(events);
 
@@ -133,25 +133,25 @@ class EventModule extends Module {
         fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
     }
 
-    getEvents(){
+    getEvents() {
         let events = fs.readFileSync(this.tempFile, "utf8");
         let eventsObject = JSON.parse(events);
 
         return eventsObject["events"];
     }
 
-    isMentionableRole(roleName){
+    isMentionableRole(roleName) {
         return Object.keys(this.roles).includes(roleName);
     }
 
-    exists(name){
+    exists(name) {
         let events = fs.readFileSync(this.tempFile, "utf8");
         let eventsObject = JSON.parse(events);
 
         return eventsObject["events"][name] != undefined;
     }
 
-    printEventList(user){
+    printEventList(user) {
         let list = "";
         let events = this.getEvents();
 
@@ -159,21 +159,21 @@ class EventModule extends Module {
             list += "\n**" + eventName + "**";
         });
 
-        if(list == "")
+        if (list == "")
             list = Translation.translate("module.event.no-event-exists");
         else
             list += "\n";
-        
+
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.event.list"))
             .setDescription(list)
             .setColor(0xbadc58)
-        
+
         user.createDM().then(dm => dm.send(embed)).catch(console.error);
     }
 
 
-    event(name, args){
+    event(name, args) {
     }
 
 }

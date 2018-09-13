@@ -3,7 +3,7 @@ const Translation = require("../Translation");
 
 class VoteCommand extends SubsCommand {
 
-    getSubCommands(){
+    getSubCommands() {
         return {
             "start": {
                 "arguments": 3
@@ -23,13 +23,13 @@ class VoteCommand extends SubsCommand {
     getName() {
         return "vote";
     }
-    
-    getGroup(){
+
+    getGroup() {
         return "vote";
     }
-    
-    getDependencies(){
-        return [ "votemodule" ];
+
+    getDependencies() {
+        return ["votemodule"];
     }
 
     init(bot) {
@@ -41,7 +41,7 @@ class VoteCommand extends SubsCommand {
         let channel = message.channel;
         let name = args[0];
 
-        if(!this.voteModule.exists(name)){
+        if (!this.voteModule.exists(name)) {
             this.sendError(channel, "command.vote.dont-exist");
             return;
         }
@@ -54,24 +54,24 @@ class VoteCommand extends SubsCommand {
     callStart(args, message) {
         let channel = message.channel;
         let [type, name, description] = args;
-        
-        let options = {"👍": Translation.translate("module.vote.yes"), "👎": Translation.translate("module.vote.no")};;
+
+        let options = { "👍": Translation.translate("module.vote.yes"), "👎": Translation.translate("module.vote.no") };;
         let optionsEmojis = this.voteModule.optionsEmojis;
 
-        if(!["global", "private"].includes(type)){
+        if (!["global", "private"].includes(type)) {
             this.sendError(channel, "command.vote.type-not-valid", "private, global");
             return;
         }
-        
-        if(this.voteModule.exists(name)){
+
+        if (this.voteModule.exists(name)) {
             this.sendError(channel, "command.vote.already-exists");
             return;
         }
 
-        if(args.length != 3){
+        if (args.length != 3) {
             let argOptions = args[3].split(";");
 
-            if(argOptions.length > optionsEmojis.length){
+            if (argOptions.length > optionsEmojis.length) {
                 this.sendError(channel, "command.vote.too-much.options");
                 return;
             }
@@ -80,8 +80,8 @@ class VoteCommand extends SubsCommand {
 
             let i = 0;
             argOptions.forEach(option => {
-                options[optionsEmojis[i]] = option;   
-                
+                options[optionsEmojis[i]] = option;
+
                 i++;
             });
         }
@@ -99,8 +99,8 @@ class VoteCommand extends SubsCommand {
     callDelete(args, message) {
         let channel = message.channel;
         let name = args[0];
-        
-        if(!this.voteModule.exists(name)){
+
+        if (!this.voteModule.exists(name)) {
             this.sendError(channel, "command.vote.dont-exist");
             return;
         }

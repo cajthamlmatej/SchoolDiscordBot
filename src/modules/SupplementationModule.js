@@ -17,7 +17,7 @@ class SupplementationModule extends Module {
             host: 'ssps.cz',
             path: '/student/'
         }
-        
+
         this.client = bot.client;
         this.supplementationConfig = bot.settings.modules.supplementation;
         this.channel = bot.settings.channels.supplementation;
@@ -26,13 +26,13 @@ class SupplementationModule extends Module {
         setInterval(() => this.tick(), this.supplementationConfig.refresh);
     }
 
-    tick(){
-        let request = http.request(this.webOptions, (res)=> {
+    tick() {
+        let request = http.request(this.webOptions, (res) => {
             let data = '';
             res.on('data', function (chunk) {
                 data += chunk;
             });
-            res.on('end', ()=> {
+            res.on('end', () => {
                 const dom = new JSDOM(data, {
                     url: "http://ssps.cz/student/",
                     referrer: "http://ssps.cz/student/",
@@ -40,7 +40,7 @@ class SupplementationModule extends Module {
                     includeNodeLocations: true,
                     storageQuota: 10000000
                 });
-        
+
                 let days = {};
                 let htmlDays = dom.window.document.querySelectorAll(".nav.nav-tabs")[0].children;
                 Object.values(htmlDays).forEach(htmlDay => {
@@ -53,9 +53,9 @@ class SupplementationModule extends Module {
                     let htmlObject = dom.window.document.querySelectorAll(days[dayName])[0];
 
                     supples[dayName] = [];
-                    
+
                     Object.values(htmlObject.querySelectorAll(".message-content")[0].children).forEach(item => {
-                        if(item.children.length > 1){
+                        if (item.children.length > 1) {
                             Object.values(item.children).forEach(subItem => {
                                 supples[dayName].push(subItem.textContent.trim());
                             });
@@ -67,10 +67,10 @@ class SupplementationModule extends Module {
 
 
                 let supplementations = fs.readFileSync("./temp/supplementations.json", "utf8");
-                let supplementationsObject = JSON.parse(supplementations); 
-                                
+                let supplementationsObject = JSON.parse(supplementations);
+
                 let channel = this.client.channels.find(c => c.id == this.channel);
-                
+
                 let count = 0;
                 Object.keys(supples).forEach(dayName => {
                     count++;
@@ -81,14 +81,14 @@ class SupplementationModule extends Module {
 
                     supplesList.forEach(supple => {
                         let includes = false;
-                        
+
                         this.supplementationConfig.highlights.forEach(highlight => {
-                            if(supple.includes(highlight)){
+                            if (supple.includes(highlight)) {
                                 includes = true
                             }
                         });
 
-                        if(includes){
+                        if (includes) {
                             suppleString += "**" + supple + "**\n";
                             containsHighlight = true;
                             return;
@@ -103,11 +103,11 @@ class SupplementationModule extends Module {
                         .setDescription(suppleString)
                         .setColor(0xbadc58);
 
-                    if(supplementationsObject["supplementations"][dayName] != undefined){
+                    if (supplementationsObject["supplementations"][dayName] != undefined) {
                         let messageId = supplementationsObject["supplementations"][dayName];
 
                         channel.fetchMessage(messageId).then(message => {
-                            if(message.embeds[0].description !== suppleString){
+                            if (message.embeds[0].description !== suppleString) {
                                 message.edit(containsHighlight == true ? "@everyone" : "", embed);
                             }
                         });
@@ -115,7 +115,7 @@ class SupplementationModule extends Module {
                         channel.send(containsHighlight == true ? "@everyone" : "", embed).then(message => {
                             supplementationsObject["supplementations"][dayName] = message.id;
 
-                            if(Object.keys(supples).length == count){
+                            if (Object.keys(supples).length == count) {
                                 fs.writeFileSync("./temp/supplementations.json", JSON.stringify(supplementationsObject));
                             }
                         });
@@ -123,16 +123,16 @@ class SupplementationModule extends Module {
                 });
 
                 // pins
-                Object.keys(supplementationsObject["supplementations"]).forEach(day =>{
+                Object.keys(supplementationsObject["supplementations"]).forEach(day => {
                     let messageId = supplementationsObject["supplementations"][day];
 
-                    channel.fetchMessage(messageId).then(message => {    
-                        if(supples[day] != undefined){
-                            if(!message.pinned){
+                    channel.fetchMessage(messageId).then(message => {
+                        if (supples[day] != undefined) {
+                            if (!message.pinned) {
                                 message.pin();
                             }
                         } else {
-                            if(message.pinned){
+                            if (message.pinned) {
                                 message.unpin();
                             }
 
@@ -151,7 +151,7 @@ class SupplementationModule extends Module {
         request.end();
     }
 
-    refresh(channel){
+    refresh(channel) {
         this.tick();
 
         const embed = new Discord.RichEmbed()
@@ -162,16 +162,16 @@ class SupplementationModule extends Module {
         channel.send(embed);
     }
 
-    event(name, args){
-        if(name != "message")
+    event(name, args) {
+        if (name != "message")
             return;
 
         let message = args.message;
 
-        if(message.channel.id != this.channel)
+        if (message.channel.id != this.channel)
             return;
 
-        if(message.type != "PINS_ADD")
+        if (message.type != "PINS_ADD")
             return;
 
         message.delete();

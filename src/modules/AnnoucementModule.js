@@ -14,19 +14,19 @@ class AnnoucementModule extends Module {
         this.channel = bot.client.channels.find(ch => ch.id == bot.settings.channels.annoucement);
     }
 
-    annoucementExist(name){
+    annoucementExist(name) {
         return this.getAnnoucement(name) != undefined;
     }
 
-    getAnnoucement(name){
+    getAnnoucement(name) {
         return this.readFile()[name];
     }
 
-    addAnnoucement(member, name, title, annoucement){
+    addAnnoucement(member, name, title, annoucement) {
         let annoucements = this.readFile();
 
-        this.channel.send(this.generateAnnoucementEmbed({annoucement: annoucement, title: title}, member)).then(message => {
-            annoucements[name] = {message: message.id, title: title, annoucement: annoucement};
+        this.channel.send(this.generateAnnoucementEmbed({ annoucement: annoucement, title: title }, member)).then(message => {
+            annoucements[name] = { message: message.id, title: title, annoucement: annoucement };
 
             this.saveFile(annoucements);
         });
@@ -40,13 +40,13 @@ class AnnoucementModule extends Module {
             .setColor(0xbadc58);
     }
 
-    deleteAnnoucement(channel, name){
+    deleteAnnoucement(channel, name) {
         let annoucement = this.getAnnoucement(name);
 
         this.channel.fetchMessage(annoucement.message).then(message => {
             message.delete();
-        }).catch(error => {});
-        
+        }).catch(error => { });
+
         let annoucements = this.readFile();
         delete annoucements[name];
 
@@ -60,21 +60,21 @@ class AnnoucementModule extends Module {
         channel.send(embed);
     }
 
-    editAnnoucement(member, name, type, value){
+    editAnnoucement(member, name, type, value) {
         let annoucement = this.getAnnoucement(name);
         annoucement[type] = value;
 
         this.channel.fetchMessage(annoucement.message).then(message => {
             message.edit(this.generateAnnoucementEmbed(annoucement, member));
-        }).catch(error => {});
-        
+        }).catch(error => { });
+
         let annoucements = this.readFile();
         annoucements[name] = annoucement;
 
         this.saveFile(annoucements);
     }
 
-    listAnnoucements(member){
+    listAnnoucements(member) {
         let annoucements = this.readFile();
 
         let list = "";
@@ -83,7 +83,7 @@ class AnnoucementModule extends Module {
             list += "\n**" + annoucementName + "** - " + annoucements[annoucementName].title;
         });
 
-        if(list == ""){
+        if (list == "") {
             list = Translation.translate("module.annoucement.no-annoucement-exists");
         }
 
@@ -92,22 +92,22 @@ class AnnoucementModule extends Module {
             .setDescription(list)
             .setColor(0xbadc58);
 
-        member.user.createDM().then(dm => dm.send(embed)).catch(error => {});
+        member.user.createDM().then(dm => dm.send(embed)).catch(error => { });
     }
 
-    readFile(){
+    readFile() {
         let file = fs.readFileSync(this.tempFile, "utf8");
         let annoucements = JSON.parse(file)["annoucements"];
 
         return annoucements;
     }
 
-    saveFile(annoucements){
-        let object = {annoucements: annoucements};
+    saveFile(annoucements) {
+        let object = { annoucements: annoucements };
         fs.writeFileSync(this.tempFile, JSON.stringify(object));
     }
 
-    event(name, args){
+    event(name, args) {
     }
 
 }

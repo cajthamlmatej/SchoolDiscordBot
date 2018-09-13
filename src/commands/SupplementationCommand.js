@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 
 class SupplementationCommand extends SubsCommand {
 
-    getSubCommands(){
+    getSubCommands() {
         return {
             "refresh": {
                 "arguments": 0
@@ -15,16 +15,16 @@ class SupplementationCommand extends SubsCommand {
         return "supplementation";
     }
 
-    getGroup(){
+    getGroup() {
         return "school";
     }
-    
-    getAliases(){
-        return [ "sup" ];
+
+    getAliases() {
+        return ["sup"];
     }
-    
-    getDependencies(){
-        return [ "supplementationmodule" ];
+
+    getDependencies() {
+        return ["supplementationmodule"];
     }
 
     init(bot) {

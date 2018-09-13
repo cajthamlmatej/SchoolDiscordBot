@@ -9,11 +9,11 @@ class PingCommand extends Command {
         return "ping";
     }
 
-    getGroup(){
+    getGroup() {
         return "main";
     }
-    
-    getRoles(){
+
+    getRoles() {
         return ["member"];
     }
 

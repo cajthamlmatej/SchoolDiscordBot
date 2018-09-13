@@ -7,8 +7,8 @@ class SayCommand extends Command {
     getName() {
         return "say";
     }
-    
-    getGroup(){
+
+    getGroup() {
         return "manage";
     }
 
@@ -18,7 +18,7 @@ class SayCommand extends Command {
 
     call(args, message) {
         let channel = message.channel;
-        if(args.length != 2){
+        if (args.length != 2) {
             this.sendHelp(channel);
             return;
         }

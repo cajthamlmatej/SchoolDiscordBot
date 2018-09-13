@@ -9,11 +9,11 @@ class HelpCommand extends Command {
         return "help";
     }
 
-    getGroup(){
+    getGroup() {
         return "main";
     }
 
-    getRoles(){
+    getRoles() {
         return ["member"];
     }
 
@@ -29,12 +29,12 @@ class HelpCommand extends Command {
         let embed = new Discord.RichEmbed()
             .setTitle("💼 | " + Translation.translate("command.help.title"))
             .setColor(0xbadc58);
-        
+
         let groups = {};
 
         Object.values(this.commands).forEach(command => {
             let group = command.getGroup();
-            if(groups[group] == undefined){
+            if (groups[group] == undefined) {
                 groups[group] = [];
             }
 
@@ -52,22 +52,22 @@ class HelpCommand extends Command {
 
             commands.forEach(command => {
                 let name;
-                
+
                 command.getRoles().forEach(role => {
-                    if(memberRoles.find(r => r.id == this.roles[role]) != undefined){
+                    if (memberRoles.find(r => r.id == this.roles[role]) != undefined) {
                         let aliasesText = "";
 
-                        if(command.getAliases().length > 0){
+                        if (command.getAliases().length > 0) {
                             command.getAliases().forEach(alias => {
                                 aliasesText += alias + ", ";
                             });
 
                             aliasesText = aliasesText.replace(/, +$/, '')
                         }
-                        
+
                         let cmdName = command.getName();
 
-                        name = "**" + this.prefix + command.getUsage() + (aliasesText != "" ? " [" +aliasesText + "]" : "") +  "**";
+                        name = "**" + this.prefix + command.getUsage() + (aliasesText != "" ? " [" + aliasesText + "]" : "") + "**";
                         commandsString += name + " - " + Translation.translate("commands.help." + cmdName) + " ";
 
                         commandsString += "\n";
@@ -75,16 +75,16 @@ class HelpCommand extends Command {
                 });
             });
 
-            if(commandsString != ""){
+            if (commandsString != "") {
                 help += Translation.translate("commands.group." + groupName) + "\n";
                 help += commandsString;
                 help += "\n";
             }
         });
 
-        
+
         embed.setDescription(help);
-    
+
         channel.send(embed).catch(console.error);
         return false;
     }

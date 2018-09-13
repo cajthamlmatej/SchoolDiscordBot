@@ -4,14 +4,14 @@ const Translation = require("../Translation");
 
 class SubsCommand extends Command {
 
-    getSubCommands(){
+    getSubCommands() {
         throw new Error('You have to implement the method getSubCommands!');
     }
 
     call(args, message) {
         let channel = message.channel;
-        
-        if(args.length <= 0){
+
+        if (args.length <= 0) {
             this.sendHelp(channel);
             return;
         }
@@ -20,12 +20,12 @@ class SubsCommand extends Command {
         let subCommandName = args[0];
         let subCommand = subCommands[subCommandName];
 
-        if(subCommand == undefined){
+        if (subCommand == undefined) {
             this.sendHelp(channel);
             return;
         }
 
-        if(args.length - 1 < subCommand.arguments){
+        if (args.length - 1 < subCommand.arguments) {
             this.sendHelp(channel, subCommandName);
             return;
         }
@@ -35,9 +35,9 @@ class SubsCommand extends Command {
         return this["call" + subCommandName[0].toUpperCase() + subCommandName.slice(1)](args, message);
     }
 
-    sendHelp(channel, subCommandName){
+    sendHelp(channel, subCommandName) {
         let embed;
-        if(subCommandName == undefined){
+        if (subCommandName == undefined) {
             embed = new Discord.RichEmbed()
                 .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
                 .setDescription(Translation.translate("command.usage") + " `" + this.getUsage() + "`")
@@ -45,7 +45,7 @@ class SubsCommand extends Command {
         } else {
             embed = new Discord.RichEmbed()
                 .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
-                .setDescription(Translation.translate("command.usage") +  " `" + this.getName() + " " + subCommandName + " " + Translation.translate("commands.usage." + this.getName() + "." + subCommandName) + "` - " + Translation.translate("commands.help." + this.getName() + "." + subCommandName))
+                .setDescription(Translation.translate("command.usage") + " `" + this.getName() + " " + subCommandName + " " + Translation.translate("commands.usage." + this.getName() + "." + subCommandName) + "` - " + Translation.translate("commands.help." + this.getName() + "." + subCommandName))
                 .setColor(0xf0932b);
         }
 

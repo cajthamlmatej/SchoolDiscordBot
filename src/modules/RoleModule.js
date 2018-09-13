@@ -13,7 +13,7 @@ class RoleModule extends Module {
         this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels.role);
         this.rolelockRole = bot.settings.roles.special.rolelock;
         this.roles = bot.settings.roles;
-        
+
         this.channel.fetchMessages({ limit: 30 })
             .then(messages => {
                 messages.forEach(message => {
@@ -25,8 +25,8 @@ class RoleModule extends Module {
             }).catch(console.error);
     }
 
-    event(name, args){
-        switch(name){
+    event(name, args) {
+        switch (name) {
             case "messageReactionAdd":
                 this.reactionAdd(args.reactionMessage, args.user);
                 break;
@@ -41,16 +41,16 @@ class RoleModule extends Module {
         if (message.channel.id != this.channel.id)
             return;
 
-        if(message.mentions.roles.array().length == 0)
+        if (message.mentions.roles.array().length == 0)
             return;
 
         let role = message.mentions.roles.first();
         let guild = message.guild;
 
         guild.fetchMember(user).then(member => {
-            if(!this.canModifyRoles(member))
+            if (!this.canModifyRoles(member))
                 return;
-            
+
             if (member.roles.find(r => r.id == role.id) != undefined)
                 return;
 
@@ -63,16 +63,16 @@ class RoleModule extends Module {
         if (message.channel.id != this.channel.id)
             return;
 
-        if(message.mentions.roles.array().length == 0)
+        if (message.mentions.roles.array().length == 0)
             return;
 
         let role = message.mentions.roles.first();
         let guild = message.guild;
 
         guild.fetchMember(user).then(member => {
-            if(!this.canModifyRoles(member))
+            if (!this.canModifyRoles(member))
                 return;
-            
+
             if (member.roles.find(r => r.id == role.id) == undefined)
                 return;
 
@@ -80,16 +80,16 @@ class RoleModule extends Module {
         }).catch(console.error);
     }
 
-    updateRole(user, role, channel){
+    updateRole(user, role, channel) {
         let guild = channel.guild;
 
         guild.fetchMember(user).then(member => {
-            if(!this.canModifyRoles(member))
+            if (!this.canModifyRoles(member))
                 return;
-            
+
             let roleId = this.roles.assignable[role];
 
-            if(member.roles.find(r => r.id == roleId) != undefined){
+            if (member.roles.find(r => r.id == roleId) != undefined) {
                 member.removeRole(roleId).catch(console.error);
 
                 const embed = new Discord.RichEmbed()
@@ -111,7 +111,7 @@ class RoleModule extends Module {
         }).catch(console.error);
     }
 
-    printRoleList(channel){
+    printRoleList(channel) {
         let roles = channel.guild.roles;
 
         let embed = new Discord.RichEmbed()
@@ -120,9 +120,9 @@ class RoleModule extends Module {
 
         Object.keys(this.roles).forEach(groupName => {
             let list = "";
-            
+
             let groupRoles = this.roles[groupName];
-            
+
             Object.keys(groupRoles).forEach(roleName => {
                 let roleId = groupRoles[roleName];
                 list += "`" + roleName + "` - " + roles.find(r => r.id == roleId) + "\n";
@@ -135,15 +135,15 @@ class RoleModule extends Module {
         channel.send(embed);
     }
 
-    canModifyRoles(member){
+    canModifyRoles(member) {
         return member.roles.find(role => role.id == this.rolelockRole) == undefined;
     }
 
-    isRole(name){
+    isRole(name) {
         return Object.keys(this.roles.assignable).includes(name);
     }
 
-    canBeAssigned(name){
+    canBeAssigned(name) {
         return name != "member";
     }
 

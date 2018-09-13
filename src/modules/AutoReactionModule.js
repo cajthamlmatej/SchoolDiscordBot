@@ -10,8 +10,8 @@ class AutoReactionModule extends Module {
         this.settings = bot.settings.modules["auto-reaction"];
     }
 
-    event(name, args){
-        if(name != "message")
+    event(name, args) {
+        if (name != "message")
             return;
 
         let message = args.message;
@@ -19,10 +19,10 @@ class AutoReactionModule extends Module {
         Object.keys(this.settings["channels-attachments"]).forEach(channelId => {
             let emoji = this.settings["channels-attachments"][channelId];
 
-            if(message.attachments.array().length < 1)
+            if (message.attachments.array().length < 1)
                 return;
 
-            if(message.channel.id == channelId){
+            if (message.channel.id == channelId) {
                 message.react(emoji);
             }
         });
@@ -30,7 +30,7 @@ class AutoReactionModule extends Module {
         Object.keys(this.settings.emojis).forEach(emoji => {
             let reactEmoji = this.settings.emojis[emoji];
 
-            if(message.content.includes(emoji)){
+            if (message.content.includes(emoji)) {
                 message.react(reactEmoji);
             }
         });

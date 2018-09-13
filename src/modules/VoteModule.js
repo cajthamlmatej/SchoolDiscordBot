@@ -16,28 +16,28 @@ class VoteModule extends Module {
         this.client = bot.client;
     }
 
-    exists(name){
+    exists(name) {
         let votes = fs.readFileSync(this.tempFile, "utf8");
         let votesObject = JSON.parse(votes);
-        
+
         return votesObject["votes"][name] != undefined;
     }
 
-    getVote(name){
+    getVote(name) {
         let votes = fs.readFileSync(this.tempFile, "utf8");
         let votesObject = JSON.parse(votes);
-        
+
         return votesObject["votes"][name];
     }
 
-    getVotes(){
+    getVotes() {
         let votes = fs.readFileSync(this.tempFile, "utf8");
         let votesObject = JSON.parse(votes);
-        
+
         return votesObject["votes"];
     }
 
-    printVoteList(user){
+    printVoteList(user) {
         let list = "";
         let votes = this.getVotes();
 
@@ -46,20 +46,20 @@ class VoteModule extends Module {
         });
 
 
-        if(list == "")
+        if (list == "")
             list = Translation.translate("module.vote.no-vote-exists");
         else
             list += "\n";
-            
+
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.vote.list"))
             .setDescription(list)
             .setColor(0xbadc58)
-        
+
         user.createDM().then(dm => dm.send(embed)).catch(console.error);
     }
 
-    deleteVote(name, channel){
+    deleteVote(name, channel) {
         let votes = fs.readFileSync(this.tempFile, "utf8");
         let votesObject = JSON.parse(votes);
         let vote = votesObject["votes"][name];
@@ -73,16 +73,16 @@ class VoteModule extends Module {
                 .setTitle("📆 | " + Translation.translate("module.vote.deleted.title"))
                 .setDescription(Translation.translate("module.vote.deleted"))
                 .setColor(0xbadc58);
-    
+
             channel.send(embed);
-    
+
             fs.writeFileSync(this.tempFile, JSON.stringify(votesObject));
         }).catch(error => {
             // Message not found, dont log anything
         });
     }
 
-    startVote(type, name, description, options, channel){
+    startVote(type, name, description, options, channel) {
         let votes = fs.readFileSync(this.tempFile, "utf8");
         let votesObject = JSON.parse(votes);
 
@@ -98,10 +98,10 @@ class VoteModule extends Module {
             .setColor(0xbadc58);
 
         let voteChannel;
-        
-        if(type == "global")
+
+        if (type == "global")
             voteChannel = this.voteChannel;
-        else 
+        else
             voteChannel = channel;
 
         voteChannel.send(embed).then(message => {
@@ -110,36 +110,36 @@ class VoteModule extends Module {
                 result = result.then(() => message.react(option));
             });
 
-            votesObject["votes"][name] = {"id": message.id, "description": description, "options": options, "channel": channel.id};
+            votesObject["votes"][name] = { "id": message.id, "description": description, "options": options, "channel": channel.id };
 
             fs.writeFileSync(this.tempFile, JSON.stringify(votesObject));
         }).catch(console.error);
     }
 
-    endVote(name){
+    endVote(name) {
         let vote = this.getVote(name);
         let voteMessageId = vote["id"];
         let channel = this.client.channels.find(c => c.id == vote["channel"]);
-        channel.fetchMessage(voteMessageId).then(message => {        
+        channel.fetchMessage(voteMessageId).then(message => {
             let reactions = message.reactions;
             let reactionCount = 0;
 
             reactions.forEach(reaction => {
-                if(vote["options"][reaction.emoji] == undefined)
+                if (vote["options"][reaction.emoji] == undefined)
                     return;
-                
+
                 reactionCount += reaction.count - 1;
             });
-            
+
             let votesString = "";
             let weight = 100 / reactionCount;
 
             let votes = {};
-            
+
             reactions.forEach(reaction => {
-                if(vote["options"][reaction.emoji] == undefined)
+                if (vote["options"][reaction.emoji] == undefined)
                     return;
-                    
+
                 let count = reaction.count - 1;
 
                 votes[reaction.emoji] = count;
@@ -147,26 +147,26 @@ class VoteModule extends Module {
                 votesString += "`" + (count) + " " + Translation.translate("module.vote.votes") + " (" + this.addZero(((count) * weight)) + "%)` " + reaction.emoji + " " + vote["options"][reaction.emoji] + "\n";
             });
 
-            let sortedVotes = Object.keys(votes).sort(function(a, b) { return votes[b] - votes[a]; });
+            let sortedVotes = Object.keys(votes).sort(function (a, b) { return votes[b] - votes[a]; });
             let winners = [];
             winners.push(sortedVotes[0]);
 
             sortedVotes.forEach(vote => {
-                if(votes[winners[0]] === votes[vote] && vote != winners[0]){
+                if (votes[winners[0]] === votes[vote] && vote != winners[0]) {
                     winners.push(vote);
                 }
             });
 
             let winningChoice = "";
 
-            if(winners.length === 1){
+            if (winners.length === 1) {
                 winningChoice = Translation.translate("module.vote.option-won") + " **" + winners[0] + " " + vote["options"][winners[0]] + "**";
-            }else {
+            } else {
                 let choiceString = "";
 
                 winners.forEach(winner => {
                     choiceString += winner + " " + vote["options"][winner];
-                    if(winners[winners.length - 1] != winner){
+                    if (winners[winners.length - 1] != winner) {
                         choiceString += ", ";
                     }
                 });
@@ -180,24 +180,24 @@ class VoteModule extends Module {
                 .setColor(0xbadc58)
                 .addField("☝ " + Translation.translate("module.vote.options-votes"), votesString, true)
                 .addBlankField()
-                .addField("🖐 " + Translation.translate("module.vote.stats"), "**" + Translation.translate("module.vote.votes-count") + "**: " + reactionCount + "\n**" + Translation.translate("module.vote.vote-weight") + "**: " + weight+ "%\n", true)
+                .addField("🖐 " + Translation.translate("module.vote.stats"), "**" + Translation.translate("module.vote.votes-count") + "**: " + reactionCount + "\n**" + Translation.translate("module.vote.vote-weight") + "**: " + weight + "%\n", true)
                 .addField("👍 " + Translation.translate("module.vote.result"), winningChoice, true);
-            
+
             channel.send(embed);
         }).catch(console.error);
     }
 
-    addZero(i){
-        if (i < 10){
-            return "00" + i; 
-        } else if(i < 100){
+    addZero(i) {
+        if (i < 10) {
+            return "00" + i;
+        } else if (i < 100) {
             return "0" + i;
         }
 
         return i;
     }
 
-    event(name, args){
+    event(name, args) {
     }
 
 }

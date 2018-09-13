@@ -2,7 +2,7 @@ const SubsCommand = require("./SubsCommand");
 
 class RoleCommand extends SubsCommand {
 
-    getSubCommands(){
+    getSubCommands() {
         return {
             "update": {
                 "arguments": 1
@@ -16,17 +16,17 @@ class RoleCommand extends SubsCommand {
     getName() {
         return "role";
     }
-    
-    getGroup(){
+
+    getGroup() {
         return "main";
     }
-    
-    getRoles(){
+
+    getRoles() {
         return ["member"];
     }
 
-    getDependencies(){
-        return [ "rolemodule" ];
+    getDependencies() {
+        return ["rolemodule"];
     }
 
     init(bot) {
@@ -40,19 +40,19 @@ class RoleCommand extends SubsCommand {
 
     callUpdate(args, message) {
         let channel = message.channel;
-        if(args.length != 1){
+        if (args.length != 1) {
             this.sendHelp(channel);
             return;
         }
 
         let role = args[0];
 
-        if(!this.roleModule.isRole(role)){
+        if (!this.roleModule.isRole(role)) {
             this.sendError(channel, "command.role.role-not-found")
 
             return;
         }
-        
+
         this.roleModule.updateRole(message.author, role, channel);
     }
 

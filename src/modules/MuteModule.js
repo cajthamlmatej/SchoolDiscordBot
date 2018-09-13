@@ -21,7 +21,7 @@ class MuteModule extends Module {
         setInterval(() => this.tick(), 10000);
     }
 
-    tick(){
+    tick() {
         let mutes = this.getMutes();
         let toRemove = [];
 
@@ -30,7 +30,7 @@ class MuteModule extends Module {
             let current = moment().format("X");
             let expiration = mute.expiration;
 
-            if(current > expiration){
+            if (current > expiration) {
                 toRemove.push(userId);
 
                 this.setMuteRoles(userId, mute.roles);
@@ -40,7 +40,7 @@ class MuteModule extends Module {
         this.removeMutesFromFile(toRemove);
     }
 
-    printRoleList(channel){
+    printRoleList(channel) {
         let mutes = this.getMutes();
 
         let embed = new Discord.RichEmbed()
@@ -58,61 +58,61 @@ class MuteModule extends Module {
         });
 
         result.then(() => {
-            if(embed.fields.length <= 0){
+            if (embed.fields.length <= 0) {
                 embed.setDescription("Žádný člen není umlčený.");
             }
-    
+
             channel.send(embed);
         });
     }
 
-    addMute(member, lengthInMinutes, reason){
+    addMute(member, lengthInMinutes, reason) {
         let mutes = fs.readFileSync(this.tempFile, "utf8");
-        let mutesObject = JSON.parse(mutes); 
+        let mutesObject = JSON.parse(mutes);
 
         let expiration = moment().add(lengthInMinutes, "m").format("X");
         let roles = [];
- 
+
         member.roles.forEach(role => {
             roles.push(role.id);
         });
 
         member.setRoles([this.muteRole]).then(member => {
-            mutesObject["mutes"][member.user.id] = {expiration: expiration, reason: reason, roles: roles};
+            mutesObject["mutes"][member.user.id] = { expiration: expiration, reason: reason, roles: roles };
 
             fs.writeFileSync(this.tempFile, JSON.stringify(mutesObject));
         }).catch(console.error);
     }
 
-    setMuteRoles(userId, muteRoles){
+    setMuteRoles(userId, muteRoles) {
         this.guild.fetchMember(userId).then(member => {
             member.setRoles(muteRoles);
         });
 
     }
 
-    removeMute(member){
+    removeMute(member) {
         let mute = this.getMute(member.user.id);
         this.setMuteRoles(member.user.id, mute.roles);
 
         this.removeMuteFromFile(member.user.id);
     }
 
-    getMutes(){
+    getMutes() {
         let mutes = fs.readFileSync(this.tempFile, "utf8");
         let mutesObject = JSON.parse(mutes);
 
         return mutesObject["mutes"];
     }
 
-    getMute(userId){
+    getMute(userId) {
         let mutes = fs.readFileSync(this.tempFile, "utf8");
         let mutesObject = JSON.parse(mutes);
 
         return mutesObject["mutes"][userId];
     }
 
-    removeMuteFromFile(userId){
+    removeMuteFromFile(userId) {
         let mutes = fs.readFileSync(this.tempFile, "utf8");
         let mutesObject = JSON.parse(mutes);
 
@@ -120,8 +120,8 @@ class MuteModule extends Module {
 
         fs.writeFileSync(this.tempFile, JSON.stringify(mutesObject));
     }
-    
-    removeMutesFromFile(ms){
+
+    removeMutesFromFile(ms) {
         let mutes = fs.readFileSync(this.tempFile, "utf8");
         let mutesObject = JSON.parse(mutes);
 
@@ -132,18 +132,18 @@ class MuteModule extends Module {
         fs.writeFileSync(this.tempFile, JSON.stringify(mutesObject));
     }
 
-    isMuted(member){
+    isMuted(member) {
         let mutes = fs.readFileSync(this.tempFile, "utf8");
-        let mutesObject = JSON.parse(mutes); 
+        let mutesObject = JSON.parse(mutes);
 
         return mutesObject["mutes"][member.user.id] != undefined;
     }
 
-    canBeMuted(member){
+    canBeMuted(member) {
         return member.roles.find(r => r.id == this.moderatorRole) == undefined;
     }
 
-    event(name, args){
+    event(name, args) {
     }
 
 }

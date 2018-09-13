@@ -4,7 +4,7 @@ const Translation = require("../Translation");
 
 class MuteCommand extends SubsCommand {
 
-    getSubCommands(){
+    getSubCommands() {
         return {
             "remove": {
                 "arguments": 1
@@ -22,12 +22,12 @@ class MuteCommand extends SubsCommand {
         return "mute";
     }
 
-    getGroup(){
+    getGroup() {
         return "manage";
     }
-    
-    getDependencies(){
-        return [ "mutemodule" ];
+
+    getDependencies() {
+        return ["mutemodule"];
     }
 
     init(bot) {
@@ -35,7 +35,7 @@ class MuteCommand extends SubsCommand {
         this.muteModule = bot.modules.mutemodule;
     }
 
-    callList(args, message){
+    callList(args, message) {
         let channel = message.channel;
 
         this.muteModule.printRoleList(channel);
@@ -48,58 +48,58 @@ class MuteCommand extends SubsCommand {
         channel.guild.members.forEach(member => {
             let name = member.nickname == undefined ? member.user.username : member.nickname;
 
-            if(name.toLowerCase().includes(args[0].toLowerCase())){
-                valid.push(member);    
+            if (name.toLowerCase().includes(args[0].toLowerCase())) {
+                valid.push(member);
             }
         });
 
-        if(valid.length > 1){
+        if (valid.length > 1) {
             let list = "";
 
             valid.forEach(member => {
                 let name = member.nickname == undefined ? member.user.username : member.nickname;
                 list += "\n**" + name + "**";
             });
-    
+
             list += "\n";
-         
+
             const embed = new Discord.RichEmbed()
                 .setTitle("🔇 | " + Translation.translate("command.mute.user-list.title"))
-                .setDescription(Translation.translate("command.mute.user-list") + ".\n"+list)
+                .setDescription(Translation.translate("command.mute.user-list") + ".\n" + list)
                 .setColor(0xe67e22)
-                
+
             channel.send(embed);
             return;
-        } else if(valid.length <= 0){
+        } else if (valid.length <= 0) {
             this.sendError(channel, "command.mute.user-not-found");
             return;
         }
 
         let minutes = args[1];
-        if(minutes <= 0 || minutes >= this.maxMuteLength){
+        if (minutes <= 0 || minutes >= this.maxMuteLength) {
             this.sendError(channel, "command.mute.wrong-mute-length", this.maxMuteLength + ".");
             return;
         }
 
         let member = valid[0];
 
-        if(member.user.id == message.author.id){
+        if (member.user.id == message.author.id) {
             this.sendError(channel, "command.mute.self");
             return;
         }
 
-        if(this.muteModule.isMuted(member)){
+        if (this.muteModule.isMuted(member)) {
             this.sendError(channel, "command.mute.already-muted");
             return;
         }
 
-        if(!this.muteModule.canBeMuted(member)){
+        if (!this.muteModule.canBeMuted(member)) {
             this.sendError(channel, "command.mute.moderator");
             return;
         }
-        
+
         let reason = args[2];
-        
+
         const embedDM = new Discord.RichEmbed()
             .setTitle("🔇 | " + Translation.translate("command.mute.user-muted-self.title"))
             .setDescription(Translation.translate("command.mute.user-muted-self"))
@@ -117,7 +117,7 @@ class MuteCommand extends SubsCommand {
         member.createDM().then(channel => {
             channel.send(embedDM);
         });
-        
+
         channel.send(embed);
 
         this.muteModule.addMute(member, minutes, reason);
@@ -125,51 +125,51 @@ class MuteCommand extends SubsCommand {
         return true;
     }
 
-    callRemove(args, message){
+    callRemove(args, message) {
         let channel = message.channel;
-        if(args.length != 1){
+        if (args.length != 1) {
             this.sendHelp(channel);
             return;
         }
-        
+
         let valid = [];
         channel.guild.members.forEach(member => {
             let name = member.nickname == undefined ? member.user.username : member.nickname;
 
-            if(name.toLowerCase().includes(args[0].toLowerCase())){
-                valid.push(member);    
+            if (name.toLowerCase().includes(args[0].toLowerCase())) {
+                valid.push(member);
             }
         });
 
-        if(valid.length > 1){
+        if (valid.length > 1) {
             let list = "";
 
             valid.forEach(member => {
                 let name = member.nickname == undefined ? member.user.username : member.nickname;
                 list += "\n**" + name + "**";
             });
-    
+
             list += "\n";
-         
+
             const embed = new Discord.RichEmbed()
                 .setTitle("🔇 | " + Translation.translate("command.mute.user-list.title"))
-                .setDescription(Translation.translate("command.mute.user-list") + ".\n"+list)
+                .setDescription(Translation.translate("command.mute.user-list") + ".\n" + list)
                 .setColor(0xe67e22)
-                
+
             channel.send(embed);
             return;
-        } else if(valid.length <= 0){            
+        } else if (valid.length <= 0) {
             this.sendError(channel, "command.mute.user-not-found");
             return;
         }
 
         let member = valid[0];
 
-        if(!this.muteModule.isMuted(member)){
+        if (!this.muteModule.isMuted(member)) {
             this.sendError(channel, "command.mute.not-muted");
             return;
         }
-        
+
         this.muteModule.removeMute(member);
 
         const embed = new Discord.RichEmbed()

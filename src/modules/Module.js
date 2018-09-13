@@ -1,14 +1,14 @@
 class Module {
 
-    init(client, settings, commands){
+    init(client, settings, commands) {
         throw new Error('You have to implement the method init!');
     }
 
-    getName(){
+    getName() {
         throw new Error('You have to implement the method getName!');
     }
 
-    event(name){
+    event(name) {
         throw new Error('You have to implement the method event!');
     }
 

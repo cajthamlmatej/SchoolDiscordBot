@@ -3,39 +3,39 @@ const Translation = require("../Translation");
 
 class Command {
 
-    init(client, settings, commands){
+    init(client, settings, commands) {
         throw new Error('You have to implement the method init!');
     }
 
-    getName(){
+    getName() {
         throw new Error('You have to implement the method getName!');
     }
 
-    getGroup(){
+    getGroup() {
         throw new Error('You have to implement the method getGroup!');
     }
 
-    getAliases(){
+    getAliases() {
         return [];
     }
 
-    getDependencies(){
+    getDependencies() {
         return [];
     }
 
-    fetchAliases(){
+    fetchAliases() {
         return [this.getName()].concat(this.getAliases());
     }
 
-    getRoles(){
+    getRoles() {
         return ["moderator"];
     }
 
-    getUsage(){
+    getUsage() {
         return this.getName() + " " + Translation.translate("commands.usage." + this.getName());
     }
 
-    sendHelp(channel){
+    sendHelp(channel) {
         const embed = new Discord.RichEmbed()
             .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
             .setDescription(Translation.translate("command.usage") + " `" + this.getUsage() + "` - " + Translation.translate("commands.help." + this.getName()))
@@ -44,8 +44,8 @@ class Command {
         channel.send(embed);
     }
 
-    sendError(channel, reason, additional){
-        if(additional == undefined)
+    sendError(channel, reason, additional) {
+        if (additional == undefined)
             additional = "";
 
 

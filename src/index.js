@@ -17,23 +17,23 @@ fs.readFile('./settings/settings.json', (err, fileContents) => {
     let commandFiles = fs.readdirSync("./src/commands");
 
     commandFiles.forEach(file => {
-        if(file == "Command.js" || file == "SubsCommand.js")
+        if (file == "Command.js" || file == "SubsCommand.js")
             return;
-        
+
         let commandFile = require("./commands/" + file);
         let command = new commandFile();
-        
+
         commands[command.getName()] = command;
     });
-  
-    let modules = {};    
+
+    let modules = {};
     console.log("Reading directory with modules.");
     let moduleFiles = fs.readdirSync("./src/modules");
-    
+
     moduleFiles.forEach(file => {
-        if(file == "Module.js")
+        if (file == "Module.js")
             return;
-        
+
         let moduleFile = require("./modules/" + file);
         let module = new moduleFile();
 

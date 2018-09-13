@@ -52,7 +52,7 @@ class EventCommand extends SubsCommand {
             start = end;
         }
 
-        if(!(moment(end, "D. M. YYYY").isValid() || moment(start, "D. M. YYYY").isValid())){
+        if (!(moment(end, "D. M. YYYY").isValid() || moment(start, "D. M. YYYY").isValid())) {
             this.sendError(channel, "command.event.wrong-date-format");
             return;
         }
@@ -85,7 +85,7 @@ class EventCommand extends SubsCommand {
 
     callEdit(args, message) {
         let channel = message.channel;
-        
+
         let [name, type, value] = args;
 
         if (!this.eventModule.exists(name)) {
@@ -99,18 +99,18 @@ class EventCommand extends SubsCommand {
             return;
         }
 
-        if(type == "type"){
+        if (type == "type") {
             let eventTypes = ["event", "task"];
             if (!eventTypes.includes(value)) {
                 this.sendError(channel, "command.event.type-not-valid", eventTypes.join(", "));
                 return;
             }
-        } else if(type == "role"){
+        } else if (type == "role") {
             if (!this.eventModule.isMentionableRole(value)) {
                 this.sendError(channel, "command.event.role-not-valid")
                 return;
             }
-        } 
+        }
 
         this.eventModule.editEvent(name, type, value);
 

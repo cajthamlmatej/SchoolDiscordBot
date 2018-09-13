@@ -2,7 +2,7 @@ const SubsCommand = require("./SubsCommand");
 
 class AnnouncementCommand extends SubsCommand {
 
-    getSubCommands(){
+    getSubCommands() {
         return {
             "create": {
                 "arguments": 3
@@ -23,36 +23,36 @@ class AnnouncementCommand extends SubsCommand {
         return "annoucement";
     }
 
-    getGroup(){
+    getGroup() {
         return "manage";
     }
 
-    getAliases(){
-        return [ "annouce" ];
+    getAliases() {
+        return ["annouce"];
     }
 
     init(bot) {
         this.annoucementModule = bot.modules["annoucementmodule"];
     }
 
-    callList(args, message){
+    callList(args, message) {
         this.annoucementModule.listAnnoucements(message.member);
 
         message.react("✅");
         return false;
     }
 
-    callEdit(args, message){
+    callEdit(args, message) {
         let channel = message.channel;
         let [name, type, value] = args;
-        
+
         let types = ["title", "annoucement"];
         if (!types.includes(type)) {
             this.sendError(channel, "command.annoucement.edit-type-not-valid", types.join(", "));
             return;
         }
 
-        if(!this.annoucementModule.annoucementExist(name)){
+        if (!this.annoucementModule.annoucementExist(name)) {
             this.sendError(channel, "command.annoucement.dont-exist");
             return;
         }
@@ -61,27 +61,27 @@ class AnnouncementCommand extends SubsCommand {
 
         return false;
     }
-    
-    callDelete(args, message){
+
+    callDelete(args, message) {
         let channel = message.channel;
         let name = args[0];
 
-        if(!this.annoucementModule.annoucementExist(name)){
+        if (!this.annoucementModule.annoucementExist(name)) {
             this.sendError(channel, "command.annoucement.dont-exist");
             return;
         }
 
         this.annoucementModule.deleteAnnoucement(channel, name);
-    
+
         return false;
     }
 
-    callCreate(args, message){
+    callCreate(args, message) {
         let channel = message.channel;
 
         let [name, title, annoucement] = args;
 
-        if(this.annoucementModule.annoucementExist(name)){
+        if (this.annoucementModule.annoucementExist(name)) {
             this.sendError(channel, "command.annoucement.already-exists");
             return;
         }
