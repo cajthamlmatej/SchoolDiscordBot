@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Translation = require("./Translation");
+const moment = require('moment');
 
 class SchoolDiscordBot {
     constructor(settings, commands, modules) {
@@ -7,7 +8,10 @@ class SchoolDiscordBot {
         this.settings = settings;
         this.commands = commands;
         this.modules = modules;
+        this.disabledCommands = [];
+        this.disabledModules = [];
         this.commandsAliases = {};
+        this.startTime = moment();
 
         this.client = new Discord.Client();
     }
@@ -59,6 +63,7 @@ class SchoolDiscordBot {
 
             if (this.settings.modules.disabled.includes(moduleName)) {
                 console.log("Module " + moduleName + " is disabled, not loading it.");
+                this.disabledModules.push(moduleName);
                 delete this.modules[moduleName];
                 return;
             }
@@ -86,6 +91,7 @@ class SchoolDiscordBot {
 
             if (!canBeEnabled) {
                 console.log("Command " + commandName + " is disabled because dependencies modules are not loaded.");
+                this.disabledCommands.push(commandName);
                 delete this.commands[commandName];
                 return;
             }

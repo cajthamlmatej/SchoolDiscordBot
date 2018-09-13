@@ -5,6 +5,7 @@ const fs = require('fs');
 const jsdom = require("jsdom");
 const Discord = require('discord.js');
 const { JSDOM } = jsdom;
+const moment = require('moment');
 
 class SupplementationModule extends Module {
 
@@ -27,6 +28,7 @@ class SupplementationModule extends Module {
     }
 
     tick() {
+        this.lastCheck = moment();
         let request = http.request(this.webOptions, (res) => {
             let data = '';
             res.on('data', function (chunk) {
