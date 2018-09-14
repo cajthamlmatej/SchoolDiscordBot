@@ -133,6 +133,18 @@
     "command.supplementation.lastcheck.title": "Poslední čas zkontrolování suplování",
     "command.supplementation.lastcheck": "Suplování bylo zkontrolováno naposledy před",
 
+    "command.status.stats": "Statistiky",
+    "command.status.commands": "Počet příkazů",
+    "command.status.number-of-commands": "✅ {0} a ❌ {1}",
+    "command.status.modules": "Počet modulů",
+    "command.status.number-of-modules": "✅ {0} a ❌ {1}",    
+    "command.status.ping": "Ping",
+    "command.status.author": "Autor",
+    "command.status.uptime": "Čas od spuštění",
+    "command.status.uptime-time": "{0} hodin",
+    "command.status.supplementation.last-check.title": "Poslední kontrola suplování",
+    "command.status.supplementation.last-check": "před {0}m",
+
     "module.event.new-event": "Nová událost",
     "module.event.new-task": "Nový úkol",
     "module.event.group": "Skupina",

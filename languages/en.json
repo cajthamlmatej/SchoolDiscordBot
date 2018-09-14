@@ -133,6 +133,17 @@
     "command.supplementation.lastcheck.title": "Last supplementation check",
     "command.supplementation.lastcheck": "Supplementation was last checked",
 
+    "command.status.stats": "Stats",
+    "command.status.commands": "Number of commands",
+    "command.status.number-of-commands": "✅ {0} and ❌ {1}",
+    "command.status.modules": "Number of modules",
+    "command.status.number-of-modules": "✅ {0} and ❌ {1}",    
+    "command.status.ping": "Ping",
+    "command.status.author": "Author",
+    "command.status.uptime": "Uptime",
+    "command.status.uptime-time": "{0} hours",
+    "command.status.supplementation.last-check.title": "Last time supplementation checked",
+    "command.status.supplementation.last-check": "before {0}m",
 
     "module.event.new-event": "New event",
     "module.event.new-task": "New task",
