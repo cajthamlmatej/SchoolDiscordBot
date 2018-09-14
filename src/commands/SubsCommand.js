@@ -13,7 +13,7 @@ class SubsCommand extends Command {
             return [];
         }
 
-        return getSubCommands()[subCommand].roles;
+        return this.getSubCommands()[subCommand].roles;
     }
 
     allCommandsRoles() {

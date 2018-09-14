@@ -51,28 +51,32 @@ class HelpCommand extends Command {
             let commandsString = "";
 
             commands.forEach(command => {
-                let name;
+                let canUse = false
 
                 command.allCommandsRoles().forEach(role => {
                     if (memberRoles.find(r => r.id == this.roles[role]) != undefined) {
-                        let aliasesText = "";
-
-                        if (command.getAliases().length > 0) {
-                            command.getAliases().forEach(alias => {
-                                aliasesText += alias + ", ";
-                            });
-
-                            aliasesText = aliasesText.replace(/, +$/, '')
-                        }
-
-                        let cmdName = command.getName();
-
-                        name = "**" + this.prefix + command.getUsage() + (aliasesText != "" ? " [" + aliasesText + "]" : "") + "**";
-                        commandsString += name + " - " + Translation.translate("commands.help." + cmdName) + " ";
-
-                        commandsString += "\n";
+                        canUse = true;
                     }
                 });
+
+                if(!canUse){
+                    return
+                }
+                    
+                let aliasesText = "";
+
+                if (command.getAliases().length > 0) {
+                    command.getAliases().forEach(alias => {
+                        aliasesText += alias + ", ";
+                    });
+
+                    aliasesText = aliasesText.replace(/, +$/, '')
+                }
+
+                let cmdName = command.getName();
+
+                let name = "**" + this.prefix + command.getUsage() + (aliasesText != "" ? " [" + aliasesText + "]" : "") + "**";
+                commandsString += name + " - " + Translation.translate("commands.help." + cmdName) + " \n";
             });
 
             if (commandsString != "") {
