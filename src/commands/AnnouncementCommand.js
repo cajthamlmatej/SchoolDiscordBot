@@ -5,16 +5,20 @@ class AnnouncementCommand extends SubsCommand {
     getSubCommands() {
         return {
             "create": {
-                "arguments": 3
+                "arguments": 3,
+                "roles": ["moderator"]
             },
             "list": {
-                "arguments": 0
+                "arguments": 0,
+                "roles": ["moderator"]
             },
             "edit": {
-                "arguments": 3
+                "arguments": 3,
+                "roles": ["moderator"]
             },
             "delete": {
-                "arguments": 1
+                "arguments": 1,
+                "roles": ["moderator"]
             }
         }
     }

@@ -4,6 +4,31 @@ const Translation = require("../Translation");
 
 class SubsCommand extends Command {
 
+    getRoles(subCommand) {
+        if (subCommand == undefined) {
+            return ["member"];
+        }
+
+        if (getSubCommands()[subCommand] == undefined) {
+            return [];
+        }
+
+        return getSubCommands()[subCommand].roles;
+    }
+
+    allCommandsRoles() {
+        let roles = [];
+
+        Object.values(this.getSubCommands()).forEach(subCommand => {
+            subCommand.roles.forEach(role => {
+                if (!roles.includes(role))
+                    roles.push(role);
+            })
+        });
+
+        return roles;
+    }
+
     getSubCommands() {
         throw new Error('You have to implement the method getSubCommands!');
     }

@@ -31,6 +31,10 @@ class Command {
         return ["moderator"];
     }
 
+    allCommandsRoles() {
+        return this.getRoles();
+    }
+
     getUsage() {
         return this.getName() + " " + Translation.translate("commands.usage." + this.getName());
     }

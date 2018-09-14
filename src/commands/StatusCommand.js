@@ -39,7 +39,7 @@ class StatusCommand extends Command {
             .addField("Autor", "Matěj Cajthaml [source (GitHub)](https://github.com/cajthamlmatej/SchoolDiscordBot)", true)
             .addField("Uptime", moment().diff(this.startTime, "hours") + " hodin", true);
 
-        if(this.supplementationModule != undefined)
+        if (this.supplementationModule != undefined)
             embed.addField("Poslední kontrola suplování", "před " + moment().diff(this.supplementationModule.lastCheck, "minutes") + "m", true);
 
         channel.send(embed);

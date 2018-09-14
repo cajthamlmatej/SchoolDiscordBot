@@ -53,7 +53,7 @@ class HelpCommand extends Command {
             commands.forEach(command => {
                 let name;
 
-                command.getRoles().forEach(role => {
+                command.allCommandsRoles().forEach(role => {
                     if (memberRoles.find(r => r.id == this.roles[role]) != undefined) {
                         let aliasesText = "";
 

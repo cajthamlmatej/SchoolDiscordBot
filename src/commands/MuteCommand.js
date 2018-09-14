@@ -7,13 +7,16 @@ class MuteCommand extends SubsCommand {
     getSubCommands() {
         return {
             "remove": {
-                "arguments": 1
+                "arguments": 1,
+                "roles": ["moderator"]
             },
             "add": {
-                "arguments": 3
+                "arguments": 3,
+                "roles": ["moderator"]
             },
             "list": {
-                "arguments": 0
+                "arguments": 0,
+                "roles": ["moderator"]
             }
         }
     }

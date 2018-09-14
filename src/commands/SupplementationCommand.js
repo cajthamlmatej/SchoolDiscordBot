@@ -6,7 +6,8 @@ class SupplementationCommand extends SubsCommand {
     getSubCommands() {
         return {
             "refresh": {
-                "arguments": 0
+                "arguments": 0,
+                "roles": ["moderator"]
             }
         }
     }

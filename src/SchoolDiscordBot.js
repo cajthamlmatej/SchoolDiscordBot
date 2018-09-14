@@ -125,12 +125,15 @@ class SchoolDiscordBot {
         if (command == undefined)
             return;
 
-        let roles = command.getRoles();
-        let havePermissions = false;
-        let guild = message.guild;
-        guild.fetchMember(message.author)
+        message.guild.fetchMember(message.author)
             .then(member => {
-                roles.forEach(r => {
+                args.shift();
+                for (var i = 0; i < args.length; i++) {
+                    args[i] = args[i].replace(/"/gm, '').replace(/'/gm, '');
+                }
+
+                let havePermissions = false;
+                command.getRoles(args[0]).forEach(r => {
                     if (member.roles.find(role => role.id == this.settings.roles.permission[r]))
                         havePermissions = true;
                 });
@@ -138,10 +141,6 @@ class SchoolDiscordBot {
                 if (!havePermissions)
                     return;
 
-                args.shift();
-                for (var i = 0; i < args.length; i++) {
-                    args[i] = args[i].replace(/"/gm, '').replace(/'/gm, '');
-                }
 
                 console.log("User " + message.author.username + " used command " + message.content + ".");
                 let deleteMessage = command.call(args, message);

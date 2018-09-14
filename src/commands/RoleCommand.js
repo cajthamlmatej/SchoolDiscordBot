@@ -5,10 +5,12 @@ class RoleCommand extends SubsCommand {
     getSubCommands() {
         return {
             "update": {
-                "arguments": 1
+                "arguments": 1,
+                "roles": ["member"]
             },
             "list": {
-                "arguments": 0
+                "arguments": 0,
+                "roles": ["member"]
             }
         }
     }
@@ -19,10 +21,6 @@ class RoleCommand extends SubsCommand {
 
     getGroup() {
         return "main";
-    }
-
-    getRoles() {
-        return ["member"];
     }
 
     getDependencies() {
