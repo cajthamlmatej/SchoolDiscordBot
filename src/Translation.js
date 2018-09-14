@@ -2,7 +2,7 @@ const fs = require('fs');
 
 class Translation {
 
-    static translate(path) {
+    static translate(path, ...args) {
         if (this.languageFile == undefined) {
             console.log("Language file is not specified in Translation yet, doing so now...");
             try {
@@ -16,7 +16,16 @@ class Translation {
         }
 
         let translation = this.languageFile[path];
-        return translation == undefined ? "?_" + path : translation;
+
+        if(translation == undefined)
+            return "t?_" + path;  
+
+        let counter = 0;
+        args.forEach(arg => {
+            translation = translation.replace(new RegExp("\\{" + counter + "\\}", "g"), arg);
+            counter++;
+        });
+        return translation;
     }
 
     static languageExists(language) {
