@@ -31,7 +31,7 @@ class StatusCommand extends Command {
     call(args, message) {
         let channel = message.channel;
         let embed = new Discord.RichEmbed()
-            .setTitle("📊  | Statistiky" + Translation.translate(""))
+            .setTitle("📊 | Statistiky" + Translation.translate(""))
             .setColor(0xbadc58)
             .addField("Počet příkazů", "✅ " + Object.keys(this.commands).length + " a ❌ " + Object.keys(this.disabledCommands).length, true)
             .addField("Počet modulů", "✅ " + Object.keys(this.modules).length + " a ❌ " + Object.keys(this.disabledModules).length, true)
