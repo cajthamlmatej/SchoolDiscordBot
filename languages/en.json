@@ -25,6 +25,7 @@
     "commands.help.purge": "Delete entered number of messages in current channel",
     "commands.help.supplementation": "Command for managing supplementation",
     "commands.help.supplementation.refresh": "Instantly check for any changes in supplementation",
+    "commands.help.supplementation.lastcheck": "Print time of last supplementation check",
     "commands.help.role": "Command for managing roles",
     "commands.help.role.update": "Add or remove entered role",
     "commands.help.role.list": "Print list of roles",
@@ -54,8 +55,9 @@
     "commands.usage.mute.remove": "<member name>",
     "commands.usage.ping": "",
     "commands.usage.purge": "<number of messages>",
-    "commands.usage.supplementation": "<refresh> <...>",
+    "commands.usage.supplementation": "<refresh/lastcheck> <...>",
     "commands.usage.supplementation.refresh": "",
+    "commands.usage.supplementation.lastcheck": "",
     "commands.usage.role": "<update/list>",
     "commands.usage.role.update": "<role>",
     "commands.usage.role.list": "",
@@ -127,7 +129,10 @@
     "command.annoucement.dont-exist": "Annoucement with this name not found, list of all annoucement can be printed by command annoucement list.",
     "command.annoucement.already-exists": "Annoucement with this name already exists, choose please another name.",
     "command.annoucement.edit-type-not-valid": "Selected type of value is not valid, must be one of:",
-    
+
+    "command.supplementation.lastcheck.title": "Last supplementation check",
+    "command.supplementation.lastcheck": "Supplementation was last checked",
+
 
     "module.event.new-event": "New event",
     "module.event.new-task": "New task",

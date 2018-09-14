@@ -25,6 +25,7 @@
     "commands.help.purge": "Smaže zadaný počet zpráv z aktuálního channelu",
     "commands.help.supplementation": "Správa suplování",
     "commands.help.supplementation.refresh": "Okamžitě zkontroluje a aktualizuje jakékoliv změny v suplování",
+    "commands.help.supplementation.lastcheck": "Vypíše před jakou dobou bylo naposledy zkontrolováno suplování",
     "commands.help.role": "Správa rolí",
     "commands.help.role.update": "Přídá nebo odebere roli",
     "commands.help.role.list": "Vypíše seznam rolí",
@@ -54,8 +55,9 @@
     "commands.usage.mute.remove": "<jméno člena>",
     "commands.usage.ping": "",
     "commands.usage.purge": "<počet zpráv>",
-    "commands.usage.supplementation": "<refresh> <...>",
+    "commands.usage.supplementation": "<refresh/lastcheck> <...>",
     "commands.usage.supplementation.refresh": "",
+    "commands.usage.supplementation.lastcheck": "",
     "commands.usage.role": "<update/list>",
     "commands.usage.role.update": "<role>",
     "commands.usage.role.list": "",
@@ -128,6 +130,8 @@
     "command.annoucement.already-exists": "Oznámení s tímto jménem již existuje, zvolte jiné jméno.",
     "command.annoucement.edit-type-not-valid": "Vybraná hodnota k editaci není platná, vyberte jednu z následujících:",
     
+    "command.supplementation.lastcheck.title": "Poslední čas zkontrolování suplování",
+    "command.supplementation.lastcheck": "Suplování bylo zkontrolováno naposledy před",
 
     "module.event.new-event": "Nová událost",
     "module.event.new-task": "Nový úkol",
