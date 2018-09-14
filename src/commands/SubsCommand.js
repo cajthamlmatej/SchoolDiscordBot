@@ -9,7 +9,7 @@ class SubsCommand extends Command {
             return ["member"];
         }
 
-        if (getSubCommands()[subCommand] == undefined) {
+        if (this.getSubCommands()[subCommand] == undefined) {
             return [];
         }
 
