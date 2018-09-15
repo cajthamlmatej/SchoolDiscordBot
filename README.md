@@ -2,7 +2,7 @@
 Discord Bot for my school class.
 This repo is just read-only, it will be hard for you to make it work fine for you - this bot is perfectly made just for my class. If you somehow manage to get it working, be sure you disable supplementation module - its really only for us. 
 
-# Features!
+### Features!
 
   - Mute for time
   - Role assigment by click to reaction
@@ -33,6 +33,10 @@ $ npm start
 ### How to add language / How to translate bot
 
 If you want to add language (translate bot messages), you just need to copy already existing language file from /language/<language>.json (we recommend to use English - en file). Then save it whatever shortcut name that your language uses and translate all strings. Remember to dont change key paths that bot fetch. After you translate all strings you need to set language shortcut in config, just change `"language"` to your language shortcut. If you think it will be good to have the language in bot files, do pull reqest to git. We will be happy for any contribution.
+
+### How to do custom commands / modules
+
+If you want to create own commands or modules look into custom.md
 
 ### Dependencies
 
