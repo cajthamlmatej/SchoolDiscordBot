@@ -78,10 +78,10 @@
     "command.error": "Při odesílání příkazu nastala chyba",
     
     "command.event.already-exists": "Událost s tímto jménem již existuje, zvolte prosím jiné jméno.",
-    "command.event.type-not-valid": "Typ události není platný, vyberte jeden z následujících:",
+    "command.event.type-not-valid": "Typ události není platný, vyberte jednu z ({0}) hodnot.",
     "command.event.role-not-valid": "Vybraná role není platná, vyberte jednu z *označitelných* rolí v příkazu `rolelist`.",
     "command.event.dont-exist": "Událost s tímto jménem neexistuje.",
-    "command.event.edit-type-not-valid": "Vybraná hodnota k editaci není platná, vyberte jednu z následujících:",
+    "command.event.edit-type-not-valid": "Vybraná hodnota k editaci není platná, vyberte jednu z ({0}) hodnot.",
     "command.event.wrong-date-format": "Zadané datum není ve správném formátu. Správný formát je \"11. 9. 2018\".",
     
     "command.help.title": "Nápověda k používání bota",
@@ -90,27 +90,27 @@
     "command.mute.user-list.title": "Seznam všech možných uživatelů",
     "command.mute.user-list": "Určete jméno člena více podrobně",
     "command.mute.user-not-found": "Nikoho s tímto jménem jsme nenašli. Zkontrolujte diakritiku a správnost jména.",
-    "command.mute.wrong-mute-length": "Nesprávný počet minut. Počet minut k umlčení není správný, minimum minut je 1 a nejvíce je",
+    "command.mute.wrong-mute-length": "Nesprávný počet minut. Počet minut k umlčení není správný, minimum je 1 a nejvíce je {0} minut.",
     "command.mute.self": "Nemůžete umlčet sám sebe.",
     "command.mute.already-muted": "Vámi zvolený člen je již umlčený.",
     "command.mute.bit-muted": "Vámi zvolený člen není umlčený.",
     "command.mute.moderator": "Vámi zvolený člen je moderátor. Nemůžete umlčet moderátora.",
-    "command.mute.user-muted.title": "byl umlčen",
-    "command.mute.user-muted": "Na serveru byl umlčen",
+    "command.mute.user-muted.title": "{0} byl umlčen",
+    "command.mute.user-muted": "Na serveru byl umlčen člen {0}.",
     "command.mute.user-muted-self.title": "Byl jste umlčen",
     "command.mute.user-muted-self": "Na serveru jste byl umlčen.",
     "command.mute.reason": "Důvod",
     "command.mute.time": "Čas",
-    "command.mute.minutes": "minut",
-    "command.mute.unmuted.title": "byl odmlčen",
-    "command.mute.unmuted": "již není umlčen.",
+    "command.mute.minutes": "{0} minut",
+    "command.mute.unmuted.title": "{0} byl odmlčen",
+    "command.mute.unmuted": "Člen {0} již není umlčen.",
     
     "command.ping": "Odezva",
-    "command.ping.ping": "Odezva bota je",
+    "command.ping.ping": "Odezva bota je {0}ms.",
     
     "command.purge.wrong-message-count": "Zadaný počet zpráv, které se mají smazat není správný. Minimum zpráv je 1 a nejvíce je 100.",
     "command.purge.purged.title": "Uklííííízečka!!!",
-    "command.purge.purged": "zpráv bylo smazáno v tomto kanálu.",
+    "command.purge.purged": "{0} zpráv bylo smazáno v tomto kanálu.",
     
     "command.role.role-not-found": "Vybraná role není platná, vyberte jednu z rolí v příkazu `rolelist`.",
     
@@ -128,10 +128,10 @@
 
     "command.annoucement.dont-exist": "Oznámení s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazem annoucement list.",
     "command.annoucement.already-exists": "Oznámení s tímto jménem již existuje, zvolte jiné jméno.",
-    "command.annoucement.edit-type-not-valid": "Vybraná hodnota k editaci není platná, vyberte jednu z následujících:",
+    "command.annoucement.edit-type-not-valid": "Vybraná hodnota k editaci není platná, vyberte jednu z ({0}) hodnot.",
     
     "command.supplementation.lastcheck.title": "Poslední čas zkontrolování suplování",
-    "command.supplementation.lastcheck": "Suplování bylo zkontrolováno naposledy před",
+    "command.supplementation.lastcheck": "Suplování bylo zkontrolováno naposledy před {0}m.",
 
     "command.status.stats": "Statistiky",
     "command.status.commands": "Počet příkazů",

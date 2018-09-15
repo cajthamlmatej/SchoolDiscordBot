@@ -80,7 +80,7 @@ class MuteCommand extends SubsCommand {
 
         let minutes = args[1];
         if (minutes <= 0 || minutes >= this.maxMuteLength) {
-            this.sendError(channel, "command.mute.wrong-mute-length", this.maxMuteLength + ".");
+            this.sendError(channel, "command.mute.wrong-mute-length", this.maxMuteLength);
             return;
         }
 
@@ -107,14 +107,14 @@ class MuteCommand extends SubsCommand {
             .setTitle("🔇 | " + Translation.translate("command.mute.user-muted-self.title"))
             .setDescription(Translation.translate("command.mute.user-muted-self"))
             .setColor(0xf0932b)
-            .addField(Translation.translate("command.mute.time"), minutes + " " + Translation.translate("command.mute.minutes"), true)
+            .addField(Translation.translate("command.mute.time"), Translation.translate("command.mute.minutes", minutes), true)
             .addField(Translation.translate("command.mute.reason"), reason, false);
 
         const embed = new Discord.RichEmbed()
-            .setTitle("🔇 | " + member.user.username + " " + Translation.translate("command.mute.user-muted.title"))
-            .setDescription(Translation.translate("command.mute.user-muted") + " " + member.user.username + ".")
+            .setTitle("🔇 | " + Translation.translate("command.mute.user-muted.title", member.user.username))
+            .setDescription(Translation.translate("command.mute.user-muted", member.user.username))
             .setColor(0xf0932b)
-            .addField(Translation.translate("command.mute.time"), minutes + " " + Translation.translate("command.mute.minutes"), true)
+            .addField(Translation.translate("command.mute.time"), Translation.translate("command.mute.minutes", minutes), true)
             .addField(Translation.translate("command.mute.reason"), reason, false);
 
         member.createDM().then(channel => {
@@ -176,8 +176,8 @@ class MuteCommand extends SubsCommand {
         this.muteModule.removeMute(member);
 
         const embed = new Discord.RichEmbed()
-            .setTitle("🔇 | " + member.user.username + " " + Translation.translate("command.mute.unmuted.title"))
-            .setDescription(member.user.username + " " + Translation.translate("command.mute.unmuted"))
+            .setTitle("🔇 | " + Translation.translate("command.mute.unmuted.title", member.user.username))
+            .setDescription(Translation.translate("command.mute.unmuted", member.user.username))
             .setColor(0xbadc58);
 
         channel.send(embed);

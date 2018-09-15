@@ -51,7 +51,7 @@ class SupplementationCommand extends SubsCommand {
         const embed = new Discord.RichEmbed()
             .setTitle("👓 | " + Translation.translate("command.supplementation.lastcheck.title"))
             .setColor(0xbadc58)
-            .setDescription(Translation.translate("command.supplementation.lastcheck") + " " + moment().diff(this.supplementationModule.lastCheck, "minutes") + "m");
+            .setDescription(Translation.translate("command.supplementation.lastcheck", moment().diff(this.supplementationModule.lastCheck, "minutes")));
 
         channel.send(embed);
 

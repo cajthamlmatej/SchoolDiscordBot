@@ -48,14 +48,14 @@ class Command {
         channel.send(embed);
     }
 
-    sendError(channel, reason, additional) {
+    sendError(channel, reason, ...additional) {
         if (additional == undefined)
             additional = "";
 
 
         const embed = new Discord.RichEmbed()
             .setTitle("❗ | " + Translation.translate("command.error"))
-            .setDescription(Translation.translate(reason) + " " + additional)
+            .setDescription(Translation.translate(reason, ...additional))
             .setColor(0xeb4d4b);
 
         channel.send(embed);

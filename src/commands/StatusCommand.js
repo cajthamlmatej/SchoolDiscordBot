@@ -35,7 +35,7 @@ class StatusCommand extends Command {
             .setColor(0xbadc58)
             .addField(Translation.translate("command.status.commands"), Translation.translate("command.status.number-of-commands", Object.keys(this.commands).length, Object.keys(this.disabledCommands).length), true)
             .addField(Translation.translate("command.status.modules"), Translation.translate("command.status.number-of-modules", Object.keys(this.modules).length, Object.keys(this.disabledModules).length), true)
-            .addField(Translation.translate("command.status.ping"), this.client.ping + "ms", true)
+            .addField(Translation.translate("command.status.ping"), Math.round(this.client.ping) + "ms", true)
             .addField(Translation.translate("command.status.author"), "Matěj Cajthaml [source (GitHub)](https://github.com/cajthamlmatej/SchoolDiscordBot)", true)
             .addField(Translation.translate("command.status.uptime"), Translation.translate("command.status.uptime-time", moment().diff(this.startTime, "hours")), true);
 

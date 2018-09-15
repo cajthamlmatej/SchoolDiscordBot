@@ -25,7 +25,7 @@ class PingCommand extends Command {
         let channel = message.channel;
         let embed = new Discord.RichEmbed()
             .setTitle("🏓 | " + Translation.translate("command.ping"))
-            .setDescription(Translation.translate("command.ping.ping") + " " + Math.round(this.client.pings[0]) + "ms")
+            .setDescription(Translation.translate("command.ping.ping", Math.round(this.client.pings[0])))
             .setColor(0xbadc58);
 
         channel.send(embed);

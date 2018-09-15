@@ -78,10 +78,10 @@
     "command.error": "There was an error while sending the command",
     
     "command.event.already-exists": "An event with this name already exists, please choose another name.",
-    "command.event.type-not-valid": "Selected type of event is not valid, must be one of:",
+    "command.event.type-not-valid": "Selected type of event is not valid, must be one of {0}.",
     "command.event.role-not-valid": "Selected role is not valid, choose one of *mentionable* from command `rolelist`.",
     "command.event.dont-exist": "Event with this name dont exists.",
-    "command.event.edit-type-not-valid": "Selected type of value is not valid, must be one of:",
+    "command.event.edit-type-not-valid": "Selected type of value is not valid, must be one of {0}.",
     "command.event.wrong-date-format": "Selected date is not in right format. Right format is \"11. 9. 2018\".",
     
     "command.help.title": "Bot help",
@@ -90,27 +90,27 @@
     "command.mute.user-list.title": "List of all possible users",
     "command.mute.user-list": "Specify the member's name in more detail",
     "command.mute.user-not-found": "We have not found anyone with this name. Check the accent and correctness of the name.",
-    "command.mute.wrong-mute-length": "Incorrect length of mute. The number of minutes to mute is not correct, minimum is 1 and maximum is",
+    "command.mute.wrong-mute-length": "Incorrect length of mute. The number of minutes to mute is not correct, minimum is 1 and maximum is {0}.",
     "command.mute.self": "You can't mute yourself.",
     "command.mute.already-muted": "Selected member is already muted.",
     "command.mute.not-muted": "Selected member is not muted.",
     "command.mute.moderator": "Selected member is moderator. You can't mute moderator.",
-    "command.mute.user-muted.title": "was muted",
-    "command.mute.user-muted": "Muted: ",
+    "command.mute.user-muted.title": "{0} was muted",
+    "command.mute.user-muted": "{0} was muted on the server.",
     "command.mute.user-muted-self.title": "You were muted",
     "command.mute.user-muted-self": "You were muteed on the server.",
     "command.mute.reason": "Reason",
     "command.mute.time": "Time",
-    "command.mute.minutes": "minutes",
-    "command.mute.unmuted.title": "was unmuted",
-    "command.mute.unmuted": "is no longer muted.",
+    "command.mute.minutes": "{0} minutes",
+    "command.mute.unmuted.title": "{0} was unmuted",
+    "command.mute.unmuted": "Member {0} is no longer muted.",
     
     "command.ping": "Ping",
-    "command.ping.ping": "Bot ping is",
+    "command.ping.ping": "Bot ping is {0}ms.",
     
     "command.purge.wrong-message-count": "Specified number of messages is not correct. Minimum of messages is 1 and maximum 100.",
     "command.purge.purged.title": "Housekeeping!!!",
-    "command.purge.purged": "messages have been deleted in this channel.",
+    "command.purge.purged": "{0} messages have been deleted in this channel.",
     
     "command.role.role-not-found": "Selected role is not valid, choose one from command `rolelist`.",
     
@@ -131,7 +131,7 @@
     "command.annoucement.edit-type-not-valid": "Selected type of value is not valid, must be one of:",
 
     "command.supplementation.lastcheck.title": "Last supplementation check",
-    "command.supplementation.lastcheck": "Supplementation was last checked",
+    "command.supplementation.lastcheck": "Supplementation was last checked before {0}m.",
 
     "command.status.stats": "Stats",
     "command.status.commands": "Number of commands",
