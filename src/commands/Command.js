@@ -3,7 +3,7 @@ const Translation = require("../Translation");
 
 class Command {
 
-    init(client, settings, commands) {
+    init(client) {
         throw new Error('You have to implement the method init!');
     }
 

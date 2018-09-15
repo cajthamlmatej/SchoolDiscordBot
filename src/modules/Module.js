@@ -1,6 +1,6 @@
 class Module {
 
-    init(client, settings, commands) {
+    init(client) {
         throw new Error('You have to implement the method init!');
     }
 
