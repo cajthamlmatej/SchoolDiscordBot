@@ -40,6 +40,7 @@
     "commands.help.annoucement.list": "Print list of annoucements",
     "commands.help.annoucement.edit": "Edit annoucement value by entered type name and value",
     "commands.help.annoucement.delete": "Delete annoucement",
+    "commands.help.status": "Show status and stats of the bot",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list> <...>",
@@ -72,6 +73,7 @@
     "commands.usage.annoucement.list": "",
     "commands.usage.annoucement.edit": "<name> <title/annoucement> <value>",
     "commands.usage.annoucement.delete": "<name>",
+    "commands.usage.status": "",
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",

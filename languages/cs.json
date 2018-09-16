@@ -40,6 +40,7 @@
     "commands.help.annoucement.list": "Vypíše seznam všech oznámení",
     "commands.help.annoucement.edit": "Upraví hodnotu oznámení vyplněným údajem",
     "commands.help.annoucement.delete": "Smaže oznámení",
+    "commands.help.status": "Zobrazí status bota a jeho statistiky.",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list> <...>",
@@ -72,6 +73,7 @@
     "commands.usage.annoucement.list": "",
     "commands.usage.annoucement.edit": "<jméno> <title/annoucement> <hodnota>",
     "commands.usage.annoucement.delete": "<jméno>",
+    "commands.usage.status": "",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
