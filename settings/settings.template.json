@@ -3,6 +3,10 @@
   "prefix": "! - prefix of the bot",
   "guild": "main guild id where bot operates",
   "language": "en",
+  "spam": {
+    // seconds before sending another command
+    "cooldown": "3"
+  },
   "roles": {
     // groups of roles
     // groups that can be mention with event command

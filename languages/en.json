@@ -4,6 +4,9 @@
     "roles.group.special": "☢ Special roles",
     "roles.group.permission": "🚫 Roles for permissions",
 
+    "spam.alert.title": "Wait please!",
+    "spam.alert": "You are sending commands too fast, please wait a few seconds before sending another command.",
+
     "commands.group.main": "🔔 Main commands",
     "commands.group.school": "🎓 School commands",
     "commands.group.vote": "🎟 Commands for voting",

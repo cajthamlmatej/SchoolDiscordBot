@@ -12,6 +12,7 @@ class SchoolDiscordBot {
         this.disabledModules = [];
         this.commandsAliases = {};
         this.startTime = moment();
+        this.recentCommandsUsage = new Set();
 
         this.client = new Discord.Client();
     }
@@ -114,8 +115,26 @@ class SchoolDiscordBot {
         if (!message.content.startsWith(this.settings.prefix))
             return;
 
-        if (message.author.id == this.client.user.id)
+        let authorId = message.author.id;
+
+        if (authorId == this.client.user.id)
             return;
+
+        if(this.recentCommandsUsage.has(authorId)){
+            const embed = new Discord.RichEmbed()
+                .setTitle("❗ | " + Translation.translate("spam.alert.title"))
+                .setColor(0xd63031)
+                .setDescription(Translation.translate("spam.alert"));
+
+            message.channel.send(embed);
+            return;
+        } 
+
+        this.recentCommandsUsage.add(authorId);
+
+        setTimeout(() => {
+          this.recentCommandsUsage.delete(authorId);
+        }, this.settings.spam.cooldown * 1000);
 
         let args = message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/gm);
 
