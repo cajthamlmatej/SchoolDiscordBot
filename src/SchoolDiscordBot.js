@@ -1,28 +1,42 @@
 const Discord = require('discord.js');
 const Translation = require("./Translation");
 const moment = require('moment');
+const fs = require('fs');
 
 class SchoolDiscordBot {
-    constructor(settings, commands, modules) {
-        this.token = settings.token;
-        this.settings = settings;
-        this.commands = commands;
-        this.modules = modules;
+    constructor() {
+        this.startTime = moment();
+    }
+
+    start() {
+        console.log("Starting client.");
+        this.reload();
+    }
+
+    reload() {
+        if(this.client != undefined){
+            console.log("Destroing client.");
+            this.client.destroy();
+        }
+        
+        this.client = new Discord.Client();
+
         this.disabledCommands = [];
         this.disabledModules = [];
         this.commandsAliases = {};
-        this.startTime = moment();
         this.recentCommandsUsage = new Set();
+        
+        this.loadConfig();
+        this.loadModules();
+        this.loadCommands();
 
-        this.client = new Discord.Client();
-    }
-
-    login() {
+        this.token = this.settings.token;
+        
         console.log("Setting bot events.");
-
         this.client.on("ready", () => {
             this.ready();
         });
+
         this.client.on("message", (message) => {
             if (message.guild == null || message.guild.id != this.settings.guild)
                 return;
@@ -32,6 +46,7 @@ class SchoolDiscordBot {
                 module.event("message", { message: message });
             })
         });
+        
         this.client.on("messageReactionAdd", (reactionMessage, user) => {
             if (reactionMessage.message.guild == null || reactionMessage.message.guild.id != this.settings.guild)
                 return;
@@ -40,6 +55,7 @@ class SchoolDiscordBot {
                 module.event("messageReactionAdd", { reactionMessage: reactionMessage, user: user });
             })
         });
+        
         this.client.on("messageReactionRemove", (reactionMessage, user) => {
             if (reactionMessage.message.guild == null || reactionMessage.message.guild.id != this.settings.guild)
                 return;
@@ -51,6 +67,50 @@ class SchoolDiscordBot {
 
         console.log("Login bot to discord.");
         this.client.login(this.token);
+    }
+
+    loadConfig() {
+        console.log("Opening and reading settings file.");
+
+        let fileContents = fs.readFileSync('./settings/settings.json');
+        
+        this.settings = JSON.parse(fileContents);
+    }
+
+    loadCommands() {
+        let commands = {};
+        console.log("Reading directory with commands.");
+        let commandFiles = fs.readdirSync("./src/commands");
+    
+        commandFiles.forEach(file => {
+            if (file == "Command.js" || file == "SubsCommand.js")
+                return;
+    
+            let commandFile = require("./commands/" + file);
+            let command = new commandFile();
+    
+            commands[command.getName()] = command;
+        });
+
+        this.commands = commands;
+    }
+
+    loadModules() {
+        let modules = {};
+        console.log("Reading directory with modules.");
+        let moduleFiles = fs.readdirSync("./src/modules");
+    
+        moduleFiles.forEach(file => {
+            if (file == "Module.js")
+                return;
+    
+            let moduleFile = require("./modules/" + file);
+            let module = new moduleFile();
+    
+            modules[module.getName()] = module;
+        });
+        
+        this.modules = modules;
     }
 
     ready() {

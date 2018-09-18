@@ -35,7 +35,7 @@
     "commands.help.say": "Řekni něco jako bot!",
     "commands.help.vote": "Příkaz pro správu hlasování",
     "commands.help.vote.start": "Vytvoří hlasování s vyplněnými údaji",
-    "commands.help.vote.end": "Ukončí hlasování a vypíše statistiky / jaké možnost/i vyhrál/y",
+    "commands.help.vote.end": "Ukončí hlasování a vypíše statistiky / jaké možnost vyhrála",
     "commands.help.vote.delete": "Smaže hlasování a jeho zprávu",
     "commands.help.vote.list": "Vypíše seznam všech hlasování",
     "commands.help.annoucement": "Správa oznámení",
@@ -43,7 +43,8 @@
     "commands.help.annoucement.list": "Vypíše seznam všech oznámení",
     "commands.help.annoucement.edit": "Upraví hodnotu oznámení vyplněným údajem",
     "commands.help.annoucement.delete": "Smaže oznámení",
-    "commands.help.status": "Zobrazí status bota a jeho statistiky.",
+    "commands.help.status": "Zobrazí status bota a jeho statistiky",
+    "commands.help.reload": "Znovu načte příkazy, moduly a překlady bota",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list> <...>",
@@ -77,6 +78,7 @@
     "commands.usage.annoucement.edit": "<jméno> <title/annoucement> <hodnota>",
     "commands.usage.annoucement.delete": "<jméno>",
     "commands.usage.status": "",
+    "commands.usage.reload": "",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
