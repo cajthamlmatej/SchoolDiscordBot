@@ -180,6 +180,14 @@ class SchoolDiscordBot {
         if (authorId == this.client.user.id)
             return;
 
+        let args = message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/gm);
+
+        let cmd = args[0].replace(this.settings.prefix, "").toLowerCase();
+        let command = this.commands[this.commandsAliases[cmd]];
+
+        if (command == undefined)
+            return;
+
         if(this.recentCommandsUsage.has(authorId)){
             const embed = new Discord.RichEmbed()
                 .setTitle("❗ | " + Translation.translate("spam.alert.title"))
@@ -193,16 +201,8 @@ class SchoolDiscordBot {
         this.recentCommandsUsage.add(authorId);
 
         setTimeout(() => {
-          this.recentCommandsUsage.delete(authorId);
+            this.recentCommandsUsage.delete(authorId);
         }, this.settings.spam.cooldown * 1000);
-
-        let args = message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/gm);
-
-        let cmd = args[0].replace(this.settings.prefix, "").toLowerCase();
-        let command = this.commands[this.commandsAliases[cmd]];
-
-        if (command == undefined)
-            return;
 
         message.guild.fetchMember(message.author)
             .then(member => {
