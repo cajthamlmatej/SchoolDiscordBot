@@ -110,7 +110,7 @@ class VoteModule extends Module {
                 result = result.then(() => message.react(option));
             });
 
-            votesObject["votes"][name] = { "id": message.id, "description": description, "options": options, "channel": channel.id };
+            votesObject["votes"][name] = { "id": message.id, "description": description, "options": options, "channel": voteChannel.id };
 
             fs.writeFileSync(this.tempFile, JSON.stringify(votesObject));
         }).catch(console.error);
