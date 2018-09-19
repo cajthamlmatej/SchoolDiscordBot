@@ -45,9 +45,22 @@
       "channels-attachments": {
         "channel id": "emoji id"
       },
-      // react to emoji in any channel with emoji
-      "emojis": {
-        "<:emojiname:emojiid>": "emoji id"
+      // react to text in any channel with emoji
+      "test": {
+        "<:emojiname:emojiid>": "emoji id",
+        "test": "emoji id"
+      },
+      // react to text with series of emojis
+      "series-text": {
+        "test": [
+          "emoji",
+          "🇭",
+          "or emoji id",
+          "🇦",
+          "🇰"
+          "🇪",
+          "🇩"
+        ]
       }
     },
     "supplementation": {

@@ -27,11 +27,22 @@ class AutoReactionModule extends Module {
             }
         });
 
-        Object.keys(this.settings.emojis).forEach(emoji => {
-            let reactEmoji = this.settings.emojis[emoji];
+        Object.keys(this.settings.text).forEach(text => {
+            let reactEmoji = this.settings.text[text];
 
-            if (message.content.includes(emoji)) {
+            if (message.content.toLowerCase().includes(text)) {
                 message.react(reactEmoji);
+            }
+        });
+        
+        Object.keys(this.settings["series-text"]).forEach(text => {
+            let emojis = this.settings["series-text"][text];
+
+            if (message.content.toLowerCase().includes(text)) {
+                let result = Promise.resolve();
+                emojis.forEach(emoji => {
+                    result = result.then(() => message.react(emoji));
+                });
             }
         });
     }
