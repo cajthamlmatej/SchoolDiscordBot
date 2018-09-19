@@ -96,7 +96,18 @@ class EventModule extends Module {
         embed.addField(Translation.translate("module.event.group"), this.channel.guild.roles.find(r => r.id == this.roles[values.role]), true);
         embed.addField(Translation.translate("module.event.subject"), values.subject, true);
 
-        embed.addField(values.start == values.end ? Translation.translate("module.event.date") : Translation.translate("module.event.from-date-to-date"), values.start == values.end ? values.end : (values.start + " " + Translation.translate("module.event.to") + " " + values.end), true);
+        let dateTitle = "";
+        let date = "";
+
+        if(values.start == values.end) {
+            dateTitle = Translation.translate("module.event.date");
+            date = values.start;
+        } else {
+            dateTitle = Translation.translate("module.event.from-date-to-date");
+            date = values.start + " " + Translation.translate("module.event.to") + " " + values.end;
+        }
+
+        embed.addField(dateTitle, date, true);
         embed.addField("Place", values.place);
 
         return embed;
