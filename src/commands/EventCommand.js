@@ -51,12 +51,12 @@ class EventCommand extends SubsCommand {
         let name, type, start, end, role, place, subject, description;
         if (args.length == 8) {
             [name, type, start, end, role, place, subject, description] = args;
-        } else {
+        } else if(arg.length == 7) {
             [name, type, end, role, place, subject, description] = args;
             start = end;
         }
 
-        if (!(moment(end, "D. M. YYYY").isValid() || moment(start, "D. M. YYYY").isValid())) {
+        if (!(moment(end, "D. M. YYYY").isValid() || moment(start, "D. M. YYYY").isValid()) || !(moment(end, "D. M. YYYY HH:mm").isValid() || moment(start, "D. M. YYYY HH:mm").isValid())) {
             this.sendError(channel, "command.event.wrong-date-format");
             return;
         }
