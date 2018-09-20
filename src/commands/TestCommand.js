@@ -1,11 +1,11 @@
 const Command = require("./Command");
 const Discord = require('discord.js');
-const Translation = require("../Translation");
+const CommandBuilder = require("../CommandBuilder");
 
-class SayCommand extends Command {
+class TestCommand extends Command {
 
     getName() {
-        return "say";
+        return "test";
     }
 
     getGroup() {
@@ -18,29 +18,29 @@ class SayCommand extends Command {
 
     call(args, message) {
         let channel = message.channel;
-        if (args.length != 2) {
-            this.sendHelp(channel);
-            return;
-        }
-
-        let channelName = args[0];
-        let msg = args[1];
-
-        let channelMatch = /<#([0-9]+)>/g.exec(channelName)[1];
-        let channelSay = this.client.channels.find(ch => ch.id == channelMatch);
-
-
-        const embed = new Discord.RichEmbed()
-            .setTitle("🤐 | " + Translation.translate("command.notice.notice"))
-            .setDescription(msg)
-            .setFooter(message.author.username, message.author.avatarURL)
-            .setColor(0xbadc58);
-
-        channelSay.send(embed);
+        
+        let builder = new CommandBuilder(message.author, [
+            {
+                "title": "",
+                "help": "",
+                "validate": (content) => {
+                    return false;
+                }
+            },
+            {
+                "title": "",
+                "help": "",
+                "validate": (content) => {
+                    return true;
+                }
+            }
+        ], channel);
+        
+        builder.start();
 
         return true;
     }
 
 }
 
-module.exports = SayCommand;
+module.exports = TestCommand;
