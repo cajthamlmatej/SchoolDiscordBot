@@ -3,11 +3,11 @@ const Translation = require("./Translation");
 
 class CommandBuilder {
 
-    constructor(name, user, channel, fields, end) {
+    constructor(name, user, channel, fields, end, stopWord) {
         this.name = name;
         this.build = {user: user, fields: fields, channel: channel};
         this.field = 0;
-        this.stopWord = "stop";
+        this.stopWord = stopWord;
         this.values = {};
         this.endFunction = end;
     }

@@ -40,6 +40,10 @@
     "annoucement": "id of the channel"
   },
   "modules": {
+    // builder
+    "builder": {
+      "stopWord": "stop"
+    },
     // auto reaction
     "auto-reaction": {
       // react to any attachment in CHANNEL: EMOJI

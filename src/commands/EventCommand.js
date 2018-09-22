@@ -44,6 +44,7 @@ class EventCommand extends SubsCommand {
 
     init(bot) {
         this.eventModule = bot.modules["eventmodule"];
+        this.stopWord = bot.config.modules.builder.stopWord;
     }
 
     callCreate(args, message) {        
@@ -140,7 +141,7 @@ class EventCommand extends SubsCommand {
 
             console.log("User " + message.author.username + " created event with name " + values["name"]);
             this.eventModule.addEvent(values["name"], values["type"], values["start"], values["end"], values["role"], values["place"], values["subject"], values["description"], files);    
-        });
+        }, this.stopWord);
         
         builder.start();
         return true;
