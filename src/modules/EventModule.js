@@ -108,7 +108,7 @@ class EventModule extends Module {
         }
 
         embed.addField(dateTitle, date, true);
-        embed.addField("Place", values.place);
+        embed.addField(Translation.translate("module.event.place"), values.place);
 
         return embed;
     }
