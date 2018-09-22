@@ -44,7 +44,7 @@ class EventCommand extends SubsCommand {
 
     init(bot) {
         this.eventModule = bot.modules["eventmodule"];
-        this.stopWord = bot.config.modules.builder.stopWord;
+        this.stopWord = bot.settings.modules.builder.stopWord;
     }
 
     callCreate(args, message) {
