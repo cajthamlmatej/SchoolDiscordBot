@@ -77,7 +77,7 @@ class EventCommand extends SubsCommand {
                 "name": "start",
                 "example": ["13. 9. 2018", "13. 9. 2018 8:00"],
                 "validate": (content) => {
-                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY").isValid())) {
+                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid())) {
                         return "command.event.wrong-date-format";
                     } else
                         return true;
@@ -90,7 +90,7 @@ class EventCommand extends SubsCommand {
                     if (content == "-")
                         return true;
 
-                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY").isValid())) {
+                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid())) {
                         return "command.event.wrong-date-format";
                     } else
                         return true;
