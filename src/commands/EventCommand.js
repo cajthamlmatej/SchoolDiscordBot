@@ -1,13 +1,14 @@
 
 const SubsCommand = require("./SubsCommand");
 const moment = require('moment');
+const CommandBuilder = require("../CommandBuilder");
 
 class EventCommand extends SubsCommand {
 
     getSubCommands() {
         return {
             "create": {
-                "arguments": 7,
+                "arguments": 0,
                 "roles": ["moderator"]
             },
             "edit": {
@@ -45,45 +46,103 @@ class EventCommand extends SubsCommand {
         this.eventModule = bot.modules["eventmodule"];
     }
 
-    callCreate(args, message) {
+    callCreate(args, message) {        
         let channel = message.channel;
-
-        let name, type, start, end, role, place, subject, description;
-        if (args.length == 8) {
-            [name, type, start, end, role, place, subject, description] = args;
-        } else if(arg.length == 7) {
-            [name, type, end, role, place, subject, description] = args;
-            start = end;
-        }
-
-        if (!(moment(end, "D. M. YYYY").isValid() || moment(start, "D. M. YYYY").isValid()) || !(moment(end, "D. M. YYYY HH:mm").isValid() || moment(start, "D. M. YYYY HH:mm").isValid())) {
-            this.sendError(channel, "command.event.wrong-date-format");
-            return;
-        }
-
-        if (this.eventModule.exists(name)) {
-            this.sendError(channel, "command.event.already-exists");
-            return;
-        }
-
         let types = ["event", "task"];
-        if (!types.includes(type)) {
-            this.sendError(channel, "command.event.type-not-valid", types.join(", "));
-            return;
-        }
 
-        if (!this.eventModule.isMentionableRole(role)) {
-            this.sendError(channel, "command.event.role-not-valid")
-            return;
-        }
+        let builder = new CommandBuilder("event.create", message.author, channel, [
+            {
+                "name": "type",
+                "example": types,
+                "validate": (content) => {
+                    if(!types.includes(content)){
+                        return ["command.event.type-not-valid", types.join(", ")];
+                    } else 
+                        return true;
+                }
+            },
+            {
+                "name": "name",
+                "example": "stp_ukol_potreby",
+                "validate": (content) => {
+                    if(this.eventModule.exists(content)){
+                        return "command.event.already-exists";
+                    } else {
+                        return true;
+                    }
+                }
+            },
+            {
+                "name": "start",
+                "example": ["13. 9. 2018", "13. 9. 2018 8:00"],
+                "validate": (content) => {
+                    if(!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY").isValid())){
+                        return "command.event.wrong-date-format";
+                    } else
+                        return true;
+                }
+            },
+            {
+                "name": "end",
+                "example": ["-", "15. 9. 2018", "15. 9. 2018 13:30"],
+                "validate": (content) => {
+                    if(content == "-")
+                        return true;
 
-        let files = [];
-        message.attachments.array().forEach(messageAttachment => {
-            files.push(messageAttachment.url);
+                    if(!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY").isValid())){
+                        return "command.event.wrong-date-format";
+                    } else
+                        return true;
+                },
+                "value": (content, values) => {
+                    if(content == "-")
+                        return values["start"];
+                    else 
+                        return content;
+                }
+            },
+            {
+                "name": "role",
+                "example": "member",
+                "validate": (content) => {
+                    if(!this.eventModule.isMentionableRole(content)){
+                        return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
+                    } else
+                        return true;
+                }
+            },
+            {
+                "name": "place",
+                "example": ["Škola", "School", "Arbesovo náměstí"],
+                "validate": (content) => {
+                    return true;
+                }
+            },
+            {
+                "name": "subject",
+                "example": ["STP", "?"],
+                "validate": (content) => {
+                    return true;
+                }
+            },
+            {
+                "name": "description",
+                "example": ["Popis eventu", "Description of event"],
+                "validate": (content) => {
+                    return true;
+                }
+            }
+        ], (values) => {
+            let files = [];
+            message.attachments.array().forEach(messageAttachment => {
+                files.push(messageAttachment.url);
+            });
+
+            console.log("User " + message.author.username + " created event with name " + values["name"]);
+            this.eventModule.addEvent(values["name"], values["type"], values["start"], values["end"], values["role"], values["place"], values["subject"], values["description"], files);    
         });
-
-        this.eventModule.addEvent(name, type, start, end, role, place, subject, description, files);
-
+        
+        builder.start();
         return true;
     }
 

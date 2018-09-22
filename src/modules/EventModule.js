@@ -155,6 +155,10 @@ class EventModule extends Module {
         return Object.keys(this.roles).includes(roleName);
     }
 
+    getMentionableRoles(){
+        return Object.keys(this.roles);
+    }
+
     exists(name) {
         let events = fs.readFileSync(this.tempFile, "utf8");
         let eventsObject = JSON.parse(events);

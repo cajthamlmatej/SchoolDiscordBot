@@ -14,7 +14,7 @@
 
     "commands.help.help": "Zobrazí tuto nápovědu",
     "commands.help.event": "Příkaz pro správu událostí",
-    "commands.help.event.create": "Vytvoří úkol/událost s vyplněnými údaji",
+    "commands.help.event.create": "Spustí builder pro vytvoření úkolu nebo události",
     "commands.help.event.edit": "Upraví hodnotu události dle jména a hodnoty",
     "commands.help.event.delete": "Smaže event a jeho zprávu",
     "commands.help.event.list": "Vypíše seznam všechn událostí",
@@ -48,7 +48,7 @@
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list> <...>",
-    "commands.usage.event.create": "<jméno> <event/task> [začátek] <konec> <role> <místo> <předmět> <popis>",
+    "commands.usage.event.create": "",
     "commands.usage.event.edit": "<jméno> <type/start/end/role/place/subject/description> <hodnota>",
     "commands.usage.event.delete": "<jméno>",
     "commands.usage.event.list": "",
@@ -86,7 +86,7 @@
     
     "command.event.already-exists": "Událost s tímto jménem již existuje, zvolte prosím jiné jméno.",
     "command.event.type-not-valid": "Typ události není platný, vyberte jednu z ({0}) hodnot.",
-    "command.event.role-not-valid": "Vybraná role není platná, vyberte jednu z *označitelných* rolí v příkazu `rolelist`.",
+    "command.event.role-not-valid": "Vybraná role není platná, vyberte jednu z ({0}) rolí.",
     "command.event.dont-exist": "Událost s tímto jménem neexistuje.",
     "command.event.edit-type-not-valid": "Vybraná hodnota k editaci není platná, vyberte jednu z ({0}) hodnot.",
     "command.event.wrong-date-format": "Zadané datum není ve správném formátu. Správný formát je například \"11. 9. 2018 8:00\" nebo \"11. 9. 2018\".",
@@ -196,5 +196,30 @@
 
     "module.mute.list": "Seznam aktuálních umlčení",
     "module.mute.expiration": "Expirace",
-    "module.mute.reason": "Důvod"
+    "module.mute.reason": "Důvod",
+
+
+    "builder.example": "Ukázka použítí: {0}",
+    "builder.stop": "K ukončení napište \"{0}\"",
+    "builder.error": "Chyba",
+    "builder.end": "Builder byl ukončen, žádná z hodnot nebyla uložena.",
+
+    "builder.event.create.title": "Přidání nové události / úkolu",
+    "builder.event.create.ok": "Událost / úkol byl přidán.",
+    "builder.event.create.type.title": "Typ eventu",
+    "builder.event.create.type.help": "Zadejte typ eventu.",
+    "builder.event.create.name.title": "Jméno eventu",
+    "builder.event.create.name.help": "Zadejte unikátní jméno eventu pro jeho budoucí manipulaci.",
+    "builder.event.create.start.title": "Začátek eventu",
+    "builder.event.create.start.help": "Zadejte datum (a čas) začátku události.",
+    "builder.event.create.end.title": "Konec eventu",
+    "builder.event.create.end.help": "Zadejte datum (a čas) konce události nebo nevyplnujte (použijte znak \"-\").",
+    "builder.event.create.role.title": "Role pro event",
+    "builder.event.create.role.help": "Zadejte jméno role, pro kterou je event určený.",
+    "builder.event.create.place.title": "Místo eventu",
+    "builder.event.create.place.help": "Zadejte místo, kde se event udehrává.",
+    "builder.event.create.subject.title": "Předmět pro event",
+    "builder.event.create.subject.help": "Zadejte předmět pro který event je.",
+    "builder.event.create.description.title": "Popis eventu",
+    "builder.event.create.description.help": "Zadejte jakékoliv další informace, které o eventu víte."
 }

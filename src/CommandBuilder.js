@@ -3,26 +3,27 @@ const Translation = require("./Translation");
 
 class CommandBuilder {
 
-    constructor(user, fields, channel, title){
-        this.build = {user: user, fields: fields, title: title, channel: channel};
+    constructor(name, user, channel, fields, end) {
+        this.name = name;
+        this.build = {user: user, fields: fields, channel: channel};
         this.field = 0;
         this.stopWord = "stop";
         this.values = {};
+        this.endFunction = end;
     }
 
     start() {
-        this.collector = new Discord.MessageCollector(this.build.channel, m => m.author.id === this.build.user.id);
+        this.collector = new Discord.MessageCollector(this.build.channel, m => m.author.id === this.build.user.id && m.channel.id === this.build.channel.id);
         this.collector.on("collect", (message) => { this.collect(message); });
         this.collector.on("end", (messages, reason) => { this.end(messages, reason); });
 
-        this.build.channel.send(this.generateEmbed(this.build.fields[this.field])).then(message => {
+        this.build.channel.send(this.generateHelpEmbed(this.build.fields[this.field])).then(message => {
             this.message = message;
         });
     }
 
     collect(message) {
         let messageContent = message.content;
-        console.log("collected: " + messageContent);
     
         if(messageContent.toLowerCase() == this.stopWord.toLowerCase()){
             this.collector.stop("forced");
@@ -42,43 +43,83 @@ class CommandBuilder {
                 } else {
                     this.field += 1;
 
-                    this.message.edit(this.generateEmbed(this.build.fields[this.field], passed));
+                    this.message.edit(this.generateHelpEmbed(this.build.fields[this.field]));
                 }
+            } else {
+                this.message.edit(this.generateHelpEmbed(this.build.fields[this.field], passed));
             }
             message.delete();
         }
     }
 
     end(messages, reason){
-        console.log("Collector end, reason: " + reason);
+        this.message.edit(this.generateEndEmbed(reason));
+        
+        switch(reason) {
+            case "forced":
+                break;
+            case "fieldEnd":
+                this.endFunction(this.values);
+                break;
+        }
     }
 
-    generateEmbed(field, error){
+    generateEndEmbed(reason) {
         let description = "";
 
-        description += field.title + "\n\n";
-        description += field.help + "\n";
+        switch(reason) {
+            case "forced":
+                description += Translation.translate("builder.end");
+                break;
+            case "fieldEnd":
+                description += Translation.translate("builder." + this.name + ".ok");
+                break;
+        }
+
+        let embed = new Discord.RichEmbed()
+            .setTitle(Translation.translate("builder." + this.name + ".title"))
+            .setDescription(description)
+            .setColor(0xeb4d4b)
+            .setFooter(this.build.user.username, this.build.user.avatarURL);
+
+        return embed;
+    }
+
+    generateHelpEmbed(field, error){
+        let fieldName = field.name;
+        let description = "";
+
+        description += Translation.translate("builder." + this.name + "." + fieldName + ".title") + "\n\n";
+        description += Translation.translate("builder." + this.name + "." + fieldName + ".help") + "\n";
+        
         if(Array.isArray(field.example)){
-            description += "Example: ";
             let list = [];
 
             field.example.forEach(example => {
                 list.push("`" + example + "`");
             });
 
-            description += list.join(" / ");
+            description += Translation.translate("builder.example", list.join(" / "));
         } else 
-            description += "Example: `" + field.example + "`\n";
-        
+            description += Translation.translate("builder.example", "`" + field.example + "`");
+
+        description += "\n\n" + Translation.translate("builder.stop", this.stopWord);
 
         let embed = new Discord.RichEmbed()
-            .setTitle(Translation.translate(this.build.title))
+            .setTitle(Translation.translate("builder." + this.name + ".title"))
             .setDescription(description)
-            .setColor(0x34ace0)
+            .setColor(0xbadc58)
             .setFooter(this.build.user.username, this.build.user.avatarURL);
 
-        if(error != undefined && error != true){
-            embed.addField("Chyba", error);
+        if(error != undefined && error != true) {
+            let errorMessage = "";
+
+            if(Array.isArray(error))
+                errorMessage = Translation.translate(error[0], error[1]);
+            else 
+                errorMessage = Translation.translate(error);
+
+            embed.addField(Translation.translate("builder.error"), errorMessage);
         }
 
         return embed;

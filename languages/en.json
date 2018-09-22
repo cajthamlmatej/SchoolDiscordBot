@@ -14,7 +14,7 @@
 
     "commands.help.help": "Show this help",
     "commands.help.event": "Command for managing events",
-    "commands.help.event.create": "Create event/task with entered informations",
+    "commands.help.event.create": "Start builder of creating event/task",
     "commands.help.event.edit": "Edit event value by entered name and value",
     "commands.help.event.delete": "Delete entered event with message",
     "commands.help.event.list": "Print list of events",
@@ -48,7 +48,7 @@
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list> <...>",
-    "commands.usage.event.create": "<name> <event/task> [start] <end> <role> <place> <subject> <description>",
+    "commands.usage.event.create": "",
     "commands.usage.event.edit": "<name> <type/start/end/role/place/subject/description> <value>",
     "commands.usage.event.delete": "<name>",
     "commands.usage.event.list": "",
@@ -86,7 +86,7 @@
     
     "command.event.already-exists": "An event with this name already exists, please choose another name.",
     "command.event.type-not-valid": "Selected type of event is not valid, must be one of {0}.",
-    "command.event.role-not-valid": "Selected role is not valid, choose one of *mentionable* from command `rolelist`.",
+    "command.event.role-not-valid": "Selected role is not valid, choose one of {0} roles.",
     "command.event.dont-exist": "Event with this name dont exists.",
     "command.event.edit-type-not-valid": "Selected type of value is not valid, must be one of {0}.",
     "command.event.wrong-date-format": "Selected date is not in right format. Right format is \"11. 9. 2018 8:00\" or \"11. 9. 2018\".",
@@ -196,5 +196,30 @@
 
     "module.mute.list": "List of all current mutes",
     "module.mute.expiration": "Expiration",
-    "module.mute.reason": "Reason"
+    "module.mute.reason": "Reason",
+
+
+    "builder.example": "Example of usage: {0}",
+    "builder.stop": "For stop, enter \"{0}\"",
+    "builder.error": "Error",
+    "builder.end": "Builder was ended, nothing was saved.",
+
+    "builder.event.create.title": "Add new event / task",
+    "builder.event.create.ok": "Event / task was added.",
+    "builder.event.create.type.title": "Type of event",
+    "builder.event.create.type.help": "Enter type of eventu.",
+    "builder.event.create.name.title": "Name of event",
+    "builder.event.create.name.help": "Enter unique name for the event for future editation.",
+    "builder.event.create.start.title": "Start of the event",
+    "builder.event.create.start.help": "Enter date (and time) for event start.",
+    "builder.event.create.end.title": "End of the event",
+    "builder.event.create.end.help": "Enter date (and time) for event end or dont enter anything (and enter \"-\").",
+    "builder.event.create.role.title": "Role for event",
+    "builder.event.create.role.help": "Enter name of role for event is.",
+    "builder.event.create.place.title": "Place of event",
+    "builder.event.create.place.help": "Enter place of the event.",
+    "builder.event.create.subject.title": "Subject of event",
+    "builder.event.create.subject.help": "Enter subject of the event.",
+    "builder.event.create.description.title": "Description of event",
+    "builder.event.create.description.help": "Enter decription and other informations about event."
 }
