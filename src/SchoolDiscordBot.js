@@ -14,24 +14,24 @@ class SchoolDiscordBot {
     }
 
     reload() {
-        if(this.client != undefined){
+        if (this.client != undefined) {
             console.log("Destroing client.");
             this.client.destroy();
         }
-        
+
         this.client = new Discord.Client();
 
         this.disabledCommands = [];
         this.disabledModules = [];
         this.commandsAliases = {};
         this.recentCommandsUsage = new Set();
-        
+
         this.loadConfig();
         this.loadModules();
         this.loadCommands();
 
         this.token = this.settings.token;
-        
+
         console.log("Setting bot events.");
         this.client.on("ready", () => {
             this.ready();
@@ -46,7 +46,7 @@ class SchoolDiscordBot {
                 module.event("message", { message: message });
             })
         });
-        
+
         this.client.on("messageReactionAdd", (reactionMessage, user) => {
             if (reactionMessage.message.guild == null || reactionMessage.message.guild.id != this.settings.guild)
                 return;
@@ -55,7 +55,7 @@ class SchoolDiscordBot {
                 module.event("messageReactionAdd", { reactionMessage: reactionMessage, user: user });
             })
         });
-        
+
         this.client.on("messageReactionRemove", (reactionMessage, user) => {
             if (reactionMessage.message.guild == null || reactionMessage.message.guild.id != this.settings.guild)
                 return;
@@ -73,7 +73,7 @@ class SchoolDiscordBot {
         console.log("Opening and reading settings file.");
 
         let fileContents = fs.readFileSync('./settings/settings.json');
-        
+
         this.settings = JSON.parse(fileContents);
     }
 
@@ -81,14 +81,14 @@ class SchoolDiscordBot {
         let commands = {};
         console.log("Reading directory with commands.");
         let commandFiles = fs.readdirSync("./src/commands");
-    
+
         commandFiles.forEach(file => {
             if (file == "Command.js" || file == "SubsCommand.js")
                 return;
-    
+
             let commandFile = require("./commands/" + file);
             let command = new commandFile();
-    
+
             commands[command.getName()] = command;
         });
 
@@ -99,17 +99,17 @@ class SchoolDiscordBot {
         let modules = {};
         console.log("Reading directory with modules.");
         let moduleFiles = fs.readdirSync("./src/modules");
-    
+
         moduleFiles.forEach(file => {
             if (file == "Module.js")
                 return;
-    
+
             let moduleFile = require("./modules/" + file);
             let module = new moduleFile();
-    
+
             modules[module.getName()] = module;
         });
-        
+
         this.modules = modules;
     }
 
@@ -188,7 +188,7 @@ class SchoolDiscordBot {
         if (command == undefined)
             return;
 
-        if(this.recentCommandsUsage.has(authorId)){
+        if (this.recentCommandsUsage.has(authorId)) {
             const embed = new Discord.RichEmbed()
                 .setTitle("❗ | " + Translation.translate("spam.alert.title"))
                 .setColor(0xd63031)
@@ -196,7 +196,7 @@ class SchoolDiscordBot {
 
             message.channel.send(embed);
             return;
-        } 
+        }
 
         this.recentCommandsUsage.add(authorId);
 

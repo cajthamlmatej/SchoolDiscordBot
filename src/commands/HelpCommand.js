@@ -59,10 +59,10 @@ class HelpCommand extends Command {
                     }
                 });
 
-                if(!canUse){
+                if (!canUse) {
                     return
                 }
-                    
+
                 let aliasesText = "";
 
                 if (command.getAliases().length > 0) {

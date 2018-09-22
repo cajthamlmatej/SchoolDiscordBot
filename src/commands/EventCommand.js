@@ -47,7 +47,7 @@ class EventCommand extends SubsCommand {
         this.stopWord = bot.config.modules.builder.stopWord;
     }
 
-    callCreate(args, message) {        
+    callCreate(args, message) {
         let channel = message.channel;
         let types = ["event", "task"];
 
@@ -56,9 +56,9 @@ class EventCommand extends SubsCommand {
                 "name": "type",
                 "example": types,
                 "validate": (content) => {
-                    if(!types.includes(content)){
+                    if (!types.includes(content)) {
                         return ["command.event.type-not-valid", types.join(", ")];
-                    } else 
+                    } else
                         return true;
                 }
             },
@@ -66,7 +66,7 @@ class EventCommand extends SubsCommand {
                 "name": "name",
                 "example": "stp_ukol_potreby",
                 "validate": (content) => {
-                    if(this.eventModule.exists(content)){
+                    if (this.eventModule.exists(content)) {
                         return "command.event.already-exists";
                     } else {
                         return true;
@@ -77,7 +77,7 @@ class EventCommand extends SubsCommand {
                 "name": "start",
                 "example": ["13. 9. 2018", "13. 9. 2018 8:00"],
                 "validate": (content) => {
-                    if(!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY").isValid())){
+                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY").isValid())) {
                         return "command.event.wrong-date-format";
                     } else
                         return true;
@@ -87,18 +87,18 @@ class EventCommand extends SubsCommand {
                 "name": "end",
                 "example": ["-", "15. 9. 2018", "15. 9. 2018 13:30"],
                 "validate": (content) => {
-                    if(content == "-")
+                    if (content == "-")
                         return true;
 
-                    if(!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY").isValid())){
+                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY").isValid())) {
                         return "command.event.wrong-date-format";
                     } else
                         return true;
                 },
                 "value": (content, values) => {
-                    if(content == "-")
+                    if (content == "-")
                         return values["start"];
-                    else 
+                    else
                         return content;
                 }
             },
@@ -106,7 +106,7 @@ class EventCommand extends SubsCommand {
                 "name": "role",
                 "example": "member",
                 "validate": (content) => {
-                    if(!this.eventModule.isMentionableRole(content)){
+                    if (!this.eventModule.isMentionableRole(content)) {
                         return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
                     } else
                         return true;
@@ -140,9 +140,9 @@ class EventCommand extends SubsCommand {
             });
 
             console.log("User " + message.author.username + " created event with name " + values["name"]);
-            this.eventModule.addEvent(values["name"], values["type"], values["start"], values["end"], values["role"], values["place"], values["subject"], values["description"], files);    
+            this.eventModule.addEvent(values["name"], values["type"], values["start"], values["end"], values["role"], values["place"], values["subject"], values["description"], files);
         }, this.stopWord);
-        
+
         builder.start();
         return true;
     }

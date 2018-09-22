@@ -99,7 +99,7 @@ class EventModule extends Module {
         let dateTitle = "";
         let date = "";
 
-        if(values.start == values.end) {
+        if (values.start == values.end) {
             dateTitle = Translation.translate("module.event.date");
             date = values.start;
         } else {
@@ -155,7 +155,7 @@ class EventModule extends Module {
         return Object.keys(this.roles).includes(roleName);
     }
 
-    getMentionableRoles(){
+    getMentionableRoles() {
         return Object.keys(this.roles);
     }
 

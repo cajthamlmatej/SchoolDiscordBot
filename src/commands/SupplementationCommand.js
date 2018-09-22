@@ -45,7 +45,7 @@ class SupplementationCommand extends SubsCommand {
         return false;
     }
 
-    callLastcheck(args, message){
+    callLastcheck(args, message) {
         let channel = message.channel;
 
         const embed = new Discord.RichEmbed()

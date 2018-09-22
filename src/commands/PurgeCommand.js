@@ -13,7 +13,7 @@ class PurgeCommand extends Command {
         return "manage";
     }
 
-    getRoles(){
+    getRoles() {
         return ["admin"];
     }
 

@@ -17,8 +17,8 @@ class Translation {
 
         let translation = this.languageFile[path];
 
-        if(translation == undefined)
-            return "t?_" + path;  
+        if (translation == undefined)
+            return "t?_" + path;
 
         let counter = 0;
         args.forEach(arg => {

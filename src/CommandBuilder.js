@@ -5,7 +5,7 @@ class CommandBuilder {
 
     constructor(name, user, channel, fields, end, stopWord) {
         this.name = name;
-        this.build = {user: user, fields: fields, channel: channel};
+        this.build = { user: user, fields: fields, channel: channel };
         this.field = 0;
         this.stopWord = stopWord;
         this.values = {};
@@ -24,21 +24,21 @@ class CommandBuilder {
 
     collect(message) {
         let messageContent = message.content;
-    
-        if(messageContent.toLowerCase() == this.stopWord.toLowerCase()){
+
+        if (messageContent.toLowerCase() == this.stopWord.toLowerCase()) {
             this.collector.stop("forced");
         } else {
             let field = this.build.fields[this.field]
             let passed = field.validate(messageContent);
 
-            if(passed === true){
-                if(field.value != undefined){    
-                   this.values[field.name] = field.value(messageContent, this.values);
+            if (passed === true) {
+                if (field.value != undefined) {
+                    this.values[field.name] = field.value(messageContent, this.values);
                 } else {
                     this.values[field.name] = messageContent;
                 }
 
-                if(this.build.fields[this.field + 1] == undefined){
+                if (this.build.fields[this.field + 1] == undefined) {
                     this.collector.stop("fieldEnd");
                 } else {
                     this.field += 1;
@@ -52,10 +52,10 @@ class CommandBuilder {
         }
     }
 
-    end(messages, reason){
+    end(messages, reason) {
         this.message.edit(this.generateEndEmbed(reason));
-        
-        switch(reason) {
+
+        switch (reason) {
             case "forced":
                 break;
             case "fieldEnd":
@@ -67,7 +67,7 @@ class CommandBuilder {
     generateEndEmbed(reason) {
         let description = "";
 
-        switch(reason) {
+        switch (reason) {
             case "forced":
                 description += Translation.translate("builder.end");
                 break;
@@ -85,14 +85,14 @@ class CommandBuilder {
         return embed;
     }
 
-    generateHelpEmbed(field, error){
+    generateHelpEmbed(field, error) {
         let fieldName = field.name;
         let description = "";
 
         description += Translation.translate("builder." + this.name + "." + fieldName + ".title") + "\n\n";
         description += Translation.translate("builder." + this.name + "." + fieldName + ".help") + "\n";
-        
-        if(Array.isArray(field.example)){
+
+        if (Array.isArray(field.example)) {
             let list = [];
 
             field.example.forEach(example => {
@@ -100,7 +100,7 @@ class CommandBuilder {
             });
 
             description += Translation.translate("builder.example", list.join(" / "));
-        } else 
+        } else
             description += Translation.translate("builder.example", "`" + field.example + "`");
 
         description += "\n\n" + Translation.translate("builder.stop", this.stopWord);
@@ -111,12 +111,12 @@ class CommandBuilder {
             .setColor(0xbadc58)
             .setFooter(this.build.user.username, this.build.user.avatarURL);
 
-        if(error != undefined && error != true) {
+        if (error != undefined && error != true) {
             let errorMessage = "";
 
-            if(Array.isArray(error))
+            if (Array.isArray(error))
                 errorMessage = Translation.translate(error[0], error[1]);
-            else 
+            else
                 errorMessage = Translation.translate(error);
 
             embed.addField(Translation.translate("builder.error"), errorMessage);

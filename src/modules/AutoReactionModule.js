@@ -34,7 +34,7 @@ class AutoReactionModule extends Module {
                 message.react(reactEmoji);
             }
         });
-        
+
         Object.keys(this.settings["series-text"]).forEach(text => {
             let emojis = this.settings["series-text"][text];
 
