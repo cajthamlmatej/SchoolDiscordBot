@@ -13,6 +13,10 @@ class ReloadCommand extends Command {
         return "manage";
     }
 
+    getRoles(){
+        return ["admin"];
+    }
+
     init(bot) {
         this.bot = bot;
     }

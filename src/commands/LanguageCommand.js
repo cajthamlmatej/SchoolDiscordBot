@@ -9,11 +9,11 @@ class LanguageCommand extends SubsCommand {
         return {
             "change": {
                 "arguments": 1,
-                "roles": ["moderator"]
+                "roles": ["admin"]
             },
             "list": {
                 "arguments": 0,
-                "roles": ["moderator"]
+                "roles": ["admin"]
             }
         }
     }

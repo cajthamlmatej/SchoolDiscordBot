@@ -25,7 +25,8 @@
     // permission roles for using commands, must contain member and moderator
     "permission": {
       "member": "id of the role",
-      "moderator": "id of the role"
+      "moderator": "id of the role",
+      "admin": "if of the role"
     }
   },
   // list of channels, must contains all values

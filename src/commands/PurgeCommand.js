@@ -13,6 +13,10 @@ class PurgeCommand extends Command {
         return "manage";
     }
 
+    getRoles(){
+        return ["admin"];
+    }
+
     init(bot) {
 
     }
