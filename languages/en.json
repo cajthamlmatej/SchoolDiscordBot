@@ -198,6 +198,15 @@
     "module.mute.expiration": "Expiration",
     "module.mute.reason": "Reason",
 
+    "module.eventannoucement.title.ends": "Event or task ends tomorrow",
+    "module.eventannoucement.title.starts": "Event or task starts tomorrow",
+    "module.eventannoucement.title.going": "Event or task is going on tomorrow",
+    "module.eventannoucement.description.ends": "Event or task with name {1} ends tomorrow ({0}). You can find more informations in channel for events and tasks.",
+    "module.eventannoucement.description.starts": "Event or task with name {1} starts tomorrow ({0}). You can find more informations in channel for events and tasks.",
+    "module.eventannoucement.description.going": "Event or task with name {1} is going on tomorrow ({0}). You can find more informations in channel for events and tasks.",
+    "module.eventannoucement.informations": "Informations",
+    "module.eventannoucement.role": "Role",
+
 
     "builder.example": "Example of usage: {0}",
     "builder.stop": "For stop, enter \"{0}\"",

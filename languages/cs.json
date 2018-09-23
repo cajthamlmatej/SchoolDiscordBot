@@ -198,6 +198,15 @@
     "module.mute.expiration": "Expirace",
     "module.mute.reason": "Důvod",
 
+    "module.eventannoucement.title.ends": "Událost či úkol zítřejším dnem končí",
+    "module.eventannoucement.title.starts": "Událost či úkol zítřejším dnem začíná",
+    "module.eventannoucement.title.going": "Událost či úkol zítřejším dnem probíhá",
+    "module.eventannoucement.description.ends": "Zítra ({0}) končí událost či úkol s jménem {1}. Více informace se dozvíte v kanálu s události a úkoly.",
+    "module.eventannoucement.description.starts": "Zítra ({0}) začíná událost či úkol s jménem {1}. Více informace se dozvíte v kanálu s události a úkoly.",
+    "module.eventannoucement.description.going": "Zítra ({0}) probíhá událost či úkol s jménem {1}. Více informace se dozvíte v kanálu s události a úkoly.",
+    "module.eventannoucement.informations": "Informace",
+    "module.eventannoucement.role": "Role",
+
 
     "builder.example": "Ukázka použítí: {0}",
     "builder.stop": "K ukončení napište \"{0}\"",

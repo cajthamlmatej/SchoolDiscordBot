@@ -44,6 +44,9 @@
     "builder": {
       "stopWord": "stop"
     },
+    "eventannoucement": {
+      "checkTime": "19:00"
+    },
     // auto reaction
     "auto-reaction": {
       // react to any attachment in CHANNEL: EMOJI
