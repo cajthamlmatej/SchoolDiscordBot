@@ -12,7 +12,7 @@ class EventCommand extends SubsCommand {
                 "roles": ["moderator"]
             },
             "edit": {
-                "arguments": 3,
+                "arguments": 0,
                 "roles": ["moderator"]
             },
             "delete": {
@@ -49,7 +49,7 @@ class EventCommand extends SubsCommand {
 
     callCreate(args, message) {
         let channel = message.channel;
-        let types = ["event", "task"];
+        const types = ["event", "task"];
 
         let builder = new CommandBuilder("event.create", message.author, channel, [
             {
@@ -139,7 +139,7 @@ class EventCommand extends SubsCommand {
                 files.push(messageAttachment.url);
             });
 
-            console.log("User " + message.author.username + " created event with name " + values["name"]);
+            console.log("User " + message.author.username + " created event with name " + values["name"] + ".");
             this.eventModule.addEvent(values["name"], values["type"], values["start"], values["end"], values["role"], values["place"], values["subject"], values["description"], files);
         }, this.stopWord);
 
@@ -149,35 +149,57 @@ class EventCommand extends SubsCommand {
 
     callEdit(args, message) {
         let channel = message.channel;
+        const types = ["type", "start", "end", "role", "place", "subject", "description"];
+        const eventTypes = ["event", "task"];
 
-        let [name, type, value] = args;
+        let builder = new CommandBuilder("event.edit", message.author, channel, [
+            {
+                "name": "name",
+                "example": "stp_ukol_potreby",
+                "validate": (content) => {
+                    if (!this.eventModule.exists(content)) {
+                        return "command.event.dont-exist";
+                    } else {
+                        return true;
+                    }
+                }
+            },
+            {
+                "name": "type",
+                "example": types,
+                "validate": (content) => {
+                    if (!types.includes(content)) {
+                        return ["command.event.edit-type-not-valid", types.join(", ")];
+                    } else
+                        return true;
+                }
+            },
+            {
+                "name": "value",
+                "example": eventTypes.concat(["?"]),
+                "validate": (content, values) => {
+                    let type = values["type"];
 
-        if (!this.eventModule.exists(name)) {
-            this.sendError(channel, "command.event.dont-exist");
-            return;
-        }
+                    if (type == "type") {
+                        if (!eventTypes.includes(content)) {
+                            return ["command.event.type-not-valid", eventTypes.join(", ")];
+                        }
+                    } else if (type == "role") {
+                        if (!this.eventModule.isMentionableRole(content)) {
+                            return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
+                        }
+                    }
 
-        let types = ["type", "start", "end", "role", "place", "subject", "description"];
-        if (!types.includes(type)) {
-            this.sendError(channel, "command.event.edit-type-not-valid", types.join(", "));
-            return;
-        }
-
-        if (type == "type") {
-            let eventTypes = ["event", "task"];
-            if (!eventTypes.includes(value)) {
-                this.sendError(channel, "command.event.type-not-valid", eventTypes.join(", "));
-                return;
+                    return true;
+                }
             }
-        } else if (type == "role") {
-            if (!this.eventModule.isMentionableRole(value)) {
-                this.sendError(channel, "command.event.role-not-valid")
-                return;
-            }
-        }
+        ], (values) => {
+            console.log("User " + message.author.username + " edited event with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
 
-        this.eventModule.editEvent(name, type, value);
+            this.eventModule.editEvent(values["name"], values["type"], values["value"]);
+        }, this.stopWord);
 
+        builder.start();
         return true;
     }
 

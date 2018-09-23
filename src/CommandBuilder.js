@@ -29,7 +29,7 @@ class CommandBuilder {
             this.collector.stop("forced");
         } else {
             let field = this.build.fields[this.field]
-            let passed = field.validate(messageContent);
+            let passed = field.validate(messageContent, this.values);
 
             if (passed === true) {
                 if (field.value != undefined) {
@@ -79,7 +79,7 @@ class CommandBuilder {
         let embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("builder." + this.name + ".title"))
             .setDescription(description)
-            .setColor(0xeb4d4b)
+            .setColor(0xbadc58)
             .setFooter(this.build.user.username, this.build.user.avatarURL);
 
         return embed;
