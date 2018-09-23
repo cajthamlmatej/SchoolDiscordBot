@@ -113,7 +113,7 @@ class AnnouncementCommand extends SubsCommand {
                 "name": "name",
                 "example": ["2392018", "botchanges"],
                 "validate": (content) => {
-                    if (this.annoucementModule.annoucementExist(name)) {
+                    if (this.annoucementModule.annoucementExist(content)) {
                         return "command.annoucement.already-exists";
                     } else {
                         return true;
