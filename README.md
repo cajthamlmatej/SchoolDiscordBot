@@ -1,6 +1,6 @@
 # SchoolDiscordBot
 Discord Bot for my school class.
-This repo is just read-only, it will be hard for you to make it work fine for you - this bot is perfectly made just for my class. If you somehow manage to get it working, be sure you disable supplementation module - its really only for us. 
+This repo is just read-only, it will be hard for you to make it work fine for you - this bot is perfectly made just for my class. If you somehow manage to get it working, be sure you disable supplementation module (or edit it to your page)- its really only for us. 
 
 ### Features!
 
