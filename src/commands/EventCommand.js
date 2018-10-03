@@ -1,7 +1,9 @@
 
 const SubsCommand = require("./SubsCommand");
 const moment = require('moment');
+const Discord = require('discord.js');
 const CommandBuilder = require("../CommandBuilder");
+const Translation = require("../Translation");
 
 class EventCommand extends SubsCommand {
 
@@ -230,13 +232,37 @@ class EventCommand extends SubsCommand {
 
     callCheck(args, message) {
         let channel = message.channel;
-        let date = args[0];
+        let dateString = args[0];
 
-        if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid())) {
-            this.sendError(channel, "command.event.wrong-date-format");
-        } 
+        let date = moment(dateString, "D. M. YYYY");
 
-        this.eventModule.deleteEvent(name);
+        if(!date.isValid()){
+            date = moment(dateString, "D. M. YYYY HH:mm");
+
+            if(!date.isValid()){
+                this.sendError(channel, "command.event.wrong-date-format");
+            }
+        }
+
+        let startsEvents = this.eventModule.getEventThatStartsInEnteredDay(date);
+        let starts = "";
+
+        startsEvents.forEach(event => {
+            starts += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + this.truncate(event.description, 30) + "*\n";
+        });
+
+        let embed = new Discord.RichEmbed()
+            .setTitle(Translation.translate("command.event.check.title", dateString))
+            .setColor(0xbadc58)
+            .setDescription(Translation.translate("command.event.check.description"))
+            .addField(Translation.translate("command.event.check.starts"), starts, true);
+
+        channel.send(embed);
+    }
+
+    truncate(str, length) {
+        var dots = str.length > length ? '...' : '';
+        return str.substring(0, length)+dots;
     }
 }
 

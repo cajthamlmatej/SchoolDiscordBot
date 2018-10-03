@@ -208,7 +208,9 @@ class EventModule extends Module {
             if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
                 return;
             
-            startsEvents.push(event);
+            eventValues["name"] = eventName;
+
+            startsEvents.push(eventValues);
         });
 
         return startsEvents;
