@@ -1,7 +1,9 @@
 
 const SubsCommand = require("./SubsCommand");
 const moment = require('moment');
+const Discord = require('discord.js');
 const CommandBuilder = require("../CommandBuilder");
+const Translation = require("../Translation");
 
 class EventCommand extends SubsCommand {
 
@@ -22,6 +24,10 @@ class EventCommand extends SubsCommand {
             "list": {
                 "arguments": 0,
                 "roles": ["moderator"]
+            },
+            "check": {
+                "arguments": 1,
+                "roles": ["member"]
             }
         }
     }
@@ -221,6 +227,72 @@ class EventCommand extends SubsCommand {
         this.eventModule.printEventList(message.author);
 
         message.react("✅");
+    }
+    
+
+    callCheck(args, message) {
+        let channel = message.channel;
+        let dateString = args[0];
+
+        let date = moment(dateString, "D. M. YYYY");
+
+        if(!date.isValid()){
+            date = moment(dateString, "D. M. YYYY HH:mm");
+
+            if(!date.isValid()){
+                this.sendError(channel, "command.event.wrong-date-format");
+                return;
+            }
+        }
+
+        let startsEvents = this.eventModule.getEventThatStartsInEnteredDay(date);
+        let starts = "";
+
+        startsEvents.forEach(event => {
+            starts += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + this.truncate(event.description, 30) + "*\n";
+        });
+
+        let endsEvents = this.eventModule.getEventThatEndsInEnteredDay(date);
+        let ends = "";
+
+        endsEvents.forEach(event => {
+        let ends = "";
+            ends += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + this.truncate(event.description, 30) + "*\n";
+        });
+
+        let goingEvents = this.eventModule.getEventThatGoingInEnteredDay(date);
+        let going = "";
+
+        goingEvents.forEach(event => {
+            going += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + this.truncate(event.description, 30) + "*\n";
+        });
+
+        if(ends == "" && starts == "" && going == ""){
+            this.sendError(channel, "module.event.no-event-exists");
+            return;
+        }
+
+        let embed = new Discord.RichEmbed()
+            .setTitle(Translation.translate("command.event.check.title", dateString))
+            .setColor(0xbadc58)
+            .setDescription(Translation.translate("command.event.check.description"));
+
+        if(starts != "")
+            embed.addField(Translation.translate("command.event.check.starts"), starts);
+        
+        if(ends != "")
+            embed.addField(Translation.translate("command.event.check.ends"), ends);
+            
+        if(going != "")
+            embed.addField(Translation.translate("command.event.check.going"), going);
+            
+
+        channel.send(embed);
+    }
+
+    truncate(str, length) {
+        var dots = str.length > length ? '...' : '';
+        return str.substring(0, length)+dots;
     }
 }
 

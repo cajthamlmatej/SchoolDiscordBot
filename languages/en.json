@@ -90,6 +90,11 @@
     "command.event.dont-exist": "Event with this name dont exists.",
     "command.event.edit-type-not-valid": "Selected type of value is not valid, must be one of {0}.",
     "command.event.wrong-date-format": "Selected date is not in right format. Right format is \"11. 9. 2018 8:00\" or \"11. 9. 2018\".",
+    "command.event.check.title": "List of events / tasks for {0}.",
+    "command.event.check.description": "For more informations, look to channel with tasks and events.",
+    "command.event.check.starts": "Events that starts",
+    "command.event.check.ends": "Events that ends",
+    "command.event.check.going": "Events that are happend",
     
     "command.help.title": "Bot help",
     "command.help.can-execute": "List of commands that you can execute.",

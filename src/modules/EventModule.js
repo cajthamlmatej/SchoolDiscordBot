@@ -192,6 +192,88 @@ class EventModule extends Module {
         user.createDM().then(dm => dm.send(embed)).catch(console.error);
     }
 
+    getEventThatStartsInEnteredDay(dateMoment){
+        let startsEvents = [];
+
+        let events = this.getEvents();
+        Object.keys(events).forEach(eventName => {
+            let event = events[eventName];
+            let eventValues = event.values;
+
+            let dateStart = moment(eventValues.start, "D. M. YYYY");
+            if (!dateStart.isValid()) {
+                dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
+            }
+
+            if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
+                return;
+
+            if(eventValues.end == eventValues.start)
+                return;
+            
+            eventValues["name"] = eventName;
+
+            startsEvents.push(eventValues);
+        });
+
+        return startsEvents;
+    }
+
+    getEventThatEndsInEnteredDay(dateMoment){
+        let endsEvents = [];
+
+        let events = this.getEvents();
+        Object.keys(events).forEach(eventName => {
+            let event = events[eventName];
+            let eventValues = event.values;
+
+            let dateEnd = moment(eventValues.end, "D. M. YYYY");
+            if (!dateEnd.isValid()) {
+                dateEnd = moment(eventValues.end, "D. M. YYYY HH:mm");
+            }
+
+            if (!(dateMoment.date() == dateEnd.date() && dateMoment.month() == dateEnd.month() && dateMoment.year() == dateEnd.year()))
+                return;
+
+            if(eventValues.end == eventValues.start)
+                return;
+            
+            eventValues["name"] = eventName;
+
+            endsEvents.push(eventValues);
+        });
+
+        return endsEvents;
+    }
+
+    getEventThatGoingInEnteredDay(dateMoment){
+        let goingEvents = [];
+
+        let events = this.getEvents();
+        Object.keys(events).forEach(eventName => {
+            let event = events[eventName];
+            let eventValues = event.values;
+
+            let dateStart = moment(eventValues.start, "D. M. YYYY");
+            if (!dateStart.isValid()) {
+                dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
+            }
+
+            if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
+                return;
+
+            if(eventValues.end != eventValues.start)
+                return;
+            
+            eventValues["name"] = eventName;
+
+            goingEvents.push(eventValues);
+        });
+
+        return goingEvents;
+        
+    }
+
 
     event(name, args) {
     }
