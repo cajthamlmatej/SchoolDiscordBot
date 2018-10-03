@@ -22,6 +22,10 @@ class EventCommand extends SubsCommand {
             "list": {
                 "arguments": 0,
                 "roles": ["moderator"]
+            },
+            "check": {
+                "arguments": 1,
+                "roles": ["member"]
             }
         }
     }
@@ -221,6 +225,18 @@ class EventCommand extends SubsCommand {
         this.eventModule.printEventList(message.author);
 
         message.react("✅");
+    }
+    
+
+    callCheck(args, message) {
+        let channel = message.channel;
+        let date = args[0];
+
+        if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid())) {
+            this.sendError(channel, "command.event.wrong-date-format");
+        } 
+
+        this.eventModule.deleteEvent(name);
     }
 }
 

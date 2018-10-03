@@ -192,6 +192,36 @@ class EventModule extends Module {
         user.createDM().then(dm => dm.send(embed)).catch(console.error);
     }
 
+    getEventThatStartsInEnteredDay(dateMoment){
+        let startsEvents = [];
+
+        let events = this.getEvents();
+        Object.keys(events).forEach(eventName => {
+            let event = events[eventName];
+            let eventValues = event.values;
+
+            let dateStart = moment(eventValues.start, "D. M. YYYY");
+            if (!dateStart.isValid()) {
+                dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
+            }
+
+            if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
+                return;
+            
+            startsEvents.push(event);
+        });
+
+        return startsEvents;
+    }
+
+    getEventThatEndsInEnteredDay(dateMoment){
+        
+    }
+
+    getEventThatGoingInEnteredDay(dateMoment){
+        
+    }
+
 
     event(name, args) {
     }
