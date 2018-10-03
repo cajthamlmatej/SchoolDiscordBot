@@ -241,6 +241,7 @@ class EventCommand extends SubsCommand {
 
             if(!date.isValid()){
                 this.sendError(channel, "command.event.wrong-date-format");
+                return;
             }
         }
 
@@ -251,11 +252,40 @@ class EventCommand extends SubsCommand {
             starts += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + this.truncate(event.description, 30) + "*\n";
         });
 
+        let endsEvents = this.eventModule.getEventThatEndsInEnteredDay(date);
+        let ends = "";
+
+        endsEvents.forEach(event => {
+        let ends = "";
+            ends += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + this.truncate(event.description, 30) + "*\n";
+        });
+
+        let goingEvents = this.eventModule.getEventThatGoingInEnteredDay(date);
+        let going = "";
+
+        goingEvents.forEach(event => {
+            going += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + this.truncate(event.description, 30) + "*\n";
+        });
+
+        if(ends == "" && starts == "" && going == ""){
+            this.sendError(channel, "module.event.no-event-exists");
+            return;
+        }
+
         let embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("command.event.check.title", dateString))
             .setColor(0xbadc58)
-            .setDescription(Translation.translate("command.event.check.description"))
-            .addField(Translation.translate("command.event.check.starts"), starts, true);
+            .setDescription(Translation.translate("command.event.check.description"));
+
+        if(starts != "")
+            embed.addField(Translation.translate("command.event.check.starts"), starts);
+        
+        if(ends != "")
+            embed.addField(Translation.translate("command.event.check.ends"), ends);
+            
+        if(going != "")
+            embed.addField(Translation.translate("command.event.check.going"), going);
+            
 
         channel.send(embed);
     }
