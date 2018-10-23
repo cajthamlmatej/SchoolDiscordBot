@@ -92,7 +92,7 @@ class BakalariModule extends Module {
         } else {
             const embed = new Discord.RichEmbed()
                 .setTitle("📚 | Nová informace ze systému Bakalářů")
-                .setDescription("NADPIS: **" + title + "**\n\n" + description)
+                .setDescription("Titulek: **" + title + "**\n\n" + description)
                 .setColor(0xbadc58);
 
             return embed;
