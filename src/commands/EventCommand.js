@@ -249,7 +249,7 @@ class EventCommand extends SubsCommand {
         let starts = "";
 
         startsEvents.forEach(event => {
-            starts += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + this.truncate(event.description, 30) + "*\n";
+            starts += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + event.description + "*\n";
         });
 
         let endsEvents = this.eventModule.getEventThatEndsInEnteredDay(date);
@@ -257,14 +257,14 @@ class EventCommand extends SubsCommand {
 
         endsEvents.forEach(event => {
         let ends = "";
-            ends += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + this.truncate(event.description, 30) + "*\n";
+            ends += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + event.description + "*\n";
         });
 
         let goingEvents = this.eventModule.getEventThatGoingInEnteredDay(date);
         let going = "";
 
         goingEvents.forEach(event => {
-            going += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + this.truncate(event.description, 30) + "*\n";
+            going += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + event.description + "*\n";
         });
 
         if(ends == "" && starts == "" && going == ""){
@@ -288,11 +288,6 @@ class EventCommand extends SubsCommand {
             
 
         channel.send(embed);
-    }
-
-    truncate(str, length) {
-        var dots = str.length > length ? '...' : '';
-        return str.substring(0, length)+dots;
     }
 }
 
