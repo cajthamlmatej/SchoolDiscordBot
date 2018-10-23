@@ -75,6 +75,11 @@ class EventModule extends Module {
         let values = event.values;
         values[type] = value;
 
+        if(type == "start" || type == "end" && values["end"] == values["start"]) {
+            values["end"] = value;
+            values["start"] = value;
+        }
+
         event.values = values;
 
         eventsObject["events"][name] = event;
