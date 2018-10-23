@@ -146,7 +146,7 @@ class EventCommand extends SubsCommand {
             });
 
             console.log("User " + message.author.username + " created event with name " + values["name"] + ".");
-            this.eventModule.addEvent(values["name"], values["type"], values["start"], values["end"], values["role"], values["place"], values["subject"], values["description"], files);
+            this.eventModule.addEvent(values["name"], values["type"], values["start"], values["end"], values["role"], values["place"], values["subject"], values["description"], message.member, files);
         }, this.stopWord);
 
         builder.start();

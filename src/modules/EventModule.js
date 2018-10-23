@@ -48,7 +48,7 @@ class EventModule extends Module {
         });
     }
 
-    addEvent(name, type, start, end, role, place, subject, description, attachments) {
+    addEvent(name, type, start, end, role, place, subject, description, author, attachments) {
         let values = {
             type: type,
             start: start,
@@ -56,11 +56,12 @@ class EventModule extends Module {
             role: role,
             place: place,
             subject: subject,
-            description: description
+            description: description,
+            author: author.id
         };
 
         this.channel.send({
-            embed: this.generateEmbed(values),
+            embed: this.generateEmbed(values, author),
             files: attachments
         }).then(message => {
             this.addEventToFile(message.id, name, values);
@@ -86,13 +87,18 @@ class EventModule extends Module {
         fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
 
         this.channel.fetchMessage(event.message).then(message => {
-            message.edit({
-                embed: this.generateEmbed(values)
+            if(values["author"] == undefined){
+                values["author"] = "164388362369761281"; // cant happend when creating new events, currently some dont have value author.
+            }
+            this.channel.guild.fetchMember(values["author"]).then(author => {
+                message.edit({
+                    embed: this.generateEmbed(values, author)
+                });
             });
         });
     }
 
-    generateEmbed(values) {
+    generateEmbed(values, author) {
         let embed = new Discord.RichEmbed()
             .setTitle("🕜 | " + ((values.type == "event") ? Translation.translate("module.event.new-event") : Translation.translate("module.event.new-task")))
             .setDescription(values.description)
@@ -114,6 +120,7 @@ class EventModule extends Module {
 
         embed.addField(dateTitle, date, true);
         embed.addField(Translation.translate("module.event.place"), values.place);
+        embed.setFooter(author.nickname, author.user.avatarURL)
 
         return embed;
     }
