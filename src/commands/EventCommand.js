@@ -244,7 +244,7 @@ class EventCommand extends SubsCommand {
         });
 
         if(date == undefined){
-            let date = moment(dateString, "D. M. YYYY");
+            date = moment(dateString, "D. M. YYYY");
         }
 
         if(!date.isValid()){
