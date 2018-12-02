@@ -95,7 +95,10 @@
       // no. of days of event to move to archive
       "days": 1,
       // refresh time of events
-      "refresh": 1800000
+      "refresh": 1800000,
+      "placeholder": {
+        "name": "n. of days" 
+      }
     },
     "bakalari": {
       "rss": {
