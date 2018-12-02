@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const SchoolDiscordBot = require("./SchoolDiscordBot");
 
 console.log("School Discord Bot started, author of the bot is Matěj Cajthaml <cajthaml.matej@navarru.cz>.");
