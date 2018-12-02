@@ -45,7 +45,15 @@
       "stopWord": "stop"
     },
     "eventannoucement": {
-      "checkTime": "19:00"
+      "checkTime": [
+        "17:00",
+        "18:00",
+        "19:00",
+        "19:00",
+        "17:00",
+        "15:00",
+        "15:00"
+      ]
     },
     // auto reaction
     "auto-reaction": {
