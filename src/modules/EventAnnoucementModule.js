@@ -23,7 +23,7 @@ class EventAnnoucementModule extends Module {
 
     tick() {
         let time = moment();
-        let checkTime = moment(this.checkTime, "HH:mm");
+        let checkTime = moment(this.checkTime[moment().isoWeekday()-1], "HH:mm");
 
         let diff = time.diff(checkTime, "seconds");
 
