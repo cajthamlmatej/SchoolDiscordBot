@@ -211,6 +211,8 @@
     "module.eventannoucement.description.going": "Zítra ({0}) probíhá událost či úkol s jménem {1}. Více informace se dozvíte v kanálu s události a úkoly.",
     "module.eventannoucement.informations": "Informace",
     "module.eventannoucement.role": "Role",
+    "module.eventannoucement.subject": "Předmět",
+    "module.eventannoucement.place": "Místo",
 
 
     "builder.example": "Ukázka použítí: {0}",

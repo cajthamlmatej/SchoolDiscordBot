@@ -66,7 +66,9 @@ class EventAnnoucementModule extends Module {
                 .setColor(0xbadc58)
                 .setDescription(Translation.translate("module.eventannoucement.description." + name, time.format("D. M. YYYY"), eventName))
                 .addField(Translation.translate("module.eventannoucement.informations"), eventValues.description)
-                .addField(Translation.translate("module.eventannoucement.role"), this.channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[eventValues.role]), true);
+                .addField(Translation.translate("module.eventannoucement.role"), this.channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[eventValues.role]), true)
+                .addField(Translation.translate("module.eventannoucement.subject"), eventValues.subject, true)
+                .addField(Translation.translate("module.eventannoucement.place"), eventValues.place, true);
 
             this.channel.send(embed);
         });

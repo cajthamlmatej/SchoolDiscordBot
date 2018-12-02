@@ -211,6 +211,8 @@
     "module.eventannoucement.description.going": "Event or task with name {1} is going on tomorrow ({0}). You can find more informations in channel for events and tasks.",
     "module.eventannoucement.informations": "Informations",
     "module.eventannoucement.role": "Role",
+    "module.eventannoucement.subject": "Subject",
+    "module.eventannoucement.place": "Place",
 
 
     "builder.example": "Example of usage: {0}",
