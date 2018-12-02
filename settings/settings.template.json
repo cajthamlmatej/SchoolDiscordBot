@@ -78,6 +78,10 @@
         "3. ročníky",
         "3. ročník"
       ],
+      // Things to replace inside supplementation
+      "replace": {
+        "what": "to"
+      },
 
       // refresh time of supplementation
       "refresh": 900000
