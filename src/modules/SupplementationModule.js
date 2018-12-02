@@ -99,6 +99,12 @@ class SupplementationModule extends Module {
                     });
 
                     suppleString = suppleString.replace(/^\s+|\s+$/g, '');
+                        
+                    Object.keys(this.supplementationConfig.replace).forEach(from => {
+                        let regex = new RegExp(from, "g");
+
+                        suppleString = suppleString.replace(regex, this.supplementationConfig.replace[from])
+                    });
 
                     const embed = new Discord.RichEmbed()
                         .setTitle("👓 | " + Translation.translate("module.supplementation.new") + " " + dayName)
