@@ -51,6 +51,7 @@ class EventCommand extends SubsCommand {
     init(bot) {
         this.eventModule = bot.modules["eventmodule"];
         this.stopWord = bot.settings.modules.builder.stopWord;
+        this.placeholders = bot.settings.modules.event.placeholders;
     }
 
     callCreate(args, message) {
@@ -233,9 +234,19 @@ class EventCommand extends SubsCommand {
     callCheck(args, message) {
         let channel = message.channel;
         let dateString = args[0];
+        
+        let date;
 
-        let date = moment(dateString, "D. M. YYYY");
+        Object.keys(this.placeholders).forEach(placeholder => {
+            if(dateString.includes(placeholder)){
+                date = moment().add(this.placeholders[placeholder], 'days')
+            }
+        });
 
+        if(date == null){
+            let date = moment(dateString, "D. M. YYYY");
+        }
+        
         if(!date.isValid()){
             date = moment(dateString, "D. M. YYYY HH:mm");
 
