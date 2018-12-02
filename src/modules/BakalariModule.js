@@ -22,7 +22,7 @@ class BakalariModule extends Module {
         this.channel = bot.client.channels.find(ch => ch.id == bot.settings.channels.bakalari);
 
         this.tick();
-        setInterval(() => this.tick(), 30000);
+        setInterval(() => this.tick(), 120000);
     }
 
     tick() {
