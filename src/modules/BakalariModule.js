@@ -57,7 +57,7 @@ class BakalariModule extends Module {
                         if(title.includes("zapsána známka:") || description.includes("zapsána známka:")){
                             let subject = title.split(":")[0];
 
-                            if(["VOP", "ANG", "PCV", "GRS", "PVA", "VYT"].includes(subject)){
+                            if(this.settings.ignored.includes(subject)){
                                 return;
                             }
 
