@@ -97,6 +97,16 @@
       // refresh time of events
       "refresh": 1800000
     },
+    "bakalari": {
+      "rss": {
+        "domain": "bakalari.api.com",
+        "url": "/bakalari.ashx?bk=with-api-key",
+        "fullUrl": "https://full.path.to.bakalari.api"
+      },
+      "ignored-subjects": [
+        "subject"
+      ]
+    },
     "disabled": [
       ["supplementationmodule", "bakalarimoadule"]
     ]
