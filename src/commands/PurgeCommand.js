@@ -41,7 +41,9 @@ class PurgeCommand extends Command {
                 .setDescription(Translation.translate("command.purge.purged", messages.size))
                 .setColor(0xbadc58);
 
-            channel.send(embed).delete(5000);
+            channel.send(embed).then(message => {
+                message.delete(5000);
+            });
         });
 
         return false;
