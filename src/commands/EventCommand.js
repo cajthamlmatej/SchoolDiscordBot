@@ -243,10 +243,10 @@ class EventCommand extends SubsCommand {
             }
         });
 
-        if(date == null){
+        if(date == undefined){
             let date = moment(dateString, "D. M. YYYY");
         }
-        
+
         if(!date.isValid()){
             date = moment(dateString, "D. M. YYYY HH:mm");
 
