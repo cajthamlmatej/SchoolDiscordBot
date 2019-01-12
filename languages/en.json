@@ -1,4 +1,6 @@
 {
+    "bot.started": "Bot started",
+
     "roles.group.mentionable": "📢 Mentionable roles",
     "roles.group.assignable": "📛 Assignable roles",
     "roles.group.special": "☢ Special roles",

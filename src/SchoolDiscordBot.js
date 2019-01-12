@@ -167,8 +167,13 @@ class SchoolDiscordBot {
             console.log("Command " + commandName + " loaded.");
         });
 
+        const embed = new Discord.RichEmbed()
+            .setTitle(Translation.translate("bot.started"))
+            .setColor(0xbadc58);
 
         console.log("Bot " + this.name + " started.");
+        let adminChannel = this.client.channels.find(c => c.id == this.settings.channels.admin);
+        adminChannel.send(embed);
     }
 
     message(message) {

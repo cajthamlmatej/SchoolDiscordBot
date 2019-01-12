@@ -1,4 +1,6 @@
 {
+    "bot.started": "Bot byl zapnut",
+
     "roles.group.mentionable": "📢 Označitelné role",
     "roles.group.assignable": "📛 Přiřaditelné role",
     "roles.group.special": "☢ Speciální role",
