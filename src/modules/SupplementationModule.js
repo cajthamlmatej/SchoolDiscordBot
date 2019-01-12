@@ -99,7 +99,7 @@ class SupplementationModule extends Module {
                     });
 
                     suppleString = suppleString.replace(/^\s+|\s+$/g, '');
-                        
+
                     Object.keys(this.supplementationConfig.replace).forEach(from => {
                         let regex = new RegExp(from, "g");
 
@@ -116,7 +116,9 @@ class SupplementationModule extends Module {
 
                         channel.fetchMessage(messageId).then(message => {
                             if (message.embeds[0].description !== suppleString) {
-                                message.edit(containsHighlight == true ? "@everyone" : "", embed);
+                                message.edit(containsHighlight == true ? "@everyone" : "", embed).catch(error => {
+                                    console.log("Error while editing supplementation message. Message is probably above 2048 char limit.");
+                                });
                             }
                         });
                     } else {
@@ -126,6 +128,8 @@ class SupplementationModule extends Module {
                             if (Object.keys(supples).length == count) {
                                 fs.writeFileSync("./temp/supplementations.json", JSON.stringify(supplementationsObject));
                             }
+                        }).catch(error => {
+                            console.log("Error while editing supplementation message. Message is probably above 2048 char limit.");
                         });
                     }
                 });
