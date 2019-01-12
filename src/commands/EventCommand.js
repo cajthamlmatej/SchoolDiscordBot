@@ -139,15 +139,30 @@ class EventCommand extends SubsCommand {
                 "validate": (content) => {
                     return true;
                 }
+            },
+            {
+                "name": "files",
+                "example": "",
+                "validate": (content) => {
+                    return true;
+                },
+                "value": (content, values, attachments) => {
+                    if (content == "-") {
+                        return [];
+                    }
+
+                    let files = [];
+                    attachments.forEach(messageAttachment => {
+                        files.push(messageAttachment.url);
+                    });
+
+                    return files;
+                }
             }
         ], (values) => {
-            let files = [];
-            message.attachments.array().forEach(messageAttachment => {
-                files.push(messageAttachment.url);
-            });
-
             console.log("User " + message.author.username + " created event with name " + values["name"] + ".");
-            this.eventModule.addEvent(values["name"], values["type"], values["start"], values["end"], values["role"], values["place"], values["subject"], values["description"], message.member, files);
+
+            this.eventModule.addEvent(values["name"], values["type"], values["start"], values["end"], values["role"], values["place"], values["subject"], values["description"], message.member, values["files"]); //files);
         }, this.stopWord);
 
         builder.start();
@@ -229,28 +244,28 @@ class EventCommand extends SubsCommand {
 
         message.react("✅");
     }
-    
+
 
     callCheck(args, message) {
         let channel = message.channel;
         let dateString = args[0];
-        
+
         let date;
 
         Object.keys(this.placeholders).forEach(placeholder => {
-            if(dateString.includes(placeholder)){
+            if (dateString.includes(placeholder)) {
                 date = moment().add(this.placeholders[placeholder], 'days')
             }
         });
 
-        if(date == undefined){
+        if (date == undefined) {
             date = moment(dateString, "D. M. YYYY");
         }
 
-        if(!date.isValid()){
+        if (!date.isValid()) {
             date = moment(dateString, "D. M. YYYY HH:mm");
 
-            if(!date.isValid()){
+            if (!date.isValid()) {
                 this.sendError(channel, "command.event.wrong-date-format");
                 return;
             }
@@ -260,25 +275,25 @@ class EventCommand extends SubsCommand {
         let starts = "";
 
         startsEvents.forEach(event => {
-            starts += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + event.description + "*\n";
+            starts += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
         let endsEvents = this.eventModule.getEventThatEndsInEnteredDay(date);
         let ends = "";
 
         endsEvents.forEach(event => {
-        let ends = "";
-            ends += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + event.description + "*\n";
+            let ends = "";
+            ends += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
         let goingEvents = this.eventModule.getEventThatGoingInEnteredDay(date);
         let going = "";
 
         goingEvents.forEach(event => {
-            going += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) +" - *" + event.description + "*\n";
+            going += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
-        if(ends == "" && starts == "" && going == ""){
+        if (ends == "" && starts == "" && going == "") {
             this.sendError(channel, "module.event.no-event-exists");
             return;
         }
@@ -288,15 +303,15 @@ class EventCommand extends SubsCommand {
             .setColor(0xbadc58)
             .setDescription(Translation.translate("command.event.check.description"));
 
-        if(starts != "")
+        if (starts != "")
             embed.addField(Translation.translate("command.event.check.starts"), starts);
-        
-        if(ends != "")
+
+        if (ends != "")
             embed.addField(Translation.translate("command.event.check.ends"), ends);
-            
-        if(going != "")
+
+        if (going != "")
             embed.addField(Translation.translate("command.event.check.going"), going);
-            
+
 
         channel.send(embed);
     }

@@ -240,6 +240,8 @@
     "builder.event.create.subject.help": "Zadejte předmět pro který event je.",
     "builder.event.create.description.title": "Popis eventu",
     "builder.event.create.description.help": "Zadejte jakékoliv další informace, které o eventu víte.",
+    "builder.event.create.files.title": "Soubory eventu",
+    "builder.event.create.files.help": "Přiložte k odeslané zprávě soubory, které chcete přidat k eventu. Po tomto kroku se event přidá a vypíše všem uživatelům.\nPokud nechcete přiložit přílohu, zadejte znak \"-\".",
 
     "builder.event.edit.title": "Úprava události / úkolu",
     "builder.event.edit.ok": "Událost / úkol byl upraven.",

@@ -240,6 +240,8 @@
     "builder.event.create.subject.help": "Enter subject of the event.",
     "builder.event.create.description.title": "Description of event",
     "builder.event.create.description.help": "Enter decription and other informations about event.",
+    "builder.event.create.files.title": "Event attachments",
+    "builder.event.create.files.help": "Add attachments that you want to add to message and send it. After this step, event will be added to list and will be announced to all users.\nIf you dont want to add any attachments, send message with char \"-\".",
 
     "builder.event.edit.title": "Editing event / task",
     "builder.event.edit.ok": "Event / task was edited.",

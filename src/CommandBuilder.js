@@ -33,7 +33,7 @@ class CommandBuilder {
 
             if (passed === true) {
                 if (field.value != undefined) {
-                    this.values[field.name] = field.value(messageContent, this.values);
+                    this.values[field.name] = field.value(messageContent, this.values, message.attachments.array());
                 } else {
                     this.values[field.name] = messageContent;
                 }
