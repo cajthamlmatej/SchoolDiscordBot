@@ -13,10 +13,6 @@ class BakalariModule extends Module {
 
     init(bot) {
         this.settings = bot.settings.modules.bakalari;
-        this.webOptions = {
-            host: this.settings.rss.domain,
-            path: this.settings.rss.url
-        }
 
         this.tempFile = "./temp/bakalari.json";
         this.channel = bot.client.channels.find(ch => ch.id == bot.settings.channels.bakalari);
@@ -26,7 +22,20 @@ class BakalariModule extends Module {
     }
 
     tick() {
-        let request = https.request(this.webOptions, (res) => {
+        let first = true;
+        Object.keys(this.settings.members).forEach(member => {
+            this.checkBakalariRSS(this.settings.members[member], first, member);
+
+            first = false;
+        });
+    }
+
+    checkBakalariRSS(values, main, member) {
+        let webOptions = {
+            host: values.domain,
+            path: values.url
+        }
+        let request = https.request(webOptions, (res) => {
             let data = '';
             res.on('data', function (chunk) {
                 data += chunk;
@@ -40,28 +49,32 @@ class BakalariModule extends Module {
                     storageQuota: 10000000
                 });
 
-                let file = this.readFile(); 
+                let file = this.readFile();
 
                 dom.window.document.querySelectorAll("item").forEach(children => {
                     let title = children.querySelectorAll("title")[0].textContent.trim();
                     let description = children.querySelectorAll("description")[0].textContent.trim();
                     let guid = children.querySelectorAll("guid")[0].textContent.trim();
                     let isTask = title.includes("ÚKOL");
+                    let subject = title.split(":")[0];
 
-                    if(file[guid] != undefined)
+                    if (file[guid] != undefined)
                         return;
 
                     description = description.replace(/<br \/>/g, "\n");
 
-                    if(!isTask) {
-                        if(title.includes("zapsána známka:") || description.includes("zapsána známka:")){
-                            let subject = title.split(":")[0];
+                    if (!isTask) {
+                        if (title.includes("zapsána známka:") || description.includes("zapsána známka:")) {
+                            title = title.split(":")[0] + title.split(":")[1];
 
-                            if(this.settings.ignored.includes(subject)){
+                            if (this.settings.ignored.includes(subject)) {
                                 return;
                             }
 
-                            title = title.split(":")[0] + title.split(":")[1];
+                            if (!main && !this.settings.separated.includes(subject)) {
+                                return;
+                            }
+
                             description = description.split(":")[0] + description.split(":")[1];
                         }
                     }
@@ -69,7 +82,7 @@ class BakalariModule extends Module {
                     file[guid] = { title: title, description: description, isTask: isTask };
 
 
-                    this.channel.send(this.generateEmbed(isTask, title, description));
+                    this.channel.send(this.generateEmbed(isTask, title, description, this.settings.separated.includes(subject) ? values.group : undefined));
                 });
 
                 this.saveFile(file);
@@ -81,17 +94,17 @@ class BakalariModule extends Module {
         request.end();
     }
 
-    generateEmbed(isTask, title, description){
-        if(isTask){
+    generateEmbed(isTask, title, description, group) {
+        if (isTask) {
             const embed = new Discord.RichEmbed()
-                .setTitle("📚 | Nový úkol ze systému Bakalářů")
+                .setTitle("📚 | Nový úkol ze systému Bakalářů" + (group == undefined ? "" : " pro " + group + ". skupinu"))
                 .setDescription("Předmět a konec: **" + title.replace(/ÚKOL -/g, "") + "**\n\n" + description)
                 .setColor(0xbadc58);
 
             return embed;
         } else {
             const embed = new Discord.RichEmbed()
-                .setTitle("📚 | Nová informace ze systému Bakalářů")
+                .setTitle("📚 | Nová informace ze systému Bakalářů" + (group == undefined ? "" : " pro " + group + ". skupinu"))
                 .setDescription("Titulek: **" + title + "**\n\n" + description)
                 .setColor(0xbadc58);
 

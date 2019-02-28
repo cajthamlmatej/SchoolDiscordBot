@@ -109,12 +109,24 @@
       }
     },
     "bakalari": {
-      "rss": {
-        "domain": "bakalari.api.com",
-        "url": "/bakalari.ashx?bk=with-api-key",
-        "fullUrl": "https://full.path.to.bakalari.api"
+      "members": {
+        "matej": {
+          "domain": "bakalari.api.com",
+          "url": "/bakalari.ashx?bk=with-api-key",
+          "fullUrl": "https://full.path.to.bakalari.api",
+          "group": "1"
+        },
+        "jakub": {
+          "domain": "bakalari.api.com",
+          "url": "/bakalari.ashx?bk=with-api-key",
+          "fullUrl": "https://full.path.to.bakalari.api",
+          "group": "2"
+        }
       },
-      "ignored-subjects": [
+      "ignored": [
+        "subject"
+      ],
+      "separated": [
         "subject"
       ]
     },
