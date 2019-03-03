@@ -47,6 +47,7 @@
     "commands.help.annoucement.delete": "Smaže oznámení",
     "commands.help.status": "Zobrazí status bota a jeho statistiky",
     "commands.help.reload": "Znovu načte příkazy, moduly a překlady bota",
+    "commands.help.stats": "Zobrazí statistiky úkolů",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list> <...>",
@@ -81,6 +82,7 @@
     "commands.usage.annoucement.delete": "<jméno>",
     "commands.usage.status": "",
     "commands.usage.reload": "",
+    "commands.usage.stats": "",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
@@ -147,7 +149,7 @@
     "command.supplementation.lastcheck.title": "Poslední čas zkontrolování suplování",
     "command.supplementation.lastcheck": "Suplování bylo zkontrolováno naposledy před {0}m.",
 
-    "command.status.stats": "Statistiky",
+    "command.status.stats": "Status bota a jeho statistiky",
     "command.status.commands": "Počet příkazů",
     "command.status.number-of-commands": "✅ {0} a ❌ {1}",
     "command.status.modules": "Počet modulů",
@@ -158,6 +160,14 @@
     "command.status.uptime-time": "{0} hodin",
     "command.status.supplementation.last-check.title": "Poslední kontrola suplování",
     "command.status.supplementation.last-check": "před {0}m",
+
+    "command.stats.title": "Statistiky úkolů",
+    "command.stats.number-of-events": "Celkový počet úkolů",
+    "command.stats.authors": "Autoři úkolů",
+    "command.stats.for-groups": "Počet úkolů pro skupiny",
+    "command.stats.for-subjects": "Počet úkolů pro předměty",
+    "command.stats.for": "{0} úkolů pro {1}",
+    "command.stats.from": "{0} úkolů od {1}",
 
     "module.event.new-event": "Nová událost",
     "module.event.new-task": "Nový úkol",

@@ -47,6 +47,7 @@
     "commands.help.annoucement.delete": "Delete annoucement",
     "commands.help.status": "Show status and stats of the bot",
     "commands.help.reload": "Reload bot's commands, modules and translations",
+    "commands.help.stats": "Show statistics for events",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list> <...>",
@@ -81,6 +82,7 @@
     "commands.usage.annoucement.delete": "<name>",
     "commands.usage.status": "",
     "commands.usage.reload": "",
+    "commands.usage.stats": "",
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",
@@ -147,7 +149,7 @@
     "command.supplementation.lastcheck.title": "Last supplementation check",
     "command.supplementation.lastcheck": "Supplementation was last checked before {0}m.",
 
-    "command.status.stats": "Stats",
+    "command.status.stats": "Status and bot stats",
     "command.status.commands": "Number of commands",
     "command.status.number-of-commands": "✅ {0} and ❌ {1}",
     "command.status.modules": "Number of modules",
@@ -158,6 +160,14 @@
     "command.status.uptime-time": "{0} hours",
     "command.status.supplementation.last-check.title": "Last time supplementation checked",
     "command.status.supplementation.last-check": "before {0}m",
+
+    "command.stats.title": "Events stats",
+    "command.stats.number-of-events": "Total number of events",
+    "command.stats.authors": "Authors of events",
+    "command.stats.for-groups": "Number of events for groups",
+    "command.stats.for-subjects": "Number of events for subjects",
+    "command.stats.for": "{0} events for {1}",
+    "command.stats.from": "{0} events from {1}",
 
     "module.event.new-event": "New event",
     "module.event.new-task": "New task",
