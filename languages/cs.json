@@ -50,7 +50,7 @@
     "commands.help.stats": "Zobrazí statistiky úkolů",
 
     "commands.usage.help": "",
-    "commands.usage.event": "<create/edit/delete/list> <...>",
+    "commands.usage.event": "<create/edit/delete/list/week/nextweek> <...>",
     "commands.usage.event.create": "",
     "commands.usage.event.edit": "",
     "commands.usage.event.delete": "<jméno>",
