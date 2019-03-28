@@ -74,16 +74,22 @@ class EventModule extends Module {
 
         let event = eventsObject["events"][name];
         let values = event.values;
-        values[type] = value;
 
-        if(type == "start" || type == "end" && values["end"] == values["start"]) {
-            values["end"] = value;
-            values["start"] = value;
-        }
+        if(type != "name"){
+            values[type] = value;
 
-        event.values = values;
+            if(type == "start" || type == "end" && values["end"] == values["start"]) {
+                values["end"] = value;
+                values["start"] = value;
+            }
 
-        eventsObject["events"][name] = event;
+            event.values = values;
+            eventsObject["events"][name] = event;
+        } else {
+            delete eventsObject["events"][name];
+            eventsObject["events"][value] = event;
+        } 
+
         fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
 
         this.channel.fetchMessage(event.message).then(message => {

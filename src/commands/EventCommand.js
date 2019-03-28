@@ -171,7 +171,7 @@ class EventCommand extends SubsCommand {
 
     callEdit(args, message) {
         let channel = message.channel;
-        const types = ["type", "start", "end", "role", "place", "subject", "description"];
+        const types = ["name", "type", "start", "end", "role", "place", "subject", "description"];
         const eventTypes = ["event", "task"];
 
         let builder = new CommandBuilder("event.edit", message.author, channel, [
