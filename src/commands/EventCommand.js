@@ -71,7 +71,7 @@ class EventCommand extends SubsCommand {
             },
             {
                 "name": "name",
-                "example": "stp_ukol_potreby",
+                "example": "eko_ukol_potreby",
                 "validate": (content) => {
                     if (this.eventModule.exists(content)) {
                         return "command.event.already-exists";
@@ -82,7 +82,7 @@ class EventCommand extends SubsCommand {
             },
             {
                 "name": "start",
-                "example": ["13. 9. 2018", "13. 9. 2018 8:00"],
+                "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm")],
                 "validate": (content) => {
                     if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid())) {
                         return "command.event.wrong-date-format";
@@ -92,7 +92,7 @@ class EventCommand extends SubsCommand {
             },
             {
                 "name": "end",
-                "example": ["-", "15. 9. 2018", "15. 9. 2018 13:30"],
+                "example": ["-", moment().add(3, 'days').format("D. M. YYYY"), moment().add(3, 'days').format("D. M. YYYY HH:mm")],
                 "validate": (content) => {
                     if (content == "-")
                         return true;
@@ -177,7 +177,7 @@ class EventCommand extends SubsCommand {
         let builder = new CommandBuilder("event.edit", message.author, channel, [
             {
                 "name": "name",
-                "example": "stp_ukol_potreby",
+                "example": "eko_ukol_potreby",
                 "validate": (content) => {
                     if (!this.eventModule.exists(content)) {
                         return "command.event.dont-exist";
