@@ -98,7 +98,11 @@
     "command.event.check.description": "Více informací k určitým událostem naleznete v kanálu s událostmi a úkoly",
     "command.event.check.starts": "Eventy které začínají",
     "command.event.check.ends": "Eventy které začínají",
-    "command.event.check.going": "Eventy které začínají",
+    "command.event.check.going": "Eventy které začínají",    
+    "command.event.check.nextweek.title": "Seznam událostí pro následující týden",
+    "command.event.check.nextweek.no-event-found": "Žádný event nebyl nalezen.",
+    "command.event.check.week.title": "Seznam událostí pro nadcházející dny v tomto týdnu",
+    "command.event.check.week.no-event-found": "Žádný event nebyl nalezen.",
     
     "command.help.title": "Nápověda k používání bota",
     "command.help.can-execute": "Seznam příkazů, které můžete použít.",

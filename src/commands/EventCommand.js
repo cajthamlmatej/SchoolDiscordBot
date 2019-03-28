@@ -28,6 +28,14 @@ class EventCommand extends SubsCommand {
             "check": {
                 "arguments": 1,
                 "roles": ["member"]
+            },
+            "week": {
+                "arguments": 0,
+                "roles": ["member"]
+            },
+            "nextweek": {
+                "arguments": 0,
+                "roles": ["member"]
             }
         }
     }
@@ -245,7 +253,6 @@ class EventCommand extends SubsCommand {
         message.react("✅");
     }
 
-
     callCheck(args, message) {
         let channel = message.channel;
         let dateString = args[0];
@@ -315,6 +322,110 @@ class EventCommand extends SubsCommand {
 
         channel.send(embed);
     }
+    
+    callWeek(args, message) {
+        let channel = message.channel;
+
+        let startDay = moment();
+
+        let sundayDay = startDay.clone();
+        while (sundayDay.weekday() !== moment().day('Sunday').weekday()){ 
+            sundayDay.add(1, 'day'); 
+        }
+
+        let dates = this.getRangeOfDates(startDay, sundayDay, 'day');
+
+        let datesInfo = {};
+        dates.forEach(date => {
+            let startsEvents = this.eventModule.getEventThatStartsInEnteredDay(date);
+            let endsEvents = this.eventModule.getEventThatEndsInEnteredDay(date);
+            let goingEvents = this.eventModule.getEventThatGoingInEnteredDay(date);
+            let events = startsEvents.concat(endsEvents).concat(goingEvents);
+
+            let string = "";
+            if(events != null)
+                events.forEach(event => {
+                    string += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + "\n";
+                });
+
+            if(string == "")
+                string = Translation.translate("command.event.check.week.no-event-found");
+
+            datesInfo[date] = {"date": date, "data": string};
+        });
+
+
+        let embed = new Discord.RichEmbed()
+            .setTitle(Translation.translate("command.event.check.week.title", ""))
+            .setColor(0xbadc58)
+            .setDescription(Translation.translate("command.event.check.description"));
+
+        Object.keys(datesInfo).forEach(date => {
+            embed.addField(datesInfo[date].date.format("D. M."), datesInfo[date].data);
+        });
+
+        channel.send(embed);
+    }
+    
+    callNextweek(args, message) {
+        let channel = message.channel;
+
+        let mondayDay = moment();
+        while (mondayDay.weekday() !== moment().day('Monday').weekday()){ 
+            mondayDay.add(1, 'day'); 
+        }
+
+        let sundayDay = mondayDay.clone();
+        while (sundayDay.weekday() !== moment().day('Sunday').weekday()){ 
+            sundayDay.add(1, 'day'); 
+        }
+
+        let dates = this.getRangeOfDates(mondayDay, sundayDay, 'day');
+
+        let datesInfo = {};
+        dates.forEach(date => {
+            let startsEvents = this.eventModule.getEventThatStartsInEnteredDay(date);
+            let endsEvents = this.eventModule.getEventThatEndsInEnteredDay(date);
+            let goingEvents = this.eventModule.getEventThatGoingInEnteredDay(date);
+            let events = startsEvents.concat(endsEvents).concat(goingEvents);
+
+            let string = "";
+            if(events != null)
+                events.forEach(event => {
+                    string += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + "\n";
+                });
+
+            if(string == "")
+                string = Translation.translate("command.event.check.nextweek.no-event-found");
+
+            datesInfo[date] = {"date": date, "data": string};
+        });
+
+
+        let embed = new Discord.RichEmbed()
+            .setTitle(Translation.translate("command.event.check.nextweek.title", ""))
+            .setColor(0xbadc58)
+            .setDescription(Translation.translate("command.event.check.description"));
+
+        Object.keys(datesInfo).forEach(date => {
+            embed.addField(datesInfo[date].date.format("D. M."), datesInfo[date].data);
+        });
+
+        channel.send(embed);
+    }
+    
+    getRangeOfDates(start, end, key, arr = [start.startOf(key)]) {
+        if(start.isAfter(end)) 
+            throw new Error('start must precede end')
+        
+        const next = moment(start).add(1, key).startOf(key);
+        
+        if(next.isAfter(end, key)) 
+            return arr;
+      
+        return this.getRangeOfDates(next, end, key, arr.concat(next));
+      }
+      
 }
 
 module.exports = EventCommand;

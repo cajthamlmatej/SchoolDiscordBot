@@ -99,6 +99,10 @@
     "command.event.check.starts": "Events that starts",
     "command.event.check.ends": "Events that ends",
     "command.event.check.going": "Events that are going to happend",
+    "command.event.check.nextweek.title": "List of events / tasks for next week.",
+    "command.event.check.nextweek.no-event-found": "No event found.",
+    "command.event.check.week.title": "List of events / tasks for next days in this week.",
+    "command.event.check.week.no-event-found": "No event found.",
     
     "command.help.title": "Bot help",
     "command.help.can-execute": "List of commands that you can execute.",
