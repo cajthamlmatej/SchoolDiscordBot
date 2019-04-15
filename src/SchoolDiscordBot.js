@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Translation = require("./Translation");
+const DirectCommand = require("./commands/DirectCommand");
 const moment = require('moment');
 const fs = require('fs');
 
@@ -38,10 +39,11 @@ class SchoolDiscordBot {
         });
 
         this.client.on("message", (message) => {
+            this.message(message);
+
             if (message.guild == null || message.guild.id != this.settings.guild)
                 return;
 
-            this.message(message);
             Object.values(this.modules).forEach(module => {
                 module.event("message", { message: message });
             })
@@ -83,7 +85,7 @@ class SchoolDiscordBot {
         let commandFiles = fs.readdirSync("./src/commands");
 
         commandFiles.forEach(file => {
-            if (file == "Command.js" || file == "SubsCommand.js")
+            if (file == "Command.js" || file == "SubsCommand.js" || file == "DirectCommand.js")
                 return;
 
             let commandFile = require("./commands/" + file);
@@ -190,6 +192,10 @@ class SchoolDiscordBot {
         let cmd = args[0].replace(this.settings.prefix, "").toLowerCase();
         let command = this.commands[this.commandsAliases[cmd]];
 
+        if(!(command instanceof DirectCommand))
+            if (message.guild == null || message.guild.id != this.settings.guild)
+                return;
+
         if (command == undefined)
             return;
 
@@ -209,7 +215,7 @@ class SchoolDiscordBot {
             this.recentCommandsUsage.delete(authorId);
         }, this.settings.spam.cooldown * 1000);
 
-        message.guild.fetchMember(message.author)
+        this.client.guilds.get(this.settings.guild).fetchMember(message.author)
             .then(member => {
                 args.shift();
                 for (var i = 0; i < args.length; i++) {
