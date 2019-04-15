@@ -48,6 +48,7 @@
     "commands.help.status": "Zobrazí status bota a jeho statistiky",
     "commands.help.reload": "Znovu načte příkazy, moduly a překlady bota",
     "commands.help.stats": "Zobrazí statistiky úkolů",
+    "commands.help.chladkova": "Zobrazí přísloví od paní Chládkové",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek> <...>",
@@ -83,6 +84,7 @@
     "commands.usage.status": "",
     "commands.usage.reload": "",
     "commands.usage.stats": "",
+    "commands.usage.chladkova": "",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
