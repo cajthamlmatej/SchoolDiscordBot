@@ -103,7 +103,14 @@
     "command.event.check.nextweek.no-event-found": "No event found.",
     "command.event.check.week.title": "List of events / tasks for next days in this week.",
     "command.event.check.week.no-event-found": "No event found.",
-    
+    "command.event.check.week.1": "Monday",
+    "command.event.check.week.2": "Tuesday",
+    "command.event.check.week.3": "Wednesday",
+    "command.event.check.week.4": "Thursday",
+    "command.event.check.week.5": "Friday",
+    "command.event.check.week.6": "Saturday",
+    "command.event.check.week.7": "Sunday",
+
     "command.help.title": "Bot help",
     "command.help.can-execute": "List of commands that you can execute.",
     

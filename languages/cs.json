@@ -105,6 +105,13 @@
     "command.event.check.nextweek.no-event-found": "Žádný event nebyl nalezen.",
     "command.event.check.week.title": "Seznam událostí pro nadcházející dny v tomto týdnu",
     "command.event.check.week.no-event-found": "Žádný event nebyl nalezen.",
+    "command.event.check.week.1": "Pondělí",
+    "command.event.check.week.2": "Úterý",
+    "command.event.check.week.3": "Středa",
+    "command.event.check.week.4": "Čtvrtek",
+    "command.event.check.week.5": "Pátek",
+    "command.event.check.week.6": "Sobota",
+    "command.event.check.week.7": "Neděle",
     
     "command.help.title": "Nápověda k používání bota",
     "command.help.can-execute": "Seznam příkazů, které můžete použít.",
