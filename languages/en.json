@@ -48,6 +48,7 @@
     "commands.help.status": "Show status and stats of the bot",
     "commands.help.reload": "Reload bot's commands, modules and translations",
     "commands.help.stats": "Show statistics for events",
+    "commands.help.bakalari": "Choose RSS token for current member",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek> <...>",
@@ -83,6 +84,7 @@
     "commands.usage.status": "",
     "commands.usage.reload": "",
     "commands.usage.stats": "",
+    "commands.usage.bakalari": "<rss token>",
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",

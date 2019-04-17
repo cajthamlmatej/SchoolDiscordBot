@@ -49,6 +49,7 @@
     "commands.help.reload": "Znovu načte příkazy, moduly a překlady bota",
     "commands.help.stats": "Zobrazí statistiky úkolů",
     "commands.help.chladkova": "Zobrazí přísloví od paní Chládkové",
+    "commands.help.bakalari": "Zvolí RSS token pro aktuálního uživatele",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek> <...>",
@@ -85,6 +86,7 @@
     "commands.usage.reload": "",
     "commands.usage.stats": "",
     "commands.usage.chladkova": "",
+    "commands.usage.bakalari": "<rss token>",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
