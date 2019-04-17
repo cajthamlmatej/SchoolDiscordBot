@@ -408,7 +408,7 @@ class EventCommand extends SubsCommand {
             .setDescription(Translation.translate("command.event.check.description"));
 
         Object.keys(datesInfo).forEach(date => {
-            embed.addField(datesInfo[date].date.format("D. M."), datesInfo[date].data);
+            embed.addField(Translation.translate("command.event.check.week." + datesInfo[date].date.isoWeekday()) + " " + datesInfo[date].date.format("D. M."), datesInfo[date].data);
         });
 
         channel.send(embed);
