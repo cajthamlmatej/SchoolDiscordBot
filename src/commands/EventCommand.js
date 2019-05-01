@@ -90,8 +90,18 @@ class EventCommand extends SubsCommand {
             },
             {
                 "name": "start",
-                "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm")],
+                "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ...Object.keys(this.placeholders)],
                 "validate": (content) => {
+                    let found = false;
+                    Object.keys(this.placeholders).forEach(placeholder => {
+                        if (content.toLowerCase().includes(placeholder)) {
+                            found = true;
+                        }
+                    });
+
+                    if(found)
+                        return true;
+
                     if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid())) {
                         return "command.event.wrong-date-format";
                     } else
@@ -100,9 +110,19 @@ class EventCommand extends SubsCommand {
             },
             {
                 "name": "end",
-                "example": ["-", moment().add(3, 'days').format("D. M. YYYY"), moment().add(3, 'days').format("D. M. YYYY HH:mm")],
+                "example": ["-", moment().add(3, 'days').format("D. M. YYYY"), moment().add(3, 'days').format("D. M. YYYY HH:mm"), ...Object.keys(this.placeholders)],
                 "validate": (content) => {
                     if (content == "-")
+                        return true;
+
+                    let found = false;
+                    Object.keys(this.placeholders).forEach(placeholder => {
+                        if (content.toLowerCase().includes(placeholder)) {
+                            found = true;
+                        }
+                    });
+
+                    if(found)
                         return true;
 
                     if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid())) {
@@ -170,7 +190,20 @@ class EventCommand extends SubsCommand {
         ], (values) => {
             console.log("User " + message.author.username + " created event with name " + values["name"] + ".");
 
-            this.eventModule.addEvent(values["name"], values["type"], values["start"], values["end"], values["role"], values["place"], values["subject"], values["description"], message.member, values["files"]); //files);
+            let start = values["start"];
+            let end = values["end"];
+
+            Object.keys(this.placeholders).forEach(placeholder => {
+                // Add days and format it back to string.
+                if (values["start"].toLowerCase().includes(placeholder)) {
+                    start = moment().add(this.placeholders[placeholder], 'days').format("D. M. YYYY");
+                }
+                if (values["end"].toLowerCase().includes(placeholder)) {
+                    end = moment().add(this.placeholders[placeholder], 'days').format("D. M. YYYY");
+                }
+            });
+
+            this.eventModule.addEvent(values["name"], values["type"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, values["files"]); //files);
         }, this.stopWord);
 
         builder.start();
