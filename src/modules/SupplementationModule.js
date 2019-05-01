@@ -1,5 +1,5 @@
 const Module = require("./Module");
-const http = require('http');
+const http = require('https');
 const Translation = require("../Translation");
 const fs = require('fs');
 const jsdom = require("jsdom");
@@ -16,7 +16,8 @@ class SupplementationModule extends Module {
     init(bot) {
         this.webOptions = {
             host: 'ssps.cz',
-            path: '/student/'
+            path: '/student/',
+            protocol: 'https:'
         }
 
         this.client = bot.client;
@@ -36,8 +37,8 @@ class SupplementationModule extends Module {
             });
             res.on('end', () => {
                 const dom = new JSDOM(data, {
-                    url: "http://ssps.cz/student/",
-                    referrer: "http://ssps.cz/student/",
+                    url: "https://ssps.cz/student/",
+                    referrer: "https://ssps.cz/student/",
                     contentType: "text/html",
                     includeNodeLocations: true,
                     storageQuota: 10000000
