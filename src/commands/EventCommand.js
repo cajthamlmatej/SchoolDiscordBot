@@ -221,7 +221,7 @@ class EventCommand extends SubsCommand {
                 "example": "eko_ukol_potreby",
                 "validate": (content) => {
                     if (!this.eventModule.exists(content)) {
-                        return "command.event.dont-exist";
+                        return ["command.event.dont-exist.edit", this.eventModule.getEventNames().join(", ").substring(0, 500) + "..."];
                     } else {
                         return true;
                     }

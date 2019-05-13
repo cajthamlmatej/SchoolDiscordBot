@@ -181,7 +181,6 @@ class EventModule extends Module {
         return this.roles;
     }
 
-
     exists(name) {
         let events = fs.readFileSync(this.tempFile, "utf8");
         let eventsObject = JSON.parse(events);
@@ -292,6 +291,18 @@ class EventModule extends Module {
         
     }
 
+    getEventNames(){
+        let events = fs.readFileSync(this.tempFile, "utf8");
+        let eventsObject = JSON.parse(events)["events"];
+    
+        let eventNames = [];
+
+        Object.keys(eventsObject).forEach(eventName => {
+            eventNames.push(eventName); 
+        });
+
+        return eventNames;
+    }
 
     event(name, args) {
     }
