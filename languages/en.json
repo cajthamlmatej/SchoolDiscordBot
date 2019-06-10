@@ -94,6 +94,7 @@
     "command.event.type-not-valid": "Selected type of event is not valid, must be one of {0}.",
     "command.event.role-not-valid": "Selected role is not valid, choose one of {0} roles.",
     "command.event.dont-exist": "Event with this name dont exists.",
+    "command.event.dont-exist.edit": "Event with this name dont exists, choose one of ({0}).",
     "command.event.edit-type-not-valid": "Selected type of value is not valid, must be one of {0}.",
     "command.event.wrong-date-format": "Selected date is not in right format. Right format is \"11. 9. 2018 8:00\" or \"11. 9. 2018\".",
     "command.event.check.title": "List of events / tasks for {0}.",

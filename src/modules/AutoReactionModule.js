@@ -16,6 +16,10 @@ class AutoReactionModule extends Module {
 
         let message = args.message;
 
+        if(message.author.bot){
+            return;
+        }
+
         Object.keys(this.settings["channels-attachments"]).forEach(channelId => {
             let emoji = this.settings["channels-attachments"][channelId];
 
@@ -43,6 +47,14 @@ class AutoReactionModule extends Module {
                 emojis.forEach(emoji => {
                     result = result.then(() => message.react(emoji));
                 });
+            }
+        });
+
+        Object.keys(this.settings["text-text"]).forEach(text => {
+            let s = this.settings["text-text"][text];
+
+            if (message.content.toLowerCase().includes(text)) {
+                message.channel.send(s);
             }
         });
     }
