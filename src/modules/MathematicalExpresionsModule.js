@@ -28,7 +28,7 @@ class MathematicalExpresionsModule extends Module {
                 message.channel.send(Translation.translate("module.math.result") + question);
             }
         }
-        catch {
+        catch (err) {
 
         }
     }
