@@ -294,5 +294,7 @@
     "builder.annoucement.edit.type.title": "Typ úpravy",
     "builder.annoucement.edit.type.help": "Zadejte typ hodnoty který chcete upravovat.",
     "builder.annoucement.edit.value.title": "Hodnota",
-    "builder.annoucement.edit.value.help": "Zadejte hodnotu typu kterou chcete upravit."
+    "builder.annoucement.edit.value.help": "Zadejte hodnotu typu kterou chcete upravit.",
+
+    "module.math.result":"Výsledek je: "
 }

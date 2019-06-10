@@ -292,6 +292,7 @@
     "builder.annoucement.edit.type.title": "Type of editing",
     "builder.annoucement.edit.type.help": "Enter type of values that you want to edit.",
     "builder.annoucement.edit.value.title": "Valei",
-    "builder.annoucement.edit.value.help": "Enter value of type that you want to edit."
+    "builder.annoucement.edit.value.help": "Enter value of type that you want to edit.",
 
+    "module.math.result":"The result is: "
 }

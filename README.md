@@ -47,3 +47,4 @@ All dependencies will be download by node/npm automaticaly.
 | Discord.js | 11.3.2 |
 | moment | 2.22.2 |
 | jsdom | 12.0.0 |
+| mathjs | 6.0.1 |
