@@ -296,5 +296,23 @@
     "builder.annoucement.edit.value.title": "Hodnota",
     "builder.annoucement.edit.value.help": "Zadejte hodnotu typu kterou chcete upravit.",
 
-    "module.math.result":"Výsledek je: "
+    "module.math.result":"🤓 Výsledek je ",
+
+    "command.weather.currentdate":"Aktuální počasí v ",
+    "command.weather.temperature":"Teplota",
+    "command.weather.condition":"Stav",
+    "command.weather.humidity":"Vlhkost",
+    "command.weather.wind":"Rychlost větru",
+    "command.weather.feelslike":"Pocitová cena",
+    "command.weather.lastchecked":"Naposledy zkontrolováno",
+    "command.weather.tommorow":"Zítřejší počasí v ",
+    "command.weather.precipitation":"Srážky",
+    "command.weather.request":"Vyžádáno od ",
+    "command.weather.error":"🛑 Zadaná lokace neexistuje"
+
+    
+
+
+
+
 }

@@ -294,5 +294,17 @@
     "builder.annoucement.edit.value.title": "Valei",
     "builder.annoucement.edit.value.help": "Enter value of type that you want to edit.",
 
-    "module.math.result":"The result is: "
+    "module.math.result":"🤓 The result is ",
+    "command.weather.currentdate":"Current weather condition in ",
+    "command.weather.temperature":"Temperature",
+    "command.weather.condition":"Condition",
+    "command.weather.humidity":"Humidity",
+    "command.weather.wind":"Speed of wind",
+    "command.weather.feelslike":"Perceived temperature",
+    "command.weather.lastchecked":"Last checked",
+    "command.weather.tommorow":"Tomorrow's weather in ",
+    "command.weather.precipitation":"Precipitation",
+    "command.weather.request":"Requested by ",
+    "command.weather.error":"🛑 The specified location does not exist"
+
 }
