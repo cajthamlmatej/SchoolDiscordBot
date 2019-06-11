@@ -256,7 +256,6 @@
 
     "module.math.result":"The result is ",
 
-
     "builder.example": "Example of usage: {0}",
     "builder.stop": "For stop, enter \"{0}\"",
     "builder.error": "Error",

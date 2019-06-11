@@ -81,7 +81,7 @@
       }
     },
     "weather":{
-      // Unit for weather command. C and F supported
+      // unit for weather command. C and F supported
       "degreeUnit": "F"
     },
     "supplementation": {
