@@ -86,6 +86,7 @@
     "commands.usage.reload": "",
     "commands.usage.stats": "",
     "commands.usage.bakalari": "<rss token>",
+    "commands.usage.weather":"<city, place>",
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",

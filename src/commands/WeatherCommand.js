@@ -24,32 +24,32 @@ class WeatherCommand extends Command {
 
     call(args, message) {
      Weather.find({search: args.join(' '), degreeType: this.unit}, (err, result) => {
-        let resultfortoday = result[0];
-        let resultfortommorow = result[0].forecast[2];
-        let currentlocation = result[0].location.name;
+        let resultForToday  = result[0];
+        let resultForTommorow = resultForToday .forecast[2];
+        let currentLocation = resultForToday .location.name;
         let degree = " °" + this.unit;
-        if(result[0] != undefined)
+        if(resultForToday  != undefined)
         {
             const weatherEmbedToday = new Discord.RichEmbed()
                 .setColor(0xbadc58)
-	            .setTitle(Translation.translate("command.weather.currentdate") + currentlocation)
-	            .setThumbnail(resultfortoday.current.imageUrl)
-                .addField(Translation.translate("command.weather.temperature"), resultfortoday.current.temperature + degree, true)
-                .addField(Translation.translate("command.weather.condition"), resultfortoday.current.skytext, true)
-	            .addField(Translation.translate("command.weather.humidity"), resultfortoday.current.humidity + "%", true)
-	            .addField(Translation.translate("command.weather.wind"), resultfortoday.current.windspeed, true)
-                .addField(Translation.translate("command.weather.feelslike"), resultfortoday.current.feelslike + degree, true)
-                .addField(Translation.translate("command.weather.lastchecked"), resultfortoday.current.observationtime, true)
-	            .setTimestamp()
-	            .setFooter(Translation.translate("command.weather.request") + message.author.name, message.author.avatarURL);
+                .setTitle(Translation.translate("command.weather.currentdate") + currentLocation)
+                .setThumbnail(resultForToday .current.imageUrl)
+                .addField(Translation.translate("command.weather.temperature"), resultForToday.current.temperature + degree, true)
+                .addField(Translation.translate("command.weather.condition"), resultForToday.current.skytext, true)
+                .addField(Translation.translate("command.weather.humidity"), resultForToday.current.humidity + "%", true)
+                .addField(Translation.translate("command.weather.wind"), resultForToday.current.windspeed, true)
+                .addField(Translation.translate("command.weather.feelslike"), resultForToday.current.feelslike + degree, true)
+                .addField(Translation.translate("command.weather.lastchecked"), resultForToday.current.observationtime, true)
+                .setTimestamp()
+                .setFooter(Translation.translate("command.weather.request") + message.author.name, message.author.avatarURL);
 
             const weatherEmbedTomorrow = new Discord.RichEmbed()
-	            .setColor(0xbadc58)
-	            .setTitle(Translation.translate("command.weather.tommorow") +  currentlocation, true)
-                .addField(Translation.translate("command.weather.temperature"), "⬆️ " + resultfortommorow .low + degree  + " | ⬇️ " +  resultfortommorow .high + degree, true)
-                .addField(Translation.translate("command.weather.condition"),resultfortommorow .skytextday,true)
-                .addField(Translation.translate("command.weather.precipitation"),resultfortommorow .precip + "%",true)
-	            .setTimestamp()
+                .setColor(0xbadc58)
+                .setTitle(Translation.translate("command.weather.tommorow") + currentLocation, true)
+                .addField(Translation.translate("command.weather.temperature"), "⬆️ " + resultForTommorow.low + degree  + " | ⬇️ " + resultForTommorow.high + degree, true)
+                .addField(Translation.translate("command.weather.condition"), resultForTommorow.skytextday,true)
+                .addField(Translation.translate("command.weather.precipitation"), resultForTommorow.precip + "%",true)
+                .setTimestamp()
                 .setFooter(Translation.translate("command.weather.request") + message.author.name, message.author.avatarURL);
 
             message.channel.send(weatherEmbedToday);

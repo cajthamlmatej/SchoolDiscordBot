@@ -88,6 +88,7 @@
     "commands.usage.stats": "",
     "commands.usage.chladkova": "",
     "commands.usage.bakalari": "<rss token>",
+    "commands.usage.weather":"<město, místo>",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
