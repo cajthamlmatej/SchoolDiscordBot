@@ -28,6 +28,7 @@ class WeatherCommand extends Command {
             let resultForTommorow = resultForToday.forecast[2];
             let currentLocation = resultForToday.location.name;
             let degree = " °" + this.unit;
+            
             if (resultForToday  != undefined)
             {
                 const weatherEmbedToday = new Discord.RichEmbed()
