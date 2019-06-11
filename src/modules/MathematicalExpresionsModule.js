@@ -24,7 +24,7 @@ class MathematicalExpresionsModule extends Module {
         try {
             let question = math.evaluate(message.content.toLowerCase());
 
-            if (question != undefined && question != message.content) {
+            if (question != undefined && question != message.content && !(question instanceof Function)) {
                 message.channel.send(Translation.translate("module.math.result") + question);
             }
         }
