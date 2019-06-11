@@ -80,6 +80,10 @@
         ]
       }
     },
+    "weather":{
+      // unit for weather command. C and F supported
+      "degreeUnit": "F"
+    },
     "supplementation": {
       // highlights for supplementation
       "highlights": [

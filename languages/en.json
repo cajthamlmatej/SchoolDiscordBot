@@ -49,6 +49,7 @@
     "commands.help.reload": "Reload bot's commands, modules and translations",
     "commands.help.stats": "Show statistics for events",
     "commands.help.bakalari": "Choose RSS token for current member",
+    "commands.help.weather": "Displays the weather overview for today and tomorrow",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek> <...>",
@@ -85,6 +86,7 @@
     "commands.usage.reload": "",
     "commands.usage.stats": "",
     "commands.usage.bakalari": "<rss token>",
+    "commands.usage.weather": "<city, place>",
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",
@@ -183,6 +185,18 @@
     "command.stats.for": "{0} events for {1}",
     "command.stats.from": "{0} events from {1}",
 
+    "command.weather.currentdate": "Current weather condition in ",
+    "command.weather.temperature": "Temperature",
+    "command.weather.condition": "Condition",
+    "command.weather.humidity": "Humidity",
+    "command.weather.wind": "Speed of wind",
+    "command.weather.feelslike": "Perceived temperature",
+    "command.weather.lastchecked": "Last checked",
+    "command.weather.tommorow": "Tomorrow's weather in ",
+    "command.weather.precipitation": "Precipitation",
+    "command.weather.request": "Requested by ",
+    "command.weather.error": "The specified location does not exist",
+
     "module.event.new-event": "New event",
     "module.event.new-task": "New task",
     "module.event.group": "Group",
@@ -240,6 +254,7 @@
     "module.eventannoucement.subject": "Subject",
     "module.eventannoucement.place": "Place",
 
+    "module.math.result": "The result is ",
 
     "builder.example": "Example of usage: {0}",
     "builder.stop": "For stop, enter \"{0}\"",
@@ -292,7 +307,5 @@
     "builder.annoucement.edit.type.title": "Type of editing",
     "builder.annoucement.edit.type.help": "Enter type of values that you want to edit.",
     "builder.annoucement.edit.value.title": "Valei",
-    "builder.annoucement.edit.value.help": "Enter value of type that you want to edit.",
-
-    "module.math.result":"The result is: "
+    "builder.annoucement.edit.value.help": "Enter value of type that you want to edit."
 }

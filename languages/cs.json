@@ -50,6 +50,7 @@
     "commands.help.stats": "Zobrazí statistiky úkolů",
     "commands.help.chladkova": "Zobrazí přísloví od paní Chládkové",
     "commands.help.bakalari": "Zvolí RSS token pro aktuálního uživatele",
+    "commands.help.weather": "Zobrazí přehled počasí pro dnešek a zítřek",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek> <...>",
@@ -87,6 +88,7 @@
     "commands.usage.stats": "",
     "commands.usage.chladkova": "",
     "commands.usage.bakalari": "<rss token>",
+    "commands.usage.weather": "<město, místo>",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
@@ -185,6 +187,18 @@
     "command.stats.for": "{0} úkolů pro {1}",
     "command.stats.from": "{0} úkolů od {1}",
 
+    "command.weather.currentdate": "Aktuální počasí v ",
+    "command.weather.temperature": "Teplota",
+    "command.weather.condition": "Stav",
+    "command.weather.humidity": "Vlhkost",
+    "command.weather.wind": "Rychlost větru",
+    "command.weather.feelslike": "Pocitová cena",
+    "command.weather.lastchecked": "Naposledy zkontrolováno",
+    "command.weather.tommorow": "Zítřejší počasí v ",
+    "command.weather.precipitation": "Srážky",
+    "command.weather.request": "Vyžádáno od ",
+    "command.weather.error": "Zadaná lokace neexistuje",
+
     "module.event.new-event": "Nová událost",
     "module.event.new-task": "Nový úkol",
     "module.event.group": "Skupina",
@@ -242,6 +256,7 @@
     "module.eventannoucement.subject": "Předmět",
     "module.eventannoucement.place": "Místo",
 
+    "module.math.result": "Výsledek je: ",
 
     "builder.example": "Ukázka použítí: {0}",
     "builder.stop": "K ukončení napište \"{0}\"",
@@ -294,7 +309,5 @@
     "builder.annoucement.edit.type.title": "Typ úpravy",
     "builder.annoucement.edit.type.help": "Zadejte typ hodnoty který chcete upravovat.",
     "builder.annoucement.edit.value.title": "Hodnota",
-    "builder.annoucement.edit.value.help": "Zadejte hodnotu typu kterou chcete upravit.",
-
-    "module.math.result":"Výsledek je: "
+    "builder.annoucement.edit.value.help": "Zadejte hodnotu typu kterou chcete upravit."
 }
