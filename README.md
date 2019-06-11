@@ -48,3 +48,4 @@ All dependencies will be download by node/npm automaticaly.
 | moment | 2.22.2 |
 | jsdom | 12.0.0 |
 | mathjs | 6.0.1 |
+| weather-js | 2.0.0 |
