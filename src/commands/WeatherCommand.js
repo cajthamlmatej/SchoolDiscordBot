@@ -25,15 +25,15 @@ class WeatherCommand extends Command {
     call(args, message) {
      Weather.find({search: args.join(' '), degreeType: this.unit}, (err, result) => {
         let resultForToday  = result[0];
-        let resultForTommorow = resultForToday .forecast[2];
-        let currentLocation = resultForToday .location.name;
+        let resultForTommorow = resultForToday.forecast[2];
+        let currentLocation = resultForToday.location.name;
         let degree = " °" + this.unit;
-        if(resultForToday  != undefined)
+        if (resultForToday  != undefined)
         {
             const weatherEmbedToday = new Discord.RichEmbed()
                 .setColor(0xbadc58)
                 .setTitle(Translation.translate("command.weather.currentdate") + currentLocation)
-                .setThumbnail(resultForToday .current.imageUrl)
+                .setThumbnail(resultForToday.current.imageUrl)
                 .addField(Translation.translate("command.weather.temperature"), resultForToday.current.temperature + degree, true)
                 .addField(Translation.translate("command.weather.condition"), resultForToday.current.skytext, true)
                 .addField(Translation.translate("command.weather.humidity"), resultForToday.current.humidity + "%", true)
@@ -55,7 +55,7 @@ class WeatherCommand extends Command {
             message.channel.send(weatherEmbedToday);
             message.channel.send(weatherEmbedTomorrow);
         }
-        else{
+        else {
             message.channel.send(Translation.translate("🛑 | " + "command.weather.error"));
         }
     });
