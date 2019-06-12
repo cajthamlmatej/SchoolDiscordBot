@@ -1,8 +1,8 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("./Translation");
 const DirectCommand = require("./commands/DirectCommand");
-const moment = require('moment');
-const fs = require('fs');
+const moment = require("moment");
+const fs = require("fs");
 
 class SchoolDiscordBot {
     constructor() {
@@ -46,7 +46,7 @@ class SchoolDiscordBot {
 
             Object.values(this.modules).forEach(module => {
                 module.event("message", { message: message });
-            })
+            });
         });
 
         this.client.on("messageReactionAdd", (reactionMessage, user) => {
@@ -55,7 +55,7 @@ class SchoolDiscordBot {
 
             Object.values(this.modules).forEach(module => {
                 module.event("messageReactionAdd", { reactionMessage: reactionMessage, user: user });
-            })
+            });
         });
 
         this.client.on("messageReactionRemove", (reactionMessage, user) => {
@@ -64,7 +64,7 @@ class SchoolDiscordBot {
 
             Object.values(this.modules).forEach(module => {
                 module.event("messageReactionRemove", { reactionMessage: reactionMessage, user: user });
-            })
+            });
         });
 
         console.log("Login bot to discord.");
@@ -74,22 +74,22 @@ class SchoolDiscordBot {
     loadConfig() {
         console.log("Opening and reading settings file.");
 
-        let fileContents = fs.readFileSync('./settings/settings.json');
+        const fileContents = fs.readFileSync("./settings/settings.json");
 
         this.settings = JSON.parse(fileContents);
     }
 
     loadCommands() {
-        let commands = {};
+        const commands = {};
         console.log("Reading directory with commands.");
-        let commandFiles = fs.readdirSync("./src/commands");
+        const commandFiles = fs.readdirSync("./src/commands");
 
         commandFiles.forEach(file => {
             if (file == "Command.js" || file == "SubsCommand.js" || file == "DirectCommand.js")
                 return;
 
-            let commandFile = require("./commands/" + file);
-            let command = new commandFile();
+            const commandFile = require("./commands/" + file);
+            const command = new commandFile();
 
             commands[command.getName()] = command;
         });
@@ -98,16 +98,16 @@ class SchoolDiscordBot {
     }
 
     loadModules() {
-        let modules = {};
+        const modules = {};
         console.log("Reading directory with modules.");
-        let moduleFiles = fs.readdirSync("./src/modules");
+        const moduleFiles = fs.readdirSync("./src/modules");
 
         moduleFiles.forEach(file => {
             if (file == "Module.js")
                 return;
 
-            let moduleFile = require("./modules/" + file);
-            let module = new moduleFile();
+            const moduleFile = require("./modules/" + file);
+            const module = new moduleFile();
 
             modules[module.getName()] = module;
         });
@@ -122,7 +122,7 @@ class SchoolDiscordBot {
 
         console.log("Loading modules.");
         Object.values(this.modules).forEach(module => {
-            let moduleName = module.getName();
+            const moduleName = module.getName();
 
             if (this.settings.modules.disabled.includes(moduleName)) {
                 console.log("Module " + moduleName + " is disabled, not loading it.");
@@ -137,7 +137,7 @@ class SchoolDiscordBot {
 
         console.log("Loading commands.");
         Object.values(this.commands).forEach(command => {
-            let commandName = command.getName();
+            const commandName = command.getName();
             if (this.settings.commands.disabled.includes(commandName)) {
                 console.log("Command " + commandName + " is disabled, not loading it.");
                 delete this.commands[commandName];
@@ -147,9 +147,9 @@ class SchoolDiscordBot {
             let canBeEnabled = true;
 
             command.getDependencies().forEach(module => {
-                if (this.modules[module] == undefined) {
+                if (this.modules[module] == undefined) 
                     canBeEnabled = false;
-                }
+                
             });
 
             if (!canBeEnabled) {
@@ -174,7 +174,7 @@ class SchoolDiscordBot {
             .setColor(0xbadc58);
 
         console.log("Bot " + this.name + " started.");
-        let adminChannel = this.client.channels.find(c => c.id == this.settings.channels.admin);
+        const adminChannel = this.client.channels.find(c => c.id == this.settings.channels.admin);
         adminChannel.send(embed);
     }
 
@@ -182,15 +182,15 @@ class SchoolDiscordBot {
         if (!message.content.startsWith(this.settings.prefix))
             return;
 
-        let authorId = message.author.id;
+        const authorId = message.author.id;
 
         if (authorId == this.client.user.id)
             return;
 
-        let args = message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/gm);
+        const args = message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/gm);
 
-        let cmd = args[0].replace(this.settings.prefix, "").toLowerCase();
-        let command = this.commands[this.commandsAliases[cmd]];
+        const cmd = args[0].replace(this.settings.prefix, "").toLowerCase();
+        const command = this.commands[this.commandsAliases[cmd]];
 
         if(!(command instanceof DirectCommand))
             if (message.guild == null || message.guild.id != this.settings.guild)
@@ -218,9 +218,8 @@ class SchoolDiscordBot {
         this.client.guilds.get(this.settings.guild).fetchMember(message.author)
             .then(member => {
                 args.shift();
-                for (var i = 0; i < args.length; i++) {
-                    args[i] = args[i].replace(/"/gm, '').replace(/'/gm, '');
-                }
+                for (let i = 0; i < args.length; i++) 
+                    args[i] = args[i].replace(/"/gm, "").replace(/'/gm, "");
 
                 let havePermissions = false;
                 command.getRoles(args[0]).forEach(r => {
@@ -231,9 +230,8 @@ class SchoolDiscordBot {
                 if (!havePermissions)
                     return;
 
-
                 console.log("User " + message.author.username + " used command " + message.content + ".");
-                let deleteMessage = command.call(args, message);
+                const deleteMessage = command.call(args, message);
 
                 if (deleteMessage)
                     message.delete();

@@ -21,7 +21,7 @@ class AnnouncementCommand extends SubsCommand {
                 "arguments": 1,
                 "roles": ["admin"]
             }
-        }
+        };
     }
 
     getName() {
@@ -49,28 +49,28 @@ class AnnouncementCommand extends SubsCommand {
     }
 
     callEdit(args, message) {
-        let channel = message.channel;
+        const channel = message.channel;
         const types = ["title", "annoucement"];
 
-        let builder = new CommandBuilder("annoucement.edit", message.author, channel, [
+        const builder = new CommandBuilder("annoucement.edit", message.author, channel, [
             {
                 "name": "name",
                 "example": ["2392018", "botchanges"],
                 "validate": (content) => {
-                    if (!this.annoucementModule.annoucementExist(content)) {
+                    if (!this.annoucementModule.annoucementExist(content)) 
                         return "command.annoucement.dont-exist";
-                    } else {
+                    else 
                         return true;
-                    }
+                    
                 }
             },
             {
                 "name": "type",
                 "example": types,
                 "validate": (content) => {
-                    if (!types.includes(content)) {
+                    if (!types.includes(content)) 
                         return ["command.annoucement.edit-type-not-valid", types.join(", ")];
-                    } else
+                    else
                         return true;
                 }
             },
@@ -92,8 +92,8 @@ class AnnouncementCommand extends SubsCommand {
     }
 
     callDelete(args, message) {
-        let channel = message.channel;
-        let name = args[0];
+        const channel = message.channel;
+        const name = args[0];
 
         if (!this.annoucementModule.annoucementExist(name)) {
             this.sendError(channel, "command.annoucement.dont-exist");
@@ -106,18 +106,18 @@ class AnnouncementCommand extends SubsCommand {
     }
 
     callCreate(args, message) {
-        let channel = message.channel;
+        const channel = message.channel;
 
-        let builder = new CommandBuilder("annoucement.create", message.author, channel, [
+        const builder = new CommandBuilder("annoucement.create", message.author, channel, [
             {
                 "name": "name",
                 "example": ["2392018", "botchanges"],
                 "validate": (content) => {
-                    if (this.annoucementModule.annoucementExist(content)) {
+                    if (this.annoucementModule.annoucementExist(content)) 
                         return "command.annoucement.already-exists";
-                    } else {
+                    else 
                         return true;
-                    }
+                    
                 }
             },
             {

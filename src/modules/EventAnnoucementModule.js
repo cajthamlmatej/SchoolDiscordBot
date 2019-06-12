@@ -1,8 +1,8 @@
 const Module = require("./Module");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
-const fs = require('fs');
-const moment = require('moment');
+const fs = require("fs");
+const moment = require("moment");
 
 class EventAnnoucementModule extends Module {
 
@@ -16,16 +16,16 @@ class EventAnnoucementModule extends Module {
         this.checkTime = bot.settings.modules.eventannoucement.checkTime;
         this.tempFile = "./temp/eventannoucement.json";
 
-        if (this.eventModule != undefined) {
+        if (this.eventModule != undefined) 
             setInterval(() => this.tick(), 5000);
-        }
+        
     }
 
     tick() {
-        let time = moment();
-        let checkTime = moment(this.checkTime[moment().isoWeekday()-1], "HH:mm");
+        const time = moment();
+        const checkTime = moment(this.checkTime[moment().isoWeekday()-1], "HH:mm");
 
-        let diff = time.diff(checkTime, "seconds");
+        const diff = time.diff(checkTime, "seconds");
 
         if (diff < 0 || this.getLastCheck() == time.format("D. M. YYYY"))
             return;
@@ -35,20 +35,18 @@ class EventAnnoucementModule extends Module {
         // tomorrow
         time.add(1, "days");
 
-        let events = this.eventModule.getEvents();
+        const events = this.eventModule.getEvents();
         Object.keys(events).forEach(eventName => {
-            let event = events[eventName];
-            let eventValues = event.values;
+            const event = events[eventName];
+            const eventValues = event.values;
 
             let dateEnd = moment(eventValues.end, "D. M. YYYY");
-            if (!dateEnd.isValid()) {
+            if (!dateEnd.isValid()) 
                 dateEnd = moment(eventValues.end, "D. M. YYYY HH:mm");
-            }
 
             let dateStart = moment(eventValues.start, "D. M. YYYY");
-            if (!dateStart.isValid()) {
+            if (!dateStart.isValid()) 
                 dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
-            }
 
             let name = "";
             if (dateEnd.date() == time.date() && dateEnd.month() == time.month() && eventValues.end != eventValues.start)
@@ -61,7 +59,7 @@ class EventAnnoucementModule extends Module {
             if (name == "")
                 return;
 
-            let embed = new Discord.RichEmbed()
+            const embed = new Discord.RichEmbed()
                 .setTitle(Translation.translate("module.eventannoucement.title." + name))
                 .setColor(0xbadc58)
                 .setDescription(Translation.translate("module.eventannoucement.description." + name, time.format("D. M. YYYY"), eventName))
@@ -75,8 +73,8 @@ class EventAnnoucementModule extends Module {
     }
 
     getLastCheck() {
-        let fileContents = fs.readFileSync(this.tempFile, "utf8");
-        let json = JSON.parse(fileContents);
+        const fileContents = fs.readFileSync(this.tempFile, "utf8");
+        const json = JSON.parse(fileContents);
 
         return json.lastcheck;
     }

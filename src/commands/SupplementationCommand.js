@@ -1,6 +1,6 @@
 const SubsCommand = require("./SubsCommand");
-const Discord = require('discord.js');
-const moment = require('moment');
+const Discord = require("discord.js");
+const moment = require("moment");
 const Translation = require("../Translation");
 
 class SupplementationCommand extends SubsCommand {
@@ -15,7 +15,7 @@ class SupplementationCommand extends SubsCommand {
                 "arguments": 0,
                 "roles": ["member"]
             },
-        }
+        };
     }
 
     getName() {
@@ -39,14 +39,14 @@ class SupplementationCommand extends SubsCommand {
     }
 
     callRefresh(args, message) {
-        let channel = message.channel;
+        const channel = message.channel;
         this.supplementationModule.refresh(channel);
 
         return false;
     }
 
     callLastcheck(args, message) {
-        let channel = message.channel;
+        const channel = message.channel;
 
         const embed = new Discord.RichEmbed()
             .setTitle("👓 | " + Translation.translate("command.supplementation.lastcheck.title"))

@@ -1,7 +1,7 @@
 const Module = require("./Module");
-const fs = require('fs');
-const Discord = require('discord.js');
-const moment = require('moment');
+const fs = require("fs");
+const Discord = require("discord.js");
+const moment = require("moment");
 const Translation = require("../Translation");
 
 class MuteModule extends Module {
@@ -22,13 +22,13 @@ class MuteModule extends Module {
     }
 
     tick() {
-        let mutes = this.getMutes();
-        let toRemove = [];
+        const mutes = this.getMutes();
+        const toRemove = [];
 
         Object.keys(mutes).forEach(userId => {
-            let mute = mutes[userId];
-            let current = moment().format("X");
-            let expiration = mute.expiration;
+            const mute = mutes[userId];
+            const current = moment().format("X");
+            const expiration = mute.expiration;
 
             if (current > expiration) {
                 toRemove.push(userId);
@@ -41,15 +41,15 @@ class MuteModule extends Module {
     }
 
     printRoleList(channel) {
-        let mutes = this.getMutes();
+        const mutes = this.getMutes();
 
-        let embed = new Discord.RichEmbed()
+        const embed = new Discord.RichEmbed()
             .setTitle("🔇 | " + Translation.translate("module.mute.list"))
             .setColor(0xbadc58);
 
         let result = Promise.resolve();
         Object.keys(mutes).forEach(userId => {
-            let mute = mutes[userId];
+            const mute = mutes[userId];
             result = result.then(() => {
                 this.guild.fetchMember(userId).then(member => {
                     embed.addField(member.nickname, Translation.translate("module.mute.reason") + ": " + mute.reason + "\n" + Translation.translate("module.mute.expiration") + ": " + moment(mute.expiration, "X").format("D. M. Y H:m:s"));
@@ -58,20 +58,19 @@ class MuteModule extends Module {
         });
 
         result.then(() => {
-            if (embed.fields.length <= 0) {
+            if (embed.fields.length <= 0) 
                 embed.setDescription("Žádný člen není umlčený.");
-            }
 
             channel.send(embed);
         });
     }
 
     addMute(member, lengthInMinutes, reason) {
-        let mutes = fs.readFileSync(this.tempFile, "utf8");
-        let mutesObject = JSON.parse(mutes);
+        const mutes = fs.readFileSync(this.tempFile, "utf8");
+        const mutesObject = JSON.parse(mutes);
 
-        let expiration = moment().add(lengthInMinutes, "m").format("X");
-        let roles = [];
+        const expiration = moment().add(lengthInMinutes, "m").format("X");
+        const roles = [];
 
         member.roles.forEach(role => {
             roles.push(role.id);
@@ -92,29 +91,29 @@ class MuteModule extends Module {
     }
 
     removeMute(member) {
-        let mute = this.getMute(member.user.id);
+        const mute = this.getMute(member.user.id);
         this.setMuteRoles(member.user.id, mute.roles);
 
         this.removeMuteFromFile(member.user.id);
     }
 
     getMutes() {
-        let mutes = fs.readFileSync(this.tempFile, "utf8");
-        let mutesObject = JSON.parse(mutes);
+        const mutes = fs.readFileSync(this.tempFile, "utf8");
+        const mutesObject = JSON.parse(mutes);
 
         return mutesObject["mutes"];
     }
 
     getMute(userId) {
-        let mutes = fs.readFileSync(this.tempFile, "utf8");
-        let mutesObject = JSON.parse(mutes);
+        const mutes = fs.readFileSync(this.tempFile, "utf8");
+        const mutesObject = JSON.parse(mutes);
 
         return mutesObject["mutes"][userId];
     }
 
     removeMuteFromFile(userId) {
-        let mutes = fs.readFileSync(this.tempFile, "utf8");
-        let mutesObject = JSON.parse(mutes);
+        const mutes = fs.readFileSync(this.tempFile, "utf8");
+        const mutesObject = JSON.parse(mutes);
 
         delete mutesObject["mutes"][userId];
 
@@ -122,8 +121,8 @@ class MuteModule extends Module {
     }
 
     removeMutesFromFile(ms) {
-        let mutes = fs.readFileSync(this.tempFile, "utf8");
-        let mutesObject = JSON.parse(mutes);
+        const mutes = fs.readFileSync(this.tempFile, "utf8");
+        const mutesObject = JSON.parse(mutes);
 
         ms.forEach(mute => {
             delete mutesObject["mutes"][mute];
@@ -133,8 +132,8 @@ class MuteModule extends Module {
     }
 
     isMuted(member) {
-        let mutes = fs.readFileSync(this.tempFile, "utf8");
-        let mutesObject = JSON.parse(mutes);
+        const mutes = fs.readFileSync(this.tempFile, "utf8");
+        const mutesObject = JSON.parse(mutes);
 
         return mutesObject["mutes"][member.user.id] != undefined;
     }

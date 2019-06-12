@@ -1,12 +1,12 @@
-const fs = require('fs');
+const fs = require("fs");
 
 class Translation {
 
-    static translate(path, ...args) {
+    static translate(path, ... args) {
         if (this.languageFile == undefined) {
             console.log("Language file is not specified in Translation yet, doing so now...");
             try {
-                let languageFileContents = fs.readFileSync("languages/" + this.language + ".json", "utf8");
+                const languageFileContents = fs.readFileSync("languages/" + this.language + ".json", "utf8");
                 this.languageFile = JSON.parse(languageFileContents);
                 console.log("Language file loaded.");
             } catch (e) {
@@ -38,8 +38,8 @@ class Translation {
     }
 
     static languageList() {
-        let languages = [];
-        let languagesFiles = fs.readdirSync("languages", "utf8");
+        const languages = [];
+        const languagesFiles = fs.readdirSync("languages", "utf8");
 
         languagesFiles.forEach(file => {
             languages.push(file.replace(".json", ""));

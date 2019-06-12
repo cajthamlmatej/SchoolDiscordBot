@@ -1,5 +1,5 @@
 const Command = require("./Command");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
 
 class SayCommand extends Command {
@@ -17,18 +17,17 @@ class SayCommand extends Command {
     }
 
     call(args, message) {
-        let channel = message.channel;
+        const channel = message.channel;
         if (args.length != 2) {
             this.sendHelp(channel);
             return;
         }
 
-        let channelName = args[0];
-        let msg = args[1];
+        const channelName = args[0];
+        const msg = args[1];
 
-        let channelMatch = /<#([0-9]+)>/g.exec(channelName)[1];
-        let channelSay = this.client.channels.find(ch => ch.id == channelMatch);
-
+        const channelMatch = /<#([0-9]+)>/g.exec(channelName)[1];
+        const channelSay = this.client.channels.find(ch => ch.id == channelMatch);
 
         const embed = new Discord.RichEmbed()
             .setTitle("🤐 | " + Translation.translate("command.notice.notice"))

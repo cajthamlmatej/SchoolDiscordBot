@@ -1,8 +1,8 @@
 const Module = require("./Module");
-const https = require('https');
-const fs = require('fs');
+const https = require("https");
+const fs = require("fs");
 const jsdom = require("jsdom");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const { JSDOM } = jsdom;
 
 class BakalariModule extends Module {
@@ -31,16 +31,16 @@ class BakalariModule extends Module {
     }
 
     checkBakalariRSS(values, main, member) {
-        let webOptions = {
+        const webOptions = {
             host: values.domain,
             path: values.url
-        }
-        let request = https.request(webOptions, (res) => {
-            let data = '';
-            res.on('data', function (chunk) {
+        };
+        const request = https.request(webOptions, (res) => {
+            let data = "";
+            res.on("data", function (chunk) {
                 data += chunk;
             });
-            res.on('end', () => {
+            res.on("end", () => {
                 const dom = new JSDOM(data, {
                     url: this.settings.fullUrl,
                     referrer: this.settings.fullUrl,
@@ -49,38 +49,34 @@ class BakalariModule extends Module {
                     storageQuota: 10000000
                 });
 
-                let file = this.readFile();
+                const file = this.readFile();
 
                 dom.window.document.querySelectorAll("item").forEach(children => {
                     let title = children.querySelectorAll("title")[0].textContent.trim();
                     let description = children.querySelectorAll("description")[0].textContent.trim();
-                    let guid = children.querySelectorAll("guid")[0].textContent.trim();
-                    let isTask = title.includes("ÚKOL");
-                    let subject = title.split(":")[0];
+                    const guid = children.querySelectorAll("guid")[0].textContent.trim();
+                    const isTask = title.includes("ÚKOL");
+                    const subject = title.split(":")[0];
 
                     if (file[guid] != undefined)
                         return;
 
                     description = description.replace(/<br \/>/g, "\n");
 
-                    if (!isTask) {
+                    if (!isTask) 
                         if (title.includes("zapsána známka:") || description.includes("zapsána známka:")) {
                             title = title.split(":")[0] + title.split(":")[1];
 
-                            if (this.settings.ignored.includes(subject)) {
+                            if (this.settings.ignored.includes(subject)) 
                                 return;
-                            }
 
-                            if (!main && !this.settings.separated.includes(subject)) {
+                            if (!main && !this.settings.separated.includes(subject)) 
                                 return;
-                            }
 
                             description = description.split(":")[0] + description.split(":")[1];
                         }
-                    }
 
                     file[guid] = { title: title, description: description, isTask: isTask };
-
 
                     this.channel.send(this.generateEmbed(isTask, title, description, this.settings.separated.includes(subject) ? values.group : undefined));
                 });
@@ -88,7 +84,7 @@ class BakalariModule extends Module {
                 this.saveFile(file);
             });
         });
-        request.on('error', function (e) {
+        request.on("error", function (e) {
             console.log(e.message);
         });
         request.end();
@@ -113,8 +109,8 @@ class BakalariModule extends Module {
     }
 
     readFile() {
-        let file = fs.readFileSync(this.tempFile, "utf8");
-        let fileContents = JSON.parse(file);
+        const file = fs.readFileSync(this.tempFile, "utf8");
+        const fileContents = JSON.parse(file);
 
         return fileContents;
     }

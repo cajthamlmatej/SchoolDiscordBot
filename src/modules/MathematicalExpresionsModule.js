@@ -16,20 +16,20 @@ class MathematicalExpresionsModule extends Module {
         if (name != "message")
             return;
 
-        let message = args.message;
+        const message = args.message;
 
         if (message.author.bot)
             return;
 
         try {
-            let question = math.evaluate(message.content.toLowerCase());
+            const question = math.evaluate(message.content.toLowerCase());
 
-            if (question != undefined && question != message.content && !(question instanceof Function)) {
+            if (question != undefined && question != message.content && !(question instanceof Function)) 
                 message.channel.send(Translation.translate("module.math.result") + question);
-            }
+            
         }
         catch (err) {
-
+            // We dont want to do anything
         }
     }
 }

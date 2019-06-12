@@ -1,18 +1,18 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
 
 class Command {
 
     init(client) {
-        throw new Error('You have to implement the method init!');
+        throw new Error("You have to implement the method init!");
     }
 
     getName() {
-        throw new Error('You have to implement the method getName!');
+        throw new Error("You have to implement the method getName!");
     }
 
     getGroup() {
-        throw new Error('You have to implement the method getGroup!');
+        throw new Error("You have to implement the method getGroup!");
     }
 
     getAliases() {
@@ -48,21 +48,20 @@ class Command {
         channel.send(embed);
     }
 
-    sendError(channel, reason, ...additional) {
+    sendError(channel, reason, ... additional) {
         if (additional == undefined)
             additional = "";
 
-
         const embed = new Discord.RichEmbed()
             .setTitle("❗ | " + Translation.translate("command.error"))
-            .setDescription(Translation.translate(reason, ...additional))
+            .setDescription(Translation.translate(reason, ... additional))
             .setColor(0xeb4d4b);
 
         channel.send(embed);
     }
 
     call(args, message) {
-        throw new Error('You have to implement the method call!');
+        throw new Error("You have to implement the method call!");
     }
 
 }

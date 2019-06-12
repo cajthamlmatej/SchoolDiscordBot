@@ -1,8 +1,7 @@
-
 const Command = require("./Command");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
-const moment = require('moment');
+const moment = require("moment");
 
 class StatusCommand extends Command {
 
@@ -29,8 +28,8 @@ class StatusCommand extends Command {
     }
 
     call(args, message) {
-        let channel = message.channel;
-        let embed = new Discord.RichEmbed()
+        const channel = message.channel;
+        const embed = new Discord.RichEmbed()
             .setTitle("📊 | " + Translation.translate("command.status.stats"))
             .setColor(0xbadc58)
             .addField(Translation.translate("command.status.commands"), Translation.translate("command.status.number-of-commands", Object.keys(this.commands).length, Object.keys(this.disabledCommands).length), true)

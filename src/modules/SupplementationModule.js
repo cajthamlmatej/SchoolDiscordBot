@@ -1,11 +1,11 @@
 const Module = require("./Module");
-const http = require('https');
+const http = require("https");
 const Translation = require("../Translation");
-const fs = require('fs');
+const fs = require("fs");
 const jsdom = require("jsdom");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const { JSDOM } = jsdom;
-const moment = require('moment');
+const moment = require("moment");
 
 class SupplementationModule extends Module {
 
@@ -15,10 +15,10 @@ class SupplementationModule extends Module {
 
     init(bot) {
         this.webOptions = {
-            host: 'ssps.cz',
-            path: '/student/',
-            protocol: 'https:'
-        }
+            host: "ssps.cz",
+            path: "/student/",
+            protocol: "https:"
+        };
 
         this.client = bot.client;
         this.supplementationConfig = bot.settings.modules.supplementation;
@@ -30,12 +30,12 @@ class SupplementationModule extends Module {
 
     tick() {
         this.lastCheck = moment();
-        let request = http.request(this.webOptions, (res) => {
-            let data = '';
-            res.on('data', function (chunk) {
+        const request = http.request(this.webOptions, (res) => {
+            let data = "";
+            res.on("data", function (chunk) {
                 data += chunk;
             });
-            res.on('end', () => {
+            res.on("end", () => {
                 const dom = new JSDOM(data, {
                     url: "https://ssps.cz/student/",
                     referrer: "https://ssps.cz/student/",
@@ -44,51 +44,50 @@ class SupplementationModule extends Module {
                     storageQuota: 10000000
                 });
 
-                let days = {};
-                let htmlDays = dom.window.document.querySelectorAll(".nav.nav-tabs")[0].children;
+                const days = {};
+                const htmlDays = dom.window.document.querySelectorAll(".nav.nav-tabs")[0].children;
                 Object.values(htmlDays).forEach(htmlDay => {
-                    let link = htmlDay.querySelectorAll("a")[0];
+                    const link = htmlDay.querySelectorAll("a")[0];
                     days[link.textContent.trim()] = link.getAttribute("href");
                 });
 
-                let supples = {}
+                const supples = {};
                 Object.keys(days).forEach(dayName => {
-                    let htmlObject = dom.window.document.querySelectorAll(days[dayName])[0];
+                    const htmlObject = dom.window.document.querySelectorAll(days[dayName])[0];
 
                     supples[dayName] = [];
 
                     Object.values(htmlObject.querySelectorAll(".message-content")[0].children).forEach(item => {
-                        if (item.children.length > 1) {
+                        if (item.children.length > 1) 
                             Object.values(item.children).forEach(subItem => {
                                 supples[dayName].push(subItem.textContent.trim());
                             });
-                        } else {
+                        else 
                             supples[dayName].push(item.textContent.trim());
-                        }
+                        
                     });
                 });
 
+                const supplementations = fs.readFileSync("./temp/supplementations.json", "utf8");
+                const supplementationsObject = JSON.parse(supplementations);
 
-                let supplementations = fs.readFileSync("./temp/supplementations.json", "utf8");
-                let supplementationsObject = JSON.parse(supplementations);
-
-                let channel = this.client.channels.find(c => c.id == this.channel);
+                const channel = this.client.channels.find(c => c.id == this.channel);
 
                 let count = 0;
                 Object.keys(supples).forEach(dayName => {
                     count++;
 
                     let containsHighlight = false;
-                    let supplesList = supples[dayName];
+                    const supplesList = supples[dayName];
                     let suppleString = "";
 
                     supplesList.forEach(supple => {
                         let includes = false;
 
                         this.supplementationConfig.highlights.forEach(highlight => {
-                            if (supple.includes(highlight)) {
-                                includes = true
-                            }
+                            if (supple.includes(highlight)) 
+                                includes = true;
+                            
                         });
 
                         if (includes) {
@@ -99,12 +98,12 @@ class SupplementationModule extends Module {
                         suppleString += supple + "\n";
                     });
 
-                    suppleString = suppleString.replace(/^\s+|\s+$/g, '');
+                    suppleString = suppleString.replace(/^\s+|\s+$/g, "");
 
                     Object.keys(this.supplementationConfig.replace).forEach(from => {
-                        let regex = new RegExp(from, "g");
+                        const regex = new RegExp(from, "g");
 
-                        suppleString = suppleString.replace(regex, this.supplementationConfig.replace[from])
+                        suppleString = suppleString.replace(regex, this.supplementationConfig.replace[from]);
                     });
 
                     const embed = new Discord.RichEmbed()
@@ -113,41 +112,40 @@ class SupplementationModule extends Module {
                         .setColor(0xbadc58);
 
                     if (supplementationsObject["supplementations"][dayName] != undefined) {
-                        let messageId = supplementationsObject["supplementations"][dayName];
+                        const messageId = supplementationsObject["supplementations"][dayName];
 
                         channel.fetchMessage(messageId).then(message => {
-                            if (message.embeds[0].description !== suppleString) {
+                            if (message.embeds[0].description !== suppleString) 
                                 message.edit(containsHighlight == true ? "@everyone" : "", embed).catch(error => {
                                     console.log("Error while editing supplementation message. Message is probably above 2048 char limit.");
                                 });
-                            }
+                            
                         });
-                    } else {
+                    } else 
                         channel.send(containsHighlight == true ? "@everyone" : "", embed).then(message => {
                             supplementationsObject["supplementations"][dayName] = message.id;
 
-                            if (Object.keys(supples).length == count) {
+                            if (Object.keys(supples).length == count) 
                                 fs.writeFileSync("./temp/supplementations.json", JSON.stringify(supplementationsObject));
-                            }
+                            
                         }).catch(error => {
                             console.log("Error while editing supplementation message. Message is probably above 2048 char limit.");
                         });
-                    }
+                    
                 });
 
                 // pins
                 Object.keys(supplementationsObject["supplementations"]).forEach(day => {
-                    let messageId = supplementationsObject["supplementations"][day];
+                    const messageId = supplementationsObject["supplementations"][day];
 
                     channel.fetchMessage(messageId).then(message => {
                         if (supples[day] != undefined) {
-                            if (!message.pinned) {
+                            if (!message.pinned) 
                                 message.pin();
-                            }
+                            
                         } else {
-                            if (message.pinned) {
+                            if (message.pinned) 
                                 message.unpin();
-                            }
 
                             console.log("Removing supplementation for day " + day);
 
@@ -158,7 +156,7 @@ class SupplementationModule extends Module {
                 });
             });
         });
-        request.on('error', function (e) {
+        request.on("error", function (e) {
             console.log(e.message);
         });
         request.end();
@@ -179,7 +177,7 @@ class SupplementationModule extends Module {
         if (name != "message")
             return;
 
-        let message = args.message;
+        const message = args.message;
 
         if (message.channel.id != this.channel)
             return;

@@ -14,33 +14,32 @@ class AutoReactionModule extends Module {
         if (name != "message")
             return;
 
-        let message = args.message;
+        const message = args.message;
 
-        if(message.author.bot){
+        if(message.author.bot) 
             return;
-        }
 
         Object.keys(this.settings["channels-attachments"]).forEach(channelId => {
-            let emoji = this.settings["channels-attachments"][channelId];
+            const emoji = this.settings["channels-attachments"][channelId];
 
             if (message.attachments.array().length < 1)
                 return;
 
-            if (message.channel.id == channelId) {
+            if (message.channel.id == channelId) 
                 message.react(emoji);
-            }
+            
         });
 
         Object.keys(this.settings.text).forEach(text => {
-            let reactEmoji = this.settings.text[text];
+            const reactEmoji = this.settings.text[text];
 
-            if (message.content.toLowerCase().includes(text)) {
+            if (message.content.toLowerCase().includes(text)) 
                 message.react(reactEmoji);
-            }
+            
         });
 
         Object.keys(this.settings["series-text"]).forEach(text => {
-            let emojis = this.settings["series-text"][text];
+            const emojis = this.settings["series-text"][text];
 
             if (message.content.toLowerCase().includes(text)) {
                 let result = Promise.resolve();
@@ -51,11 +50,11 @@ class AutoReactionModule extends Module {
         });
 
         Object.keys(this.settings["text-text"]).forEach(text => {
-            let s = this.settings["text-text"][text];
+            const s = this.settings["text-text"][text];
 
-            if (message.content.toLowerCase().includes(text)) {
+            if (message.content.toLowerCase().includes(text)) 
                 message.channel.send(s);
-            }
+            
         });
     }
 
