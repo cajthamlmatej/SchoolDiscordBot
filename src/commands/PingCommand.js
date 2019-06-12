@@ -10,7 +10,7 @@ class PingCommand extends Command {
     }
 
     getGroup() {
-        return "main";
+        return "utilities";
     }
 
     getRoles() {
