@@ -302,7 +302,7 @@ class ChladkovaCommand extends Command {
     }
 
     getGroup() {
-        return "main";
+        return "fun";
     }
 
     getRoles() {

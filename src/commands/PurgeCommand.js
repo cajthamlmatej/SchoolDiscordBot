@@ -10,7 +10,7 @@ class PurgeCommand extends Command {
     }
 
     getGroup() {
-        return "manage";
+        return "utilities";
     }
 
     getRoles() {

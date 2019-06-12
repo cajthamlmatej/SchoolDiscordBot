@@ -13,6 +13,8 @@
     "commands.group.school": "🎓 School commands",
     "commands.group.vote": "🎟 Commands for voting",
     "commands.group.manage": "💾 Commands for managing server",
+    "commands.group.utilities": "👑 Utilities",
+    "commands.group.fun": "😆 Fun",
 
     "commands.help.help": "Show this help",
     "commands.help.event": "Command for managing events",
