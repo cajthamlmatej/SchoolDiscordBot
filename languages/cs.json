@@ -13,8 +13,8 @@
     "commands.group.school": "🎓 Školní příkazy",
     "commands.group.vote": "🎟 Příkazy na hlasování",
     "commands.group.manage": "💾 Příkazy na správu serveru",
-    "roles.group.utilities": "👑 Utilities",
-    "roles.group.fun": "😆 Fun",
+    "commands.group.utilities": "👑 Utility",
+    "commands.group.fun": "😆 Zábava",
 
     "commands.help.help": "Zobrazí tuto nápovědu",
     "commands.help.event": "Příkaz pro správu událostí",
