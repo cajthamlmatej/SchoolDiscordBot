@@ -10,7 +10,7 @@ class WeatherCommand extends Command {
     }
 
     getGroup() {
-        return "main";
+        return "utilities";
     }
 
     getRoles() {
