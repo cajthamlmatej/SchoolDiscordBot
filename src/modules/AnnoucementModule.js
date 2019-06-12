@@ -1,6 +1,6 @@
 const Module = require("./Module");
-const Discord = require('discord.js');
-const fs = require('fs');
+const Discord = require("discord.js");
+const fs = require("fs");
 const Translation = require("../Translation");
 
 class AnnoucementModule extends Module {
@@ -23,7 +23,7 @@ class AnnoucementModule extends Module {
     }
 
     addAnnoucement(member, name, title, annoucement) {
-        let annoucements = this.readFile();
+        const annoucements = this.readFile();
 
         this.channel.send(this.generateAnnoucementEmbed({ annoucement: annoucement, title: title }, member)).then(message => {
             annoucements[name] = { message: message.id, title: title, annoucement: annoucement };
@@ -41,13 +41,13 @@ class AnnoucementModule extends Module {
     }
 
     deleteAnnoucement(channel, name) {
-        let annoucement = this.getAnnoucement(name);
+        const annoucement = this.getAnnoucement(name);
 
         this.channel.fetchMessage(annoucement.message).then(message => {
             message.delete();
         }).catch(error => { });
 
-        let annoucements = this.readFile();
+        const annoucements = this.readFile();
         delete annoucements[name];
 
         this.saveFile(annoucements);
@@ -61,21 +61,21 @@ class AnnoucementModule extends Module {
     }
 
     editAnnoucement(member, name, type, value) {
-        let annoucement = this.getAnnoucement(name);
+        const annoucement = this.getAnnoucement(name);
         annoucement[type] = value;
 
         this.channel.fetchMessage(annoucement.message).then(message => {
             message.edit(this.generateAnnoucementEmbed(annoucement, member));
         }).catch(error => { });
 
-        let annoucements = this.readFile();
+        const annoucements = this.readFile();
         annoucements[name] = annoucement;
 
         this.saveFile(annoucements);
     }
 
     listAnnoucements(member) {
-        let annoucements = this.readFile();
+        const annoucements = this.readFile();
 
         let list = "";
 
@@ -83,9 +83,8 @@ class AnnoucementModule extends Module {
             list += "\n**" + annoucementName + "** - " + annoucements[annoucementName].title;
         });
 
-        if (list == "") {
+        if (list == "") 
             list = Translation.translate("module.annoucement.no-annoucement-exists");
-        }
 
         const embed = new Discord.RichEmbed()
             .setTitle("📢 | " + Translation.translate("module.annoucement.list"))
@@ -96,14 +95,14 @@ class AnnoucementModule extends Module {
     }
 
     readFile() {
-        let file = fs.readFileSync(this.tempFile, "utf8");
-        let annoucements = JSON.parse(file)["annoucements"];
+        const file = fs.readFileSync(this.tempFile, "utf8");
+        const annoucements = JSON.parse(file)["annoucements"];
 
         return annoucements;
     }
 
     saveFile(annoucements) {
-        let object = { annoucements: annoucements };
+        const object = { annoucements: annoucements };
         fs.writeFileSync(this.tempFile, JSON.stringify(object));
     }
 

@@ -1,6 +1,5 @@
-
 const Command = require("./Command");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
 
 class StatsCommand extends Command {
@@ -24,77 +23,75 @@ class StatsCommand extends Command {
     }
 
     call(args, message) {
-        let channel = message.channel;
+        const channel = message.channel;
 
         this.next(null, this.eventChannel).then(currentMessages => {
             this.next(null, this.eventArchiveChannel).then(currentMessagesArchive => {
-                let messages = currentMessages.concat(currentMessagesArchive);
-                let subjects = {};
-                let authors = {};
-                let groups = {};
+                const messages = currentMessages.concat(currentMessagesArchive);
+                const subjects = {};
+                const authors = {};
+                const groups = {};
 
                 messages.forEach(message => {
-                    if (message.embeds.length > 0) {
+                    if (message.embeds.length > 0) 
                         message.embeds.forEach(embed => {
                             embed.fields.forEach(field => {
-                                if (field.name == "Předmět" || field.name == "Subject") {
+                                if (field.name == "Předmět" || field.name == "Subject") 
                                     if (subjects[field.value] == undefined) {
                                         subjects[field.value] = 1;
                                     } else {
                                         subjects[field.value] += 1;
                                     }
-                                } else if (field.name == "Skupina" || field.name == "Group") {
+                                else if (field.name == "Skupina" || field.name == "Group") 
                                     if (groups[field.value] == undefined) {
                                         groups[field.value] = 1;
                                     } else {
                                         groups[field.value] += 1;
                                     }
-                                }
 
                             });
 
-                            if (embed.footer != null && embed.footer.text != "null") {
+                            if (embed.footer != null && embed.footer.text != "null") 
                                 if (authors[embed.footer.text] == undefined) {
                                     authors[embed.footer.text] = 1;
                                 } else {
                                     authors[embed.footer.text] += 1;
                                 }
-                            } else {
-                                if (authors["?"] == undefined) {
-                                    authors["?"] = 1;
-                                } else {
-                                    authors["?"] += 1;
-                                }
-                            }
+                            else 
+                            if (authors["?"] == undefined) 
+                                authors["?"] = 1;
+                            else 
+                                authors["?"] += 1;
+                            
                         });
-                    }
+                    
                 });
 
-                let sortedSubjectsKeys = Object.keys(subjects).sort(function (a, b) { return subjects[a] - subjects[b] }).reverse();
+                const sortedSubjectsKeys = Object.keys(subjects).sort(function (a, b) { return subjects[a] - subjects[b]; }).reverse();
 
                 let subjectsStr = "";
 
                 sortedSubjectsKeys.forEach(name => {
-                    subjectsStr += Translation.translate("command.stats.for", "**" + (subjects[name] + "").padStart(2, '0') + "**", "**" + name + "**") + "\n";
+                    subjectsStr += Translation.translate("command.stats.for", "**" + (subjects[name] + "").padStart(2, "0") + "**", "**" + name + "**") + "\n";
                 });
 
-                let sortedAuthorsKeys = Object.keys(authors).sort(function (a, b) { return authors[a] - authors[b] }).reverse();
+                const sortedAuthorsKeys = Object.keys(authors).sort(function (a, b) { return authors[a] - authors[b]; }).reverse();
 
                 let authorsStr = "";
 
                 sortedAuthorsKeys.forEach(name => {
-                    authorsStr += Translation.translate("command.stats.from", "**" + (authors[name] + "").padStart(2, '0') + "**", "*" + name + "*") + "\n";
+                    authorsStr += Translation.translate("command.stats.from", "**" + (authors[name] + "").padStart(2, "0") + "**", "*" + name + "*") + "\n";
                 });
 
-                let sortedGroupsKeys = Object.keys(groups).sort(function (a, b) { return groups[a] - groups[b] }).reverse();
+                const sortedGroupsKeys = Object.keys(groups).sort(function (a, b) { return groups[a] - groups[b]; }).reverse();
 
                 let groupsStr = "";
 
                 sortedGroupsKeys.forEach(name => {
-                    groupsStr += Translation.translate("command.stats.for", "**" + (groups[name] + "").padStart(2, '0') + "**", name) + "\n";
+                    groupsStr += Translation.translate("command.stats.for", "**" + (groups[name] + "").padStart(2, "0") + "**", name) + "\n";
                 });
 
-                let embed = new Discord.RichEmbed()
+                const embed = new Discord.RichEmbed()
                     .setTitle("📜 | " + Translation.translate("command.stats.title"))
                     .addField(Translation.translate("command.stats.number-of-events"), "**" + messages.size + "**", false)
                     .addField(Translation.translate("command.stats.authors"), authorsStr, true)
@@ -110,22 +107,21 @@ class StatsCommand extends Command {
     }
 
     getMessages(last, channel) {
-        if (last != null) {
+        if (last != null) 
             return channel.fetchMessages({ limit: 100, before: last });
-        } else {
+        else 
             return channel.fetchMessages({ limit: 100 });
-        }
+        
     }
 
     next(messages, channel) {
-        var self = this;
-        var promise = null;
+        const self = this;
+        let promise = null;
 
-        if (messages == null) {
+        if (messages == null) 
             promise = this.getMessages(null, channel);
-        } else {
+        else 
             promise = this.getMessages(messages.last().id, channel);
-        }
 
         return promise.then(currentMessages => {
             if (currentMessages.size == 100) {

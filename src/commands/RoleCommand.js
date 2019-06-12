@@ -12,7 +12,7 @@ class RoleCommand extends SubsCommand {
                 "arguments": 0,
                 "roles": ["member"]
             }
-        }
+        };
     }
 
     getName() {
@@ -32,28 +32,27 @@ class RoleCommand extends SubsCommand {
     }
 
     callList(args, message) {
-        let channel = message.channel;
+        const channel = message.channel;
         this.roleModule.printRoleList(channel);
     }
 
     callUpdate(args, message) {
-        let channel = message.channel;
+        const channel = message.channel;
         if (args.length != 1) {
             this.sendHelp(channel);
             return;
         }
 
-        let role = args[0];
+        const role = args[0];
 
         if (!this.roleModule.isRole(role)) {
-            this.sendError(channel, "command.role.role-not-found")
+            this.sendError(channel, "command.role.role-not-found");
 
             return;
         }
 
         this.roleModule.updateRole(message.author, role, channel);
     }
-
 
 }
 

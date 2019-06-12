@@ -1,6 +1,5 @@
-
 const SubsCommand = require("./SubsCommand");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
 
 class LanguageCommand extends SubsCommand {
@@ -15,7 +14,7 @@ class LanguageCommand extends SubsCommand {
                 "arguments": 0,
                 "roles": ["admin"]
             }
-        }
+        };
     }
 
     getName() {
@@ -35,8 +34,8 @@ class LanguageCommand extends SubsCommand {
     }
 
     callList(args, message) {
-        let channel = message.channel;
-        let languages = Translation.languageList();
+        const channel = message.channel;
+        const languages = Translation.languageList();
 
         let list = "";
 
@@ -49,7 +48,7 @@ class LanguageCommand extends SubsCommand {
         const embed = new Discord.RichEmbed()
             .setTitle("🗣️ | " + Translation.translate("command.language.language-list"))
             .setDescription(list)
-            .setColor(0xbadc58)
+            .setColor(0xbadc58);
 
         message.author.createDM().then(dm => dm.send(embed)).catch(error => { });
 
@@ -57,8 +56,8 @@ class LanguageCommand extends SubsCommand {
     }
 
     callChange(args, message) {
-        let channel = message.channel;
-        let language = args[0];
+        const channel = message.channel;
+        const language = args[0];
 
         if (!Translation.languageExists(language)) {
             this.sendError(channel, "command.language.language-not-found");

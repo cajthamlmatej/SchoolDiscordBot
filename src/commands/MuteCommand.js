@@ -1,5 +1,5 @@
 const SubsCommand = require("./SubsCommand");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
 
 class MuteCommand extends SubsCommand {
@@ -18,7 +18,7 @@ class MuteCommand extends SubsCommand {
                 "arguments": 0,
                 "roles": ["moderator"]
             }
-        }
+        };
     }
 
     getName() {
@@ -39,28 +39,28 @@ class MuteCommand extends SubsCommand {
     }
 
     callList(args, message) {
-        let channel = message.channel;
+        const channel = message.channel;
 
         this.muteModule.printRoleList(channel);
     }
 
     callAdd(args, message) {
-        let channel = message.channel;
+        const channel = message.channel;
 
-        let valid = [];
+        const valid = [];
         channel.guild.members.forEach(member => {
-            let name = member.nickname == undefined ? member.user.username : member.nickname;
+            const name = member.nickname == undefined ? member.user.username : member.nickname;
 
-            if (name.toLowerCase().includes(args[0].toLowerCase())) {
+            if (name.toLowerCase().includes(args[0].toLowerCase())) 
                 valid.push(member);
-            }
+            
         });
 
         if (valid.length > 1) {
             let list = "";
 
             valid.forEach(member => {
-                let name = member.nickname == undefined ? member.user.username : member.nickname;
+                const name = member.nickname == undefined ? member.user.username : member.nickname;
                 list += "\n**" + name + "**";
             });
 
@@ -69,7 +69,7 @@ class MuteCommand extends SubsCommand {
             const embed = new Discord.RichEmbed()
                 .setTitle("🔇 | " + Translation.translate("command.mute.user-list.title"))
                 .setDescription(Translation.translate("command.mute.user-list") + ".\n" + list)
-                .setColor(0xe67e22)
+                .setColor(0xe67e22);
 
             channel.send(embed);
             return;
@@ -78,13 +78,13 @@ class MuteCommand extends SubsCommand {
             return;
         }
 
-        let minutes = args[1];
+        const minutes = args[1];
         if (minutes <= 0 || minutes >= this.maxMuteLength) {
             this.sendError(channel, "command.mute.wrong-mute-length", this.maxMuteLength);
             return;
         }
 
-        let member = valid[0];
+        const member = valid[0];
 
         if (member.user.id == message.author.id) {
             this.sendError(channel, "command.mute.self");
@@ -101,7 +101,7 @@ class MuteCommand extends SubsCommand {
             return;
         }
 
-        let reason = args[2];
+        const reason = args[2];
 
         const embedDM = new Discord.RichEmbed()
             .setTitle("🔇 | " + Translation.translate("command.mute.user-muted-self.title"))
@@ -129,26 +129,26 @@ class MuteCommand extends SubsCommand {
     }
 
     callRemove(args, message) {
-        let channel = message.channel;
+        const channel = message.channel;
         if (args.length != 1) {
             this.sendHelp(channel);
             return;
         }
 
-        let valid = [];
+        const valid = [];
         channel.guild.members.forEach(member => {
-            let name = member.nickname == undefined ? member.user.username : member.nickname;
+            const name = member.nickname == undefined ? member.user.username : member.nickname;
 
-            if (name.toLowerCase().includes(args[0].toLowerCase())) {
+            if (name.toLowerCase().includes(args[0].toLowerCase())) 
                 valid.push(member);
-            }
+            
         });
 
         if (valid.length > 1) {
             let list = "";
 
             valid.forEach(member => {
-                let name = member.nickname == undefined ? member.user.username : member.nickname;
+                const name = member.nickname == undefined ? member.user.username : member.nickname;
                 list += "\n**" + name + "**";
             });
 
@@ -157,7 +157,7 @@ class MuteCommand extends SubsCommand {
             const embed = new Discord.RichEmbed()
                 .setTitle("🔇 | " + Translation.translate("command.mute.user-list.title"))
                 .setDescription(Translation.translate("command.mute.user-list") + ".\n" + list)
-                .setColor(0xe67e22)
+                .setColor(0xe67e22);
 
             channel.send(embed);
             return;
@@ -166,7 +166,7 @@ class MuteCommand extends SubsCommand {
             return;
         }
 
-        let member = valid[0];
+        const member = valid[0];
 
         if (!this.muteModule.isMuted(member)) {
             this.sendError(channel, "command.mute.not-muted");

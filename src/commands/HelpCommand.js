@@ -1,6 +1,5 @@
-
 const Command = require("./Command");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
 
 class HelpCommand extends Command {
@@ -25,43 +24,41 @@ class HelpCommand extends Command {
     }
 
     call(args, message) {
-        let channel = message.channel;
-        let embed = new Discord.RichEmbed()
+        const channel = message.channel;
+        const embed = new Discord.RichEmbed()
             .setTitle("💼 | " + Translation.translate("command.help.title"))
             .setColor(0xbadc58);
 
-        let groups = {};
+        const groups = {};
 
         Object.values(this.commands).forEach(command => {
-            let group = command.getGroup();
-            if (groups[group] == undefined) {
+            const group = command.getGroup();
+            if (groups[group] == undefined) 
                 groups[group] = [];
-            }
 
             groups[group].push(command);
         });
 
         let help = Translation.translate("command.help.can-execute") + "\n\n";
 
-        let member = message.member;
-        let memberRoles = member.roles;
+        const member = message.member;
+        const memberRoles = member.roles;
 
         Object.keys(groups).forEach(groupName => {
-            let commands = groups[groupName];
+            const commands = groups[groupName];
             let commandsString = "";
 
             commands.forEach(command => {
-                let canUse = false
+                let canUse = false;
 
                 command.allCommandsRoles().forEach(role => {
-                    if (memberRoles.find(r => r.id == this.roles[role]) != undefined) {
+                    if (memberRoles.find(r => r.id == this.roles[role]) != undefined) 
                         canUse = true;
-                    }
+                    
                 });
 
-                if (!canUse) {
-                    return
-                }
+                if (!canUse) 
+                    return;
 
                 let aliasesText = "";
 
@@ -70,12 +67,12 @@ class HelpCommand extends Command {
                         aliasesText += alias + ", ";
                     });
 
-                    aliasesText = aliasesText.replace(/, +$/, '')
+                    aliasesText = aliasesText.replace(/, +$/, "");
                 }
 
-                let cmdName = command.getName();
+                const cmdName = command.getName();
 
-                let name = "**" + this.prefix + command.getUsage() + (aliasesText != "" ? " [" + aliasesText + "]" : "") + "**";
+                const name = "**" + this.prefix + command.getUsage() + (aliasesText != "" ? " [" + aliasesText + "]" : "") + "**";
                 commandsString += name + " - " + Translation.translate("commands.help." + cmdName) + " \n";
             });
 
@@ -85,7 +82,6 @@ class HelpCommand extends Command {
                 help += "\n";
             }
         });
-
 
         embed.setDescription(help);
 

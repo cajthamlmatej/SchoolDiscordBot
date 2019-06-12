@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("./Translation");
 
 class CommandBuilder {
@@ -23,31 +23,30 @@ class CommandBuilder {
     }
 
     collect(message) {
-        let messageContent = message.content;
+        const messageContent = message.content;
 
-        if (messageContent.toLowerCase() == this.stopWord.toLowerCase()) {
+        if (messageContent.toLowerCase() == this.stopWord.toLowerCase()) 
             this.collector.stop("forced");
-        } else {
-            let field = this.build.fields[this.field]
-            let passed = field.validate(messageContent, this.values);
+        else {
+            const field = this.build.fields[this.field];
+            const passed = field.validate(messageContent, this.values);
 
             if (passed === true) {
-                if (field.value != undefined) {
+                if (field.value != undefined) 
                     this.values[field.name] = field.value(messageContent, this.values, message.attachments.array());
-                } else {
+                else 
                     this.values[field.name] = messageContent;
-                }
 
-                if (this.build.fields[this.field + 1] == undefined) {
+                if (this.build.fields[this.field + 1] == undefined) 
                     this.collector.stop("fieldEnd");
-                } else {
+                else {
                     this.field += 1;
 
                     this.message.edit(this.generateHelpEmbed(this.build.fields[this.field]));
                 }
-            } else {
+            } else 
                 this.message.edit(this.generateHelpEmbed(this.build.fields[this.field], passed));
-            }
+            
             message.delete();
         }
     }
@@ -56,11 +55,11 @@ class CommandBuilder {
         this.message.edit(this.generateEndEmbed(reason));
 
         switch (reason) {
-            case "forced":
-                break;
-            case "fieldEnd":
-                this.endFunction(this.values);
-                break;
+        case "forced":
+            break;
+        case "fieldEnd":
+            this.endFunction(this.values);
+            break;
         }
     }
 
@@ -68,15 +67,15 @@ class CommandBuilder {
         let description = "";
 
         switch (reason) {
-            case "forced":
-                description += Translation.translate("builder.end");
-                break;
-            case "fieldEnd":
-                description += Translation.translate("builder." + this.name + ".ok");
-                break;
+        case "forced":
+            description += Translation.translate("builder.end");
+            break;
+        case "fieldEnd":
+            description += Translation.translate("builder." + this.name + ".ok");
+            break;
         }
 
-        let embed = new Discord.RichEmbed()
+        const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("builder." + this.name + ".title"))
             .setDescription(description)
             .setColor(0xbadc58)
@@ -86,14 +85,14 @@ class CommandBuilder {
     }
 
     generateHelpEmbed(field, error) {
-        let fieldName = field.name;
+        const fieldName = field.name;
         let description = "";
 
         description += Translation.translate("builder." + this.name + "." + fieldName + ".title") + "\n\n";
         description += Translation.translate("builder." + this.name + "." + fieldName + ".help") + "\n";
 
         if (Array.isArray(field.example)) {
-            let list = [];
+            const list = [];
 
             field.example.forEach(example => {
                 list.push("`" + example + "`");
@@ -105,7 +104,7 @@ class CommandBuilder {
 
         description += "\n\n" + Translation.translate("builder.stop", this.stopWord);
 
-        let embed = new Discord.RichEmbed()
+        const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("builder." + this.name + ".title"))
             .setDescription(description)
             .setColor(0xbadc58)

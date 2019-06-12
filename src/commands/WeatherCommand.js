@@ -1,7 +1,7 @@
 const Command = require("./Command");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
-const Weather = require('weather-js');
+const Weather = require("weather-js");
 
 class WeatherCommand extends Command {
 
@@ -23,11 +23,11 @@ class WeatherCommand extends Command {
     }
 
     call(args, message) {
-        Weather.find({search: args.join(' '), degreeType: this.unit}, (err, result) => {
-            let resultForToday  = result[0];
-            let resultForTommorow = resultForToday.forecast[2];
-            let currentLocation = resultForToday.location.name;
-            let degree = " °" + this.unit;
+        Weather.find({search: args.join(" "), degreeType: this.unit}, (err, result) => {
+            const resultForToday  = result[0];
+            const resultForTommorow = resultForToday.forecast[2];
+            const currentLocation = resultForToday.location.name;
+            const degree = " °" + this.unit;
             
             if (resultForToday  != undefined)
             {
@@ -56,9 +56,9 @@ class WeatherCommand extends Command {
                 message.channel.send(weatherEmbedToday);
                 message.channel.send(weatherEmbedTomorrow);
             }
-            else {
+            else 
                 message.channel.send(Translation.translate("🛑 | " + "command.weather.error"));
-            }
+            
         });
     }
 }

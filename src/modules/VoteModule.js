@@ -1,7 +1,7 @@
 const Module = require("./Module");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
-const fs = require('fs');
+const fs = require("fs");
 
 class VoteModule extends Module {
 
@@ -17,34 +17,33 @@ class VoteModule extends Module {
     }
 
     exists(name) {
-        let votes = fs.readFileSync(this.tempFile, "utf8");
-        let votesObject = JSON.parse(votes);
+        const votes = fs.readFileSync(this.tempFile, "utf8");
+        const votesObject = JSON.parse(votes);
 
         return votesObject["votes"][name] != undefined;
     }
 
     getVote(name) {
-        let votes = fs.readFileSync(this.tempFile, "utf8");
-        let votesObject = JSON.parse(votes);
+        const votes = fs.readFileSync(this.tempFile, "utf8");
+        const votesObject = JSON.parse(votes);
 
         return votesObject["votes"][name];
     }
 
     getVotes() {
-        let votes = fs.readFileSync(this.tempFile, "utf8");
-        let votesObject = JSON.parse(votes);
+        const votes = fs.readFileSync(this.tempFile, "utf8");
+        const votesObject = JSON.parse(votes);
 
         return votesObject["votes"];
     }
 
     printVoteList(user) {
         let list = "";
-        let votes = this.getVotes();
+        const votes = this.getVotes();
 
         Object.keys(votes).forEach(voteKey => {
             list += "\n**" + voteKey + "**";
         });
-
 
         if (list == "")
             list = Translation.translate("module.vote.no-vote-exists");
@@ -54,17 +53,17 @@ class VoteModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.vote.list"))
             .setDescription(list)
-            .setColor(0xbadc58)
+            .setColor(0xbadc58);
 
         user.createDM().then(dm => dm.send(embed)).catch(console.error);
     }
 
     deleteVote(name, channel) {
-        let votes = fs.readFileSync(this.tempFile, "utf8");
-        let votesObject = JSON.parse(votes);
-        let vote = votesObject["votes"][name];
+        const votes = fs.readFileSync(this.tempFile, "utf8");
+        const votesObject = JSON.parse(votes);
+        const vote = votesObject["votes"][name];
 
-        let voteChannel = this.client.channels.find(c => c.id == vote["channel"]);
+        const voteChannel = this.client.channels.find(c => c.id == vote["channel"]);
         voteChannel.fetchMessage(vote["id"]).then(message => {
             message.delete();
             delete votesObject["votes"][name];
@@ -83,8 +82,8 @@ class VoteModule extends Module {
     }
 
     startVote(type, name, description, options, channel) {
-        let votes = fs.readFileSync(this.tempFile, "utf8");
-        let votesObject = JSON.parse(votes);
+        const votes = fs.readFileSync(this.tempFile, "utf8");
+        const votesObject = JSON.parse(votes);
 
         let optionsString = "";
 
@@ -92,7 +91,7 @@ class VoteModule extends Module {
             optionsString += optionEmoji + " " + Translation.translate("module.vote.for") + " **" + options[optionEmoji] + "**\n";
         });
 
-        let embed = new Discord.RichEmbed()
+        const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.vote.new"))
             .setDescription(description + "\n\n" + Translation.translate("module.vote.vote") + ": \n" + optionsString)
             .setColor(0xbadc58);
@@ -117,11 +116,11 @@ class VoteModule extends Module {
     }
 
     endVote(name) {
-        let vote = this.getVote(name);
-        let voteMessageId = vote["id"];
-        let channel = this.client.channels.find(c => c.id == vote["channel"]);
+        const vote = this.getVote(name);
+        const voteMessageId = vote["id"];
+        const channel = this.client.channels.find(c => c.id == vote["channel"]);
         channel.fetchMessage(voteMessageId).then(message => {
-            let reactions = message.reactions;
+            const reactions = message.reactions;
             let reactionCount = 0;
 
             reactions.forEach(reaction => {
@@ -132,43 +131,43 @@ class VoteModule extends Module {
             });
 
             let votesString = "";
-            let weight = 100 / reactionCount;
+            const weight = 100 / reactionCount;
 
-            let votes = {};
+            const votes = {};
 
             reactions.forEach(reaction => {
                 if (vote["options"][reaction.emoji] == undefined)
                     return;
 
-                let count = reaction.count - 1;
+                const count = reaction.count - 1;
 
                 votes[reaction.emoji] = count;
 
                 votesString += "`" + (count) + " " + Translation.translate("module.vote.votes") + " (" + this.addZero(((count) * weight)) + "%)` " + reaction.emoji + " " + vote["options"][reaction.emoji] + "\n";
             });
 
-            let sortedVotes = Object.keys(votes).sort(function (a, b) { return votes[b] - votes[a]; });
-            let winners = [];
+            const sortedVotes = Object.keys(votes).sort(function (a, b) { return votes[b] - votes[a]; });
+            const winners = [];
             winners.push(sortedVotes[0]);
 
             sortedVotes.forEach(vote => {
-                if (votes[winners[0]] === votes[vote] && vote != winners[0]) {
+                if (votes[winners[0]] === votes[vote] && vote != winners[0]) 
                     winners.push(vote);
-                }
+                
             });
 
             let winningChoice = "";
 
-            if (winners.length === 1) {
+            if (winners.length === 1) 
                 winningChoice = Translation.translate("module.vote.option-won") + " **" + winners[0] + " " + vote["options"][winners[0]] + "**";
-            } else {
+            else {
                 let choiceString = "";
 
                 winners.forEach(winner => {
                     choiceString += winner + " " + vote["options"][winner];
-                    if (winners[winners.length - 1] != winner) {
+                    if (winners[winners.length - 1] != winner) 
                         choiceString += ", ";
-                    }
+                    
                 });
 
                 winningChoice = Translation.translate("module.vote.options-won") + " **" + choiceString + "**";
@@ -188,11 +187,10 @@ class VoteModule extends Module {
     }
 
     addZero(i) {
-        if (i < 10) {
+        if (i < 10) 
             return "00" + i;
-        } else if (i < 100) {
+        else if (i < 100) 
             return "0" + i;
-        }
 
         return i;
     }

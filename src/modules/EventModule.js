@@ -1,8 +1,8 @@
 const Module = require("./Module");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
-const fs = require('fs');
-const moment = require('moment');
+const fs = require("fs");
+const moment = require("moment");
 
 class EventModule extends Module {
 
@@ -23,19 +23,19 @@ class EventModule extends Module {
     }
 
     tick() {
-        let events = this.getEvents();
-        let toRemove = [];
+        const events = this.getEvents();
+        const toRemove = [];
 
         Object.keys(events).forEach(name => {
-            let data = events[name];
-            let messageId = data.message;
-            let end = data.values.end;
-            let todayDate = moment();
-            let eventDate = moment(end, "D. M. YYYY");
+            const data = events[name];
+            const messageId = data.message;
+            const end = data.values.end;
+            const todayDate = moment();
+            const eventDate = moment(end, "D. M. YYYY");
 
             if (todayDate.diff(eventDate, "days") >= this.daysToArchive) {
                 this.channel.fetchMessage(messageId).then(message => {
-                    let embed = new Discord.RichEmbed(message.embeds[0]);
+                    const embed = new Discord.RichEmbed(message.embeds[0]);
 
                     this.archiveChannel.send(embed);
                     message.delete();
@@ -49,7 +49,7 @@ class EventModule extends Module {
     }
 
     addEvent(name, type, start, end, role, place, subject, description, author, attachments) {
-        let values = {
+        const values = {
             type: type,
             start: start,
             end: end,
@@ -69,13 +69,13 @@ class EventModule extends Module {
     }
 
     editEvent(name, type, value) {
-        let events = fs.readFileSync(this.tempFile, "utf8");
-        let eventsObject = JSON.parse(events);
+        const events = fs.readFileSync(this.tempFile, "utf8");
+        const eventsObject = JSON.parse(events);
 
-        let event = eventsObject["events"][name];
-        let values = event.values;
+        const event = eventsObject["events"][name];
+        const values = event.values;
 
-        if(type != "name"){
+        if(type != "name") {
             values[type] = value;
 
             if(type == "start" || type == "end" && values["end"] == values["start"]) {
@@ -93,9 +93,9 @@ class EventModule extends Module {
         fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
 
         this.channel.fetchMessage(event.message).then(message => {
-            if(values["author"] == undefined){
+            if(values["author"] == undefined) 
                 values["author"] = "164388362369761281"; // cant happend when creating new events, currently some dont have value author.
-            }
+            
             this.channel.guild.fetchMember(values["author"]).then(author => {
                 message.edit({
                     embed: this.generateEmbed(values, author)
@@ -105,7 +105,7 @@ class EventModule extends Module {
     }
 
     generateEmbed(values, author) {
-        let embed = new Discord.RichEmbed()
+        const embed = new Discord.RichEmbed()
             .setTitle("🕜 | " + ((values.type == "event") ? Translation.translate("module.event.new-event") : Translation.translate("module.event.new-task")))
             .setDescription(values.description)
             .setColor(0xbadc58);
@@ -126,14 +126,14 @@ class EventModule extends Module {
 
         embed.addField(dateTitle, date, true);
         embed.addField(Translation.translate("module.event.place"), values.place);
-        embed.setFooter(author.nickname, author.user.avatarURL)
+        embed.setFooter(author.nickname, author.user.avatarURL);
 
         return embed;
     }
 
     addEventToFile(messageId, name, values) {
-        let events = fs.readFileSync(this.tempFile, "utf8");
-        let eventsObject = JSON.parse(events);
+        const events = fs.readFileSync(this.tempFile, "utf8");
+        const eventsObject = JSON.parse(events);
 
         eventsObject["events"][name] = { message: messageId, values: values };
 
@@ -141,8 +141,8 @@ class EventModule extends Module {
     }
 
     deleteEvent(name) {
-        let events = fs.readFileSync(this.tempFile, "utf8");
-        let eventsObject = JSON.parse(events);
+        const events = fs.readFileSync(this.tempFile, "utf8");
+        const eventsObject = JSON.parse(events);
 
         this.channel.fetchMessage(eventsObject["events"][name].message).then(message => {
             message.delete();
@@ -154,8 +154,8 @@ class EventModule extends Module {
     }
 
     removeEventFromFile(event) {
-        let events = fs.readFileSync(this.tempFile, "utf8");
-        let eventsObject = JSON.parse(events);
+        const events = fs.readFileSync(this.tempFile, "utf8");
+        const eventsObject = JSON.parse(events);
 
         delete eventsObject["events"][event];
 
@@ -163,8 +163,8 @@ class EventModule extends Module {
     }
 
     getEvents() {
-        let events = fs.readFileSync(this.tempFile, "utf8");
-        let eventsObject = JSON.parse(events);
+        const events = fs.readFileSync(this.tempFile, "utf8");
+        const eventsObject = JSON.parse(events);
 
         return eventsObject["events"];
     }
@@ -182,15 +182,15 @@ class EventModule extends Module {
     }
 
     exists(name) {
-        let events = fs.readFileSync(this.tempFile, "utf8");
-        let eventsObject = JSON.parse(events);
+        const events = fs.readFileSync(this.tempFile, "utf8");
+        const eventsObject = JSON.parse(events);
 
         return eventsObject["events"][name] != undefined;
     }
 
     printEventList(user) {
         let list = "";
-        let events = this.getEvents();
+        const events = this.getEvents();
 
         Object.keys(events).forEach(eventName => {
             list += "\n**" + eventName + "**";
@@ -204,23 +204,22 @@ class EventModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.event.list"))
             .setDescription(list)
-            .setColor(0xbadc58)
+            .setColor(0xbadc58);
 
         user.createDM().then(dm => dm.send(embed)).catch(console.error);
     }
 
-    getEventThatStartsInEnteredDay(dateMoment){
-        let startsEvents = [];
+    getEventThatStartsInEnteredDay(dateMoment) {
+        const startsEvents = [];
 
-        let events = this.getEvents();
+        const events = this.getEvents();
         Object.keys(events).forEach(eventName => {
-            let event = events[eventName];
-            let eventValues = event.values;
+            const event = events[eventName];
+            const eventValues = event.values;
 
             let dateStart = moment(eventValues.start, "D. M. YYYY");
-            if (!dateStart.isValid()) {
+            if (!dateStart.isValid()) 
                 dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
-            }
 
             if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
                 return;
@@ -236,18 +235,17 @@ class EventModule extends Module {
         return startsEvents;
     }
 
-    getEventThatEndsInEnteredDay(dateMoment){
-        let endsEvents = [];
+    getEventThatEndsInEnteredDay(dateMoment) {
+        const endsEvents = [];
 
-        let events = this.getEvents();
+        const events = this.getEvents();
         Object.keys(events).forEach(eventName => {
-            let event = events[eventName];
-            let eventValues = event.values;
+            const event = events[eventName];
+            const eventValues = event.values;
 
             let dateEnd = moment(eventValues.end, "D. M. YYYY");
-            if (!dateEnd.isValid()) {
+            if (!dateEnd.isValid()) 
                 dateEnd = moment(eventValues.end, "D. M. YYYY HH:mm");
-            }
 
             if (!(dateMoment.date() == dateEnd.date() && dateMoment.month() == dateEnd.month() && dateMoment.year() == dateEnd.year()))
                 return;
@@ -263,18 +261,17 @@ class EventModule extends Module {
         return endsEvents;
     }
 
-    getEventThatGoingInEnteredDay(dateMoment){
-        let goingEvents = [];
+    getEventThatGoingInEnteredDay(dateMoment) {
+        const goingEvents = [];
 
-        let events = this.getEvents();
+        const events = this.getEvents();
         Object.keys(events).forEach(eventName => {
-            let event = events[eventName];
-            let eventValues = event.values;
+            const event = events[eventName];
+            const eventValues = event.values;
 
             let dateStart = moment(eventValues.start, "D. M. YYYY");
-            if (!dateStart.isValid()) {
+            if (!dateStart.isValid()) 
                 dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
-            }
 
             if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
                 return;
@@ -291,11 +288,11 @@ class EventModule extends Module {
         
     }
 
-    getEventNames(){
-        let events = fs.readFileSync(this.tempFile, "utf8");
-        let eventsObject = JSON.parse(events)["events"];
+    getEventNames() {
+        const events = fs.readFileSync(this.tempFile, "utf8");
+        const eventsObject = JSON.parse(events)["events"];
     
-        let eventNames = [];
+        const eventNames = [];
 
         Object.keys(eventsObject).forEach(eventName => {
             eventNames.push(eventName); 

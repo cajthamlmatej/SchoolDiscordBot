@@ -1,6 +1,5 @@
-
 const Command = require("./Command");
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const Translation = require("../Translation");
 
 const proverbs = `Letíš jako pšíkanec z nosu.
@@ -315,8 +314,8 @@ class ChladkovaCommand extends Command {
     }
 
     call(args, message) {
-        let channel = message.channel;
-        let embed = new Discord.RichEmbed()
+        const channel = message.channel;
+        const embed = new Discord.RichEmbed()
             .setTitle("👩‍🏫 | Paní Ing. Elena Chládková říká:")
             .setDescription(this.proverbs[Math.floor(Math.random() * this.proverbs.length)])
             .setColor(0xfd79a8);

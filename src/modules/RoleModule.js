@@ -1,6 +1,6 @@
 const Module = require("./Module");
-const Discord = require('discord.js');
-const fs = require('fs');
+const Discord = require("discord.js");
+const fs = require("fs");
 const Translation = require("../Translation");
 
 class RoleModule extends Module {
@@ -27,25 +27,25 @@ class RoleModule extends Module {
 
     event(name, args) {
         switch (name) {
-            case "messageReactionAdd":
-                this.reactionAdd(args.reactionMessage, args.user);
-                break;
-            case "messageReactionRemove":
-                this.reactionRemove(args.reactionMessage, args.user);
-                break;
+        case "messageReactionAdd":
+            this.reactionAdd(args.reactionMessage, args.user);
+            break;
+        case "messageReactionRemove":
+            this.reactionRemove(args.reactionMessage, args.user);
+            break;
         }
     }
 
     reactionAdd(reactionMessage, user) {
-        let message = reactionMessage.message;
+        const message = reactionMessage.message;
         if (message.channel.id != this.channel.id)
             return;
 
         if (message.mentions.roles.array().length == 0)
             return;
 
-        let role = message.mentions.roles.first();
-        let guild = message.guild;
+        const role = message.mentions.roles.first();
+        const guild = message.guild;
 
         guild.fetchMember(user).then(member => {
             if (!this.canModifyRoles(member))
@@ -59,15 +59,15 @@ class RoleModule extends Module {
     }
 
     reactionRemove(reactionMessage, user) {
-        let message = reactionMessage.message;
+        const message = reactionMessage.message;
         if (message.channel.id != this.channel.id)
             return;
 
         if (message.mentions.roles.array().length == 0)
             return;
 
-        let role = message.mentions.roles.first();
-        let guild = message.guild;
+        const role = message.mentions.roles.first();
+        const guild = message.guild;
 
         guild.fetchMember(user).then(member => {
             if (!this.canModifyRoles(member))
@@ -81,13 +81,13 @@ class RoleModule extends Module {
     }
 
     updateRole(user, role, channel) {
-        let guild = channel.guild;
+        const guild = channel.guild;
 
         guild.fetchMember(user).then(member => {
             if (!this.canModifyRoles(member))
                 return;
 
-            let roleId = this.roles.assignable[role];
+            const roleId = this.roles.assignable[role];
 
             if (member.roles.find(r => r.id == roleId) != undefined) {
                 member.removeRole(roleId).catch(console.error);
@@ -112,25 +112,24 @@ class RoleModule extends Module {
     }
 
     printRoleList(channel) {
-        let roles = channel.guild.roles;
+        const roles = channel.guild.roles;
 
-        let embed = new Discord.RichEmbed()
+        const embed = new Discord.RichEmbed()
             .setTitle("👥 | " + Translation.translate("module.role.list"))
             .setColor(0xbadc58);
 
         Object.keys(this.roles).forEach(groupName => {
             let list = "";
 
-            let groupRoles = this.roles[groupName];
+            const groupRoles = this.roles[groupName];
 
             Object.keys(groupRoles).forEach(roleName => {
-                let roleId = groupRoles[roleName];
+                const roleId = groupRoles[roleName];
                 list += "`" + roleName + "` - " + roles.find(r => r.id == roleId) + "\n";
             });
 
             embed.addField(Translation.translate("roles.group." + groupName), list);
         });
-
 
         channel.send(embed);
     }
