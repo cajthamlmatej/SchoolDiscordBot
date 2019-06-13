@@ -49,3 +49,7 @@ All dependencies will be download by node/npm automaticaly.
 | jsdom | 12.0.0 |
 | mathjs | 6.0.1 |
 | weather-js | 2.0.0 |
+
+### Contribute
+
+Every pull-request need their own issue, create it first and wait until someone reaction on it. If we will accept your issues, you can start programming in your own repository. After solving the issue, you can create pull request, that will automatically test if eslint test passed. If you want try it yourself, use command `npm run lint`.
