@@ -194,7 +194,7 @@
     "command.weather.condition": "Stav",
     "command.weather.humidity": "Vlhkost",
     "command.weather.wind": "Rychlost větru",
-    "command.weather.feelslike": "Pocitová cena",
+    "command.weather.feelslike": "Pocitová teplota",
     "command.weather.lastchecked": "Naposledy zkontrolováno",
     "command.weather.tommorow": "Zítřejší počasí v ",
     "command.weather.precipitation": "Srážky",
