@@ -126,6 +126,12 @@ class EventModule extends Module {
 
         embed.addField(dateTitle, date, true);
         embed.addField(Translation.translate("module.event.place"), values.place);
+        embed.addField("Kalendář", "[Přidat do kalendáře](https://www.google.com/calendar/event?action=TEMPLATE"
+                                        + "&text=" + encodeURI(values.subject + " | " + ((values.type == "event") ? "Událost" : "Úkol"))
+                                        + "&details=" + encodeURI("Všechny potřebné informace naleznete na Discordu.") 
+                                        + "&location=" + encodeURI(values.place)
+                                        + "&dates=" + encodeURI(moment(values.start, "D. M. YYYY").format("YMMDD") + "/" + moment(values.end, "D. M. YYYY").format("YMMDD") + ")"));
+        
         embed.setFooter(author.nickname, author.user.avatarURL);
 
         return embed;
