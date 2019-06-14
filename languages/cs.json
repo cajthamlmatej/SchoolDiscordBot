@@ -211,6 +211,11 @@
     "module.event.to": "do",
     "module.event.no-event-exists": "Žádná událost neexistuje.",
     "module.event.list": "Seznam událostí",
+    "module.event.calendar.calendar": "Kalendář",
+    "module.event.calendar.add-to-calendar": "Přidat do kalendáře",
+    "module.event.calendar.event": "Událost",
+    "module.event.calendar.task": "Úkol",
+    "module.event.calendar.details": "Všechny potřebné informace naleznete na Discordu.",
 
     "module.role.deleted": "Role byla odstraněna",
     "module.role.added": "Role byla přidána",

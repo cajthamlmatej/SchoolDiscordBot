@@ -209,6 +209,11 @@
     "module.event.to": "to",
     "module.event.no-event-exists": "No events exists.",
     "module.event.list": "List of all events",
+    "module.event.calendar.calendar": "Calendar",
+    "module.event.calendar.add-to-calendar": "Add to calendar",
+    "module.event.calendar.event": "Event",
+    "module.event.calendar.task": "Task",
+    "module.event.calendar.details": "All important informations can be found on Discord.",
 
     "module.role.deleted": "Role was removed",
     "module.role.added": "Role was added",
