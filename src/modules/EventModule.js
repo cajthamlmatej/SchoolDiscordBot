@@ -131,6 +131,7 @@ class EventModule extends Module {
                                         + "&details=" + encodeURI("Všechny potřebné informace naleznete na Discordu.") 
                                         + "&location=" + encodeURI(values.place)
                                         + "&dates=" + encodeURI(moment(values.start, "D. M. YYYY").format("YMMDD") + "/" + moment(values.end, "D. M. YYYY").format("YMMDD") + ")"));
+        
         embed.setFooter(author.nickname, author.user.avatarURL);
 
         return embed;
