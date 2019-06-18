@@ -35,6 +35,10 @@ class EventCommand extends SubsCommand {
             "nextweek": {
                 "arguments": 0,
                 "roles": ["member"]
+            },
+            "refresh": {
+                "arguments": 1,
+                "roles": ["owner"]
             }
         };
     }
@@ -436,6 +440,28 @@ class EventCommand extends SubsCommand {
 
         channel.send(embed);
     }
+    
+    callRefresh(args, message) {
+        const eventName = args[0];
+
+        if (eventName == "all") {
+            const events = this.eventModule.getEvents();
+    
+            Object.keys(events).forEach(eventName => {
+                this.eventModule.editEvent(eventName, "refresh", undefined);
+            });
+        } else {
+            if (!this.eventModule.exists(eventName)) {
+                this.sendError(message.channel, "command.event.dont-exist.edit", this.eventModule.getEventNames().join(", ").substring(0, 500) + "...");
+                return;    
+            }
+
+            this.eventModule.editEvent(eventName, "refresh", undefined);
+        }
+
+        message.react("✅");
+    }
+    
     
     getRangeOfDates(start, end, key, arr = [start.startOf(key)]) {
         if(start.isAfter(end)) 

@@ -74,7 +74,7 @@ class EventModule extends Module {
 
         const event = eventsObject["events"][name];
         const values = event.values;
-
+        
         if(type != "name") {
             values[type] = value;
 
@@ -86,6 +86,9 @@ class EventModule extends Module {
             event.values = values;
             eventsObject["events"][name] = event;
         } else {
+            if(type == "refresh")
+                return;
+
             delete eventsObject["events"][name];
             eventsObject["events"][value] = event;
         } 
