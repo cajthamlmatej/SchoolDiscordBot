@@ -22,10 +22,8 @@ class MathematicalExpresionsModule extends Module {
 
         try {
             const question = math.evaluate(message.content.toLowerCase());
-
-            if (question != undefined && question != message.content && !(question instanceof Function) && !(message.content.includes("\"")))
+            if (question != undefined && question != message.content && !(question instanceof Function) && !message.content.includes("\""))
                 message.channel.send(Translation.translate("module.math.result") + question);
-
         } catch (err) {
             // We dont want to do anything
         }
