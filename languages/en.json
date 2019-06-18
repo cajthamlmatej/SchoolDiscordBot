@@ -54,11 +54,12 @@
     "commands.help.weather": "Displays the weather overview for today and tomorrow",
 
     "commands.usage.help": "",
-    "commands.usage.event": "<create/edit/delete/list/week/nextweek> <...>",
+    "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh> <...>",
     "commands.usage.event.create": "",
     "commands.usage.event.edit": "",
     "commands.usage.event.delete": "<name>",
     "commands.usage.event.list": "",
+    "commands.usage.event.refresh": "<all/name>",
     "commands.usage.language": "<change/list> <...>",
     "commands.usage.language.change": "<language>",
     "commands.usage.language.list": "",

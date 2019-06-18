@@ -55,11 +55,12 @@
     "commands.help.weather": "Zobrazí přehled počasí pro dnešek a zítřek",
 
     "commands.usage.help": "",
-    "commands.usage.event": "<create/edit/delete/list/week/nextweek> <...>",
+    "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh> <...>",
     "commands.usage.event.create": "",
     "commands.usage.event.edit": "",
     "commands.usage.event.delete": "<jméno>",
     "commands.usage.event.list": "",
+    "commands.usage.event.refresh": "<all/jméno>",
     "commands.usage.language": "<change/list> <...>",
     "commands.usage.language.change": "<jazyk>",
     "commands.usage.language.list": "",
