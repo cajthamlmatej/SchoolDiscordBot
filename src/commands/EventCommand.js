@@ -462,7 +462,6 @@ class EventCommand extends SubsCommand {
         message.react("✅");
     }
     
-    
     getRangeOfDates(start, end, key, arr = [start.startOf(key)]) {
         if(start.isAfter(end)) 
             throw new Error("start must precede end");

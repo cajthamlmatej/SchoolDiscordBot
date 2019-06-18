@@ -130,9 +130,8 @@ class EventModule extends Module {
         const startDate = moment(values.start, "D. M. YYYY");
         const endDate = moment(values.end, "D. M. YYYY");
 
-        if(startDate.format("D. M. YYYY HH:mm") == endDate.format("D. M. YYYY HH:mm")) {
+        if(startDate.format("D. M. YYYY HH:mm") == endDate.format("D. M. YYYY HH:mm")) 
             endDate.add(1, "d");
-        }
 
         let startDateFormat = "YMMDD[T]HHmmS";
         let endDateFormat = "YMMDD[T]HHmmS";
