@@ -219,6 +219,7 @@
     "module.role.deleted": "Role was removed",
     "module.role.added": "Role was added",
     "module.role.list": "List of roles",
+    "module.mute.error": "Nobody was silenced",
 
     "module.supplementation.new": "New supplementation has been published for day/s",
     "module.supplementation.refreshed.title": "Supplementation has been refreshed",

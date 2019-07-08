@@ -252,6 +252,7 @@
     "module.mute.list": "Seznam aktuálních umlčení",
     "module.mute.expiration": "Expirace",
     "module.mute.reason": "Důvod",
+    "module.mute.error": "Nikdo nebyl umlčen",
 
     "module.eventannoucement.title.ends": "Událost či úkol zítřejším dnem končí",
     "module.eventannoucement.title.starts": "Událost či úkol zítřejším dnem začíná",
