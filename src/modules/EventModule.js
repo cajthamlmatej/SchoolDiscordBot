@@ -74,7 +74,7 @@ class EventModule extends Module {
 
         const event = eventsObject["events"][name];
         const values = event.values;
-
+        
         if(type != "name") {
             values[type] = value;
 
@@ -86,6 +86,9 @@ class EventModule extends Module {
             event.values = values;
             eventsObject["events"][name] = event;
         } else {
+            if(type == "refresh")
+                return;
+
             delete eventsObject["events"][name];
             eventsObject["events"][value] = event;
         } 
@@ -124,15 +127,30 @@ class EventModule extends Module {
             date = values.start + " " + Translation.translate("module.event.to") + " " + values.end;
         }
 
+        const startDate = moment(values.start, "D. M. YYYY");
+        const endDate = moment(values.end, "D. M. YYYY");
+
+        if(startDate.format("D. M. YYYY HH:mm") == endDate.format("D. M. YYYY HH:mm")) 
+            endDate.add(1, "d");
+
+        let startDateFormat = "YMMDD[T]HHmmS";
+        let endDateFormat = "YMMDD[T]HHmmS";
+
+        if(startDate.hour() == 0 && startDate.minute() == 0)
+            startDateFormat = "YMMDD";
+
+        if(endDate.hour() == 0 && endDate.minute() == 0)
+            endDateFormat = "YMMDD";
+
         embed.addField(dateTitle, date, true);
         embed.addField(Translation.translate("module.event.place"), values.place);
         embed.addField(Translation.translate("module.event.calendar.calendar"), "[" + Translation.translate("module.event.calendar.add-to-calendar") + "](https://www.google.com/calendar/event?action=TEMPLATE"
-                                        + "&text=" + encodeURI(values.subject + " | " + ((values.type == "event") ? Translation.translate("module.event.calendar.event") : Translation.translate("module.event.calendar.task")))
-                                        + "&details=" + encodeURI(Translation.translate("module.event.calendar.details")) 
-                                        + "&location=" + encodeURI(values.place)
-                                        + "&dates=" + encodeURI(moment(values.start, "D. M. YYYY").format("YMMDD") + "/" + moment(values.end, "D. M. YYYY").format("YMMDD") + ")"));
+                                        + "&text=" + encodeURIComponent(values.subject + " | " + ((values.type == "event") ? Translation.translate("module.event.calendar.event") : Translation.translate("module.event.calendar.task")))
+                                        + "&details=" + encodeURIComponent(Translation.translate("module.event.calendar.details")) 
+                                        + "&location=" + encodeURIComponent(values.place)
+                                        + "&dates=" + encodeURI(startDate.format(startDateFormat) + "/" + endDate.format(endDateFormat) + ")"));
         
-        embed.setFooter(author.nickname, author.user.avatarURL);
+        embed.setFooter(author.nickname == undefined ? author.user.username : author.nickname, author.user.avatarURL);
 
         return embed;
     }
