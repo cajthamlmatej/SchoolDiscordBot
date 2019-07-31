@@ -70,12 +70,11 @@ class EventCommand extends SubsCommand {
         const channel = message.channel;
         const types = ["event", "task"];
 
-        const builder = new CommandBuilder("event.create", message.author, channel, [
-            {
+        const builder = new CommandBuilder("event.create", message.author, channel, [{
                 "name": "type",
                 "example": types,
                 "validate": (content) => {
-                    if (!types.includes(content)) 
+                    if (!types.includes(content))
                         return ["command.event.type-not-valid", types.join(", ")];
                     else
                         return true;
@@ -85,28 +84,36 @@ class EventCommand extends SubsCommand {
                 "name": "name",
                 "example": "eko_ukol_potreby",
                 "validate": (content) => {
-                    if (this.eventModule.exists(content)) 
+                    if (this.eventModule.exists(content))
                         return "command.event.already-exists";
-                    else 
+                    else
                         return true;
-                    
+
+                }
+            },
+            {
+                "name": "title",
+                "example": "EKO - pořeby",
+                "validate": (content) => {
+                    return true;
+
                 }
             },
             {
                 "name": "start",
-                "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+                "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ...Object.keys(this.placeholders)],
                 "validate": (content) => {
                     let found = false;
                     Object.keys(this.placeholders).forEach(placeholder => {
-                        if (content.toLowerCase().includes(placeholder)) 
+                        if (content.toLowerCase().includes(placeholder))
                             found = true;
-                        
+
                     });
 
-                    if(found)
+                    if (found)
                         return true;
 
-                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid())) 
+                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
                         return "command.event.wrong-date-format";
                     else
                         return true;
@@ -114,22 +121,22 @@ class EventCommand extends SubsCommand {
             },
             {
                 "name": "end",
-                "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+                "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ...Object.keys(this.placeholders)],
                 "validate": (content) => {
                     if (content == "-")
                         return true;
 
                     let found = false;
                     Object.keys(this.placeholders).forEach(placeholder => {
-                        if (content.toLowerCase().includes(placeholder)) 
+                        if (content.toLowerCase().includes(placeholder))
                             found = true;
-                        
+
                     });
 
-                    if(found)
+                    if (found)
                         return true;
 
-                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid())) 
+                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
                         return "command.event.wrong-date-format";
                     else
                         return true;
@@ -145,7 +152,7 @@ class EventCommand extends SubsCommand {
                 "name": "role",
                 "example": "member",
                 "validate": (content) => {
-                    if (!this.eventModule.isMentionableRole(content)) 
+                    if (!this.eventModule.isMentionableRole(content))
                         return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
                     else
                         return true;
@@ -179,7 +186,7 @@ class EventCommand extends SubsCommand {
                     return true;
                 },
                 "value": (content, values, attachments) => {
-                    if (content == "-") 
+                    if (content == "-")
                         return [];
 
                     const files = [];
@@ -198,15 +205,15 @@ class EventCommand extends SubsCommand {
 
             Object.keys(this.placeholders).forEach(placeholder => {
                 // Add days and format it back to string.
-                if (values["start"].toLowerCase().includes(placeholder)) 
+                if (values["start"].toLowerCase().includes(placeholder))
                     start = moment().add(this.placeholders[placeholder], "days").format("D. M. YYYY");
-                
-                if (values["end"].toLowerCase().includes(placeholder)) 
+
+                if (values["end"].toLowerCase().includes(placeholder))
                     end = moment().add(this.placeholders[placeholder], "days").format("D. M. YYYY");
-                
+
             });
 
-            this.eventModule.addEvent(values["name"], values["type"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, values["files"]); // files);
+            this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, values["files"]); // files);
         }, this.stopWord);
 
         builder.start();
@@ -215,26 +222,25 @@ class EventCommand extends SubsCommand {
 
     callEdit(args, message) {
         const channel = message.channel;
-        const types = ["name", "type", "start", "end", "role", "place", "subject", "description"];
+        const types = ["name", "type", "title", "start", "end", "role", "place", "subject", "description"];
         const eventTypes = ["event", "task"];
 
-        const builder = new CommandBuilder("event.edit", message.author, channel, [
-            {
+        const builder = new CommandBuilder("event.edit", message.author, channel, [{
                 "name": "name",
                 "example": "eko_ukol_potreby",
                 "validate": (content) => {
-                    if (!this.eventModule.exists(content)) 
+                    if (!this.eventModule.exists(content))
                         return ["command.event.dont-exist.edit", this.eventModule.getEventNames().join(", ").substring(0, 500) + "..."];
-                    else 
+                    else
                         return true;
-                    
+
                 }
             },
             {
                 "name": "type",
                 "example": types,
                 "validate": (content) => {
-                    if (!types.includes(content)) 
+                    if (!types.includes(content))
                         return ["command.event.edit-type-not-valid", types.join(", ")];
                     else
                         return true;
@@ -247,10 +253,10 @@ class EventCommand extends SubsCommand {
                     const type = values["type"];
 
                     if (type == "type") {
-                        if (!eventTypes.includes(content)) 
+                        if (!eventTypes.includes(content))
                             return ["command.event.type-not-valid", eventTypes.join(", ")];
-                        
-                    } else if (type == "role") 
+
+                    } else if (type == "role")
                         if (!this.eventModule.isMentionableRole(content)) {
                             return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
                         }
@@ -295,12 +301,12 @@ class EventCommand extends SubsCommand {
         let date;
 
         Object.keys(this.placeholders).forEach(placeholder => {
-            if (dateString.includes(placeholder)) 
+            if (dateString.includes(placeholder))
                 date = moment().add(this.placeholders[placeholder], "days");
-            
+
         });
 
-        if (date == undefined) 
+        if (date == undefined)
             date = moment(dateString, "D. M. YYYY");
 
         if (!date.isValid()) {
@@ -355,15 +361,15 @@ class EventCommand extends SubsCommand {
 
         channel.send(embed);
     }
-    
+
     callWeek(args, message) {
         const channel = message.channel;
 
         const startDay = moment();
 
         const sundayDay = startDay.clone();
-        while (sundayDay.weekday() !== moment().day("Sunday").weekday())  
-            sundayDay.add(1, "day"); 
+        while (sundayDay.weekday() !== moment().day("Sunday").weekday())
+            sundayDay.add(1, "day");
 
         const dates = this.getRangeOfDates(startDay, sundayDay, "day");
 
@@ -375,15 +381,15 @@ class EventCommand extends SubsCommand {
             const events = startsEvents.concat(endsEvents).concat(goingEvents);
 
             let string = "";
-            if(events != null)
+            if (events != null)
                 events.forEach(event => {
                     string += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + "\n";
                 });
 
-            if(string == "")
+            if (string == "")
                 string = Translation.translate("command.event.check.week.no-event-found");
 
-            datesInfo[date] = {"date": date, "data": string};
+            datesInfo[date] = { "date": date, "data": string };
         });
 
         const embed = new Discord.RichEmbed()
@@ -397,17 +403,17 @@ class EventCommand extends SubsCommand {
 
         channel.send(embed);
     }
-    
+
     callNextweek(args, message) {
         const channel = message.channel;
 
         const mondayDay = moment();
-        while (mondayDay.weekday() !== moment().day("Monday").weekday())  
-            mondayDay.add(1, "day"); 
+        while (mondayDay.weekday() !== moment().day("Monday").weekday())
+            mondayDay.add(1, "day");
 
         const sundayDay = mondayDay.clone();
-        while (sundayDay.weekday() !== moment().day("Sunday").weekday())  
-            sundayDay.add(1, "day"); 
+        while (sundayDay.weekday() !== moment().day("Sunday").weekday())
+            sundayDay.add(1, "day");
 
         const dates = this.getRangeOfDates(mondayDay, sundayDay, "day");
 
@@ -419,15 +425,15 @@ class EventCommand extends SubsCommand {
             const events = startsEvents.concat(endsEvents).concat(goingEvents);
 
             let string = "";
-            if(events != null)
+            if (events != null)
                 events.forEach(event => {
                     string += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + "\n";
                 });
 
-            if(string == "")
+            if (string == "")
                 string = Translation.translate("command.event.check.nextweek.no-event-found");
 
-            datesInfo[date] = {"date": date, "data": string};
+            datesInfo[date] = { "date": date, "data": string };
         });
 
         const embed = new Discord.RichEmbed()
@@ -441,20 +447,20 @@ class EventCommand extends SubsCommand {
 
         channel.send(embed);
     }
-    
+
     callRefresh(args, message) {
         const eventName = args[0];
 
         if (eventName == "all") {
             const events = this.eventModule.getEvents();
-    
+
             Object.keys(events).forEach(eventName => {
                 this.eventModule.editEvent(eventName, "refresh", undefined);
             });
         } else {
             if (!this.eventModule.exists(eventName)) {
                 this.sendError(message.channel, "command.event.dont-exist.edit", this.eventModule.getEventNames().join(", ").substring(0, 500) + "...");
-                return;    
+                return;
             }
 
             this.eventModule.editEvent(eventName, "refresh", undefined);
@@ -462,19 +468,19 @@ class EventCommand extends SubsCommand {
 
         message.react("✅");
     }
-    
+
     getRangeOfDates(start, end, key, arr = [start.startOf(key)]) {
-        if(start.isAfter(end)) 
+        if (start.isAfter(end))
             throw new Error("start must precede end");
-        
+
         const next = moment(start).add(1, key).startOf(key);
-        
-        if(next.isAfter(end, key)) 
+
+        if (next.isAfter(end, key))
             return arr;
-      
+
         return this.getRangeOfDates(next, end, key, arr.concat(next));
     }
-      
+
 }
 
 module.exports = EventCommand;

@@ -27,7 +27,7 @@
     "commands.help.language.list": "Print list of languages",
     "commands.help.mute": "Command for managing mutes",
     "commands.help.mute.add": "Mute **member** for entered number of minutes",
-    "commands.help.mute.remove": "Remove mute from member",    
+    "commands.help.mute.remove": "Remove mute from member",
     "commands.help.ping": "Is bot active?",
     "commands.help.purge": "Delete entered number of messages in current channel",
     "commands.help.supplementation": "Command for managing supplementation",
@@ -94,7 +94,7 @@
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",
     "command.error": "There was an error while sending the command",
-    
+
     "command.event.already-exists": "An event with this name already exists, please choose another name.",
     "command.event.type-not-valid": "Selected type of event is not valid, must be one of {0}.",
     "command.event.role-not-valid": "Selected role is not valid, choose one of {0} roles.",
@@ -121,7 +121,7 @@
 
     "command.help.title": "Bot help",
     "command.help.can-execute": "List of commands that you can execute.",
-    
+
     "command.mute.user-list.title": "List of all possible users",
     "command.mute.user-list": "Specify the member's name in more detail",
     "command.mute.user-not-found": "We have not found anyone with this name. Check the accent and correctness of the name.",
@@ -139,23 +139,23 @@
     "command.mute.minutes": "{0} minutes",
     "command.mute.unmuted.title": "{0} was unmuted",
     "command.mute.unmuted": "Member {0} is no longer muted.",
-    
+
     "command.ping": "Ping",
     "command.ping.ping": "Bot ping is {0}ms.",
-    
+
     "command.purge.wrong-message-count": "Specified number of messages is not correct. Minimum of messages is 1 and maximum 100.",
     "command.purge.purged.title": "Housekeeping!!!",
     "command.purge.purged": "{0} messages have been deleted in this channel.",
-    
+
     "command.role.role-not-found": "Selected role is not valid, choose one from command `rolelist`.",
-    
+
     "command.notice.notice": "Notice!",
-    
+
     "command.vote.dont-exist": "Vote with selected name not found. List of all votes can be printed with command `vote list`.",
     "command.vote.type-not-valid": "Selected type of vote is not valid, must be one of:",
     "command.vote.already-exists": "Vote with this name already exists, choose different name.",
     "command.vote.too-much.options": "You have entered too much options (> 10). Enter a smaller number.",
-    
+
     "command.language.language-not-found": "Language with this name not found.",
     "command.language.language-changed.title": "Language of the bot has changed.",
     "command.language.language-changed": "Language of the bot has changed until bot restart, dont forget to change it in config too.",
@@ -172,7 +172,7 @@
     "command.status.commands": "Number of commands",
     "command.status.number-of-commands": "✅ {0} and ❌ {1}",
     "command.status.modules": "Number of modules",
-    "command.status.number-of-modules": "✅ {0} and ❌ {1}",    
+    "command.status.number-of-modules": "✅ {0} and ❌ {1}",
     "command.status.ping": "Ping",
     "command.status.author": "Author",
     "command.status.uptime": "Uptime",
@@ -276,6 +276,8 @@
     "builder.event.create.type.help": "Enter type of eventu.",
     "builder.event.create.name.title": "Name of event",
     "builder.event.create.name.help": "Enter unique name for the event for future editing.",
+    "builder.event.create.title.title": "Title of event",
+    "builder.event.create.title.help": "Enter a title of the event",
     "builder.event.create.start.title": "Start of the event",
     "builder.event.create.start.help": "Enter date (and time) for event start.",
     "builder.event.create.end.title": "End of the event",
