@@ -1,4 +1,5 @@
 const Module = require("./Module");
+const Config = require("../Config");
 
 class AutoReactionModule extends Module {
 
