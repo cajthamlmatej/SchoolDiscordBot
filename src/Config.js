@@ -48,6 +48,10 @@ class Config {
             "modules.auto-reaction.text",
             "modules.auto-reaction.series-text",
 
+            "modules.bakalari.members",
+            "modules.bakalari.subjects.ignored",
+            "modules.bakalari.subjects.separated",
+
             "commands.disabled"
         ];
     }
