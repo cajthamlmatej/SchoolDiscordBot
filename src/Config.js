@@ -39,8 +39,10 @@ class Config {
             
 
             "modules.disabled",
+
             "modules.event.archive-days",
             "modules.event.check-time",
+            "modules.event.placeholders",
 
             "commands.disabled"
         ];
