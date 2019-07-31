@@ -176,7 +176,7 @@
     "command.status.ping": "Ping",
     "command.status.author": "Author",
     "command.status.uptime": "Uptime",
-    "command.status.uptime-time": "{0} hours",
+    "command.status.uptime-time": "{0} hours and {1} minutes",
     "command.status.supplementation.last-check.title": "Last time supplementation checked",
     "command.status.supplementation.last-check": "before {0}m",
 

@@ -15,6 +15,10 @@ class BakalariCommand extends DirectCommand {
     getRoles() {
         return ["member"];
     }
+    
+    getDependencies() {
+        return ["directbakalarimodule"];
+    }
 
     init(bot) {
         this.client = bot.client;

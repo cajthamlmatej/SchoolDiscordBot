@@ -29,6 +29,11 @@ class StatusCommand extends Command {
 
     call(args, message) {
         const channel = message.channel;
+        
+        const duration = moment.duration(moment().diff(this.startTime));
+        const hours = parseInt(duration.asHours());
+        const minutes = parseInt(duration.asMinutes()) % 60;
+        
         const embed = new Discord.RichEmbed()
             .setTitle("📊 | " + Translation.translate("command.status.stats"))
             .setColor(0xbadc58)
@@ -36,7 +41,7 @@ class StatusCommand extends Command {
             .addField(Translation.translate("command.status.modules"), Translation.translate("command.status.number-of-modules", Object.keys(this.modules).length, Object.keys(this.disabledModules).length), true)
             .addField(Translation.translate("command.status.ping"), Math.round(this.client.ping) + "ms", true)
             .addField(Translation.translate("command.status.author"), "Matěj Cajthaml [source (GitHub)](https://github.com/cajthamlmatej/SchoolDiscordBot)", true)
-            .addField(Translation.translate("command.status.uptime"), Translation.translate("command.status.uptime-time", moment().diff(this.startTime, "hours")), true);
+            .addField(Translation.translate("command.status.uptime"), Translation.translate("command.status.uptime-time", hours, minutes));  
 
         if (this.supplementationModule != undefined)
             embed.addField(Translation.translate("command.status.supplementation.last-check.title"), Translation.translate("command.status.supplementation.last-check", moment().diff(this.supplementationModule.lastCheck, "minutes")), true);

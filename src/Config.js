@@ -1,4 +1,4 @@
-const config = require('config');
+const config = require("config");
         
 class Config {
 
@@ -27,6 +27,8 @@ class Config {
             "roles.permissions.moderator",
             "roles.permissions.member",
 
+            "roles.mentionable.member",
+
             "channels.annoucement",
             "channels.bakalari",
             "channels.supplementation",
@@ -34,10 +36,18 @@ class Config {
             "channels.event-archive",
             "channels.vote",
             "channels.bot-info",
-            
 
             "modules.disabled",
-            
+
+            "modules.event.archive-days",
+            "modules.event.check-time",
+            "modules.event.placeholders",
+
+            "modules.auto-reaction.text-text",
+            "modules.auto-reaction.channels-attachments",
+            "modules.auto-reaction.text",
+            "modules.auto-reaction.series-text",
+
             "commands.disabled"
         ];
     }

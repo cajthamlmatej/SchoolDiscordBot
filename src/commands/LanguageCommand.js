@@ -34,7 +34,6 @@ class LanguageCommand extends SubsCommand {
     }
 
     callList(args, message) {
-        const channel = message.channel;
         const languages = Translation.languageList();
 
         let list = "";
