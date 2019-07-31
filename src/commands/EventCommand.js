@@ -81,24 +81,34 @@ class EventCommand extends SubsCommand {
                 }
             },
             {
+                "name": "title",
+                "example": Translation.translate("builder.event.create.title.example"),
+                "validate": (content) => {
+                    return true;
+                }
+            },
+            {
                 "name": "name",
-                "example": Translation.translate("builder.event.create.name.example"),
+                "example": Translation.translate("builder.event.create.name.example").split(","),
                 "validate": (content) => {
                     if (this.eventModule.exists(content))
                         return "command.event.already-exists";
                     else
                         return true;
 
+                },
+                "value": (content, values) => {
+                    if (content == "-")
+                        return values["title"].toLowerCase().split('').map(function(letter) {
+                            let i = this.accents.indexOf(letter)
+                            return (i !== -1) ? this.acc_out[i] : letter
+                        }.bind({
+                            accents: 'àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž- ',
+                            acc_out: 'aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz__'
+                        })).join('')
                 }
             },
-            {
-                "name": "title",
-                "example": Translation.translate("builder.event.create.title.example"),
-                "validate": (content) => {
-                    return true;
 
-                }
-            },
             {
                 "name": "start",
                 "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ...Object.keys(this.placeholders)],
@@ -160,14 +170,14 @@ class EventCommand extends SubsCommand {
             },
             {
                 "name": "place",
-                "example": Translation.translate("builder.event.create.place.example"),
+                "example": Translation.translate("builder.event.create.place.example").split(","),
                 "validate": (content) => {
                     return true;
                 }
             },
             {
                 "name": "subject",
-                "example": Translation.translate("builder.event.create.subject.example"),
+                "example": Translation.translate("builder.event.create.subject.example").split(","),
                 "validate": (content) => {
                     return true;
                 }
@@ -322,7 +332,7 @@ class EventCommand extends SubsCommand {
         let starts = "";
 
         startsEvents.forEach(event => {
-            starts += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
+            starts += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
         const endsEvents = this.eventModule.getEventThatEndsInEnteredDay(date);
@@ -330,14 +340,14 @@ class EventCommand extends SubsCommand {
 
         endsEvents.forEach(event => {
             let ends = "";
-            ends += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
+            ends += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
         const goingEvents = this.eventModule.getEventThatGoingInEnteredDay(date);
         let going = "";
 
         goingEvents.forEach(event => {
-            going += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
+            going += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
         if (ends == "" && starts == "" && going == "") {
@@ -383,7 +393,7 @@ class EventCommand extends SubsCommand {
             let string = "";
             if (events != null)
                 events.forEach(event => {
-                    string += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + "\n";
+                    string += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + "\n";
                 });
 
             if (string == "")
@@ -427,7 +437,7 @@ class EventCommand extends SubsCommand {
             let string = "";
             if (events != null)
                 events.forEach(event => {
-                    string += "**" + event.name + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + "\n";
+                    string += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + "\n";
                 });
 
             if (string == "")
