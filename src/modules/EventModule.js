@@ -14,18 +14,17 @@ class EventModule extends Module {
     init(bot) {
         this.channel = bot.client.channels.find(channel => channel.id === Config.get("channels.event"));
         this.archiveChannel = bot.client.channels.find(channel => channel.id === Config.get("channels.event-archive"));
-        this.roles = {no: "480845310227120128"};//bot.settings.roles.mentionable;
-        this.daysToArchive = 3;//bot.settings.modules.event.days;
+        this.roles = Config.get("roles.mentionable");
+        this.daysToArchive = Config.get("modules.event.archive-days");
 
         this.tempFile = "./temp/events.json";
 
         this.tick();
-        setInterval(() => this.tick(), 10000000);// bot.settings.modules.event.refresh);
+        setInterval(() => this.tick(), Config.get("modules.event.check-time"));
     }
 
     tick() {
         const events = this.getEvents();
-        const toRemove = [];
 
         Object.keys(events).forEach(name => {
             const data = events[name];

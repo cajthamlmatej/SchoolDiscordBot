@@ -27,6 +27,8 @@ class Config {
             "roles.permissions.moderator",
             "roles.permissions.member",
 
+            "roles.mentionable.member",
+
             "channels.annoucement",
             "channels.bakalari",
             "channels.supplementation",
@@ -37,7 +39,9 @@ class Config {
             
 
             "modules.disabled",
-            
+            "modules.event.archive-days",
+            "modules.event.check-time",
+
             "commands.disabled"
         ];
     }
