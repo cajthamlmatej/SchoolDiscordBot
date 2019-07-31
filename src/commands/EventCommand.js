@@ -82,7 +82,7 @@ class EventCommand extends SubsCommand {
             },
             {
                 "name": "name",
-                "example": "eko_ukol_potreby",
+                "example": Translation.translate("builder.event.create.name.example"),
                 "validate": (content) => {
                     if (this.eventModule.exists(content))
                         return "command.event.already-exists";
@@ -93,7 +93,7 @@ class EventCommand extends SubsCommand {
             },
             {
                 "name": "title",
-                "example": "EKO - pořeby",
+                "example": Translation.translate("builder.event.create.title.example"),
                 "validate": (content) => {
                     return true;
 
@@ -160,21 +160,21 @@ class EventCommand extends SubsCommand {
             },
             {
                 "name": "place",
-                "example": ["Škola", "School", "Arbesovo náměstí"],
+                "example": Translation.translate("builder.event.create.place.example"),
                 "validate": (content) => {
                     return true;
                 }
             },
             {
                 "name": "subject",
-                "example": ["STP", "?"],
+                "example": Translation.translate("builder.event.create.subject.example"),
                 "validate": (content) => {
                     return true;
                 }
             },
             {
                 "name": "description",
-                "example": ["Popis eventu", "Description of event"],
+                "example": Translation.translate("builder.event.create.description.example"),
                 "validate": (content) => {
                     return true;
                 }
