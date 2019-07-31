@@ -1,15 +1,17 @@
 const Discord = require("discord.js");
 const Translation = require("./Translation");
+const Config = require("./Config");
 
 class CommandBuilder {
 
-    constructor(name, user, channel, fields, end, stopWord) {
+    constructor(name, user, channel, fields, end) {
         this.name = name;
         this.build = { user: user, fields: fields, channel: channel };
         this.field = 0;
-        this.stopWord = stopWord;
         this.values = {};
         this.endFunction = end;
+        
+        this.stopWord = Config.get("bot.builder.stop-word");
     }
 
     start() {
