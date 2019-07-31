@@ -35,6 +35,10 @@ class AnnouncementCommand extends SubsCommand {
     getAliases() {
         return ["annouce"];
     }
+    
+    getDependencies() {
+        return ["annoucementmodule"];
+    }
 
     init(bot) {
         this.annoucementModule = bot.modules["annoucementmodule"];

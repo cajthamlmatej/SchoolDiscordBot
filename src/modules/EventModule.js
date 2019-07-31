@@ -1,6 +1,7 @@
 const Module = require("./Module");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
+const Config = require("../Config");
 const fs = require("fs");
 const moment = require("moment");
 
@@ -11,15 +12,15 @@ class EventModule extends Module {
     }
 
     init(bot) {
-        this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels.event);
-        this.archiveChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels["event-archive"]);
-        this.roles = bot.settings.roles.mentionable;
-        this.daysToArchive = bot.settings.modules.event.days;
+        this.channel = bot.client.channels.find(channel => channel.id === Config.get("channels.event"));
+        this.archiveChannel = bot.client.channels.find(channel => channel.id === Config.get("channels.event-archive"));
+        this.roles = {no: "480845310227120128"};//bot.settings.roles.mentionable;
+        this.daysToArchive = 3;//bot.settings.modules.event.days;
 
         this.tempFile = "./temp/events.json";
 
         this.tick();
-        setInterval(() => this.tick(), bot.settings.modules.event.refresh);
+        setInterval(() => this.tick(), 10000000);// bot.settings.modules.event.refresh);
     }
 
     tick() {

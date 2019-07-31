@@ -3,6 +3,7 @@ const moment = require("moment");
 const Discord = require("discord.js");
 const CommandBuilder = require("../CommandBuilder");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class EventCommand extends SubsCommand {
 
@@ -61,8 +62,8 @@ class EventCommand extends SubsCommand {
 
     init(bot) {
         this.eventModule = bot.modules["eventmodule"];
-        this.stopWord = bot.settings.modules.builder.stopWord;
-        this.placeholders = bot.settings.modules.event.placeholders;
+        this.stopWord = Config.get("bot.builder.stop-word");
+        this.placeholders = [];//bot.settings.modules.event.placeholders;
     }
 
     callCreate(args, message) {

@@ -32,17 +32,19 @@ class SchoolDiscordBot {
         this.loadModules();
         this.loadCommands();
 
-        this.token = this.settings.token;
+        this.token = Config.get("bot.token");
 
         console.log("Setting bot events.");
         this.client.on("ready", () => {
             this.ready();
         });
 
+        const guild = Config.get("bot.guild");
+
         this.client.on("message", (message) => {
             this.message(message);
 
-            if (message.guild == null || message.guild.id != this.settings.guild)
+            if (message.guild == null || message.guild.id != guild)
                 return;
 
             Object.values(this.modules).forEach(module => {
@@ -51,7 +53,7 @@ class SchoolDiscordBot {
         });
 
         this.client.on("messageReactionAdd", (reactionMessage, user) => {
-            if (reactionMessage.message.guild == null || reactionMessage.message.guild.id != this.settings.guild)
+            if (reactionMessage.message.guild == null || reactionMessage.message.guild.id != guild)
                 return;
 
             Object.values(this.modules).forEach(module => {
@@ -60,7 +62,7 @@ class SchoolDiscordBot {
         });
 
         this.client.on("messageReactionRemove", (reactionMessage, user) => {
-            if (reactionMessage.message.guild == null || reactionMessage.message.guild.id != this.settings.guild)
+            if (reactionMessage.message.guild == null || reactionMessage.message.guild.id != guild)
                 return;
 
             Object.values(this.modules).forEach(module => {
@@ -76,10 +78,6 @@ class SchoolDiscordBot {
         console.log("Opening and reading settings file.");
 
         Config.validate();
-
-        /*const fileContents = fs.readFileSync("./settings/settings.json");
-
-        this.settings = JSON.parse(fileContents);*/
     }
 
     loadCommands() {
@@ -119,7 +117,7 @@ class SchoolDiscordBot {
     }
 
     ready() {
-        Translation.setLanguage(this.settings.language);
+        Translation.setLanguage(Config.get("bot.language"));
 
         this.name = this.client.user.username;
 
@@ -127,7 +125,7 @@ class SchoolDiscordBot {
         Object.values(this.modules).forEach(module => {
             const moduleName = module.getName();
 
-            if (this.settings.modules.disabled.includes(moduleName)) {
+            if (Config.get("modules.disabled").includes(moduleName)) {
                 console.log("Module " + moduleName + " is disabled, not loading it.");
                 this.disabledModules.push(moduleName);
                 delete this.modules[moduleName];
@@ -141,7 +139,7 @@ class SchoolDiscordBot {
         console.log("Loading commands.");
         Object.values(this.commands).forEach(command => {
             const commandName = command.getName();
-            if (this.settings.commands.disabled.includes(commandName)) {
+            if (Config.get("commands.disabled").includes(commandName)) {
                 console.log("Command " + commandName + " is disabled, not loading it.");
                 delete this.commands[commandName];
                 return;
@@ -177,12 +175,13 @@ class SchoolDiscordBot {
             .setColor(0xbadc58);
 
         console.log("Bot " + this.name + " started.");
-        const adminChannel = this.client.channels.find(c => c.id == this.settings.channels.admin);
+        const adminChannel = this.client.channels.find(c => c.id == Config.get("channels.bot-info"));
         adminChannel.send(embed);
     }
 
     message(message) {
-        if (!message.content.startsWith(this.settings.prefix))
+        const prefix = Config.get("bot.prefix");
+        if (!message.content.startsWith(prefix))
             return;
 
         const authorId = message.author.id;
@@ -192,11 +191,11 @@ class SchoolDiscordBot {
 
         const args = message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/gm);
 
-        const cmd = args[0].replace(this.settings.prefix, "").toLowerCase();
+        const cmd = args[0].replace(prefix, "").toLowerCase();
         const command = this.commands[this.commandsAliases[cmd]];
 
         if(!(command instanceof DirectCommand))
-            if (message.guild == null || message.guild.id != this.settings.guild)
+            if (message.guild == null || message.guild.id != Config.get("bot.guild"))
                 return;
 
         if (command == undefined)
@@ -216,9 +215,9 @@ class SchoolDiscordBot {
 
         setTimeout(() => {
             this.recentCommandsUsage.delete(authorId);
-        }, this.settings.spam.cooldown * 1000);
+        }, Config.get("bot.limit.command-usage") * 1000);
 
-        this.client.guilds.get(this.settings.guild).fetchMember(message.author)
+        this.client.guilds.get(Config.get("bot.guild")).fetchMember(message.author)
             .then(member => {
                 args.shift();
                 for (let i = 0; i < args.length; i++) 
@@ -226,7 +225,8 @@ class SchoolDiscordBot {
 
                 let havePermissions = false;
                 command.getRoles(args[0]).forEach(r => {
-                    if (member.roles.find(role => role.id == this.settings.roles.permission[r]))
+                    // TODO: too much 
+                    if (member.roles.find(role => role.id == Config.get("roles.permissions")[r]))
                         havePermissions = true;
                 });
 
