@@ -71,142 +71,142 @@ class EventCommand extends SubsCommand {
         const types = ["event", "task"];
 
         const builder = new CommandBuilder("event.create", message.author, channel, [{
-                "name": "type",
-                "example": types,
-                "validate": (content) => {
-                    if (!types.includes(content))
-                        return ["command.event.type-not-valid", types.join(", ")];
-                    else
-                        return true;
-                }
-            },
-            {
-                "name": "title",
-                "example": Translation.translate("builder.event.create.title.example"),
-                "validate": (content) => {
+            "name": "type",
+            "example": types,
+            "validate": (content) => {
+                if (!types.includes(content))
+                    return ["command.event.type-not-valid", types.join(", ")];
+                else
                     return true;
-                }
-            },
-            {
-                "name": "name",
-                "example": Translation.translate("builder.event.create.name.example").split(","),
-                "validate": (content) => {
-                    if (this.eventModule.exists(content))
-                        return "command.event.already-exists";
-                    else
-                        return true;
-
-                },
-                "value": (content, values) => {
-                    if (content == "-")
-                        return values["title"].toLowerCase().split('').map(function(letter) {
-                            let i = this.accents.indexOf(letter)
-                            return (i !== -1) ? this.acc_out[i] : letter
-                        }.bind({
-                            accents: 'àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž- ',
-                            acc_out: 'aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz__'
-                        })).join('')
-                }
-            },
-
-            {
-                "name": "start",
-                "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ...Object.keys(this.placeholders)],
-                "validate": (content) => {
-                    let found = false;
-                    Object.keys(this.placeholders).forEach(placeholder => {
-                        if (content.toLowerCase().includes(placeholder))
-                            found = true;
-
-                    });
-
-                    if (found)
-                        return true;
-
-                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
-                        return "command.event.wrong-date-format";
-                    else
-                        return true;
-                }
-            },
-            {
-                "name": "end",
-                "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ...Object.keys(this.placeholders)],
-                "validate": (content) => {
-                    if (content == "-")
-                        return true;
-
-                    let found = false;
-                    Object.keys(this.placeholders).forEach(placeholder => {
-                        if (content.toLowerCase().includes(placeholder))
-                            found = true;
-
-                    });
-
-                    if (found)
-                        return true;
-
-                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
-                        return "command.event.wrong-date-format";
-                    else
-                        return true;
-                },
-                "value": (content, values) => {
-                    if (content == "-")
-                        return values["start"];
-                    else
-                        return content;
-                }
-            },
-            {
-                "name": "role",
-                "example": "member",
-                "validate": (content) => {
-                    if (!this.eventModule.isMentionableRole(content))
-                        return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
-                    else
-                        return true;
-                }
-            },
-            {
-                "name": "place",
-                "example": Translation.translate("builder.event.create.place.example").split(","),
-                "validate": (content) => {
-                    return true;
-                }
-            },
-            {
-                "name": "subject",
-                "example": Translation.translate("builder.event.create.subject.example").split(","),
-                "validate": (content) => {
-                    return true;
-                }
-            },
-            {
-                "name": "description",
-                "example": Translation.translate("builder.event.create.description.example"),
-                "validate": (content) => {
-                    return true;
-                }
-            },
-            {
-                "name": "files",
-                "example": "",
-                "validate": (content) => {
-                    return true;
-                },
-                "value": (content, values, attachments) => {
-                    if (content == "-")
-                        return [];
-
-                    const files = [];
-                    attachments.forEach(messageAttachment => {
-                        files.push(messageAttachment.url);
-                    });
-
-                    return files;
-                }
             }
+        },
+        {
+            "name": "title",
+            "example": Translation.translate("builder.event.create.title.example"),
+            "validate": (content) => {
+                return true;
+            }
+        },
+        {
+            "name": "name",
+            "example": Translation.translate("builder.event.create.name.example").split(","),
+            "validate": (content) => {
+                if (this.eventModule.exists(content))
+                    return "command.event.already-exists";
+                else
+                    return true;
+
+            },
+            "value": (content, values) => {
+                if (content == "-")
+                    return values["title"].toLowerCase().split("").map(function(letter) {
+                        const i = this.accents.indexOf(letter);
+                        return (i !== -1) ? this.acc_out[i] : letter;
+                    }.bind({
+                        accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž- ",
+                        acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz__"
+                    })).join("");
+            }
+        },
+
+        {
+            "name": "start",
+            "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "validate": (content) => {
+                let found = false;
+                Object.keys(this.placeholders).forEach(placeholder => {
+                    if (content.toLowerCase().includes(placeholder))
+                        found = true;
+
+                });
+
+                if (found)
+                    return true;
+
+                if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
+                    return "command.event.wrong-date-format";
+                else
+                    return true;
+            }
+        },
+        {
+            "name": "end",
+            "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "validate": (content) => {
+                if (content == "-")
+                    return true;
+
+                let found = false;
+                Object.keys(this.placeholders).forEach(placeholder => {
+                    if (content.toLowerCase().includes(placeholder))
+                        found = true;
+
+                });
+
+                if (found)
+                    return true;
+
+                if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
+                    return "command.event.wrong-date-format";
+                else
+                    return true;
+            },
+            "value": (content, values) => {
+                if (content == "-")
+                    return values["start"];
+                else
+                    return content;
+            }
+        },
+        {
+            "name": "role",
+            "example": "member",
+            "validate": (content) => {
+                if (!this.eventModule.isMentionableRole(content))
+                    return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
+                else
+                    return true;
+            }
+        },
+        {
+            "name": "place",
+            "example": Translation.translate("builder.event.create.place.example").split(","),
+            "validate": (content) => {
+                return true;
+            }
+        },
+        {
+            "name": "subject",
+            "example": Translation.translate("builder.event.create.subject.example").split(","),
+            "validate": (content) => {
+                return true;
+            }
+        },
+        {
+            "name": "description",
+            "example": Translation.translate("builder.event.create.description.example"),
+            "validate": (content) => {
+                return true;
+            }
+        },
+        {
+            "name": "files",
+            "example": "",
+            "validate": (content) => {
+                return true;
+            },
+            "value": (content, values, attachments) => {
+                if (content == "-")
+                    return [];
+
+                const files = [];
+                attachments.forEach(messageAttachment => {
+                    files.push(messageAttachment.url);
+                });
+
+                return files;
+            }
+        }
         ], (values) => {
             console.log("User " + message.author.username + " created event with name " + values["name"] + ".");
 
@@ -236,44 +236,44 @@ class EventCommand extends SubsCommand {
         const eventTypes = ["event", "task"];
 
         const builder = new CommandBuilder("event.edit", message.author, channel, [{
-                "name": "name",
-                "example": "eko_ukol_potreby",
-                "validate": (content) => {
-                    if (!this.eventModule.exists(content))
-                        return ["command.event.dont-exist.edit", this.eventModule.getEventNames().join(", ").substring(0, 500) + "..."];
-                    else
-                        return true;
-
-                }
-            },
-            {
-                "name": "type",
-                "example": types,
-                "validate": (content) => {
-                    if (!types.includes(content))
-                        return ["command.event.edit-type-not-valid", types.join(", ")];
-                    else
-                        return true;
-                }
-            },
-            {
-                "name": "value",
-                "example": eventTypes.concat(["?"]),
-                "validate": (content, values) => {
-                    const type = values["type"];
-
-                    if (type == "type") {
-                        if (!eventTypes.includes(content))
-                            return ["command.event.type-not-valid", eventTypes.join(", ")];
-
-                    } else if (type == "role")
-                        if (!this.eventModule.isMentionableRole(content)) {
-                            return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
-                        }
-
+            "name": "name",
+            "example": "eko_ukol_potreby",
+            "validate": (content) => {
+                if (!this.eventModule.exists(content))
+                    return ["command.event.dont-exist.edit", this.eventModule.getEventNames().join(", ").substring(0, 500) + "..."];
+                else
                     return true;
-                }
+
             }
+        },
+        {
+            "name": "type",
+            "example": types,
+            "validate": (content) => {
+                if (!types.includes(content))
+                    return ["command.event.edit-type-not-valid", types.join(", ")];
+                else
+                    return true;
+            }
+        },
+        {
+            "name": "value",
+            "example": eventTypes.concat(["?"]),
+            "validate": (content, values) => {
+                const type = values["type"];
+
+                if (type == "type") {
+                    if (!eventTypes.includes(content))
+                        return ["command.event.type-not-valid", eventTypes.join(", ")];
+
+                } else if (type == "role")
+                    if (!this.eventModule.isMentionableRole(content)) {
+                        return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
+                    }
+
+                return true;
+            }
+        }
         ], (values) => {
             console.log("User " + message.author.username + " edited event with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
 
