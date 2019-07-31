@@ -106,6 +106,8 @@ class EventCommand extends SubsCommand {
                         accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž- ",
                         acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz__"
                     })).join("");
+                else
+                    return content;
             }
         },
 
