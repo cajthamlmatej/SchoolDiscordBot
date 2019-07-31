@@ -8,3 +8,4 @@ temp/events.json
 temp/supplementation.json
 temp/mutes.json
 temp/votes.json
+config/production.json

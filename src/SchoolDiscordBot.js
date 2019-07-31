@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const Translation = require("./Translation");
+const Config = require("./Config");
 const DirectCommand = require("./commands/DirectCommand");
 const moment = require("moment");
 const fs = require("fs");
@@ -74,9 +75,11 @@ class SchoolDiscordBot {
     loadConfig() {
         console.log("Opening and reading settings file.");
 
-        const fileContents = fs.readFileSync("./settings/settings.json");
+        Config.validate();
 
-        this.settings = JSON.parse(fileContents);
+        /*const fileContents = fs.readFileSync("./settings/settings.json");
+
+        this.settings = JSON.parse(fileContents);*/
     }
 
     loadCommands() {
