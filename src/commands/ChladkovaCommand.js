@@ -1,6 +1,37 @@
 const Command = require("./Command");
 const Discord = require("discord.js");
-const Translation = require("../Translation");
+
+class ChladkovaCommand extends Command {
+
+    getName() {
+        return "chladkova";
+    }
+
+    getGroup() {
+        return "fun";
+    }
+
+    getRoles() {
+        return ["member"];
+    }
+
+    init(bot) {
+        this.client = bot.client;
+        this.proverbs = proverbs.split("\n");
+    }
+
+    call(args, message) {
+        const channel = message.channel;
+        const embed = new Discord.RichEmbed()
+            .setTitle("👩‍🏫 | Paní Ing. Elena Chládková říká:")
+            .setDescription(this.proverbs[Math.floor(Math.random() * this.proverbs.length)])
+            .setColor(0xfd79a8);
+
+        channel.send(embed);
+        return false;
+    }
+
+}
 
 const proverbs = `Letíš jako pšíkanec z nosu.
 Bezdomovec je doma všude.
@@ -293,37 +324,5 @@ Zvyk je železná košile.
 Žádný strom neroste do nebe.
 Žádný učený z nebe nespadl.
 Žízeň je věčná.`;
-
-class ChladkovaCommand extends Command {
-
-    getName() {
-        return "chladkova";
-    }
-
-    getGroup() {
-        return "fun";
-    }
-
-    getRoles() {
-        return ["member"];
-    }
-
-    init(bot) {
-        this.client = bot.client;
-        this.proverbs = proverbs.split("\n");
-    }
-
-    call(args, message) {
-        const channel = message.channel;
-        const embed = new Discord.RichEmbed()
-            .setTitle("👩‍🏫 | Paní Ing. Elena Chládková říká:")
-            .setDescription(this.proverbs[Math.floor(Math.random() * this.proverbs.length)])
-            .setColor(0xfd79a8);
-
-        channel.send(embed);
-        return false;
-    }
-
-}
 
 module.exports = ChladkovaCommand;
