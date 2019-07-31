@@ -58,8 +58,8 @@ class MuteModule extends Module {
         });
 
         result.then(() => {
-            if (embed.fields.length <= 0) 
-                embed.setDescription("Žádný člen není umlčený.");
+            if (embed.fields.length <= 0)
+                embed.setDescription(Translation.translate("module.mute.error"));
 
             channel.send(embed);
         });
