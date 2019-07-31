@@ -2,6 +2,7 @@ const Module = require("./Module");
 const Discord = require("discord.js");
 const fs = require("fs");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class AnnoucementModule extends Module {
 
@@ -11,7 +12,7 @@ class AnnoucementModule extends Module {
 
     init(bot) {
         this.tempFile = "./temp/annoucements.json";
-        this.channel = bot.client.channels.find(ch => ch.id == bot.settings.channels.annoucement);
+        this.channel = bot.client.channels.find(ch => ch.id == Config.get("channels.annoucement"));
     }
 
     annoucementExist(name) {
