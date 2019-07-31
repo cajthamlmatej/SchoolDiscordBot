@@ -178,7 +178,7 @@
     "command.status.ping": "Ping",
     "command.status.author": "Autor",
     "command.status.uptime": "Čas od spuštění",
-    "command.status.uptime-time": "{0} hodin",
+    "command.status.uptime-time": "{0} hodin a {1} minut",
     "command.status.supplementation.last-check.title": "Poslední kontrola suplování",
     "command.status.supplementation.last-check": "před {0}m",
 
