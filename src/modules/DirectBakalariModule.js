@@ -61,7 +61,6 @@ class DirectBakalariModule extends Module {
                     let description = children.querySelectorAll("description")[0].textContent.trim();
                     const guid = children.querySelectorAll("guid")[0].textContent.trim();
                     const isTask = title.includes("ÚKOL");
-                    const subject = title;
 
                     if (informations.includes(guid))
                         return;
@@ -72,8 +71,6 @@ class DirectBakalariModule extends Module {
                     description = description.replace(/<br \/>/g, "\n");
 
                     if (title.includes("zapsána známka:") || description.includes("zapsána známka:")) {
-                        // title = title.split(":")[0] + title.split(":")[1];
-
                         description = description.split(":")[0] + description.split(":")[1];
 
                         informations.push(guid);
