@@ -15,9 +15,40 @@ class Config {
     getRequiredPaths() {
         return [
             "bot.token",
-            "bot.prefix"
+            "bot.prefix",
+            "bot.guild",
+            "bot.language",
+
+            "bot.limit.command-usage",
+            "bot.builder.stop-word",
+
+            "roles.permissions.owner",
+            "roles.permissions.admin",
+            "roles.permissions.moderator",
+            "roles.permissions.member",
+
+            "channels.annoucement",
+            "channels.bakalari",
+            "channels.supplementation",
+            "channels.event",
+            "channels.event-archive",
+            "channels.vote",
+            "channels.bot-info",
+            
+
+            "modules.disabled",
+            
+            "commands.disabled"
         ];
     }
+
+    get(path) {
+        if(config.has(path))
+            return config.get(path);
+        else 
+            return undefined;
+    }
+
 }
 
 const conf = new Config();

@@ -1,6 +1,7 @@
 const Command = require("./Command");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class HelpCommand extends Command {
 
@@ -17,9 +18,8 @@ class HelpCommand extends Command {
     }
 
     init(bot) {
-        this.commandsGroups = bot.settings.commands.groups;
-        this.prefix = bot.settings.prefix;
-        this.roles = bot.settings.roles.permission;
+        this.prefix = Config.get("bot.prefix");
+        this.roles = Config.get("roles.permissions");
         this.commands = bot.commands;
     }
 
