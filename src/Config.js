@@ -43,6 +43,11 @@ class Config {
             "modules.event.check-time",
             "modules.event.placeholders",
 
+            "modules.auto-reaction.text-text",
+            "modules.auto-reaction.channels-attachments",
+            "modules.auto-reaction.text",
+            "modules.auto-reaction.series-text",
+
             "commands.disabled"
         ];
     }

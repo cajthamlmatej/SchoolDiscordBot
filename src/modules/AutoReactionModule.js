@@ -7,7 +7,7 @@ class AutoReactionModule extends Module {
     }
 
     init(bot) {
-        this.settings = bot.settings.modules["auto-reaction"];
+        this.settings = Config.get("modules.auto-reaction");
     }
 
     event(name, args) {
