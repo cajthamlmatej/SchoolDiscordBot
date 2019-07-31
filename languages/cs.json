@@ -96,7 +96,7 @@
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
     "command.error": "Při odesílání příkazu nastala chyba",
-    
+
     "command.event.already-exists": "Událost s tímto jménem již existuje, zvolte prosím jiné jméno.",
     "command.event.type-not-valid": "Typ události není platný, vyberte jednu z ({0}) hodnot.",
     "command.event.role-not-valid": "Vybraná role není platná, vyberte jednu z ({0}) rolí.",
@@ -108,7 +108,7 @@
     "command.event.check.description": "Více informací k určitým událostem naleznete v kanálu s událostmi a úkoly",
     "command.event.check.starts": "Eventy které začínají",
     "command.event.check.ends": "Eventy které začínají",
-    "command.event.check.going": "Eventy které začínají",    
+    "command.event.check.going": "Eventy které začínají",
     "command.event.check.nextweek.title": "Seznam událostí pro následující týden",
     "command.event.check.nextweek.no-event-found": "Žádný event nebyl nalezen.",
     "command.event.check.week.title": "Seznam událostí pro nadcházející dny v tomto týdnu",
@@ -120,10 +120,10 @@
     "command.event.check.week.5": "Pátek",
     "command.event.check.week.6": "Sobota",
     "command.event.check.week.7": "Neděle",
-    
+
     "command.help.title": "Nápověda k používání bota",
     "command.help.can-execute": "Seznam příkazů, které můžete použít.",
-    
+
     "command.mute.user-list.title": "Seznam všech možných uživatelů",
     "command.mute.user-list": "Určete jméno člena více podrobně",
     "command.mute.user-not-found": "Nikoho s tímto jménem jsme nenašli. Zkontrolujte diakritiku a správnost jména.",
@@ -141,23 +141,23 @@
     "command.mute.minutes": "{0} minut",
     "command.mute.unmuted.title": "{0} byl odmlčen",
     "command.mute.unmuted": "Člen {0} již není umlčen.",
-    
+
     "command.ping": "Odezva",
     "command.ping.ping": "Odezva bota je {0}ms.",
-    
+
     "command.purge.wrong-message-count": "Zadaný počet zpráv, které se mají smazat není správný. Minimum zpráv je 1 a nejvíce je 100.",
     "command.purge.purged.title": "Uklííííízečka!!!",
     "command.purge.purged": "{0} zpráv bylo smazáno v tomto kanálu.",
-    
+
     "command.role.role-not-found": "Vybraná role není platná, vyberte jednu z rolí v příkazu `rolelist`.",
-    
+
     "command.notice.notice": "Oznámení!",
-    
+
     "command.vote.dont-exist": "Hlasování s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazem vote list.",
     "command.vote.type-not-valid": "Typ hlasování není platný, vyberte jeden z následujících:",
     "command.vote.already-exists": "Hlasování s tímto jménem již existuje, zvolte prosím jiné jméno.",
     "command.vote.too-much.options": "Zadal jste více možností (> 10) než je možné. Zadejte menší počet.",
-    
+
     "command.language.language-not-found": "Jazyk s tímto jménem nebyl nalezen.",
     "command.language.language-changed.title": "Jazyk bota byl změněn",
     "command.language.language-changed": "Jazyk bota byl do restartování změněn, nezapomente jej změnit i v configu.",
@@ -166,7 +166,7 @@
     "command.annoucement.dont-exist": "Oznámení s tímto jménem nebylo nalezeno. Výpis všech hlasování provedete příkazem annoucement list.",
     "command.annoucement.already-exists": "Oznámení s tímto jménem již existuje, zvolte jiné jméno.",
     "command.annoucement.edit-type-not-valid": "Vybraná hodnota k editaci není platná, vyberte jednu z ({0}) hodnot.",
-    
+
     "command.supplementation.lastcheck.title": "Poslední čas zkontrolování suplování",
     "command.supplementation.lastcheck": "Suplování bylo zkontrolováno naposledy před {0}m.",
 
@@ -174,7 +174,7 @@
     "command.status.commands": "Počet příkazů",
     "command.status.number-of-commands": "✅ {0} a ❌ {1}",
     "command.status.modules": "Počet modulů",
-    "command.status.number-of-modules": "✅ {0} a ❌ {1}",    
+    "command.status.number-of-modules": "✅ {0} a ❌ {1}",
     "command.status.ping": "Ping",
     "command.status.author": "Autor",
     "command.status.uptime": "Čas od spuštění",
@@ -276,8 +276,12 @@
     "builder.event.create.ok": "Událost / úkol byl přidán.",
     "builder.event.create.type.title": "Typ eventu",
     "builder.event.create.type.help": "Zadejte typ eventu.",
+    "builder.event.create.title.title": "Nadpis eventu",
+    "builder.event.create.title.help": "Zadejte nadpis eventu",
+    "builder.event.create.title.example": "Test z programovacího jazyka Javascript",
     "builder.event.create.name.title": "Jméno eventu",
     "builder.event.create.name.help": "Zadejte unikátní jméno eventu pro jeho budoucí manipulaci.",
+    "builder.event.create.name.example": "-,pva_test_javascript",
     "builder.event.create.start.title": "Začátek eventu",
     "builder.event.create.start.help": "Zadejte datum (a čas) začátku události.",
     "builder.event.create.end.title": "Konec eventu",
@@ -286,10 +290,13 @@
     "builder.event.create.role.help": "Zadejte jméno role, pro kterou je event určený.",
     "builder.event.create.place.title": "Místo eventu",
     "builder.event.create.place.help": "Zadejte místo, kde se event udehrává.",
+    "builder.event.create.place.example": "Škola,Arbesovo náměstí,Václavské náměstí",
     "builder.event.create.subject.title": "Předmět pro event",
     "builder.event.create.subject.help": "Zadejte předmět pro který event je.",
+    "builder.event.create.subject.example": "PVA,Matematika",
     "builder.event.create.description.title": "Popis eventu",
     "builder.event.create.description.help": "Zadejte jakékoliv další informace, které o eventu víte.",
+    "builder.event.create.description.example": "Popis eventu",
     "builder.event.create.files.title": "Soubory eventu",
     "builder.event.create.files.help": "Přiložte k odeslané zprávě soubory, které chcete přidat k eventu. Po tomto kroku se event přidá a vypíše všem uživatelům.\nPokud nechcete přiložit přílohu, zadejte znak \"-\".",
 
