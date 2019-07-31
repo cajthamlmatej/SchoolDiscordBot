@@ -1,4 +1,4 @@
-const config = require('config');
+const config = require("config");
         
 class Config {
 
@@ -36,7 +36,6 @@ class Config {
             "channels.event-archive",
             "channels.vote",
             "channels.bot-info",
-            
 
             "modules.disabled",
 
