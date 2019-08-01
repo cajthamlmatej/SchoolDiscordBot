@@ -2,6 +2,7 @@ const Module = require("./Module");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
 const fs = require("fs");
+const Config = require("../Config");
 
 class VoteModule extends Module {
 
@@ -12,7 +13,7 @@ class VoteModule extends Module {
     init(bot) {
         this.tempFile = "./temp/votes.json";
         this.optionsEmojis = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣", "🔟"];
-        this.voteChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels.vote);
+        this.voteChannel = bot.client.channels.find(channel => channel.id === Config.get("channels.annoucement"));
         this.client = bot.client;
     }
 
