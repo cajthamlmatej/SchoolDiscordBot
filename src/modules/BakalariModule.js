@@ -1,4 +1,5 @@
 const Module = require("./Module");
+const Config = require("../Config");
 const https = require("https");
 const fs = require("fs");
 const jsdom = require("jsdom");
@@ -12,10 +13,10 @@ class BakalariModule extends Module {
     }
 
     init(bot) {
-        this.settings = bot.settings.modules.bakalari;
+        this.settings = Config.get("modules.bakalari");
 
         this.tempFile = "./temp/bakalari.json";
-        this.channel = bot.client.channels.find(ch => ch.id == bot.settings.channels.bakalari);
+        this.channel = bot.client.channels.find(ch => ch.id == Config.get("channels.bakalari"));
 
         this.tick();
         setInterval(() => this.tick(), 120000);
@@ -67,10 +68,10 @@ class BakalariModule extends Module {
                         if (title.includes("zapsána známka:") || description.includes("zapsána známka:")) {
                             title = title.split(":")[0] + title.split(":")[1];
 
-                            if (this.settings.ignored.includes(subject)) 
+                            if (this.settings.subjects.ignored.includes(subject)) 
                                 return;
 
-                            if (!main && !this.settings.separated.includes(subject)) 
+                            if (!main && !this.settings.subjects.separated.includes(subject)) 
                                 return;
 
                             description = description.split(":")[0] + description.split(":")[1];
@@ -78,7 +79,7 @@ class BakalariModule extends Module {
 
                     file[guid] = { title: title, description: description, isTask: isTask };
 
-                    this.channel.send(this.generateEmbed(isTask, title, description, this.settings.separated.includes(subject) ? values.group : undefined));
+                    this.channel.send(this.generateEmbed(isTask, title, description, this.settings.subjects.separated.includes(subject) ? values.group : undefined));
                 });
 
                 this.saveFile(file);

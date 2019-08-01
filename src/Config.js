@@ -26,12 +26,18 @@ class Config {
             "roles.permissions.admin",
             "roles.permissions.moderator",
             "roles.permissions.member",
+            
+            "roles.assignable",
 
             "roles.mentionable.member",
+
+            "roles.special.mute",
+            "roles.special.rolelock",
 
             "channels.annoucement",
             "channels.bakalari",
             "channels.supplementation",
+            "channels.role",
             "channels.event",
             "channels.event-archive",
             "channels.vote",
@@ -48,7 +54,19 @@ class Config {
             "modules.auto-reaction.text",
             "modules.auto-reaction.series-text",
 
-            "commands.weather.unit",
+            "modules.bakalari.members",
+            "modules.bakalari.subjects.ignored",
+            "modules.bakalari.subjects.separated",
+
+            "modules.event-annoucement.check-time",
+
+            "modules.supplementation.highlights",
+            "modules.supplementation.replace",
+            "modules.supplementation.refresh",
+
+            "modules.mute.max",
+
+            "commands.weather.degree",
 
             "commands.disabled"
         ];

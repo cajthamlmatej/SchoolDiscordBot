@@ -1,7 +1,7 @@
 const Module = require("./Module");
 const Discord = require("discord.js");
-const fs = require("fs");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class RoleModule extends Module {
 
@@ -10,9 +10,9 @@ class RoleModule extends Module {
     }
 
     init(bot) {
-        this.channel = bot.client.channels.find(channel => channel.id === bot.settings.channels.role);
-        this.rolelockRole = bot.settings.roles.special.rolelock;
-        this.roles = bot.settings.roles;
+        this.channel = bot.client.channels.find(channel => channel.id === Config.get("channels.role"));
+        this.rolelockRole = Config.get("roles.special.rolelock");
+        this.roles = Config.get("roles");
 
         this.channel.fetchMessages({ limit: 30 })
             .then(messages => {

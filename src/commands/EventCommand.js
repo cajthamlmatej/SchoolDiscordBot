@@ -62,7 +62,6 @@ class EventCommand extends SubsCommand {
 
     init(bot) {
         this.eventModule = bot.modules["eventmodule"];
-        this.stopWord = Config.get("bot.builder.stop-word");
         this.placeholders = Config.get("modules.event.placeholders");
     }
 
@@ -101,7 +100,7 @@ class EventCommand extends SubsCommand {
                 if (content == "-")
                     return values["title"].toLowerCase().split("").map(function(letter) {
                         const i = this.accents.indexOf(letter);
-                        return (i !== -1) ? this.acc_out[i] : letter;
+                        return (i !== -1) ? this.acceOut[i] : letter;
                     }.bind({
                         accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž- ",
                         acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz__"
@@ -226,7 +225,7 @@ class EventCommand extends SubsCommand {
             });
 
             this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, values["files"]); // files);
-        }, this.stopWord);
+        });
 
         builder.start();
         return true;
@@ -280,7 +279,7 @@ class EventCommand extends SubsCommand {
             console.log("User " + message.author.username + " edited event with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
 
             this.eventModule.editEvent(values["name"], values["type"], values["value"]);
-        }, this.stopWord);
+        });
 
         builder.start();
         return true;

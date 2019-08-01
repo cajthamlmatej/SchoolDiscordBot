@@ -6,6 +6,7 @@ const jsdom = require("jsdom");
 const Discord = require("discord.js");
 const { JSDOM } = jsdom;
 const moment = require("moment");
+const Config = require("../Config");
 
 class SupplementationModule extends Module {
 
@@ -21,8 +22,8 @@ class SupplementationModule extends Module {
         };
 
         this.client = bot.client;
-        this.supplementationConfig = bot.settings.modules.supplementation;
-        this.channel = bot.settings.channels.supplementation;
+        this.supplementationConfig = Config.get("modules.supplementation");
+        this.channel = Config.get("channels.supplementation");
 
         this.tick();
         setInterval(() => this.tick(), this.supplementationConfig.refresh);

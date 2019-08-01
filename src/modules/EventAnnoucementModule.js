@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const Translation = require("../Translation");
 const fs = require("fs");
 const moment = require("moment");
+const Config = require("../Config");
 
 class EventAnnoucementModule extends Module {
 
@@ -12,8 +13,8 @@ class EventAnnoucementModule extends Module {
 
     init(bot) {
         this.eventModule = bot.modules.eventmodule;
-        this.channel = bot.client.channels.find(ch => ch.id == bot.settings.channels.eventannoucement);
-        this.checkTime = bot.settings.modules.eventannoucement.checkTime;
+        this.channel = bot.client.channels.find(ch => ch.id == Config.get("annoucement"));
+        this.checkTime = Config.get("modules.event-annoucement.check-time");
         this.tempFile = "./temp/eventannoucement.json";
 
         if (this.eventModule != undefined) 

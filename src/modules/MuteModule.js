@@ -3,6 +3,7 @@ const fs = require("fs");
 const Discord = require("discord.js");
 const moment = require("moment");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class MuteModule extends Module {
 
@@ -11,9 +12,9 @@ class MuteModule extends Module {
     }
 
     init(bot) {
-        this.guild = bot.client.channels.find(channel => channel.id === bot.settings.channels.vote).guild;
-        this.muteRole = bot.settings.modules.mute.role;
-        this.moderatorRole = bot.settings.roles.permission.moderator;
+        this.guild = bot.client.guilds.get(Config.get("bot.guild"));
+        this.muteRole = Config.get("roles.special.mute");
+        this.moderatorRole = Config.get("roles.permissions.moderator");
 
         this.tempFile = "./temp/mutes.json";
 
