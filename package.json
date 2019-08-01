@@ -10,7 +10,8 @@
     "jsdom": "^12.2.0",
     "mathjs": "^6.0.1",
     "moment": "^2.24.0",
-    "weather-js": "^2.0.0"
+    "weather-js": "^2.0.0",
+    "winston": "^3.2.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

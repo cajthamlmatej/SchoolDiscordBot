@@ -34,7 +34,7 @@ class LanguageCommand extends SubsCommand {
     }
 
     callList(args, message) {
-        const languages = Translation.languageList();
+        const languages = Translation.getLanguages();
 
         let list = "";
 
@@ -58,7 +58,7 @@ class LanguageCommand extends SubsCommand {
         const channel = message.channel;
         const language = args[0];
 
-        if (!Translation.languageExists(language)) {
+        if (!Translation.isValidLanguage(language)) {
             this.sendError(channel, "command.language.language-not-found");
             return;
         }
