@@ -6,3 +6,4 @@ package-lock.json
 settings/settings.json
 temp/
 config/
+log/
