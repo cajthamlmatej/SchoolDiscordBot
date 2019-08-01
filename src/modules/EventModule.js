@@ -218,7 +218,7 @@ class EventModule extends Module {
         const events = this.getEvents();
 
         Object.keys(events).forEach(eventName => {
-            list += "\n**" + eventName + "**";
+            list += "\n**" + eventName + " (" + events[eventName].values.title + ")**";
         });
 
         if (list == "")
