@@ -28,7 +28,7 @@ class Translation {
         return translation;
     }
 
-    static languageExists(language) {
+    static isValidLanguage(language) {
         try {
             fs.readFileSync("languages/" + language + ".json", "utf8");
             return true;
@@ -37,7 +37,7 @@ class Translation {
         }
     }
 
-    static languageList() {
+    static getLanguages() {
         const languages = [];
         const languagesFiles = fs.readdirSync("languages", "utf8");
 
