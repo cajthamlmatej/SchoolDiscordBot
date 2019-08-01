@@ -33,7 +33,7 @@ class WeatherCommand extends Command {
                 const currentLocation = resultBase.location.name;
                 const degree = " °" + this.unit;
                 const resultTodaySkytext = resultBase.current.skytext.toLowerCase().replace(/ /g, "-");
-                const resultTommorowSkytext = resultForTommorow.skytext.toLowerCase().replace(/ /g, "-");
+                const resultTommorowSkytext = resultForTommorow.skytextday.toLowerCase().replace(/ /g, "-");
 
                 const weatherEmbedToday = new Discord.RichEmbed()
                     .setColor(0xbadc58)
