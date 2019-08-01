@@ -5,6 +5,7 @@ const fs = require("fs");
 const jsdom = require("jsdom");
 const Discord = require("discord.js");
 const { JSDOM } = jsdom;
+const logger = require("../Logger");
 
 class BakalariModule extends Module {
 
@@ -86,7 +87,7 @@ class BakalariModule extends Module {
             });
         });
         request.on("error", function (e) {
-            console.log(e.message);
+            logger.error(e.message);
         });
         request.end();
     }

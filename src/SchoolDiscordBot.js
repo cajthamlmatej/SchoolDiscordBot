@@ -2,27 +2,33 @@ const Discord = require("discord.js");
 const Translation = require("./Translation");
 const Config = require("./Config");
 const DirectCommand = require("./commands/DirectCommand");
+const SubsCommand = require("./commands/SubsCommand");
 const moment = require("moment");
 const fs = require("fs");
+const logger = require("./Logger");
 
 class SchoolDiscordBot {
+
     constructor() {
         this.startTime = moment();
     }
 
     start() {
-        console.log("Starting client.");
         this.reload();
     }
 
     reload() {
+        logger.info("Bot is reloading.");
+
         if (this.client != undefined) {
-            console.log("Destroing client.");
+            logger.warn("Bot Discord client already exists. Destroying client.");
             this.client.destroy();
         }
 
+        logger.info("Creating Discord client.");
         this.client = new Discord.Client();
 
+        logger.info("Clearing default variables for commands, modules, aliases and recent commands usage.");
         this.disabledCommands = [];
         this.disabledModules = [];
         this.commandsAliases = {};
@@ -33,13 +39,13 @@ class SchoolDiscordBot {
         this.loadCommands();
 
         this.token = Config.get("bot.token");
+        const guild = Config.get("bot.guild");
 
-        console.log("Setting bot events.");
+        logger.info("Setup of events.");
+
         this.client.on("ready", () => {
             this.ready();
         });
-
-        const guild = Config.get("bot.guild");
 
         this.client.on("message", (message) => {
             this.message(message);
@@ -70,19 +76,22 @@ class SchoolDiscordBot {
             });
         });
 
-        console.log("Login bot to discord.");
+        logger.info("Logging bot into Discord API.");
         this.client.login(this.token);
     }
 
     loadConfig() {
-        console.log("Opening and reading settings file.");
-
+        logger.info("Loading config...");
+        logger.info("Validating Config variables.");
         Config.validate();
+        logger.info("Config variables validated.");
     }
 
     loadCommands() {
+        logger.info("Loading commands...");
+
         const commands = {};
-        console.log("Reading directory with commands.");
+        logger.info("Reading directory with commands.");
         const commandFiles = fs.readdirSync("./src/commands");
 
         commandFiles.forEach(file => {
@@ -99,8 +108,11 @@ class SchoolDiscordBot {
     }
 
     loadModules() {
+        logger.info("Loading modules...");
+
         const modules = {};
-        console.log("Reading directory with modules.");
+        logger.info("Reading directory with modules.");
+
         const moduleFiles = fs.readdirSync("./src/modules");
 
         moduleFiles.forEach(file => {
@@ -121,26 +133,26 @@ class SchoolDiscordBot {
 
         this.name = this.client.user.username;
 
-        console.log("Loading modules.");
+        logger.info("Loading bot modules...");
         Object.values(this.modules).forEach(module => {
             const moduleName = module.getName();
 
             if (Config.get("modules.disabled").includes(moduleName)) {
-                console.log("Module " + moduleName + " is disabled, not loading it.");
+                logger.warn("  Module " + moduleName + " is disabled, not loading it.");
                 this.disabledModules.push(moduleName);
                 delete this.modules[moduleName];
                 return;
             }
 
             module.init(this);
-            console.log("Module " + moduleName + " loaded.");
+            logger.info(" Module " + moduleName + " loaded.");
         });
 
-        console.log("Loading commands.");
+        logger.info("Loading bot commands...");
         Object.values(this.commands).forEach(command => {
             const commandName = command.getName();
             if (Config.get("commands.disabled").includes(commandName)) {
-                console.log("Command " + commandName + " is disabled, not loading it.");
+                logger.warn(" Command " + commandName + " is disabled, not loading it.");
                 delete this.commands[commandName];
                 return;
             }
@@ -154,7 +166,7 @@ class SchoolDiscordBot {
             });
 
             if (!canBeEnabled) {
-                console.log("Command " + commandName + " is disabled because dependencies modules are not loaded.");
+                logger.warn("  Command " + commandName + " is disabled because dependencies modules (" + command.getDependencies() + ") are not loaded.");
                 this.disabledCommands.push(commandName);
                 delete this.commands[commandName];
                 return;
@@ -167,14 +179,20 @@ class SchoolDiscordBot {
             this.commandsAliases[commandName] = commandName;
 
             command.init(this);
-            console.log("Command " + commandName + " loaded.");
+            logger.info(" Command " + commandName + " loaded.");
+
+            if(command instanceof SubsCommand)
+                Object.keys(command.getSubCommands()).forEach(name => {
+                    logger.info("  Sub-command " + name + " loaded.");
+                });
         });
 
+        logger.info("Bot started.");
+        logger.info("Sending message to server moderators.");
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("bot.started"))
             .setColor(0xbadc58);
 
-        console.log("Bot " + this.name + " started.");
         const adminChannel = this.client.channels.find(c => c.id == Config.get("channels.bot-info"));
         adminChannel.send(embed);
     }
@@ -233,7 +251,7 @@ class SchoolDiscordBot {
                 if (!havePermissions)
                     return;
 
-                console.log("User " + message.author.username + " used command " + message.content + ".");
+                logger.info("User " + message.author.username + (member.nickname != undefined ? " (" + member.nickname + ")" : "") + " user command " + message.content + ".");
                 const deleteMessage = command.call(args, message);
 
                 if (deleteMessage)

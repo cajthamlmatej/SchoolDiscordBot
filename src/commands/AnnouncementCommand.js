@@ -1,6 +1,6 @@
 const SubsCommand = require("./SubsCommand");
 const CommandBuilder = require("../CommandBuilder");
-const Config = require("../Config");
+const logger = require("../Logger");
 
 class AnnouncementCommand extends SubsCommand {
 
@@ -86,7 +86,7 @@ class AnnouncementCommand extends SubsCommand {
                 }
             }
         ], (values) => {
-            console.log("User " + message.author.username + " edited annoucement with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
+            logger.info("User " + message.author.username + " edited annoucement with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
 
             this.annoucementModule.editAnnoucement(message.member, values["name"], values["type"], values["value"]);
         });
@@ -139,7 +139,7 @@ class AnnouncementCommand extends SubsCommand {
                 }
             }
         ], (values) => {
-            console.log("User " + message.author.username + " created annoucement with name " + values["name"] + ".");
+            logger.info("User " + message.author.username + " created annoucement with name " + values["name"] + ".");
 
             this.annoucementModule.addAnnoucement(message.member, values["name"], values["title"], values["annoucement"]);
         });

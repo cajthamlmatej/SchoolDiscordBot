@@ -7,6 +7,7 @@ const Discord = require("discord.js");
 const { JSDOM } = jsdom;
 const moment = require("moment");
 const Config = require("../Config");
+const logger = require("../Logger");
 
 class SupplementationModule extends Module {
 
@@ -118,7 +119,7 @@ class SupplementationModule extends Module {
                         channel.fetchMessage(messageId).then(message => {
                             if (message.embeds[0].description !== suppleString) 
                                 message.edit(containsHighlight == true ? "@everyone" : "", embed).catch(error => {
-                                    console.log("Error while editing supplementation message. Message is probably above 2048 char limit.");
+                                    logger.error("Error while editing supplementation message. Message is probably above 2048 char limit.");
                                 });
                             
                         });
@@ -130,12 +131,11 @@ class SupplementationModule extends Module {
                                 fs.writeFileSync("./temp/supplementations.json", JSON.stringify(supplementationsObject));
                             
                         }).catch(error => {
-                            console.log("Error while editing supplementation message. Message is probably above 2048 char limit.");
+                            logger.error("Error while editing supplementation message. Message is probably above 2048 char limit.");
                         });
                     
                 });
 
-                // pins
                 Object.keys(supplementationsObject["supplementations"]).forEach(day => {
                     const messageId = supplementationsObject["supplementations"][day];
 
@@ -148,7 +148,7 @@ class SupplementationModule extends Module {
                             if (message.pinned) 
                                 message.unpin();
 
-                            console.log("Removing supplementation for day " + day);
+                            logger.info("Removing supplementation for day " + day);
 
                             delete supplementationsObject["supplementations"][day];
                             fs.writeFileSync("./temp/supplementations.json", JSON.stringify(supplementationsObject));
@@ -158,7 +158,7 @@ class SupplementationModule extends Module {
             });
         });
         request.on("error", function (e) {
-            console.log(e.message);
+            logger.error(e.message);
         });
         request.end();
     }

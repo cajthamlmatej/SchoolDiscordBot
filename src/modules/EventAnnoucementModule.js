@@ -68,7 +68,7 @@ class EventAnnoucementModule extends Module {
                 .addField(Translation.translate("module.eventannoucement.role"), this.channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[eventValues.role]), true)
                 .addField(Translation.translate("module.eventannoucement.subject"), eventValues.subject, true)
                 .addField(Translation.translate("module.eventannoucement.place"), eventValues.place, true);
-
+     
             this.channel.send(embed);
         });
     }

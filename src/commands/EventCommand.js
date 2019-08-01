@@ -4,6 +4,7 @@ const Discord = require("discord.js");
 const CommandBuilder = require("../CommandBuilder");
 const Translation = require("../Translation");
 const Config = require("../Config");
+const logger = require("../Logger");
 
 class EventCommand extends SubsCommand {
 
@@ -209,7 +210,7 @@ class EventCommand extends SubsCommand {
             }
         }
         ], (values) => {
-            console.log("User " + message.author.username + " created event with name " + values["name"] + ".");
+            logger.info("User " + message.author.username + " created event with name " + values["name"] + ".");
 
             let start = values["start"];
             let end = values["end"];
@@ -276,7 +277,7 @@ class EventCommand extends SubsCommand {
             }
         }
         ], (values) => {
-            console.log("User " + message.author.username + " edited event with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
+            logger.info("User " + message.author.username + " edited event with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
 
             this.eventModule.editEvent(values["name"], values["type"], values["value"]);
         });
