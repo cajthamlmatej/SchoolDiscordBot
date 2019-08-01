@@ -58,7 +58,12 @@ class Config {
             "modules.bakalari.subjects.ignored",
             "modules.bakalari.subjects.separated",
 
-            "modules.event-annoucement.check-time"
+            "modules.event-annoucement.check-time",
+
+            "modules.supplementation.highlights",
+            "modules.supplementation.replace",
+            "modules.supplementation.refresh",
+
 
             "commands.disabled"
         ];
