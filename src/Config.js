@@ -26,13 +26,18 @@ class Config {
             "roles.permissions.admin",
             "roles.permissions.moderator",
             "roles.permissions.member",
+            
+            "roles.assignable",
 
             "roles.mentionable.member",
 
             "roles.special.mute",
+            "roles.special.rolelock",
+
             "channels.annoucement",
             "channels.bakalari",
             "channels.supplementation",
+            "channels.role",
             "channels.event",
             "channels.event-archive",
             "channels.vote",
