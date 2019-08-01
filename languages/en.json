@@ -277,10 +277,10 @@
     "module.eventannoucement.event.description.ends": "Event with name {1} ends tomorrow ({0}). You can find more informations in channel for events and tasks.",
     "module.eventannoucement.event.description.starts": "Event with name {1} starts tomorrow ({0}). You can find more informations in channel for events and tasks.",
     "module.eventannoucement.event.description.going": "Event with name {1} is going on tomorrow ({0}). You can find more informations in channel for events and tasks.",
-    "module.eventannoucement.informations": "Informace",
+    "module.eventannoucement.informations": "Information",
     "module.eventannoucement.role": "Role",
-    "module.eventannoucement.subject": "Předmět",
-    "module.eventannoucement.place": "Místo",
+    "module.eventannoucement.subject": "Subject",
+    "module.eventannoucement.place": "Place",
 
     "module.math.result": "The result is ",
 
