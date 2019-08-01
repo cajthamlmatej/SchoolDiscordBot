@@ -64,6 +64,7 @@ class Config {
             "modules.supplementation.replace",
             "modules.supplementation.refresh",
 
+            "commands.weather.degree",
 
             "commands.disabled"
         ];

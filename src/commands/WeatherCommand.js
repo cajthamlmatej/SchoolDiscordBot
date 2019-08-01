@@ -2,6 +2,7 @@ const Command = require("./Command");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
 const Weather = require("weather-js");
+const Config = require("../Config");
 
 class WeatherCommand extends Command {
 
@@ -19,7 +20,7 @@ class WeatherCommand extends Command {
 
     init(bot) {
         this.client = bot.client;
-        this.unit = bot.settings.modules.weather.degreeUnit;
+        this.unit = Config.get("commands.weather.degree");
     }
 
     call(args, message) {
