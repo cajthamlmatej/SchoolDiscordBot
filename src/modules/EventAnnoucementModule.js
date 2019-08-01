@@ -61,18 +61,18 @@ class EventAnnoucementModule extends Module {
                 return;
 
             const dmembed = new Discord.RichEmbed()
-                .setTitle(Translation.translate("module.eventannoucement.title." + name))
-                .setColor(0xbadc58)
-                .setDescription(Translation.translate("module.eventannoucement.description." + name, time.format("D. M. YYYY"), eventValues.title))
+                .setTitle((eventValues.type == "event") ? "👁 " + Translation.translate("module.eventannoucement.event.title." + name) : "👁 " + Translation.translate("module.eventannoucement.task.title." + name))
+                .setColor(0xdb970f)
+                .setDescription((eventValues.type == "event") ? Translation.translate("module.eventannoucement.event.description." + name, time.format("D. M. YYYY"), eventValues.title) : Translation.translate("module.eventannoucement.task.description." + name, time.format("D. M. YYYY"), eventValues.title))
                 .addField(Translation.translate("module.eventannoucement.informations"), eventValues.description)
                 .addField(Translation.translate("module.eventannoucement.role"), eventValues.role, true)
                 .addField(Translation.translate("module.eventannoucement.subject"), eventValues.subject, true)
                 .addField(Translation.translate("module.eventannoucement.place"), eventValues.place, true);
 
             const embed = new Discord.RichEmbed()
-                .setTitle(Translation.translate("module.eventannoucement.title." + name))
+                .setTitle((eventValues.type == "event") ? "👁 " + Translation.translate("module.eventannoucement.event.title." + name) : "👁 " + Translation.translate("module.eventannoucement.task.title." + name))
                 .setColor(0xbadc58)
-                .setDescription(Translation.translate("module.eventannoucement.description." + name, time.format("D. M. YYYY"), eventValues.title))
+                .setDescription((eventValues.type == "event") ? Translation.translate("module.eventannoucement.event.description." + name, time.format("D. M. YYYY"), eventValues.title) : Translation.translate("module.eventannoucement.task.description." + name, time.format("D. M. YYYY"), eventValues.title))
                 .addField(Translation.translate("module.eventannoucement.informations"), eventValues.description)
                 .addField(Translation.translate("module.eventannoucement.role"), this.channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[eventValues.role]), true)
                 .addField(Translation.translate("module.eventannoucement.subject"), eventValues.subject, true)
