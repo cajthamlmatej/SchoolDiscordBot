@@ -12,7 +12,7 @@ class MuteModule extends Module {
     }
 
     init(bot) {
-        this.guild = bot.client.guilds.find("id", Config.get("bot.guild"));
+        this.guild = bot.client.guilds.get(Config.get("bot.guild"));
         this.muteRole = Config.get("roles.special.mute");
         this.moderatorRole = Config.get("roles.permissions.moderator");
 

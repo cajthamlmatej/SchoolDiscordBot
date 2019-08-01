@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const Translation = require("../Translation");
 const fs = require("fs");
 const moment = require("moment");
-const Config = require("./Config");
+const Config = require("../Config");
 
 class EventAnnoucementModule extends Module {
 
