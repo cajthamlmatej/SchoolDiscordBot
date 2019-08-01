@@ -1,13 +1,13 @@
 const config = require("config");
-        
+
 class Config {
 
     validate() {
-        if(process.env.NODE_ENV == undefined)
+        if (process.env.NODE_ENV == undefined)
             throw new Error("You are using default node enviroment. Please read README.md, change config and node enviroment.");
 
         this.getRequiredPaths().forEach(path => {
-            if(!config.has(path))
+            if (!config.has(path))
                 throw new Error("Path " + path + " is required in config.");
         });
     }
@@ -48,14 +48,16 @@ class Config {
             "modules.auto-reaction.text",
             "modules.auto-reaction.series-text",
 
+            "commands.weather.unit",
+
             "commands.disabled"
         ];
     }
 
     get(path) {
-        if(config.has(path))
+        if (config.has(path))
             return config.get(path);
-        else 
+        else
             return undefined;
     }
 
