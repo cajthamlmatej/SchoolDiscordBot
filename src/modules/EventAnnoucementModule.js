@@ -17,14 +17,14 @@ class EventAnnoucementModule extends Module {
         this.checkTime = Config.get("modules.event-annoucement.check-time");
         this.tempFile = "./temp/eventannoucement.json";
 
-        if (this.eventModule != undefined) 
+        if (this.eventModule != undefined)
             setInterval(() => this.tick(), 5000);
-        
+
     }
 
     tick() {
         const time = moment();
-        const checkTime = moment(this.checkTime[moment().isoWeekday()-1], "HH:mm");
+        const checkTime = moment(this.checkTime[moment().isoWeekday() - 1], "HH:mm");
 
         const diff = time.diff(checkTime, "seconds");
 
@@ -42,11 +42,11 @@ class EventAnnoucementModule extends Module {
             const eventValues = event.values;
 
             let dateEnd = moment(eventValues.end, "D. M. YYYY");
-            if (!dateEnd.isValid()) 
+            if (!dateEnd.isValid())
                 dateEnd = moment(eventValues.end, "D. M. YYYY HH:mm");
 
             let dateStart = moment(eventValues.start, "D. M. YYYY");
-            if (!dateStart.isValid()) 
+            if (!dateStart.isValid())
                 dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
 
             let name = "";
@@ -60,6 +60,15 @@ class EventAnnoucementModule extends Module {
             if (name == "")
                 return;
 
+            const dmembed = new Discord.RichEmbed()
+                .setTitle(Translation.translate("module.eventannoucement.title." + name))
+                .setColor(0xbadc58)
+                .setDescription(Translation.translate("module.eventannoucement.description." + name, time.format("D. M. YYYY"), eventName))
+                .addField(Translation.translate("module.eventannoucement.informations"), eventValues.description)
+                .addField(Translation.translate("module.eventannoucement.role"), eventValues.role, true)
+                .addField(Translation.translate("module.eventannoucement.subject"), eventValues.subject, true)
+                .addField(Translation.translate("module.eventannoucement.place"), eventValues.place, true);
+
             const embed = new Discord.RichEmbed()
                 .setTitle(Translation.translate("module.eventannoucement.title." + name))
                 .setColor(0xbadc58)
@@ -69,6 +78,11 @@ class EventAnnoucementModule extends Module {
                 .addField(Translation.translate("module.eventannoucement.subject"), eventValues.subject, true)
                 .addField(Translation.translate("module.eventannoucement.place"), eventValues.place, true);
 
+            this.channel.guild.members.forEach((member) => {
+                if (member.roles.has(this.eventModule.getMentionableRolesIds()[eventValues.role]))
+                    member.createDM().then(dm => dm.send(dmembed));
+
+            });
             this.channel.send(embed);
         });
     }
@@ -84,8 +98,7 @@ class EventAnnoucementModule extends Module {
         fs.writeFileSync(this.tempFile, JSON.stringify({ "lastcheck": lastcheck }));
     }
 
-    event(name, args) {
-    }
+    event(name, args) {}
 
 }
 
