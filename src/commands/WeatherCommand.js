@@ -28,11 +28,11 @@ class WeatherCommand extends Command {
             if (result[0] != undefined) {
                 const resultBase = result[0];
                 const resultForToday = resultBase.forecast[1];
-                const resultForTommorow = resultBase.forecast[2];
+                const resultForTomorrow = resultBase.forecast[2];
                 const currentLocation = resultBase.location.name;
                 const degree = " °" + this.unit;
                 const resultTodaySkytext = resultBase.current.skytext.toLowerCase().replace(/ /g, "-");
-                const resultTommorowSkytext = resultForTommorow.skytextday.toLowerCase().replace(/ /g, "-");
+                const resultTomorrowSkytext = resultForTomorrow.skytextday.toLowerCase().replace(/ /g, "-");
 
                 const weatherEmbedToday = new Discord.RichEmbed()
                     .setColor(0xbadc58)
@@ -50,10 +50,10 @@ class WeatherCommand extends Command {
 
                 const weatherEmbedTomorrow = new Discord.RichEmbed()
                     .setColor(0xbadc58)
-                    .setTitle(Translation.translate("command.weather.tommorow") + currentLocation, true)
-                    .addField(Translation.translate("command.weather.temperature"), "⬇️ " + resultForTommorow.low + degree + " | ⬆️ " + resultForTommorow.high + degree, true)
-                    .addField(Translation.translate("command.weather.condition"), Translation.translate("command.weather.skytext." + resultTommorowSkytext), true)
-                    .addField(Translation.translate("command.weather.precipitation"), resultForTommorow.precip + "%", true)
+                    .setTitle(Translation.translate("command.weather.tomorrow") + currentLocation, true)
+                    .addField(Translation.translate("command.weather.temperature"), "⬇️ " + resultForTomorrow.low + degree + " | ⬆️ " + resultForTomorrow.high + degree, true)
+                    .addField(Translation.translate("command.weather.condition"), Translation.translate("command.weather.skytext." + resultTomorrowSkytext), true)
+                    .addField(Translation.translate("command.weather.precipitation"), resultForTomorrow.precip + "%", true)
                     .setTimestamp()
                     .setFooter(Translation.translate("command.weather.request") + message.member.nickname, message.author.avatarURL);
 
