@@ -52,6 +52,8 @@ class Config {
             "modules.bakalari.subjects.ignored",
             "modules.bakalari.subjects.separated",
 
+            "modules.event-annoucement.check-time"
+
             "commands.disabled"
         ];
     }
