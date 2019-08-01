@@ -4,8 +4,4 @@
 /node_modules/
 package-lock.json
 settings/settings.json
-temp/*.json
-temp/events.json
-temp/supplementation.json
-temp/mutes.json
-temp/votes.json
+temp/
