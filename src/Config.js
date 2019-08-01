@@ -29,6 +29,7 @@ class Config {
 
             "roles.mentionable.member",
 
+            "roles.special.mute",
             "channels.annoucement",
             "channels.bakalari",
             "channels.supplementation",
