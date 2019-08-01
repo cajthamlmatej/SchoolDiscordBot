@@ -48,9 +48,10 @@ class EventModule extends Module {
         });
     }
 
-    addEvent(name, type, start, end, role, place, subject, description, author, attachments) {
+    addEvent(name, type, title, start, end, role, place, subject, description, author, attachments) {
         const values = {
             type: type,
+            title: title,
             start: start,
             end: end,
             role: role,
@@ -74,11 +75,11 @@ class EventModule extends Module {
 
         const event = eventsObject["events"][name];
         const values = event.values;
-        
-        if(type != "name") {
+
+        if (type != "name") {
             values[type] = value;
 
-            if(type == "start" || type == "end" && values["end"] == values["start"]) {
+            if (type == "start" || type == "end" && values["end"] == values["start"]) {
                 values["end"] = value;
                 values["start"] = value;
             }
@@ -86,19 +87,19 @@ class EventModule extends Module {
             event.values = values;
             eventsObject["events"][name] = event;
         } else {
-            if(type == "refresh")
+            if (type == "refresh")
                 return;
 
             delete eventsObject["events"][name];
             eventsObject["events"][value] = event;
-        } 
+        }
 
         fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
 
         this.channel.fetchMessage(event.message).then(message => {
-            if(values["author"] == undefined) 
+            if (values["author"] == undefined)
                 values["author"] = "164388362369761281"; // cant happend when creating new events, currently some dont have value author.
-            
+
             this.channel.guild.fetchMember(values["author"]).then(author => {
                 message.edit({
                     embed: this.generateEmbed(values, author)
@@ -109,7 +110,7 @@ class EventModule extends Module {
 
     generateEmbed(values, author) {
         const embed = new Discord.RichEmbed()
-            .setTitle("🕜 | " + ((values.type == "event") ? Translation.translate("module.event.new-event") : Translation.translate("module.event.new-task")))
+            .setTitle("🕜 | " + ((values.type == "event") ? Translation.translate("module.event.new-event") : Translation.translate("module.event.new-task")) + " | " + values.title)
             .setDescription(values.description)
             .setColor(0xbadc58);
 
@@ -130,26 +131,26 @@ class EventModule extends Module {
         const startDate = moment(values.start, "D. M. YYYY");
         const endDate = moment(values.end, "D. M. YYYY");
 
-        if(startDate.format("D. M. YYYY HH:mm") == endDate.format("D. M. YYYY HH:mm")) 
+        if (startDate.format("D. M. YYYY HH:mm") == endDate.format("D. M. YYYY HH:mm"))
             endDate.add(1, "d");
 
         let startDateFormat = "YMMDD[T]HHmmS";
         let endDateFormat = "YMMDD[T]HHmmS";
 
-        if(startDate.hour() == 0 && startDate.minute() == 0)
+        if (startDate.hour() == 0 && startDate.minute() == 0)
             startDateFormat = "YMMDD";
 
-        if(endDate.hour() == 0 && endDate.minute() == 0)
+        if (endDate.hour() == 0 && endDate.minute() == 0)
             endDateFormat = "YMMDD";
 
         embed.addField(dateTitle, date, true);
         embed.addField(Translation.translate("module.event.place"), values.place);
-        embed.addField(Translation.translate("module.event.calendar.calendar"), "[" + Translation.translate("module.event.calendar.add-to-calendar") + "](https://www.google.com/calendar/event?action=TEMPLATE"
-                                        + "&text=" + encodeURIComponent(values.subject + " | " + ((values.type == "event") ? Translation.translate("module.event.calendar.event") : Translation.translate("module.event.calendar.task")))
-                                        + "&details=" + encodeURIComponent(Translation.translate("module.event.calendar.details")) 
-                                        + "&location=" + encodeURIComponent(values.place)
-                                        + "&dates=" + encodeURI(startDate.format(startDateFormat) + "/" + endDate.format(endDateFormat) + ")"));
-        
+        embed.addField(Translation.translate("module.event.calendar.calendar"), "[" + Translation.translate("module.event.calendar.add-to-calendar") + "](https://www.google.com/calendar/event?action=TEMPLATE" +
+            "&text=" + encodeURIComponent(values.subject + " | " + ((values.type == "event") ? Translation.translate("module.event.calendar.event") : Translation.translate("module.event.calendar.task")) + " | " + values.title) +
+            "&details=" + encodeURIComponent(Translation.translate("module.event.calendar.details")) +
+            "&location=" + encodeURIComponent(values.place) +
+            "&dates=" + encodeURI(startDate.format(startDateFormat) + "/" + endDate.format(endDateFormat) + ")"));
+
         embed.setFooter(author.nickname == undefined ? author.user.username : author.nickname, author.user.avatarURL);
 
         return embed;
@@ -242,15 +243,15 @@ class EventModule extends Module {
             const eventValues = event.values;
 
             let dateStart = moment(eventValues.start, "D. M. YYYY");
-            if (!dateStart.isValid()) 
+            if (!dateStart.isValid())
                 dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
 
             if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
                 return;
 
-            if(eventValues.end == eventValues.start)
+            if (eventValues.end == eventValues.start)
                 return;
-            
+
             eventValues["name"] = eventName;
 
             startsEvents.push(eventValues);
@@ -268,15 +269,15 @@ class EventModule extends Module {
             const eventValues = event.values;
 
             let dateEnd = moment(eventValues.end, "D. M. YYYY");
-            if (!dateEnd.isValid()) 
+            if (!dateEnd.isValid())
                 dateEnd = moment(eventValues.end, "D. M. YYYY HH:mm");
 
             if (!(dateMoment.date() == dateEnd.date() && dateMoment.month() == dateEnd.month() && dateMoment.year() == dateEnd.year()))
                 return;
 
-            if(eventValues.end == eventValues.start)
+            if (eventValues.end == eventValues.start)
                 return;
-            
+
             eventValues["name"] = eventName;
 
             endsEvents.push(eventValues);
@@ -294,39 +295,38 @@ class EventModule extends Module {
             const eventValues = event.values;
 
             let dateStart = moment(eventValues.start, "D. M. YYYY");
-            if (!dateStart.isValid()) 
+            if (!dateStart.isValid())
                 dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
 
             if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
                 return;
 
-            if(eventValues.end != eventValues.start)
+            if (eventValues.end != eventValues.start)
                 return;
-            
+
             eventValues["name"] = eventName;
 
             goingEvents.push(eventValues);
         });
 
         return goingEvents;
-        
+
     }
 
     getEventNames() {
         const events = fs.readFileSync(this.tempFile, "utf8");
         const eventsObject = JSON.parse(events)["events"];
-    
+
         const eventNames = [];
 
         Object.keys(eventsObject).forEach(eventName => {
-            eventNames.push(eventName); 
+            eventNames.push(eventName);
         });
 
         return eventNames;
     }
 
-    event(name, args) {
-    }
+    event(name, args) {}
 
 }
 
