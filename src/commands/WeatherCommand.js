@@ -26,7 +26,6 @@ class WeatherCommand extends Command {
     call(args, message) {
         Weather.find({ search: args.join(" "), degreeType: this.unit }, (err, result) => {
             if (result[0] != undefined) {
-
                 const resultBase = result[0];
                 const resultForToday = resultBase.forecast[1];
                 const resultForTommorow = resultBase.forecast[2];

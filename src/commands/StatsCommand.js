@@ -1,5 +1,6 @@
 const Command = require("./Command");
 const Discord = require("discord.js");
+const Config = require("../Config");
 const Translation = require("../Translation");
 
 class StatsCommand extends Command {
@@ -18,8 +19,8 @@ class StatsCommand extends Command {
 
     init(bot) {
         this.client = bot.client;
-        this.eventArchiveChannel = bot.client.channels.find(ch => ch.id == bot.settings.channels["event-archive"]);
-        this.eventChannel = bot.client.channels.find(ch => ch.id == bot.settings.channels.event);
+        this.eventArchiveChannel = bot.client.channels.find(ch => ch.id == Config.get("channels.event-archive"));
+        this.eventChannel = bot.client.channels.find(ch => ch.id == Config.get("channels.event"));
     }
 
     call(args, message) {

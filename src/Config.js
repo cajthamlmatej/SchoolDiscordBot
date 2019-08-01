@@ -64,6 +64,8 @@ class Config {
             "modules.supplementation.replace",
             "modules.supplementation.refresh",
 
+            "modules.mute.max",
+
             "commands.weather.degree",
 
             "commands.disabled"

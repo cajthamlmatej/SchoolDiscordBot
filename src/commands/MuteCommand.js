@@ -1,6 +1,7 @@
 const SubsCommand = require("./SubsCommand");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class MuteCommand extends SubsCommand {
 
@@ -34,7 +35,7 @@ class MuteCommand extends SubsCommand {
     }
 
     init(bot) {
-        this.maxMuteLength = bot.settings.modules.mute.max;
+        this.maxMuteLength = Config.get("modules.mute.max");
         this.muteModule = bot.modules.mutemodule;
     }
 
