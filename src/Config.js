@@ -66,6 +66,9 @@ class Config {
 
             "modules.mute.max",
 
+            "modules.automatic-voice.create-channel",
+            "modules.automatic-voice.name",
+
             "commands.weather.degree",
 
             "commands.disabled"

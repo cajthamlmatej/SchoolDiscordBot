@@ -76,6 +76,12 @@ class SchoolDiscordBot {
             });
         });
 
+        this.client.on("voiceStateUpdate", (oldMember, newMember) => {
+            Object.values(this.modules).forEach(module => {
+                module.event("voiceStateUpdate", { oldMember: oldMember, newMember: newMember });
+            });
+        });
+
         logger.info("Logging bot into Discord API.");
         this.client.login(this.token);
     }
