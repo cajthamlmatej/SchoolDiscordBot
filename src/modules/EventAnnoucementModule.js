@@ -13,7 +13,7 @@ class EventAnnoucementModule extends Module {
 
     init(bot) {
         this.eventModule = bot.modules.eventmodule;
-        this.channel = bot.client.channels.find(ch => ch.id == Config.get("annoucement"));
+        this.channel = bot.client.channels.find(ch => ch.id == Config.get("channels.annoucement"));
         this.checkTime = Config.get("modules.event-annoucement.check-time");
         this.tempFile = "./temp/eventannoucement.json";
 
