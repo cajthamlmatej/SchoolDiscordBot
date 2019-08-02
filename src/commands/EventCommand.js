@@ -90,12 +90,11 @@ class EventCommand extends SubsCommand {
         {
             "name": "name",
             "example": Translation.translate("builder.event.create.name.example").split(","),
-            "validate": (content) => {
-                if (this.eventModule.exists(content))
+            "validate": async (content) => {
+                if (await this.eventModule.exists(content))
                     return "command.event.already-exists";
                 else
                     return true;
-
             },
             "value": (content, values) => {
                 if (content == "-")

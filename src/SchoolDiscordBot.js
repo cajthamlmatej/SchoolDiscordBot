@@ -6,6 +6,7 @@ const SubsCommand = require("./commands/SubsCommand");
 const moment = require("moment");
 const fs = require("fs");
 const logger = require("./Logger");
+const database = require("./database/Database");
 
 class SchoolDiscordBot {
 
@@ -19,6 +20,7 @@ class SchoolDiscordBot {
 
     reload() {
         logger.info("Bot is reloading.");
+        database.initialize();
 
         if (this.client != undefined) {
             logger.warn("Bot Discord client already exists. Destroying client.");

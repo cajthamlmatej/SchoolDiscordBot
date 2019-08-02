@@ -4,6 +4,7 @@ const Translation = require("../Translation");
 const Config = require("../Config");
 const fs = require("fs");
 const moment = require("moment");
+const database = require("../database/Database");
 
 class EventModule extends Module {
 
@@ -50,6 +51,7 @@ class EventModule extends Module {
 
     addEvent(name, type, title, start, end, role, place, subject, description, author, attachments) {
         const values = {
+            name: name,
             type: type,
             title: title,
             start: start,
@@ -65,7 +67,10 @@ class EventModule extends Module {
             embed: this.generateEmbed(values, author),
             files: attachments
         }).then(message => {
-            this.addEventToFile(message.id, name, values);
+            values.id = message.id;
+
+            database.getRepository("event").insert(values);
+            //this.addEventToFile(message.id, name, values);
         });
     }
 
@@ -206,7 +211,9 @@ class EventModule extends Module {
         return this.roles;
     }
 
-    exists(name) {
+    async exists(name) {
+        return await database.getRepository("event").doesEventExistsWithName(name);
+
         const events = fs.readFileSync(this.tempFile, "utf8");
         const eventsObject = JSON.parse(events);
 
