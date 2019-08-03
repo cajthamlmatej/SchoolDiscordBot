@@ -33,8 +33,6 @@ class CommandBuilder {
             const field = this.build.fields[this.field];
             const passed = await field.validate(messageContent, this.values);
 
-            console.log("passed: " + passed);
-
             if (passed === true) {
                 if (field.value != undefined) 
                     this.values[field.name] = await field.value(messageContent, this.values, message.attachments.array());
