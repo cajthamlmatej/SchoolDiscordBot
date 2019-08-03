@@ -5,6 +5,7 @@ const Config = require("../Config");
 const fs = require("fs");
 const moment = require("moment");
 const database = require("../database/Database");
+const logger = require("../Logger");
 
 class EventModule extends Module {
 
@@ -12,25 +13,22 @@ class EventModule extends Module {
         return "eventmodule";
     }
 
-    init(bot) {
+    async init(bot) {
         this.channel = bot.client.channels.find(channel => channel.id === Config.get("channels.event"));
         this.archiveChannel = bot.client.channels.find(channel => channel.id === Config.get("channels.event-archive"));
         this.roles = Config.get("roles.mentionable");
         this.daysToArchive = Config.get("modules.event.archive-days");
 
-        this.tempFile = "./temp/events.json";
-
         this.tick();
         setInterval(() => this.tick(), Config.get("modules.event.check-time"));
     }
 
-    tick() {
-        const events = this.getEvents();
+    async tick() {
+        const events = await this.getEvents();
 
-        Object.keys(events).forEach(name => {
-            const data = events[name];
-            const messageId = data.message;
-            const end = data.values.end;
+        events.forEach(async (event) => {
+            const messageId = event.message;
+            const end = event.end;
             const todayDate = moment();
             const eventDate = moment(end, "D. M. YYYY");
 
@@ -39,12 +37,14 @@ class EventModule extends Module {
                     const embed = new Discord.RichEmbed(message.embeds[0]);
 
                     this.archiveChannel.send(embed);
-                    message.delete();
-                }).catch(error => {
-
+                    message.delete().then(async () => {
+                        await database.getRepository("event").archiveEvent(event.name);
+                    });
+                }).catch(async (error) => {
+                    logger.error("Message with id " + event.message + " not found for event with name " + event.name + ". Assuming that message is deleted. Archiving event.");
+                    
+                    await database.getRepository("event").archiveEvent(event.name);
                 });
-
-                this.removeEventFromFile(name);
             }
         });
     }
@@ -67,74 +67,69 @@ class EventModule extends Module {
             embed: this.generateEmbed(values, author),
             files: attachments
         }).then(message => {
-            values.id = message.id;
+            values.message = message.id;
 
             database.getRepository("event").insert(values);
-            //this.addEventToFile(message.id, name, values);
         });
     }
 
-    editEvent(name, type, value) {
-        const events = fs.readFileSync(this.tempFile, "utf8");
-        const eventsObject = JSON.parse(events);
+    async editEvent(name, type, value, author) {
+        const event = await database.getRepository("event").getEventByName(name);
 
-        const event = eventsObject["events"][name];
-        const values = event.values;
+        if (type != "refresh") {
+            event.history.push({ type: type, value: { old: event[type], new: value }, author: author });
 
-        if (type != "name") {
-            values[type] = value;
+            event[type] = value;
 
-            if (type == "start" || type == "end" && values["end"] == values["start"]) {
-                values["end"] = value;
-                values["start"] = value;
+            if (type == "start" || type == "end" && event["end"] == event["start"]) {
+                event["end"] = value;
+                event["start"] = value;
             }
-
-            event.values = values;
-            eventsObject["events"][name] = event;
-        } else {
-            if (type == "refresh")
-                return;
-
-            delete eventsObject["events"][name];
-            eventsObject["events"][value] = event;
         }
 
-        fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
+        await event.save();
 
         this.channel.fetchMessage(event.message).then(message => {
-            if (values["author"] == undefined)
-                values["author"] = "164388362369761281"; // cant happend when creating new events, currently some dont have value author.
-
-            this.channel.guild.fetchMember(values["author"]).then(author => {
+            this.channel.guild.fetchMember(event.author).then(author => {
                 message.edit({
-                    embed: this.generateEmbed(values, author)
+                    embed: this.generateEmbed(event, author)
                 });
             });
         });
     }
 
-    generateEmbed(values, author) {
+    generateEmbed(event, author) {
         const embed = new Discord.RichEmbed()
-            .setTitle("🕜 | " + ((values.type == "event") ? Translation.translate("module.event.new-event") : Translation.translate("module.event.new-task")) + " | " + values.title)
-            .setDescription(values.description)
+            .setTitle("🕜 | " + ((event.type == "event") ? Translation.translate("module.event.new-event") : Translation.translate("module.event.new-task")) + " | " + event.title)
+            .setDescription(event.description)
             .setColor(0xbadc58);
 
-        embed.addField(Translation.translate("module.event.group"), this.channel.guild.roles.find(r => r.id == this.roles[values.role]), true);
-        embed.addField(Translation.translate("module.event.subject"), values.subject, true);
+        embed.addField(Translation.translate("module.event.group"), this.channel.guild.roles.find(r => r.id == this.roles[event.role]), true);
+        embed.addField(Translation.translate("module.event.subject"), event.subject, true);
 
         let dateTitle = "";
         let date = "";
 
-        if (values.start == values.end) {
+        if (event.start == event.end) {
             dateTitle = Translation.translate("module.event.date");
-            date = values.start;
+            date = event.start;
         } else {
             dateTitle = Translation.translate("module.event.from-date-to-date");
-            date = values.start + " " + Translation.translate("module.event.to") + " " + values.end;
+            date = event.start + " " + Translation.translate("module.event.to") + " " + event.end;
         }
 
-        const startDate = moment(values.start, "D. M. YYYY");
-        const endDate = moment(values.end, "D. M. YYYY");
+        embed.addField(dateTitle, date, true);
+        embed.addField(Translation.translate("module.event.place"), event.place);
+        embed.addField(Translation.translate("module.event.calendar.calendar"), this.generateGoogleCalendarLink(event));
+
+        embed.setFooter(author.nickname == undefined ? author.user.username : author.nickname, author.user.avatarURL);
+
+        return embed;
+    }
+
+    generateGoogleCalendarLink(event){
+        const startDate = moment(event.start, "D. M. YYYY");
+        const endDate = moment(event.end, "D. M. YYYY");
 
         if (startDate.format("D. M. YYYY HH:mm") == endDate.format("D. M. YYYY HH:mm"))
             endDate.add(1, "d");
@@ -148,55 +143,34 @@ class EventModule extends Module {
         if (endDate.hour() == 0 && endDate.minute() == 0)
             endDateFormat = "YMMDD";
 
-        embed.addField(dateTitle, date, true);
-        embed.addField(Translation.translate("module.event.place"), values.place);
-        embed.addField(Translation.translate("module.event.calendar.calendar"), "[" + Translation.translate("module.event.calendar.add-to-calendar") + "](https://www.google.com/calendar/event?action=TEMPLATE" +
-            "&text=" + encodeURIComponent(values.subject + " | " + ((values.type == "event") ? Translation.translate("module.event.calendar.event") : Translation.translate("module.event.calendar.task")) + " | " + values.title) +
-            "&details=" + encodeURIComponent(Translation.translate("module.event.calendar.details")) +
-            "&location=" + encodeURIComponent(values.place) +
-            "&dates=" + encodeURI(startDate.format(startDateFormat) + "/" + endDate.format(endDateFormat) + ")"));
+        const text = "[" + Translation.translate("module.event.calendar.add-to-calendar") + "]";
 
-        embed.setFooter(author.nickname == undefined ? author.user.username : author.nickname, author.user.avatarURL);
+        let link = "(https://www.google.com/calendar/event?action=TEMPLATE";
+        
+        link += "&text=" + encodeURIComponent(event.subject + " | " + Translation.translate("module.event.calendar." + event.type) + " | " + event.title);
+        link += "&details=" + encodeURIComponent(Translation.translate("module.event.calendar.details"));
+        link += "&location=" + encodeURIComponent(event.place);
+        link += "&dates=" + encodeURI(startDate.format(startDateFormat) + "/" + endDate.format(endDateFormat));
+        
+        link += ")";
 
-        return embed;
+        return text + link;
     }
 
-    addEventToFile(messageId, name, values) {
-        const events = fs.readFileSync(this.tempFile, "utf8");
-        const eventsObject = JSON.parse(events);
+    async deleteEvent(name) {
+        const event = await database.getRepository("event").getEventByName(name);
 
-        eventsObject["events"][name] = { message: messageId, values: values };
-
-        fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
-    }
-
-    deleteEvent(name) {
-        const events = fs.readFileSync(this.tempFile, "utf8");
-        const eventsObject = JSON.parse(events);
-
-        this.channel.fetchMessage(eventsObject["events"][name].message).then(message => {
+        this.channel.fetchMessage(event.message).then(message => {
             message.delete();
         }).catch(error => {
-            // Message not found, dont log anything
+            logger.error("Message with id " + event.message + " not found for event with name " + name + ". Assuming that message is deleted. Deleting event.")
         });
 
-        this.removeEventFromFile(name);
+        await database.getRepository("event").deleteEvent(name);
     }
 
-    removeEventFromFile(event) {
-        const events = fs.readFileSync(this.tempFile, "utf8");
-        const eventsObject = JSON.parse(events);
-
-        delete eventsObject["events"][event];
-
-        fs.writeFileSync(this.tempFile, JSON.stringify(eventsObject));
-    }
-
-    getEvents() {
-        const events = fs.readFileSync(this.tempFile, "utf8");
-        const eventsObject = JSON.parse(events);
-
-        return eventsObject["events"];
+    async getEvents(fields = null) {
+        return await database.getRepository("event").getEvents(fields);
     }
 
     isMentionableRole(roleName) {
@@ -213,19 +187,14 @@ class EventModule extends Module {
 
     async exists(name) {
         return await database.getRepository("event").doesEventExistsWithName(name);
-
-        const events = fs.readFileSync(this.tempFile, "utf8");
-        const eventsObject = JSON.parse(events);
-
-        return eventsObject["events"][name] != undefined;
     }
 
-    printEventList(user) {
+    async printEventList(user) {
         let list = "";
-        const events = this.getEvents();
+        const events = await this.getEvents("name title");
 
-        Object.keys(events).forEach(eventName => {
-            list += "\n**" + eventName + " (" + events[eventName].values.title + ")**";
+        events.forEach(event => {
+            list += "\n**" + event.name + " (" + event.title + ")**";
         });
 
         if (list == "")
@@ -238,99 +207,74 @@ class EventModule extends Module {
             .setDescription(list)
             .setColor(0xbadc58);
 
-        user.createDM().then(dm => dm.send(embed)).catch(console.error);
+        user.createDM().then(dm => dm.send(embed)).catch(logger.error);
     }
 
-    getEventThatStartsInEnteredDay(dateMoment) {
+    async getEventThatStartsInEnteredDay(dateMoment) {
         const startsEvents = [];
 
-        const events = this.getEvents();
-        Object.keys(events).forEach(eventName => {
-            const event = events[eventName];
-            const eventValues = event.values;
-
-            let dateStart = moment(eventValues.start, "D. M. YYYY");
+        const events = await this.getEvents();
+        events.forEach(event => {
+            let dateStart = moment(event.start, "D. M. YYYY");
             if (!dateStart.isValid())
-                dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
+                dateStart = moment(event.start, "D. M. YYYY HH:mm");
 
             if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
                 return;
 
-            if (eventValues.end == eventValues.start)
+            if (event.end == event.start)
                 return;
 
-            eventValues["name"] = eventName;
-
-            startsEvents.push(eventValues);
+            startsEvents.push(event);
         });
 
         return startsEvents;
     }
 
-    getEventThatEndsInEnteredDay(dateMoment) {
+    async getEventThatEndsInEnteredDay(dateMoment) {
         const endsEvents = [];
 
-        const events = this.getEvents();
-        Object.keys(events).forEach(eventName => {
-            const event = events[eventName];
-            const eventValues = event.values;
-
-            let dateEnd = moment(eventValues.end, "D. M. YYYY");
+        const events = await this.getEvents();
+        events.forEach(event => {
+            let dateEnd = moment(event.end, "D. M. YYYY");
             if (!dateEnd.isValid())
-                dateEnd = moment(eventValues.end, "D. M. YYYY HH:mm");
+                dateEnd = moment(event.end, "D. M. YYYY HH:mm");
 
             if (!(dateMoment.date() == dateEnd.date() && dateMoment.month() == dateEnd.month() && dateMoment.year() == dateEnd.year()))
                 return;
 
-            if (eventValues.end == eventValues.start)
+            if (event.end == event.start)
                 return;
 
-            eventValues["name"] = eventName;
-
-            endsEvents.push(eventValues);
+            endsEvents.push(event);
         });
 
         return endsEvents;
     }
 
-    getEventThatGoingInEnteredDay(dateMoment) {
+    async getEventThatGoingInEnteredDay(dateMoment) {
         const goingEvents = [];
 
-        const events = this.getEvents();
-        Object.keys(events).forEach(eventName => {
-            const event = events[eventName];
-            const eventValues = event.values;
-
-            let dateStart = moment(eventValues.start, "D. M. YYYY");
+        const events = await this.getEvents();
+        events.forEach(event => {
+            let dateStart = moment(event.start, "D. M. YYYY");
             if (!dateStart.isValid())
-                dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
+                dateStart = moment(event.start, "D. M. YYYY HH:mm");
 
             if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
                 return;
 
-            if (eventValues.end != eventValues.start)
+            if (event.end != event.start)
                 return;
 
-            eventValues["name"] = eventName;
-
-            goingEvents.push(eventValues);
+            goingEvents.push(event);
         });
 
         return goingEvents;
-
     }
 
-    getEventNames() {
-        const events = fs.readFileSync(this.tempFile, "utf8");
-        const eventsObject = JSON.parse(events)["events"];
-
-        const eventNames = [];
-
-        Object.keys(eventsObject).forEach(eventName => {
-            eventNames.push(eventName);
-        });
-
-        return eventNames;
+    async getEventNames() {
+        return await database.getRepository("event").getEventsNames();
     }
 
     event(name, args) {}

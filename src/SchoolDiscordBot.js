@@ -259,7 +259,7 @@ class SchoolDiscordBot {
                 if (!havePermissions)
                     return;
 
-                logger.info("User " + message.author.username + (member.nickname != undefined ? " (" + member.nickname + ")" : "") + " user command " + message.content + ".");
+                logger.info("User " + message.author.username + (member.nickname != undefined ? " (" + member.nickname + ")" : "") + " used command " + message.content + ".");
                 const deleteMessage = command.call(args, message);
 
                 if (deleteMessage)

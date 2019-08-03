@@ -1,16 +1,46 @@
 const mongoose = require('mongoose');
 
+const history = new mongoose.Schema({ 
+    type: {
+        type: String,
+        required: true,
+    },
+    value: {
+        old: {
+            type: String,
+            required: true,
+        },
+        new: {
+            type: String,
+            required: true,
+        }
+    },
+    author: {
+        type: String,
+        required: true
+    },
+    changed: {
+        type: Date,
+        default: Date.now(),
+        required: true
+    }
+});
+
 const eventSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     type: {
         type: String,
         enum: ["event", "task"],
         required: true,
         lowercase: true
+    },
+    message: {
+        type: String,
+        required: true,
+        unique: true
     },
     title: {
         type: String,
@@ -44,6 +74,24 @@ const eventSchema = new mongoose.Schema({
     author: {
         type: String,
         required: true
+    },
+    archived: {  
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    deleted: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    created: {
+        type: Date,
+        default: Date.now(),
+        required: true
+    },
+    history: {
+        type: [history]
     }
 });
 
