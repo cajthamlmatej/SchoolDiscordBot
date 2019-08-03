@@ -2,10 +2,10 @@ const Module = require("./Module");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
 const Config = require("../Config");
-const fs = require("fs");
 const moment = require("moment");
-const database = require("../database/Database");
 const logger = require("../Logger");
+
+const eventRepository = require("../database/Database").getRepository("event");
 
 class EventModule extends Module {
 
@@ -38,12 +38,12 @@ class EventModule extends Module {
 
                     this.archiveChannel.send(embed);
                     message.delete().then(async () => {
-                        await database.getRepository("event").archiveEvent(event.name);
+                        await eventRepository.archiveEvent(event.name);
                     });
                 }).catch(async (error) => {
                     logger.error("Message with id " + event.message + " not found for event with name " + event.name + ". Assuming that message is deleted. Archiving event.");
                     
-                    await database.getRepository("event").archiveEvent(event.name);
+                    await eventRepository.archiveEvent(event.name);
                 });
             }
         });
@@ -69,12 +69,12 @@ class EventModule extends Module {
         }).then(message => {
             values.message = message.id;
 
-            database.getRepository("event").insert(values);
+            eventRepository.insert(values);
         });
     }
 
     async editEvent(name, type, value, author) {
-        const event = await database.getRepository("event").getEventByName(name);
+        const event = await eventRepository.getEventByName(name);
 
         if (type != "refresh") {
             event.history.push({ type: type, value: { old: event[type], new: value }, author: author });
@@ -158,7 +158,7 @@ class EventModule extends Module {
     }
 
     async deleteEvent(name) {
-        const event = await database.getRepository("event").getEventByName(name);
+        const event = await eventRepository.getEventByName(name);
 
         this.channel.fetchMessage(event.message).then(message => {
             message.delete();
@@ -166,11 +166,11 @@ class EventModule extends Module {
             logger.error("Message with id " + event.message + " not found for event with name " + name + ". Assuming that message is deleted. Deleting event.")
         });
 
-        await database.getRepository("event").deleteEvent(name);
+        await eventRepository.deleteEvent(name);
     }
 
     async getEvents(fields = null) {
-        return await database.getRepository("event").getEvents(fields);
+        return await eventRepository.getEvents(fields);
     }
 
     isMentionableRole(roleName) {
@@ -186,7 +186,7 @@ class EventModule extends Module {
     }
 
     async exists(name) {
-        return await database.getRepository("event").doesEventExistsWithName(name);
+        return await eventRepository.doesEventExistsWithName(name);
     }
 
     async printEventList(user) {
@@ -274,7 +274,7 @@ class EventModule extends Module {
     }
 
     async getEventNames() {
-        return await database.getRepository("event").getEventsNames();
+        return await eventRepository.getEventsNames();
     }
 
     event(name, args) {}
