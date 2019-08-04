@@ -52,6 +52,7 @@
     "commands.help.stats": "Show statistics for events",
     "commands.help.bakalari": "Choose RSS token for current member",
     "commands.help.weather": "Displays the weather overview for today and tomorrow",
+    "commands.help.math": "Solves specified math problem",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh> <...>",
@@ -90,6 +91,8 @@
     "commands.usage.stats": "",
     "commands.usage.bakalari": "<rss token>",
     "commands.usage.weather": "<city, place>",
+    "commands.usage.math": "<example>",
+
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",
@@ -229,6 +232,12 @@
     "command.weather.skytext.chance-of-snow": "Chance of snow",
     "command.weather.skytext.na": "-",
 
+    "command.math.result": "Result of the given example",
+    "command.math.error": "The example could not be calculated",
+    "command.math.request": "Calculated for {0}",
+    "command.math.description.error": "The specified example ({0}) could not be calculated. Didn't you write something wrong?",
+    "command.math.zerodividedbyzero.request": "What a mystery?",
+
     "module.event.new-event": "New event",
     "module.event.new-task": "New task",
     "module.event.group": "Group",
@@ -297,8 +306,6 @@
     "module.eventannoucement.role": "Role",
     "module.eventannoucement.subject": "Subject",
     "module.eventannoucement.place": "Place",
-
-    "module.math.result": "The result is ",
 
     "builder.example": "Example of usage: {0}",
     "builder.stop": "For stop, enter \"{0}\"",
