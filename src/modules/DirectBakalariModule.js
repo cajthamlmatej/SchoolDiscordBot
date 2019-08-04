@@ -69,7 +69,7 @@ class DirectBakalariModule extends Module {
                     
                     description = description.replace(/<br \/>/g, "\n");
 
-                    //if (title.includes("zapsána známka:") || description.includes("zapsána známka:")) {
+                    if (title.includes("zapsána známka:") || description.includes("zapsána známka:")) {
                         description = description.split(":")[0] + description.split(":")[1];
 
                         informations.push(guid);
@@ -82,8 +82,7 @@ class DirectBakalariModule extends Module {
 
                             user.send(embed);
                         });
-                        
-                    //}
+                    }
                 });
 
                 await directBakalari.save();
