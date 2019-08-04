@@ -159,7 +159,7 @@ class EventCommand extends SubsCommand {
         },
         {
             "name": "role",
-            "example": "member",
+            "example": this.eventModule.getMentionableRoles()[0],
             "validate": (content) => {
                 if (!this.eventModule.isMentionableRole(content))
                     return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
