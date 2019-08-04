@@ -44,7 +44,7 @@ class MathCommand extends Command {
             const failEmbed = new Discord.RichEmbed()
                 .setColor(0xc72227)
                 .setTitle("😶 | " + Translation.translate("command.math.error"))
-                .setDescription(Translation.translate("command.math.description.error") + messageArgs)
+                .setDescription(Translation.translate("command.math.description.error", messageArgs))
                 .setTimestamp()
                 .setFooter(Translation.translate("command.math.request") + ((message.member.nickname != null) ? message.member.nickname : message.member.user.username), message.author.avatarURL);
 

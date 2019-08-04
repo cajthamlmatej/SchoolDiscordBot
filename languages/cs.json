@@ -234,7 +234,7 @@
     "command.math.result": "Výsledek zadaného příkladu",
     "command.math.error": "Příklad nebylo možné spočítat",
     "command.math.request": "Spočítáno pro ",
-    "command.math.description.error": "Zadaný příklad nebylo možné vypočítat. Nenapsali jste něco špatně? Napsali jste: ",
+    "command.math.description.error": "Zadaný příklad ({0}) nebylo možné vypočítat. Nenapsali jste něco špatně?",
     "command.math.zerodividedbyzero.request": "Jaké to tajemství?",
 
     "module.event.new-event": "Nová událost",
