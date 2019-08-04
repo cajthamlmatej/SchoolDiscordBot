@@ -38,7 +38,7 @@ class MathCommand extends Command {
                     .setTitle("🤓 | " + Translation.translate("command.math.result"))
                     .setDescription(question)
                     .setTimestamp()
-                    .setFooter(Translation.translate("command.math.request") + ((message.member.nickname != null) ? message.member.nickname : message.member.user.username), message.author.avatarURL));
+                    .setFooter(Translation.translate("command.math.request", ((message.member.nickname != null) ? message.member.nickname : message.member.user.username)), message.author.avatarURL));
 
         } catch (error) {
             const failEmbed = new Discord.RichEmbed()
@@ -46,7 +46,7 @@ class MathCommand extends Command {
                 .setTitle("😶 | " + Translation.translate("command.math.error"))
                 .setDescription(Translation.translate("command.math.description.error", messageArgs))
                 .setTimestamp()
-                .setFooter(Translation.translate("command.math.request") + ((message.member.nickname != null) ? message.member.nickname : message.member.user.username), message.author.avatarURL);
+                .setFooter(Translation.translate("command.math.request", ((message.member.nickname != null) ? message.member.nickname : message.member.user.username)), message.author.avatarURL);
 
             message.channel.send(failEmbed);
         }
