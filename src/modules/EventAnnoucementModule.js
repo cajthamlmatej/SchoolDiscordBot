@@ -15,11 +15,10 @@ class EventAnnoucementModule extends Module {
         this.eventModule = bot.modules.eventmodule;
         this.channel = bot.client.channels.find(ch => ch.id == Config.get("channels.annoucement"));
         this.checkTime = Config.get("modules.event-annoucement.check-time");
-        this.tempFile = "./temp/eventannoucement.json";
+        this.tempFile = "./eventannoucement-lastcheck.json";
 
         if (this.eventModule != undefined)
             setInterval(() => this.tick(), 5000);
-
     }
 
     tick() {
