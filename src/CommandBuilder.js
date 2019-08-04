@@ -80,7 +80,7 @@ class CommandBuilder {
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("builder." + this.name + ".title"))
             .setDescription(description)
-            .setColor(0xbadc58)
+            .setColor(Config.getColor("SUCCESS"))
             .setFooter(this.build.user.username, this.build.user.avatarURL);
 
         return embed;
@@ -109,7 +109,7 @@ class CommandBuilder {
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("builder." + this.name + ".title"))
             .setDescription(description)
-            .setColor(0xbadc58)
+            .setColor(Config.getColor("SUCCESS"))
             .setFooter(this.build.user.username, this.build.user.avatarURL);
 
         if (error != undefined && error != true) {

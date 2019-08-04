@@ -61,7 +61,7 @@ class EventAnnoucementModule extends Module {
 
             const dmembed = new Discord.RichEmbed()
                 .setTitle("👁 " + Translation.translate("module.eventannoucement." + eventValues.type + ".title." + name))
-                .setColor(0xdb970f)
+                .setColor(Config.getColor("SUCCESS"))
                 .setDescription(Translation.translate("module.eventannoucement." + eventValues.type + ".description." + name, time.format("D. M. YYYY"), eventValues.title))
                 .addField(Translation.translate("module.eventannoucement.informations"), eventValues.description)
                 .addField(Translation.translate("module.eventannoucement.role"), eventValues.role, true)
@@ -70,7 +70,7 @@ class EventAnnoucementModule extends Module {
 
             const embed = new Discord.RichEmbed()
                 .setTitle(("👁 " + Translation.translate("module.eventannoucement." + eventValues.type + ".title." + name)))
-                .setColor(0xbadc58)
+                .setColor(Config.getColor("SUCCESS"))
                 .setDescription(Translation.translate("module.eventannoucement." + eventValues.type + ".description." + name, time.format("D. M. YYYY"), eventValues.title))
                 .addField(Translation.translate("module.eventannoucement.informations"), eventValues.description)
                 .addField(Translation.translate("module.eventannoucement.role"), this.channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[eventValues.role]), true)

@@ -28,7 +28,7 @@ class HelpCommand extends Command {
         const channel = message.channel;
         const embed = new Discord.RichEmbed()
             .setTitle("💼 | " + Translation.translate("command.help.title"))
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         const groups = {};
 

@@ -1,6 +1,7 @@
 const Command = require("./Command");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class PurgeCommand extends Command {
 
@@ -38,11 +39,11 @@ class PurgeCommand extends Command {
             const embed = new Discord.RichEmbed()
                 .setTitle("🧙 | " + Translation.translate("command.purge.purged.title"))
                 .setDescription(Translation.translate("command.purge.purged", messages.size))
-                .setColor(0xbadc58);
+                .setColor(Config.getColor("SUCCESS"));
 
             channel.send(embed).then(message => {
                 message.delete(5000);
-            });
+            }).catch();
         });
 
         return false;

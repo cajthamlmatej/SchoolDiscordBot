@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const Command = require("./Command");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class SubsCommand extends Command {
 
@@ -64,12 +65,12 @@ class SubsCommand extends Command {
             embed = new Discord.RichEmbed()
                 .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
                 .setDescription(Translation.translate("command.usage") + " `" + this.getUsage() + "`")
-                .setColor(0xf0932b);
+                .setColor(Config.getColor("WARNING"));
         else 
             embed = new Discord.RichEmbed()
                 .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
                 .setDescription(Translation.translate("command.usage") + " `" + this.getName() + " " + subCommandName + " " + Translation.translate("commands.usage." + this.getName() + "." + subCommandName) + "` - " + Translation.translate("commands.help." + this.getName() + "." + subCommandName))
-                .setColor(0xf0932b);
+                .setColor(Config.getColor("WARNING"));
 
         channel.send(embed);
     }

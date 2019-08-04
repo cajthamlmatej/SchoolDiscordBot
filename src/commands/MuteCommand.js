@@ -70,7 +70,7 @@ class MuteCommand extends SubsCommand {
             const embed = new Discord.RichEmbed()
                 .setTitle("🔇 | " + Translation.translate("command.mute.user-list.title"))
                 .setDescription(Translation.translate("command.mute.user-list") + ".\n" + list)
-                .setColor(0xe67e22);
+                .setColor(Config.getColor("WARNING"));
 
             channel.send(embed);
             return;
@@ -107,14 +107,14 @@ class MuteCommand extends SubsCommand {
         const embedDM = new Discord.RichEmbed()
             .setTitle("🔇 | " + Translation.translate("command.mute.user-muted-self.title"))
             .setDescription(Translation.translate("command.mute.user-muted-self"))
-            .setColor(0xf0932b)
+            .setColor(Config.getColor("SUCCESS"))
             .addField(Translation.translate("command.mute.time"), Translation.translate("command.mute.minutes", minutes), true)
             .addField(Translation.translate("command.mute.reason"), reason, false);
 
         const embed = new Discord.RichEmbed()
             .setTitle("🔇 | " + Translation.translate("command.mute.user-muted.title", member.user.username))
             .setDescription(Translation.translate("command.mute.user-muted", member.user.username))
-            .setColor(0xf0932b)
+            .setColor(Config.getColor("WARNING"))
             .addField(Translation.translate("command.mute.time"), Translation.translate("command.mute.minutes", minutes), true)
             .addField(Translation.translate("command.mute.reason"), reason, false);
 
@@ -156,7 +156,7 @@ class MuteCommand extends SubsCommand {
             const embed = new Discord.RichEmbed()
                 .setTitle("🔇 | " + Translation.translate("command.mute.user-list.title"))
                 .setDescription(Translation.translate("command.mute.user-list") + ".\n" + list)
-                .setColor(0xe67e22);
+                .setColor(Config.getColor("WARNING"));
 
             channel.send(embed);
             return;
@@ -177,7 +177,7 @@ class MuteCommand extends SubsCommand {
         const embed = new Discord.RichEmbed()
             .setTitle("🔇 | " + Translation.translate("command.mute.unmuted.title", member.user.username))
             .setDescription(Translation.translate("command.mute.unmuted", member.user.username))
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         channel.send(embed);
     }

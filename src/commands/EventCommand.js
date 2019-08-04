@@ -352,7 +352,7 @@ class EventCommand extends SubsCommand {
 
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("command.event.check.title", dateString))
-            .setColor(0xbadc58)
+            .setColor(Config.getColor("SUCCESS"))
             .setDescription(Translation.translate("command.event.check.description"));
 
         if (starts != "")
@@ -399,7 +399,7 @@ class EventCommand extends SubsCommand {
 
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("command.event.check.week.title", ""))
-            .setColor(0xbadc58)
+            .setColor(Config.getColor("SUCCESS"))
             .setDescription(Translation.translate("command.event.check.description"));
 
         Object.keys(datesInfo).forEach(date => {
@@ -443,7 +443,7 @@ class EventCommand extends SubsCommand {
 
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("command.event.check.nextweek.title", ""))
-            .setColor(0xbadc58)
+            .setColor(Config.getColor("SUCCESS"))
             .setDescription(Translation.translate("command.event.check.description"));
 
         Object.keys(datesInfo).forEach(date => {

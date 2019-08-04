@@ -96,7 +96,7 @@ class RoleModule extends Module {
                 const embed = new Discord.RichEmbed()
                     .setTitle("✅ | " + Translation.translate("module.role.deleted"))
                     .setDescription("")
-                    .setColor(0xbadc58);
+                    .setColor(Config.getColor("SUCCESS"));
 
                 channel.send(embed);
             } else {
@@ -105,7 +105,7 @@ class RoleModule extends Module {
                 const embed = new Discord.RichEmbed()
                     .setTitle("✅ | " + Translation.translate("module.role.added"))
                     .setDescription("")
-                    .setColor(0xbadc58);
+                    .setColor(Config.getColor("SUCCESS"));
 
                 channel.send(embed);
             }
@@ -117,7 +117,7 @@ class RoleModule extends Module {
 
         const embed = new Discord.RichEmbed()
             .setTitle("👥 | " + Translation.translate("module.role.list"))
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         Object.keys(this.roles).forEach(groupName => {
             let list = "";

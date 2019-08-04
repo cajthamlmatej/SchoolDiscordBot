@@ -25,7 +25,7 @@ module.exports = {
         "no-multiple-empty-lines": [
             1, {"max": 1, "maxEOF": 0, "maxBOF": 0}
         ],
-        "no-console": "off",
+        "no-console": 2,
         "indent": [
             "error",
             4

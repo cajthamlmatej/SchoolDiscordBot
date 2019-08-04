@@ -1,5 +1,6 @@
 const Command = require("./Command");
 const Discord = require("discord.js");
+const Config = require("../Config");
 
 class ChladkovaCommand extends Command {
 
@@ -25,7 +26,7 @@ class ChladkovaCommand extends Command {
         const embed = new Discord.RichEmbed()
             .setTitle("👩‍🏫 | Paní Ing. Elena Chládková říká:")
             .setDescription(this.proverbs[Math.floor(Math.random() * this.proverbs.length)])
-            .setColor(0xfd79a8);
+            .setColor(Config.getColor("SPECIAL"));
 
         channel.send(embed);
         return false;

@@ -46,7 +46,7 @@ class VoteModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.vote.list"))
             .setDescription(list)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         user.createDM().then(dm => dm.send(embed)).catch(logger.error);
     }
@@ -62,7 +62,7 @@ class VoteModule extends Module {
             const embed = new Discord.RichEmbed()
                 .setTitle("📆 | " + Translation.translate("module.vote.deleted.title"))
                 .setDescription(Translation.translate("module.vote.deleted"))
-                .setColor(0xbadc58);
+                .setColor(Config.getColor("SUCCESS"));
 
             channel.send(embed);
         }).catch(error => {
@@ -80,7 +80,7 @@ class VoteModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.vote.new"))
             .setDescription(description + "\n\n" + Translation.translate("module.vote.vote") + ": \n" + optionsString)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         let voteChannel;
 
@@ -175,7 +175,7 @@ class VoteModule extends Module {
             const embed = new Discord.RichEmbed()
                 .setTitle("📆 | " + Translation.translate("module.vote.end") + " \"" + name + "\"")
                 .setDescription(vote.description)
-                .setColor(0xbadc58)
+                .setColor(Config.getColor("SUCCESS"))
                 .addField("☝ " + Translation.translate("module.vote.options-votes"), votesString, true)
                 .addBlankField()
                 .addField("🖐 " + Translation.translate("module.vote.stats"), "**" + Translation.translate("module.vote.votes-count") + "**: " + reactionCount + "\n**" + Translation.translate("module.vote.vote-weight") + "**: " + weight + "%\n", true)

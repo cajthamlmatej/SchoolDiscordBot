@@ -78,7 +78,7 @@ class DirectBakalariModule extends Module {
                             const embed = new Discord.RichEmbed()
                                 .setTitle("📚 | Nová známka ze systému Bakalářů")
                                 .setDescription("**" + title + "**\n\n" + description)
-                                .setColor(0xbadc58);
+                                .setColor(Config.getColor("SUCCESS"));
 
                             user.send(embed);
                         });

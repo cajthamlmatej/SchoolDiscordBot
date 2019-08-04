@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class Command {
 
@@ -43,7 +44,7 @@ class Command {
         const embed = new Discord.RichEmbed()
             .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
             .setDescription(Translation.translate("command.usage") + " `" + this.getUsage() + "` - " + Translation.translate("commands.help." + this.getName()))
-            .setColor(0xf0932b);
+            .setColor(Config.getColor("WARNING"));
 
         channel.send(embed);
     }
@@ -55,7 +56,7 @@ class Command {
         const embed = new Discord.RichEmbed()
             .setTitle("❗ | " + Translation.translate("command.error"))
             .setDescription(Translation.translate(reason, ... additional))
-            .setColor(0xeb4d4b);
+            .setColor(Config.getColor("FAIL"));
 
         channel.send(embed);
     }

@@ -12,6 +12,20 @@ class Config {
         });
     }
 
+    getColor(type) {
+        type = type.toUpperCase();
+        switch (type) {
+        case "SUCCESS": 
+            return 0xb8e994;
+        case "FAIL":
+            return 0xe55039;
+        case "WARNING":
+            return 0xfa983a;
+        case "SPECIAL":
+            return 0x000000;
+        }
+    }
+
     getRequiredPaths() {
         return [
             "bot.token",
