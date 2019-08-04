@@ -6,6 +6,7 @@ const SubsCommand = require("./commands/SubsCommand");
 const moment = require("moment");
 const fs = require("fs");
 const logger = require("./Logger");
+const database = require("./database/Database");
 
 class SchoolDiscordBot {
 
@@ -19,6 +20,7 @@ class SchoolDiscordBot {
 
     reload() {
         logger.info("Bot is reloading.");
+        database.initialize();
 
         if (this.client != undefined) {
             logger.warn("Bot Discord client already exists. Destroying client.");
@@ -242,7 +244,7 @@ class SchoolDiscordBot {
         }, Config.get("bot.limit.command-usage") * 1000);
 
         this.client.guilds.get(Config.get("bot.guild")).fetchMember(message.author)
-            .then(member => {
+            .then(async (member) => {
                 args.shift();
                 for (let i = 0; i < args.length; i++) 
                     args[i] = args[i].replace(/"/gm, "").replace(/'/gm, "");
@@ -257,8 +259,8 @@ class SchoolDiscordBot {
                 if (!havePermissions)
                     return;
 
-                logger.info("User " + message.author.username + (member.nickname != undefined ? " (" + member.nickname + ")" : "") + " user command " + message.content + ".");
-                const deleteMessage = command.call(args, message);
+                logger.info("User " + message.author.username + (member.nickname != undefined ? " (" + member.nickname + ")" : "") + " used command " + message.content + ".");
+                const deleteMessage = await command.call(args, message);
 
                 if (deleteMessage)
                     message.delete();

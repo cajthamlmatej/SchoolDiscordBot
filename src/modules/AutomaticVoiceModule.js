@@ -21,6 +21,9 @@ class AutomaticVoiceModule extends Module {
             if(channel.name != this.name)
                 return;
 
+            if(channel.members.size > 0)
+                return;
+
             channel.delete();
         });
     }

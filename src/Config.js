@@ -54,6 +54,7 @@ class Config {
             "modules.auto-reaction.text",
             "modules.auto-reaction.series-text",
 
+            "modules.bakalari.check-time",
             "modules.bakalari.members",
             "modules.bakalari.subjects.ignored",
             "modules.bakalari.subjects.separated",
@@ -69,9 +70,9 @@ class Config {
             "modules.automatic-voice.create-channel",
             "modules.automatic-voice.name",
 
-            "commands.weather.degree",
+            "commands.disabled",
 
-            "commands.disabled"
+            "commands.weather.degree",
         ];
     }
 

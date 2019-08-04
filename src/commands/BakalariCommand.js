@@ -1,6 +1,5 @@
 const DirectCommand = require("./DirectCommand");
 const Discord = require("discord.js");
-const Translation = require("../Translation");
 
 class BakalariCommand extends DirectCommand {
 
@@ -25,7 +24,7 @@ class BakalariCommand extends DirectCommand {
         this.directBakalariModule = bot.modules["directbakalarimodule"];
     }
 
-    call(args, message) {
+    async call(args, message) {
         const channel = message.channel;
 
         if(args.length == 0) {
@@ -35,7 +34,7 @@ class BakalariCommand extends DirectCommand {
 
         const rssToken = args[0];
 
-        this.directBakalariModule.addRssTokenForUser(message.author.id, rssToken);
+        await this.directBakalariModule.addRssTokenForUser(message.author.id, rssToken);
 
         const embed = new Discord.RichEmbed()
             .setTitle("📣 | RSS token změněn.")
@@ -43,8 +42,6 @@ class BakalariCommand extends DirectCommand {
             .setColor(0xe67e22);
 
         channel.send(embed);
-
-        return false;
     }
 
 }

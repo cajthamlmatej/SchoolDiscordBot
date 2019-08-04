@@ -1,11 +1,12 @@
 const Module = require("./Module");
 const Config = require("../Config");
 const https = require("https");
-const fs = require("fs");
 const jsdom = require("jsdom");
 const Discord = require("discord.js");
 const { JSDOM } = jsdom;
 const logger = require("../Logger");
+
+const bakalariRepository = require("../database/Database").getRepository("bakalari");
 
 class BakalariModule extends Module {
 
@@ -14,53 +15,50 @@ class BakalariModule extends Module {
     }
 
     init(bot) {
-        this.settings = Config.get("modules.bakalari");
+        this.config = Config.get("modules.bakalari");
 
-        this.tempFile = "./temp/bakalari.json";
         this.channel = bot.client.channels.find(ch => ch.id == Config.get("channels.bakalari"));
 
         this.tick();
-        setInterval(() => this.tick(), 120000);
+        setInterval(() => this.tick(), this.config["check-time"]);
     }
 
     tick() {
         let first = true;
-        Object.keys(this.settings.members).forEach(member => {
-            this.checkBakalariRSS(this.settings.members[member], first, member);
+        Object.keys(this.config.members).forEach(member => {
+            this.checkBakalariRSS(this.config.members[member], first, member);
 
             first = false;
         });
     }
 
-    checkBakalariRSS(values, main, member) {
+    async checkBakalariRSS(values, main, member) {
         const webOptions = {
             host: values.domain,
             path: values.url
         };
-        const request = https.request(webOptions, (res) => {
+        const request = https.request(webOptions, async (res) => {
             let data = "";
             res.on("data", function (chunk) {
                 data += chunk;
             });
-            res.on("end", () => {
+            res.on("end", async () => {
                 const dom = new JSDOM(data, {
-                    url: this.settings.fullUrl,
-                    referrer: this.settings.fullUrl,
+                    url: this.config.fullUrl,
+                    referrer: this.config.fullUrl,
                     contentType: "text/html",
                     includeNodeLocations: true,
                     storageQuota: 10000000
                 });
 
-                const file = this.readFile();
-
-                dom.window.document.querySelectorAll("item").forEach(children => {
+                dom.window.document.querySelectorAll("item").forEach(async (children) => {
                     let title = children.querySelectorAll("title")[0].textContent.trim();
                     let description = children.querySelectorAll("description")[0].textContent.trim();
                     const guid = children.querySelectorAll("guid")[0].textContent.trim();
                     const isTask = title.includes("ÚKOL");
                     const subject = title.split(":")[0];
 
-                    if (file[guid] != undefined)
+                    if (await bakalariRepository.doesBakalariExistsWithGuid(guid))
                         return;
 
                     description = description.replace(/<br \/>/g, "\n");
@@ -69,21 +67,19 @@ class BakalariModule extends Module {
                         if (title.includes("zapsána známka:") || description.includes("zapsána známka:")) {
                             title = title.split(":")[0] + title.split(":")[1];
 
-                            if (this.settings.subjects.ignored.includes(subject)) 
+                            if (this.config.subjects.ignored.includes(subject)) 
                                 return;
 
-                            if (!main && !this.settings.subjects.separated.includes(subject)) 
+                            if (!main && !this.config.subjects.separated.includes(subject)) 
                                 return;
 
                             description = description.split(":")[0] + description.split(":")[1];
                         }
 
-                    file[guid] = { title: title, description: description, isTask: isTask };
+                    await bakalariRepository.insert({guid: guid, title: title, description: description, isTask: isTask});
 
-                    this.channel.send(this.generateEmbed(isTask, title, description, this.settings.subjects.separated.includes(subject) ? values.group : undefined));
+                    this.channel.send(this.generateEmbed(isTask, title, description, this.config.subjects.separated.includes(subject) ? values.group : undefined));
                 });
-
-                this.saveFile(file);
             });
         });
         request.on("error", function (e) {
@@ -108,17 +104,6 @@ class BakalariModule extends Module {
 
             return embed;
         }
-    }
-
-    readFile() {
-        const file = fs.readFileSync(this.tempFile, "utf8");
-        const fileContents = JSON.parse(file);
-
-        return fileContents;
-    }
-
-    saveFile(fileContents) {
-        fs.writeFileSync(this.tempFile, JSON.stringify(fileContents));
     }
 
     event(name, args) {

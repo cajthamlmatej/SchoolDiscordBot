@@ -31,7 +31,7 @@ class SubsCommand extends Command {
         throw new Error("You have to implement the method getSubCommands!");
     }
 
-    call(args, message) {
+    async call(args, message) {
         const channel = message.channel;
 
         if (args.length <= 0) {
@@ -55,7 +55,7 @@ class SubsCommand extends Command {
 
         const realArgs = args.slice(1);
 
-        return this["call" + subCommandName[0].toUpperCase() + subCommandName.slice(1)](realArgs, message);
+        return await this["call" + subCommandName[0].toUpperCase() + subCommandName.slice(1)](realArgs, message);
     }
 
     sendHelp(channel, subCommandName) {
