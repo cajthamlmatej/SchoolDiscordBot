@@ -25,19 +25,19 @@ class CommandBuilder {
     }
 
     async collect(message) {
-        const messageContent = message.content;
+        let messageContent = message.content;
 
         if (messageContent.toLowerCase() == this.stopWord.toLowerCase()) 
             this.collector.stop("forced");
         else {
             const field = this.build.fields[this.field];
+            if (field.value != undefined) 
+                messageContent = await field.value(messageContent, this.values, message.attachments.array());
+
             const passed = await field.validate(messageContent, this.values);
 
             if (passed === true) {
-                if (field.value != undefined) 
-                    this.values[field.name] = await field.value(messageContent, this.values, message.attachments.array());
-                else 
-                    this.values[field.name] = messageContent;
+                this.values[field.name] = messageContent;
 
                 if (this.build.fields[this.field + 1] == undefined) 
                     this.collector.stop("fieldEnd");
