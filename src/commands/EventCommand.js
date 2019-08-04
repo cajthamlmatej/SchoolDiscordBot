@@ -140,7 +140,6 @@ class EventCommand extends SubsCommand {
                 Object.keys(this.placeholders).forEach(placeholder => {
                     if (content.toLowerCase().includes(placeholder))
                         found = true;
-
                 });
 
                 if (found)
