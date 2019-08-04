@@ -1,9 +1,11 @@
 const Module = require("./Module");
 const https = require("https");
-const fs = require("fs");
 const jsdom = require("jsdom");
 const Discord = require("discord.js");
 const { JSDOM } = jsdom;
+const Config = require("../Config");
+
+const directBakalariRepository = require("../database/Database").getRepository("directbakalari");
 
 const bakalariDomain = "bakalari.ssps.cz";
 const bakalariUrl = "/bakrss.ashx?bk=";
@@ -17,23 +19,20 @@ class DirectBakalariModule extends Module {
 
     init(bot) {
         this.bot = bot;
-        this.tempFile = "./temp/directbakalari.json";
 
         this.tick();
-        setInterval(() => this.tick(), 120000);
+        setInterval(() => this.tick(), Config.get("modules.bakalari.check-time"));
     }
     
-    tick() {
-        const file = this.readFile();
-
-        Object.keys(file).forEach(userId => {
-            this.checkRssTokenForUser(userId, file[userId]);
+    async tick() {
+        (await directBakalariRepository.getAllUsers()).forEach(directBakalari => {
+            this.checkRssTokenForUser(directBakalari);
         });
     }
 
-    checkRssTokenForUser(userId, data) {
-        const rssToken = data["token"];
-        const informations = data["informations"];
+    checkRssTokenForUser(directBakalari) {
+        const rssToken = directBakalari.token;
+        const informations = directBakalari.informations;
         const url = bakalariUrl + rssToken;
         const fullUrl = bakalariFullUrl + rssToken;
 
@@ -47,7 +46,7 @@ class DirectBakalariModule extends Module {
             res.on("data", function (chunk) {
                 data += chunk;
             });
-            res.on("end", () => {
+            res.on("end", async () => {
                 const dom = new JSDOM(data, {
                     url: fullUrl,
                     referrer: fullUrl,
@@ -75,7 +74,7 @@ class DirectBakalariModule extends Module {
 
                         informations.push(guid);
 
-                        this.bot.client.fetchUser(userId).then( user => {
+                        this.bot.client.fetchUser(directBakalari.user).then( user => {
                             const embed = new Discord.RichEmbed()
                                 .setTitle("📚 | Nová známka ze systému Bakalářů")
                                 .setDescription("**" + title + "**\n\n" + description)
@@ -83,11 +82,10 @@ class DirectBakalariModule extends Module {
 
                             user.send(embed);
                         });
-                        
                     }
                 });
 
-                this.saveUserInformations(userId, informations);
+                await directBakalari.save();
             });
         });
         request.on("error", function (e) {
@@ -95,34 +93,18 @@ class DirectBakalariModule extends Module {
         request.end();
     }
 
-    saveUserInformations(userId, informations) {
-        const file = this.readFile();
+    async addRssTokenForUser(userId, rssToken) {
+        const user = await directBakalariRepository.getUser(userId);
 
-        file[userId].informations = informations;
-        
-        this.saveFile(file);
-    }
-
-    addRssTokenForUser(userId, rssToken) {
-        const file = this.readFile();
-
-        file[userId] = {
-            token: rssToken,
-            informations: []
-        };
-
-        this.saveFile(file);
-    }
-
-    readFile() {
-        const file = fs.readFileSync(this.tempFile, "utf8");
-        const fileContents = JSON.parse(file);
-
-        return fileContents;
-    }
-
-    saveFile(fileContents) {
-        fs.writeFileSync(this.tempFile, JSON.stringify(fileContents));
+        if(user != null) {
+            user.token = rssToken;
+            await user.save();
+        } else
+            await directBakalariRepository.insert({
+                user: userId,
+                token: rssToken,
+                informations: [] 
+            });
     }
 
     event(name, args) {

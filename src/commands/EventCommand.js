@@ -90,12 +90,11 @@ class EventCommand extends SubsCommand {
         {
             "name": "name",
             "example": Translation.translate("builder.event.create.name.example").split(","),
-            "validate": (content) => {
-                if (this.eventModule.exists(content))
+            "validate": async (content) => {
+                if (await this.eventModule.exists(content))
                     return "command.event.already-exists";
                 else
                     return true;
-
             },
             "value": (content, values) => {
                 if (content == "-")
@@ -119,7 +118,6 @@ class EventCommand extends SubsCommand {
                 Object.keys(this.placeholders).forEach(placeholder => {
                     if (content.toLowerCase().includes(placeholder))
                         found = true;
-
                 });
 
                 if (found)
@@ -216,16 +214,14 @@ class EventCommand extends SubsCommand {
             let end = values["end"];
 
             Object.keys(this.placeholders).forEach(placeholder => {
-                // Add days and format it back to string.
                 if (values["start"].toLowerCase().includes(placeholder))
                     start = moment().add(this.placeholders[placeholder], "days").format("D. M. YYYY");
 
                 if (values["end"].toLowerCase().includes(placeholder))
                     end = moment().add(this.placeholders[placeholder], "days").format("D. M. YYYY");
-
             });
 
-            this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, values["files"]); // files);
+            this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, values["files"]);
         });
 
         builder.start();
@@ -240,9 +236,9 @@ class EventCommand extends SubsCommand {
         const builder = new CommandBuilder("event.edit", message.author, channel, [{
             "name": "name",
             "example": "eko_ukol_potreby",
-            "validate": (content) => {
-                if (!this.eventModule.exists(content))
-                    return ["command.event.dont-exist.edit", this.eventModule.getEventNames().join(", ").substring(0, 500) + "..."];
+            "validate": async (content) => {
+                if (!(await this.eventModule.exists(content)))
+                    return ["command.event.dont-exist.edit", (await this.eventModule.getEventNames()).join(", ").substring(0, 500) + "..."];
                 else
                     return true;
 
@@ -279,14 +275,14 @@ class EventCommand extends SubsCommand {
         ], (values) => {
             logger.info("User " + message.author.username + " edited event with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
 
-            this.eventModule.editEvent(values["name"], values["type"], values["value"]);
+            this.eventModule.editEvent(values["name"], values["type"], values["value"], message.author.id);
         });
 
         builder.start();
         return true;
     }
 
-    callDelete(args, message) {
+    async callDelete(args, message) {
         const channel = message.channel;
         const name = args[0];
 
@@ -295,9 +291,7 @@ class EventCommand extends SubsCommand {
             return;
         }
 
-        this.eventModule.deleteEvent(name);
-
-        return true;
+        await this.eventModule.deleteEvent(name);
     }
 
     callList(args, message) {
@@ -306,7 +300,7 @@ class EventCommand extends SubsCommand {
         message.react("✅");
     }
 
-    callCheck(args, message) {
+    async callCheck(args, message) {
         const channel = message.channel;
         const dateString = args[0];
 
@@ -330,14 +324,14 @@ class EventCommand extends SubsCommand {
             }
         }
 
-        const startsEvents = this.eventModule.getEventThatStartsInEnteredDay(date);
+        const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
         let starts = "";
 
         startsEvents.forEach(event => {
             starts += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
-        const endsEvents = this.eventModule.getEventThatEndsInEnteredDay(date);
+        const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
         const ends = "";
 
         endsEvents.forEach(event => {
@@ -345,7 +339,7 @@ class EventCommand extends SubsCommand {
             ends += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
-        const goingEvents = this.eventModule.getEventThatGoingInEnteredDay(date);
+        const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
         let going = "";
 
         goingEvents.forEach(event => {
@@ -374,7 +368,7 @@ class EventCommand extends SubsCommand {
         channel.send(embed);
     }
 
-    callWeek(args, message) {
+    async callWeek(args, message) {
         const channel = message.channel;
 
         const startDay = moment();
@@ -386,10 +380,10 @@ class EventCommand extends SubsCommand {
         const dates = this.getRangeOfDates(startDay, sundayDay, "day");
 
         const datesInfo = {};
-        dates.forEach(date => {
-            const startsEvents = this.eventModule.getEventThatStartsInEnteredDay(date);
-            const endsEvents = this.eventModule.getEventThatEndsInEnteredDay(date);
-            const goingEvents = this.eventModule.getEventThatGoingInEnteredDay(date);
+        await this.asyncForEach(dates, async (date) => {
+            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
+            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
+            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
             const events = startsEvents.concat(endsEvents).concat(goingEvents);
 
             let string = "";
@@ -416,7 +410,7 @@ class EventCommand extends SubsCommand {
         channel.send(embed);
     }
 
-    callNextweek(args, message) {
+    async callNextweek(args, message) {
         const channel = message.channel;
 
         const mondayDay = moment();
@@ -430,10 +424,10 @@ class EventCommand extends SubsCommand {
         const dates = this.getRangeOfDates(mondayDay, sundayDay, "day");
 
         const datesInfo = {};
-        dates.forEach(date => {
-            const startsEvents = this.eventModule.getEventThatStartsInEnteredDay(date);
-            const endsEvents = this.eventModule.getEventThatEndsInEnteredDay(date);
-            const goingEvents = this.eventModule.getEventThatGoingInEnteredDay(date);
+        await this.asyncForEach(dates, async (date) => {
+            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
+            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
+            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
             const events = startsEvents.concat(endsEvents).concat(goingEvents);
 
             let string = "";
@@ -460,18 +454,24 @@ class EventCommand extends SubsCommand {
         channel.send(embed);
     }
 
-    callRefresh(args, message) {
+    async asyncForEach(array, callback) {
+        for (let index = 0; index < array.length; index++) 
+            await callback(array[index], index, array);
+        
+    }
+
+    async callRefresh(args, message) {
         const eventName = args[0];
 
         if (eventName == "all") {
             const events = this.eventModule.getEvents();
 
-            Object.keys(events).forEach(eventName => {
-                this.eventModule.editEvent(eventName, "refresh", undefined);
+            events.forEach(event => {
+                this.eventModule.editEvent(event.name, "refresh", undefined);
             });
         } else {
-            if (!this.eventModule.exists(eventName)) {
-                this.sendError(message.channel, "command.event.dont-exist.edit", this.eventModule.getEventNames().join(", ").substring(0, 500) + "...");
+            if (!(await this.eventModule.exists(eventName))) {
+                this.sendError(message.channel, "command.event.dont-exist.edit", (await this.eventModule.getEventNames()).join(", ").substring(0, 500) + "...");
                 return;
             }
 

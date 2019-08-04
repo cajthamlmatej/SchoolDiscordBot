@@ -49,10 +49,9 @@ class AnnouncementCommand extends SubsCommand {
         this.annoucementModule.listAnnoucements(message.member);
 
         message.react("✅");
-        return false;
     }
 
-    callEdit(args, message) {
+    async callEdit(args, message) {
         const channel = message.channel;
         const types = ["title", "annoucement"];
 
@@ -60,8 +59,8 @@ class AnnouncementCommand extends SubsCommand {
             {
                 "name": "name",
                 "example": ["2392018", "botchanges"],
-                "validate": (content) => {
-                    if (!this.annoucementModule.annoucementExist(content)) 
+                "validate": async (content) => {
+                    if (!await this.annoucementModule.annoucementExist(content)) 
                         return "command.annoucement.dont-exist";
                     else 
                         return true;
@@ -95,29 +94,29 @@ class AnnouncementCommand extends SubsCommand {
         return true;
     }
 
-    callDelete(args, message) {
+    async callDelete(args, message) {
         const channel = message.channel;
         const name = args[0];
 
-        if (!this.annoucementModule.annoucementExist(name)) {
+        if (!await this.annoucementModule.annoucementExist(name)) {
             this.sendError(channel, "command.annoucement.dont-exist");
             return;
         }
 
-        this.annoucementModule.deleteAnnoucement(channel, name);
+        await this.annoucementModule.deleteAnnoucement(channel, name);
 
         return false;
     }
 
-    callCreate(args, message) {
+    async callCreate(args, message) {
         const channel = message.channel;
 
         const builder = new CommandBuilder("annoucement.create", message.author, channel, [
             {
                 "name": "name",
                 "example": ["2392018", "botchanges"],
-                "validate": (content) => {
-                    if (this.annoucementModule.annoucementExist(content)) 
+                "validate": async (content) => {
+                    if (await this.annoucementModule.annoucementExist(content)) 
                         return "command.annoucement.already-exists";
                     else 
                         return true;
@@ -138,10 +137,10 @@ class AnnouncementCommand extends SubsCommand {
                     return true;
                 }
             }
-        ], (values) => {
+        ], async (values) => {
             logger.info("User " + message.author.username + " created annoucement with name " + values["name"] + ".");
 
-            this.annoucementModule.addAnnoucement(message.member, values["name"], values["title"], values["annoucement"]);
+            await this.annoucementModule.addAnnoucement(message.member, values["name"], values["title"], values["annoucement"]);
         });
 
         builder.start();

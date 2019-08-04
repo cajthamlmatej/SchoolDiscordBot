@@ -1,8 +1,9 @@
 const Module = require("./Module");
 const Discord = require("discord.js");
-const fs = require("fs");
 const Translation = require("../Translation");
 const Config = require("../Config");
+
+const annoucementRepository = require("../database/Database").getRepository("annoucement");
 
 class AnnoucementModule extends Module {
 
@@ -11,25 +12,22 @@ class AnnoucementModule extends Module {
     }
 
     init(bot) {
-        this.tempFile = "./temp/annoucements.json";
         this.channel = bot.client.channels.find(ch => ch.id == Config.get("channels.annoucement"));
     }
 
-    annoucementExist(name) {
-        return this.getAnnoucement(name) != undefined;
+    async annoucementExist(name) {
+        return await annoucementRepository.doesAnnoucementExistsWithName(name);
     }
 
-    getAnnoucement(name) {
-        return this.readFile()[name];
-    }
-
-    addAnnoucement(member, name, title, annoucement) {
-        const annoucements = this.readFile();
-
-        this.channel.send(this.generateAnnoucementEmbed({ annoucement: annoucement, title: title }, member)).then(message => {
-            annoucements[name] = { message: message.id, title: title, annoucement: annoucement };
-
-            this.saveFile(annoucements);
+    async addAnnoucement(member, name, title, annoucement) {
+        await this.channel.send(this.generateAnnoucementEmbed({ annoucement: annoucement, title: title }, member)).then(async (message) => {
+            await annoucementRepository.insert({
+                name: name,
+                title: title,
+                annoucement: annoucement,
+                message: message.id,
+                author: member.user.id
+            });
         });
     }
 
@@ -41,17 +39,14 @@ class AnnoucementModule extends Module {
             .setColor(0xbadc58);
     }
 
-    deleteAnnoucement(channel, name) {
-        const annoucement = this.getAnnoucement(name);
+    async deleteAnnoucement(channel, name) {
+        const annoucement = await annoucementRepository.getAnnoucementByName(name, "message");
 
         this.channel.fetchMessage(annoucement.message).then(message => {
             message.delete();
         }).catch(error => { });
 
-        const annoucements = this.readFile();
-        delete annoucements[name];
-
-        this.saveFile(annoucements);
+        await annoucementRepository.deleteAnnoucement(name);
 
         const embed = new Discord.RichEmbed()
             .setTitle("📢 | " + Translation.translate("module.annoucement.deleted"))
@@ -61,27 +56,25 @@ class AnnoucementModule extends Module {
         channel.send(embed);
     }
 
-    editAnnoucement(member, name, type, value) {
-        const annoucement = this.getAnnoucement(name);
-        annoucement[type] = value;
+    async editAnnoucement(member, name, type, value) {
+        const annoucement = await annoucementRepository.getAnnoucementByName(name, "message");
+        const change = {};
+        change[type] = value;
+        
+        await annoucementRepository.editAnnoucement(name, change);
 
         this.channel.fetchMessage(annoucement.message).then(message => {
             message.edit(this.generateAnnoucementEmbed(annoucement, member));
         }).catch(error => { });
-
-        const annoucements = this.readFile();
-        annoucements[name] = annoucement;
-
-        this.saveFile(annoucements);
     }
 
-    listAnnoucements(member) {
-        const annoucements = this.readFile();
+    async listAnnoucements(member) {
+        const annoucements = await annoucementRepository.getAnnoucements("name title");
 
         let list = "";
 
-        Object.keys(annoucements).forEach(annoucementName => {
-            list += "\n**" + annoucementName + "** - " + annoucements[annoucementName].title;
+        annoucements.forEach(annoucement => {
+            list += "\n**" + annoucement.name + "** - " + annoucement.title;
         });
 
         if (list == "") 
@@ -93,18 +86,6 @@ class AnnoucementModule extends Module {
             .setColor(0xbadc58);
 
         member.user.createDM().then(dm => dm.send(embed)).catch(error => { });
-    }
-
-    readFile() {
-        const file = fs.readFileSync(this.tempFile, "utf8");
-        const annoucements = JSON.parse(file)["annoucements"];
-
-        return annoucements;
-    }
-
-    saveFile(annoucements) {
-        const object = { annoucements: annoucements };
-        fs.writeFileSync(this.tempFile, JSON.stringify(object));
     }
 
     event(name, args) {
