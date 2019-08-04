@@ -39,13 +39,13 @@ class MuteCommand extends SubsCommand {
         this.muteModule = bot.modules.mutemodule;
     }
 
-    callList(args, message) {
+    async callList(args, message) {
         const channel = message.channel;
 
-        this.muteModule.printRoleList(channel);
+        await this.muteModule.printRoleList(channel);
     }
 
-    callAdd(args, message) {
+    async callAdd(args, message) {
         const channel = message.channel;
 
         const valid = [];
@@ -92,12 +92,12 @@ class MuteCommand extends SubsCommand {
             return;
         }
 
-        if (this.muteModule.isMuted(member)) {
+        if (await this.muteModule.isMuted(member)) {
             this.sendError(channel, "command.mute.already-muted");
             return;
         }
 
-        if (!this.muteModule.canBeMuted(member)) {
+        if (!await this.muteModule.canBeMuted(member)) {
             this.sendError(channel, "command.mute.moderator");
             return;
         }
@@ -124,12 +124,10 @@ class MuteCommand extends SubsCommand {
 
         channel.send(embed);
 
-        this.muteModule.addMute(member, minutes, reason);
-
-        return true;
+        await this.muteModule.addMute(member, minutes, reason);
     }
 
-    callRemove(args, message) {
+    async callRemove(args, message) {
         const channel = message.channel;
         if (args.length != 1) {
             this.sendHelp(channel);
@@ -169,12 +167,12 @@ class MuteCommand extends SubsCommand {
 
         const member = valid[0];
 
-        if (!this.muteModule.isMuted(member)) {
+        if (!await this.muteModule.isMuted(member)) {
             this.sendError(channel, "command.mute.not-muted");
             return;
         }
 
-        this.muteModule.removeMute(member);
+        await this.muteModule.removeMute(member);
 
         const embed = new Discord.RichEmbed()
             .setTitle("🔇 | " + Translation.translate("command.mute.unmuted.title", member.user.username))
@@ -182,7 +180,6 @@ class MuteCommand extends SubsCommand {
             .setColor(0xbadc58);
 
         channel.send(embed);
-        return true;
     }
 
 }
