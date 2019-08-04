@@ -231,6 +231,12 @@
     "command.weather.skytext.chance-of-snow": "Pravděpodobnost sněhu",
     "command.weather.skytext.na": "-",
 
+    "command.math.result": "Výsledek zadaného příkladu",
+    "command.math.error": "Příklad nebylo možné spočítat",
+    "command.math.request": "Spočítáno pro ",
+    "command.math.description.error": "Zadaný příklad nebylo možné vypočítat. Nenapsali jste něco špatně? Napsali jste: ",
+    "command.math.zerodividedbyzero.request": "Jaké to tajemství?",
+
     "module.event.new-event": "Nová událost",
     "module.event.new-task": "Nový úkol",
     "module.event.group": "Skupina",
@@ -299,8 +305,6 @@
     "module.eventannoucement.role": "Role",
     "module.eventannoucement.subject": "Předmět",
     "module.eventannoucement.place": "Místo",
-
-    "module.math.result": "Výsledek je: ",
 
     "builder.example": "Ukázka použítí: {0}",
     "builder.stop": "K ukončení napište \"{0}\"",
