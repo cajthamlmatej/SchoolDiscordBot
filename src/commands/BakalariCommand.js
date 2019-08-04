@@ -1,6 +1,5 @@
 const DirectCommand = require("./DirectCommand");
 const Discord = require("discord.js");
-const Translation = require("../Translation");
 
 class BakalariCommand extends DirectCommand {
 
