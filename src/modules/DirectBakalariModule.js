@@ -97,7 +97,6 @@ class DirectBakalariModule extends Module {
         const user = await directBakalariRepository.getUser(userId);
 
         if(user != null){
-            console.log(user);
             user.token = rssToken;
             await user.save();
         } else
