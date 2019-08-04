@@ -53,7 +53,7 @@ class AnnouncementCommand extends SubsCommand {
 
     async callEdit(args, message) {
         const channel = message.channel;
-        const types = ["title", "annoucement"];
+        const types = ["title", "annoucement", "name"];
 
         const builder = new CommandBuilder("annoucement.edit", message.author, channel, [
             {
