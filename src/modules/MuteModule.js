@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const moment = require("moment");
 const Translation = require("../Translation");
 const Config = require("../Config");
+const logger = require("../Logger");
 
 const muteRepository = require("../database/Database").getRepository("mute");
 
@@ -78,7 +79,7 @@ class MuteModule extends Module {
                 roles: roles,
                 reason: reason
             });
-        }).catch(console.error);
+        }).catch(logger.error);
     }
 
     setMuteRoles(user, muteRoles) {

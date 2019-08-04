@@ -2,6 +2,7 @@ const Command = require("./Command");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
 const Config = require("../Config");
+const logger = require("../Logger");
 
 class HelpCommand extends Command {
 
@@ -85,7 +86,7 @@ class HelpCommand extends Command {
 
         embed.setDescription(help);
 
-        channel.send(embed).catch(console.error);
+        channel.send(embed).catch( logger.error);
         return false;
     }
 

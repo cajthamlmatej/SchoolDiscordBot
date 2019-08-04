@@ -264,7 +264,7 @@ class SchoolDiscordBot {
 
                 if (deleteMessage)
                     message.delete();
-            }).catch(console.error);
+            }).catch(logger.error);
     }
 }
 

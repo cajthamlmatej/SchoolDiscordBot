@@ -2,6 +2,7 @@ const Module = require("./Module");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
 const Config = require("../Config");
+const logger = require("../Logger");
 
 const voteRepository = require("../database/Database").getRepository("vote");
 
@@ -47,7 +48,7 @@ class VoteModule extends Module {
             .setDescription(list)
             .setColor(0xbadc58);
 
-        user.createDM().then(dm => dm.send(embed)).catch(console.error);
+        user.createDM().then(dm => dm.send(embed)).catch(logger.error);
     }
 
     async deleteVote(name, channel) {
@@ -107,7 +108,7 @@ class VoteModule extends Module {
                 options: decodedOptions,
                 channel: voteChannel.id
             });
-        }).catch(console.error);
+        }).catch(logger.error);
     }
 
     async endVote(name) {
@@ -154,7 +155,7 @@ class VoteModule extends Module {
 
             let winningChoice = "";
 
-            console.log(winners[0]);
+            logger.log(winners[0]);
 
             if (winners.length === 1) 
                 winningChoice = Translation.translate("module.vote.option-won") + " **" + winners[0] + " " + vote.options.get(winners[0].codePointAt(0) + "") + "**";
@@ -181,7 +182,7 @@ class VoteModule extends Module {
                 .addField("👍 " + Translation.translate("module.vote.result"), winningChoice, true);
 
             channel.send(embed);
-        }).catch(console.error);
+        }).catch(logger.error);
     }
 
     addZero(i) {
