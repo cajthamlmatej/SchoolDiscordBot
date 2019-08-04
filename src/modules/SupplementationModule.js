@@ -1,7 +1,6 @@
 const Module = require("./Module");
 const http = require("https");
 const Translation = require("../Translation");
-const fs = require("fs");
 const jsdom = require("jsdom");
 const Discord = require("discord.js");
 const { JSDOM } = jsdom;

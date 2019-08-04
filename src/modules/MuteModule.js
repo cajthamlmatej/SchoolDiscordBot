@@ -1,5 +1,4 @@
 const Module = require("./Module");
-const fs = require("fs");
 const Discord = require("discord.js");
 const moment = require("moment");
 const Translation = require("../Translation");

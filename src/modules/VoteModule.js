@@ -1,7 +1,6 @@
 const Module = require("./Module");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
-const fs = require("fs");
 const Config = require("../Config");
 
 class VoteModule extends Module {
