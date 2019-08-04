@@ -91,6 +91,7 @@
     "commands.usage.stats": "",
     "commands.usage.bakalari": "<rss token>",
     "commands.usage.weather": "<city, place>",
+    "commands.usage.math": "<example>",
 
 
     "command.too-few-arguments": "Too few arguments",

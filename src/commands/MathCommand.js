@@ -23,7 +23,7 @@ class MathCommand extends Command {
     }
 
     call(args, message) {
-        const messageArgs = args.join(" ").toLowerCase();
+        const messageArgs = args.join(" ");
         if (messageArgs.includes("0/0")) {
             message.channel.send(Translation.translate("command.math.zerodividedbyzero.request"));
             return;
