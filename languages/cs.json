@@ -260,7 +260,7 @@
     "module.vote.no-vote-exists": "Žádné hlasování neexistuje.",
     "module.vote.list": "Seznam všech hlasování",
     "module.vote.deleted.title": "Hlasování bylo smazáno",
-    "module.vote.deleted": "Hlasování a jeho zpráva bylo smazáno.",
+    "module.vote.deleted": "Hlasování a jeho zpráva byla smazána.",
     "module.vote.for": "pro",
     "module.vote.new": "Nové hlasování",
     "module.vote.vote": "hlasujte pomocí kliku na reakci pro vybranou možnost",
