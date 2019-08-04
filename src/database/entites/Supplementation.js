@@ -18,6 +18,11 @@ const supplementationSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    created: {
+        type: Date,
+        default: Date.now(),
+        required: true
     }
 });
 
