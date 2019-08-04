@@ -53,6 +53,7 @@
     "commands.help.chladkova": "Zobrazí přísloví od paní Chládkové",
     "commands.help.bakalari": "Zvolí RSS token pro aktuálního uživatele",
     "commands.help.weather": "Zobrazí přehled počasí pro dnešek a zítřek",
+    "commands.help.math": "Vypočítá zadaný příklad",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh> <...>",
@@ -92,6 +93,7 @@
     "commands.usage.chladkova": "",
     "commands.usage.bakalari": "<rss token>",
     "commands.usage.weather": "<město, místo>",
+    "commands.usage.math": "<příklad>",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
@@ -233,7 +235,7 @@
 
     "command.math.result": "Výsledek zadaného příkladu",
     "command.math.error": "Příklad nebylo možné spočítat",
-    "command.math.request": "Spočítáno pro ",
+    "command.math.request": "Spočítáno pro {0}",
     "command.math.description.error": "Zadaný příklad ({0}) nebylo možné vypočítat. Nenapsali jste něco špatně?",
     "command.math.zerodividedbyzero.request": "Jaké to tajemství?",
 
