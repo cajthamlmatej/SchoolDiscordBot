@@ -1,4 +1,3 @@
-
 class Repository {
 
     setEntity(entity) {
@@ -13,7 +12,7 @@ class Repository {
         throw new Error("You have to implement the method getEntity!");
     }
 
-    insert(values){
+    insert(values) {
         const entity = new this.entity(values);
 
         entity.save();

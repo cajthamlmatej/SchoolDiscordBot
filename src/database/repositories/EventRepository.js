@@ -2,7 +2,7 @@ const Repository = require("../Repository");
 
 class EventRepository extends Repository {
     
-    getName(){
+    getName() {
         return "eventrepository";
     }
 
@@ -10,29 +10,29 @@ class EventRepository extends Repository {
         return "Event";
     }
 
-    async doesEventExistsWithName(name){
+    async doesEventExistsWithName(name) {
         const entity = await this.entity.findOne({ name: name, archived: false, deleted: false });
         return entity != null;
     }
 
-    async getEvents(fields = null){
+    async getEvents(fields = null) {
         if(fields != null)
             return await this.entity.find({ archived: false, deleted: false }, fields);
     
         return await this.entity.find({ archived: false, deleted: false });
     }
 
-    async getEventByName(name){
+    async getEventByName(name) {
         return await this.entity.findOne({ name: name, archived: false, deleted: false });
     }
 
-    async deleteEvent(name){
+    async deleteEvent(name) {
         await this.entity.updateOne({ name: name, archived: false, deleted: false }, {
             deleted: true
         });
     }
 
-    async archiveEvent(name){
+    async archiveEvent(name) {
         await this.entity.updateOne({ name: name, archived: false, deleted: false }, {
             archived: true
         });

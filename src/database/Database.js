@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Config = require("../Config");
 const logger = require("../Logger");
 const fs = require("fs");
@@ -21,7 +21,7 @@ class Database {
         this.entites = {};
         this.repositories = {};
 
-        logger.info("Reading directory with entities.")
+        logger.info("Reading directory with entities.");
         const entitesFiles = fs.readdirSync("./src/database/entites");
         entitesFiles.forEach(file => {
             const entity = require("./entites/" + file);
@@ -31,7 +31,7 @@ class Database {
             logger.info(" Database entity " + entity.modelName + " loaded.");
         });
 
-        logger.info("Reading directory with repositories.")
+        logger.info("Reading directory with repositories.");
         const repositoriesFiles = fs.readdirSync("./src/database/repositories");
         repositoriesFiles.forEach(file => {
             const repositoryFile = require("./repositories/" + file);

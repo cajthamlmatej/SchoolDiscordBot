@@ -112,11 +112,11 @@ class SupplementationModule extends Module {
                         channel.fetchMessage(supplementationEntity.message).then(async (message) => {
                             if (message.embeds[0].description !== suppleString) 
                                 supplementationEntity.text = suppleString;
-                                await supplementationEntity.save();
+                            await supplementationEntity.save();
 
-                                message.edit(containsHighlight == true ? "@everyone" : "", embed).catch(error => {
-                                    logger.error("Error while editing supplementation message. Message is probably above 2048 char limit.");
-                                });
+                            message.edit(containsHighlight == true ? "@everyone" : "", embed).catch(error => {
+                                logger.error("Error while editing supplementation message. Message is probably above 2048 char limit.");
+                            });
                         });
                     else 
                         channel.send(containsHighlight == true ? "@everyone" : "", embed).then(async (message) => {
@@ -125,7 +125,6 @@ class SupplementationModule extends Module {
                             logger.error("Error while editing supplementation message. Message is probably above 2048 char limit.");
                         }); 
                 });
-
                 
                 await this.asyncForEach(await supplementationRepository.getSupplementations(), async (supplementation) => {
                     channel.fetchMessage(supplementation.message).then(async (message) => {
@@ -152,9 +151,9 @@ class SupplementationModule extends Module {
     }
 
     async asyncForEach(array, callback) {
-        for (let index = 0; index < array.length; index++) {
+        for (let index = 0; index < array.length; index++) 
             await callback(array[index], index, array);
-        }
+        
     }
 
     refresh(channel) {

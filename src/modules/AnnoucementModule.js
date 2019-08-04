@@ -22,11 +22,11 @@ class AnnoucementModule extends Module {
     async addAnnoucement(member, name, title, annoucement) {
         await this.channel.send(this.generateAnnoucementEmbed({ annoucement: annoucement, title: title }, member)).then(async (message) => {
             await annoucementRepository.insert({
-               name: name,
-               title: title,
-               annoucement: annoucement,
-               message: message.id,
-               author: member.user.id
+                name: name,
+                title: title,
+                annoucement: annoucement,
+                message: message.id,
+                author: member.user.id
             });
         });
     }

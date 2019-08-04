@@ -2,7 +2,7 @@ const Repository = require("../Repository");
 
 class BakalariRepository extends Repository {
     
-    getName(){
+    getName() {
         return "bakalarirepository";
     }
 
@@ -10,7 +10,7 @@ class BakalariRepository extends Repository {
         return "Bakalari";
     }
 
-    async doesBakalariExistsWithGuid(guid){
+    async doesBakalariExistsWithGuid(guid) {
         const entity = await this.entity.findOne({ guid: guid }, "");
         return entity != null;
     }

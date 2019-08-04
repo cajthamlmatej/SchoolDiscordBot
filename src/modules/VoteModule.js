@@ -98,7 +98,7 @@ class VoteModule extends Module {
 
             Object.keys(options).forEach(option => {
                 decodedOptions[option.codePointAt(0)] = options[option]; 
-            })
+            });
 
             await voteRepository.insert({
                 name: name,

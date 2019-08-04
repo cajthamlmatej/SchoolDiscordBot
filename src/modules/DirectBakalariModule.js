@@ -96,14 +96,14 @@ class DirectBakalariModule extends Module {
     async addRssTokenForUser(userId, rssToken) {
         const user = await directBakalariRepository.getUser(userId);
 
-        if(user != null){
+        if(user != null) {
             user.token = rssToken;
             await user.save();
         } else
             await directBakalariRepository.insert({
-            user: userId,
-            token: rssToken,
-            informations: [] 
+                user: userId,
+                token: rssToken,
+                informations: [] 
             });
     }
 

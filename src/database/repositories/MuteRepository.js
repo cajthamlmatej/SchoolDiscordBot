@@ -2,7 +2,7 @@ const Repository = require("../Repository");
 
 class MuteRepository extends Repository {
     
-    getName(){
+    getName() {
         return "muterepository";
     }
 
@@ -10,7 +10,7 @@ class MuteRepository extends Repository {
         return "Mute";
     }
 
-    async isMuted(user){
+    async isMuted(user) {
         const entity = await this.entity.findOne({ user: user, deleted: false }, "");
         return entity != null;
     }
@@ -19,7 +19,7 @@ class MuteRepository extends Repository {
         await this.entity.updateOne({ user: user, deleted: false }, {deleted: true});
     }
 
-    async getMute(user){
+    async getMute(user) {
         return await this.entity.findOne({ user: user, deleted: false });
     }
 

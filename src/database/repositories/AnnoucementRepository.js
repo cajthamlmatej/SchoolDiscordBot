@@ -2,7 +2,7 @@ const Repository = require("../Repository");
 
 class AnnoucementRepository extends Repository {
     
-    getName(){
+    getName() {
         return "annoucementrepository";
     }
 
@@ -10,16 +10,16 @@ class AnnoucementRepository extends Repository {
         return "Annoucement";
     }
 
-    async doesAnnoucementExistsWithName(name){
+    async doesAnnoucementExistsWithName(name) {
         const entity = await this.entity.findOne({ name: name, deleted: false });
         return entity != null;
     }
 
-    async getAnnoucementByName(name, fields = null){
+    async getAnnoucementByName(name, fields = null) {
         return await this.entity.findOne({ name: name, deleted: false }, fields);
     }
 
-    async deleteAnnoucement(name){
+    async deleteAnnoucement(name) {
         await this.entity.updateOne({ name: name, deleted: false }, {
             deleted: true
         });

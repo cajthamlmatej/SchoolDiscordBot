@@ -2,7 +2,7 @@ const Repository = require("../Repository");
 
 class DirectBakalariRepository extends Repository {
     
-    getName(){
+    getName() {
         return "directbakalarirepository";
     }
 
@@ -14,7 +14,7 @@ class DirectBakalariRepository extends Repository {
         return await this.entity.find({}, fields);
     }
 
-    async getUser(id){
+    async getUser(id) {
         return await this.entity.findOne({user: id});
     }
 

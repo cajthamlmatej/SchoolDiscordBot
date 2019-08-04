@@ -2,7 +2,7 @@ const Repository = require("../Repository");
 
 class SupplementationRepository extends Repository {
     
-    getName(){
+    getName() {
         return "supplementationrepository";
     }
 
@@ -10,20 +10,20 @@ class SupplementationRepository extends Repository {
         return "Supplementation";
     }
 
-    async doesSupplementationExistsWithName(name){
+    async doesSupplementationExistsWithName(name) {
         const entity = await this.entity.findOne({ name: name, archived: false });
         return entity != null;
     }
 
-    async getSupplementationByDay(name){
+    async getSupplementationByDay(name) {
         return await this.entity.findOne({ name: name, archived: false });
     }
 
-    async getSupplementations(){
+    async getSupplementations() {
         return await this.entity.find({ archived: false });
     }
 
-    async archiveSupplementation(name){
+    async archiveSupplementation(name) {
         await this.entity.updateOne({ name: name, archived: false }, { archived: true });
     }
 }

@@ -32,7 +32,7 @@ class EventModule extends Module {
             const todayDate = moment();
             const eventDate = moment(end, "D. M. YYYY");
 
-            if (todayDate.diff(eventDate, "days") >= this.daysToArchive) {
+            if (todayDate.diff(eventDate, "days") >= this.daysToArchive) 
                 this.channel.fetchMessage(messageId).then(message => {
                     const embed = new Discord.RichEmbed(message.embeds[0]);
 
@@ -45,7 +45,7 @@ class EventModule extends Module {
                     
                     await eventRepository.archiveEvent(event.name);
                 });
-            }
+            
         });
     }
 
@@ -127,7 +127,7 @@ class EventModule extends Module {
         return embed;
     }
 
-    generateGoogleCalendarLink(event){
+    generateGoogleCalendarLink(event) {
         const startDate = moment(event.start, "D. M. YYYY");
         const endDate = moment(event.end, "D. M. YYYY");
 
@@ -163,7 +163,7 @@ class EventModule extends Module {
         this.channel.fetchMessage(event.message).then(message => {
             message.delete();
         }).catch(error => {
-            logger.error("Message with id " + event.message + " not found for event with name " + name + ". Assuming that message is deleted. Deleting event.")
+            logger.error("Message with id " + event.message + " not found for event with name " + name + ". Assuming that message is deleted. Deleting event.");
         });
 
         await eventRepository.deleteEvent(name);

@@ -2,7 +2,7 @@ const Repository = require("../Repository");
 
 class VoteRepository extends Repository {
     
-    getName(){
+    getName() {
         return "voterepository";
     }
 
@@ -10,20 +10,20 @@ class VoteRepository extends Repository {
         return "Vote";
     }
 
-    async doesVoteExistsWithName(name){
+    async doesVoteExistsWithName(name) {
         const entity = await this.entity.findOne({ name: name, deleted: false }, "");
         return entity != null;
     }
 
-    async getVote(name){
+    async getVote(name) {
         return await this.entity.findOne({ name: name, deleted: false });
     }
 
-    async getVotes(){
+    async getVotes() {
         return await this.entity.find({ deleted: false});
     }
 
-    async deleteVote(name){
+    async deleteVote(name) {
         await this.entity.updateOne({ name: name, deleted: false}, {deleted: true});
     }
 

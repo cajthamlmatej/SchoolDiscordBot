@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const bakalariSchema = new mongoose.Schema({
     guid: {
