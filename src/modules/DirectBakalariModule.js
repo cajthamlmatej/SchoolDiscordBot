@@ -3,6 +3,7 @@ const https = require("https");
 const jsdom = require("jsdom");
 const Discord = require("discord.js");
 const { JSDOM } = jsdom;
+const Config = require("../Config");
 
 const directBakalariRepository = require("../database/Database").getRepository("directbakalari");
 
@@ -20,7 +21,7 @@ class DirectBakalariModule extends Module {
         this.bot = bot;
 
         this.tick();
-        setInterval(() => this.tick(), 120000);
+        setInterval(() => this.tick(), Config.get("modules.bakalari.check-time"));
     }
     
     async tick() {

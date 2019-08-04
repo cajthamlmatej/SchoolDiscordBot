@@ -20,7 +20,7 @@ class BakalariModule extends Module {
         this.channel = bot.client.channels.find(ch => ch.id == Config.get("channels.bakalari"));
 
         this.tick();
-        setInterval(() => this.tick(), 120000);
+        setInterval(() => this.tick(), this.config["check-time"]);
     }
 
     tick() {
