@@ -244,7 +244,7 @@ class SchoolDiscordBot {
         }, Config.get("bot.limit.command-usage") * 1000);
 
         this.client.guilds.get(Config.get("bot.guild")).fetchMember(message.author)
-            .then(member => {
+            .then(async (member) => {
                 args.shift();
                 for (let i = 0; i < args.length; i++) 
                     args[i] = args[i].replace(/"/gm, "").replace(/'/gm, "");
@@ -260,7 +260,7 @@ class SchoolDiscordBot {
                     return;
 
                 logger.info("User " + message.author.username + (member.nickname != undefined ? " (" + member.nickname + ")" : "") + " used command " + message.content + ".");
-                const deleteMessage = command.call(args, message);
+                const deleteMessage = await command.call(args, message);
 
                 if (deleteMessage)
                     message.delete();
