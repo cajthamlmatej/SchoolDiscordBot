@@ -19,10 +19,8 @@ class MathCommand extends Command {
     }
 
     init(bot) {
-        this.client = bot.client;
-    }
 
-    init(bot) {}
+    }
 
     call(args, message) {
         const messageArgs = args.join(" ").toLowerCase();
@@ -34,19 +32,15 @@ class MathCommand extends Command {
         try {
             const question = math.evaluate(messageArgs);
 
-            if (question != undefined && question != messageArgs && !(question instanceof Function) && !messageArgs.includes("\"")) {
-                const successEmbed = new Discord.RichEmbed()
+            if (question != undefined && question != messageArgs && !(question instanceof Function) && !messageArgs.includes("\""))
+                message.channel.send(new Discord.RichEmbed()
                     .setColor(0xbadc58)
                     .setTitle("🤓 | " + Translation.translate("command.math.result"))
                     .setDescription(question)
                     .setTimestamp()
-                    .setFooter(Translation.translate("command.math.request") + ((message.member.nickname != null) ? message.member.nickname : message.member.user.username), message.author.avatarURL);
+                    .setFooter(Translation.translate("command.math.request") + ((message.member.nickname != null) ? message.member.nickname : message.member.user.username), message.author.avatarURL));
 
-                message.channel.send(successEmbed);
-            }
-
-
-        } catch {
+        } catch (error) {
             const failEmbed = new Discord.RichEmbed()
                 .setColor(0xc72227)
                 .setTitle("😶 | " + Translation.translate("command.math.error"))
