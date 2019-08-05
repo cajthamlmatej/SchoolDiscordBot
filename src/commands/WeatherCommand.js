@@ -36,7 +36,7 @@ class WeatherCommand extends Command {
 
                 const weatherEmbedToday = new Discord.RichEmbed()
                     .setColor(Config.getColor("SUCCESS"))
-                    .setTitle(Translation.translate("command.weather.currentdate") + currentLocation)
+                    .setTitle(Translation.translate("command.weather.currentdate", currentLocation))
                     .setThumbnail(resultBase.current.imageUrl)
                     .addField(Translation.translate("command.weather.temperature"), resultBase.current.temperature + degree + " (" + "⬇️ " + resultForToday.low + degree + " | ⬆️ " + resultForToday.high + degree + ")", true)
                     .addField(Translation.translate("command.weather.condition"), Translation.translate("command.weather.skytext." + resultTodaySkytext), true)
@@ -46,22 +46,22 @@ class WeatherCommand extends Command {
                     .addField(Translation.translate("command.weather.precipitation"), resultForToday.precip + "%", true)
                     .addField(Translation.translate("command.weather.lastchecked"), resultBase.current.observationtime, true)
                     .setTimestamp()
-                    .setFooter(Translation.translate("command.weather.request") + message.member.nickname, message.author.avatarURL);
+                    .setFooter(Translation.translate("command.weather.request", message.member.nickname), message.author.avatarURL);
 
                 const weatherEmbedTomorrow = new Discord.RichEmbed()
                     .setColor(Config.getColor("SUCCESS"))
-                    .setTitle(Translation.translate("command.weather.tomorrow") + currentLocation, true)
+                    .setTitle(Translation.translate("command.weather.tomorrow", currentLocation), true)
                     .addField(Translation.translate("command.weather.temperature"), "⬇️ " + resultForTomorrow.low + degree + " | ⬆️ " + resultForTomorrow.high + degree, true)
                     .addField(Translation.translate("command.weather.condition"), Translation.translate("command.weather.skytext." + resultTomorrowSkytext), true)
                     .addField(Translation.translate("command.weather.precipitation"), resultForTomorrow.precip + "%", true)
                     .setTimestamp()
-                    .setFooter(Translation.translate("command.weather.request") + message.member.nickname, message.author.avatarURL);
+                    .setFooter(Translation.translate("command.weather.request", message.member.nickname), message.author.avatarURL);
 
                 message.channel.send(weatherEmbedToday);
                 message.channel.send(weatherEmbedTomorrow);
 
             } else
-                message.channel.send("🛑 | " + Translation.translate("command.weather.error"));
+                message.channel.send("🛑 | " + Translation.translate("command.weather.error", currentLocation));
         });
     }
 }
