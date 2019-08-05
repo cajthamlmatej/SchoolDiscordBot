@@ -147,7 +147,7 @@ class EventModule extends Module {
 
         let link = "(https://www.google.com/calendar/event?action=TEMPLATE";
         
-        link += "&text=" + encodeURIComponent(event.subject + " | " + Translation.translate("module.event.calendar." + event.type) + " | " + event.title);
+        link += "&text=" + encodeURIComponent(event.subject + " | " + event.title.replace(/[*_`\\/~]/g, ""));
         link += "&details=" + encodeURIComponent(Translation.translate("module.event.calendar.details"));
         link += "&location=" + encodeURIComponent(event.place);
         link += "&dates=" + encodeURI(startDate.format(startDateFormat) + "/" + endDate.format(endDateFormat));
