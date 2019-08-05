@@ -78,7 +78,7 @@ class BakalariModule extends Module {
 
                     await bakalariRepository.insert({guid: guid, title: title, description: description, isTask: isTask});
 
-                    this.channel.send(this.generateEmbed(isTask, title, description, this.config.subjects.separated.includes(subject) ? values.group : undefined));
+                    this.channel.send(this.generateEmbed(isTask, title, description, this.config.subjects.separated.includes(subject) ? values.groups[subject] : undefined));
                 });
             });
         });
