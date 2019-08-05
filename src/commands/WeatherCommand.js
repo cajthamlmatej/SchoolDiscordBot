@@ -50,7 +50,7 @@ class WeatherCommand extends Command {
 
                 const weatherEmbedTomorrow = new Discord.RichEmbed()
                     .setColor(0xbadc58)
-                    .setTitle(Translation.translate("command.weather.tomorrow") + currentLocation, true)
+                    .setTitle(Translation.translate("command.weather.tomorrow") + currentLocation)
                     .addField(Translation.translate("command.weather.temperature"), "⬇️ " + resultForTomorrow.low + degree + " | ⬆️ " + resultForTomorrow.high + degree, true)
                     .addField(Translation.translate("command.weather.condition"), Translation.translate("command.weather.skytext." + resultTomorrowSkytext), true)
                     .addField(Translation.translate("command.weather.precipitation"), resultForTomorrow.precip + "%", true)

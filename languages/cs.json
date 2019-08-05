@@ -199,7 +199,7 @@
     "command.weather.wind": "Rychlost větru",
     "command.weather.feelslike": "Pocitová teplota",
     "command.weather.lastchecked": "Naposledy zkontrolováno",
-    "command.weather.tommorow": "Zítřejší počasí v ",
+    "command.weather.tomorrow": "Zítřejší počasí v ",
     "command.weather.precipitation": "Srážky",
     "command.weather.request": "Vyžádáno od ",
     "command.weather.error": "Zadaná lokace neexistuje",

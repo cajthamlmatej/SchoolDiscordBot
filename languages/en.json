@@ -198,7 +198,7 @@
     "command.weather.wind": "Speed of wind",
     "command.weather.feelslike": "Perceived temperature",
     "command.weather.lastchecked": "Last checked",
-    "command.weather.tommorow": "Tomorrow's weather in ",
+    "command.weather.tomorrow": "Tomorrow's weather in ",
     "command.weather.precipitation": "Precipitation",
     "command.weather.request": "Requested by ",
     "command.weather.error": "The specified location does not exist",
