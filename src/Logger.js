@@ -9,19 +9,20 @@ const logger = winston.createLogger({
         })
     ),
     transports: [
-        new winston.transports.File({ filename: "log/bot-" + moment().format("YYYY-MM-DD-HH-mm-ss") + ".log" }),
+        new winston.transports.File({ filename: "log/bot-" + moment().format("YYYY-MM-DD-HH-mm-ss") + ".log", handleExceptions: true }),
     ]
 });
 
 logger.add(new winston.transports.Console({
-    fromat: winston.format.combine(
+    format: winston.format.combine(
         winston.format.colorize(),
         winston.format.timestamp(),
         winston.format.cli(),
         winston.format.printf((info) => {
             return `${moment(info.timestamp).format("DD. MM. YYYY HH:mm:ss")} | [${info.level}] ${info.message}`;
         })
-    )
+    ),
+    handleExceptions: true
 }));
 
 logger.info("Logger initialized.");

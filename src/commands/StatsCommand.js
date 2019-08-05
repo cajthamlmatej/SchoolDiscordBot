@@ -98,7 +98,7 @@ class StatsCommand extends Command {
                     .addField(Translation.translate("command.stats.authors"), authorsStr, true)
                     .addField(Translation.translate("command.stats.for-groups"), groupsStr, true)
                     .addField(Translation.translate("command.stats.for-subjects"), subjectsStr, true)
-                    .setColor(0xbadc58);
+                    .setColor(Config.getColor("SUCCESS"));
 
                 channel.send(embed);
             });

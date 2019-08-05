@@ -25,19 +25,19 @@ class CommandBuilder {
     }
 
     async collect(message) {
-        const messageContent = message.content;
+        let messageContent = message.content;
 
         if (messageContent.toLowerCase() == this.stopWord.toLowerCase()) 
             this.collector.stop("forced");
         else {
             const field = this.build.fields[this.field];
+            if (field.value != undefined) 
+                messageContent = await field.value(messageContent, this.values, message.attachments.array());
+
             const passed = await field.validate(messageContent, this.values);
 
             if (passed === true) {
-                if (field.value != undefined) 
-                    this.values[field.name] = await field.value(messageContent, this.values, message.attachments.array());
-                else 
-                    this.values[field.name] = messageContent;
+                this.values[field.name] = messageContent;
 
                 if (this.build.fields[this.field + 1] == undefined) 
                     this.collector.stop("fieldEnd");
@@ -80,7 +80,7 @@ class CommandBuilder {
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("builder." + this.name + ".title"))
             .setDescription(description)
-            .setColor(0xbadc58)
+            .setColor(Config.getColor("SUCCESS"))
             .setFooter(this.build.user.username, this.build.user.avatarURL);
 
         return embed;
@@ -109,7 +109,7 @@ class CommandBuilder {
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("builder." + this.name + ".title"))
             .setDescription(description)
-            .setColor(0xbadc58)
+            .setColor(Config.getColor("SUCCESS"))
             .setFooter(this.build.user.username, this.build.user.avatarURL);
 
         if (error != undefined && error != true) {

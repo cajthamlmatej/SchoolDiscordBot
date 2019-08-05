@@ -1,5 +1,6 @@
 const DirectCommand = require("./DirectCommand");
 const Discord = require("discord.js");
+const Config = require("../Config");
 
 class BakalariCommand extends DirectCommand {
 
@@ -39,7 +40,7 @@ class BakalariCommand extends DirectCommand {
         const embed = new Discord.RichEmbed()
             .setTitle("📣 | RSS token změněn.")
             .setDescription("RSS token byl změněn. Během pár minut dostanete upozornění o známkách. Pokuď se tak nestane do hodiny a bot je online, nejspíše jste zadali špatný token - proto jej zadejte znovu a správně (vše za ?bk=).")
-            .setColor(0xe67e22);
+            .setColor(Config.getColor("SUCCESS"));
 
         channel.send(embed);
     }

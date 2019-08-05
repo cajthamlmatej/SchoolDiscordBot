@@ -102,7 +102,7 @@ class EventModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("🕜 | " + ((event.type == "event") ? Translation.translate("module.event.new-event") : Translation.translate("module.event.new-task")) + " | " + event.title)
             .setDescription(event.description)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         embed.addField(Translation.translate("module.event.group"), this.channel.guild.roles.find(r => r.id == this.roles[event.role]), true);
         embed.addField(Translation.translate("module.event.subject"), event.subject, true);
@@ -147,7 +147,7 @@ class EventModule extends Module {
 
         let link = "(https://www.google.com/calendar/event?action=TEMPLATE";
         
-        link += "&text=" + encodeURIComponent(event.subject + " | " + Translation.translate("module.event.calendar." + event.type) + " | " + event.title);
+        link += "&text=" + encodeURIComponent(event.subject + " | " + event.title.replace(/[*_`\\/~]/g, ""));
         link += "&details=" + encodeURIComponent(Translation.translate("module.event.calendar.details"));
         link += "&location=" + encodeURIComponent(event.place);
         link += "&dates=" + encodeURI(startDate.format(startDateFormat) + "/" + endDate.format(endDateFormat));
@@ -205,7 +205,7 @@ class EventModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.event.list"))
             .setDescription(list)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         user.createDM().then(dm => dm.send(embed)).catch(logger.error);
     }

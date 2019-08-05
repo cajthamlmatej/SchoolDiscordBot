@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const moment = require("moment");
 const Translation = require("../Translation");
 const Config = require("../Config");
+const logger = require("../Logger");
 
 const muteRepository = require("../database/Database").getRepository("mute");
 
@@ -27,8 +28,7 @@ class MuteModule extends Module {
 
         mutes.forEach(mute => {
             const current = moment().format("X");
-            const expiration = mute.expiration;
-
+            const expiration = mute.expire;
             if (current > expiration) {
                 toRemove.push(mute.user);
 
@@ -36,7 +36,7 @@ class MuteModule extends Module {
             }
         });
 
-        this.removeMutesFromFile(toRemove);
+        this.removeMutesFromDatabase(toRemove);
     }
 
     async printRoleList(channel) {
@@ -44,7 +44,7 @@ class MuteModule extends Module {
 
         const embed = new Discord.RichEmbed()
             .setTitle("🔇 | " + Translation.translate("module.mute.list"))
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         let result = Promise.resolve();
         mutes.forEach(mute => {
@@ -78,7 +78,7 @@ class MuteModule extends Module {
                 roles: roles,
                 reason: reason
             });
-        }).catch(console.error);
+        }).catch(logger.error);
     }
 
     setMuteRoles(user, muteRoles) {
@@ -91,7 +91,7 @@ class MuteModule extends Module {
         const mute = await this.getMute(member.user.id);
         this.setMuteRoles(member.user.id, mute.roles);
 
-        await this.removeMuteFromFile(member.user.id);
+        await this.removeMuteFromDatabase(member.user.id);
     }
 
     async getMutes() {
@@ -102,13 +102,13 @@ class MuteModule extends Module {
         return await muteRepository.getMute(user);
     }
 
-    async removeMuteFromFile(user) {
+    async removeMuteFromDatabase(user) {
         await muteRepository.deleteMute(user);
     }
 
-    removeMutesFromFile(users) {
-        users.forEach(user => {
-            this.removeMuteFromFile(user);
+    async removeMutesFromDatabase(users) {
+        users.forEach(async (user) => {
+            await this.removeMuteFromDatabase(user);
         });
     }
 

@@ -140,7 +140,6 @@ class EventCommand extends SubsCommand {
                 Object.keys(this.placeholders).forEach(placeholder => {
                     if (content.toLowerCase().includes(placeholder))
                         found = true;
-
                 });
 
                 if (found)
@@ -160,7 +159,7 @@ class EventCommand extends SubsCommand {
         },
         {
             "name": "role",
-            "example": "member",
+            "example": this.eventModule.getMentionableRoles()[0],
             "validate": (content) => {
                 if (!this.eventModule.isMentionableRole(content))
                     return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
@@ -353,7 +352,7 @@ class EventCommand extends SubsCommand {
 
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("command.event.check.title", dateString))
-            .setColor(0xbadc58)
+            .setColor(Config.getColor("SUCCESS"))
             .setDescription(Translation.translate("command.event.check.description"));
 
         if (starts != "")
@@ -400,7 +399,7 @@ class EventCommand extends SubsCommand {
 
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("command.event.check.week.title", ""))
-            .setColor(0xbadc58)
+            .setColor(Config.getColor("SUCCESS"))
             .setDescription(Translation.translate("command.event.check.description"));
 
         Object.keys(datesInfo).forEach(date => {
@@ -444,7 +443,7 @@ class EventCommand extends SubsCommand {
 
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("command.event.check.nextweek.title", ""))
-            .setColor(0xbadc58)
+            .setColor(Config.getColor("SUCCESS"))
             .setDescription(Translation.translate("command.event.check.description"));
 
         Object.keys(datesInfo).forEach(date => {

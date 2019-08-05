@@ -35,7 +35,7 @@ class WeatherCommand extends Command {
                 const resultTomorrowSkytext = resultForTomorrow.skytextday.toLowerCase().replace(/ /g, "-");
 
                 const weatherEmbedToday = new Discord.RichEmbed()
-                    .setColor(0xbadc58)
+                    .setColor(Config.getColor("SUCCESS"))
                     .setTitle(Translation.translate("command.weather.currentdate", currentLocation))
                     .setThumbnail(resultBase.current.imageUrl)
                     .addField(Translation.translate("command.weather.temperature"), resultBase.current.temperature + degree + " (" + "⬇️ " + resultForToday.low + degree + " | ⬆️ " + resultForToday.high + degree + ")", true)
@@ -49,8 +49,8 @@ class WeatherCommand extends Command {
                     .setFooter(Translation.translate("command.weather.request", message.member.nickname), message.author.avatarURL);
 
                 const weatherEmbedTomorrow = new Discord.RichEmbed()
-                    .setColor(0xbadc58)
-                    .setTitle(Translation.translate("command.weather.tomorrow", currentLocation))
+                    .setColor(Config.getColor("SUCCESS"))
+                    .setTitle(Translation.translate("command.weather.tomorrow", currentLocation), true)
                     .addField(Translation.translate("command.weather.temperature"), "⬇️ " + resultForTomorrow.low + degree + " | ⬆️ " + resultForTomorrow.high + degree, true)
                     .addField(Translation.translate("command.weather.condition"), Translation.translate("command.weather.skytext." + resultTomorrowSkytext), true)
                     .addField(Translation.translate("command.weather.precipitation"), resultForTomorrow.precip + "%", true)

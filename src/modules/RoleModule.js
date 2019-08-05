@@ -2,6 +2,7 @@ const Module = require("./Module");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
 const Config = require("../Config");
+const logger = require("../Logger");
 
 class RoleModule extends Module {
 
@@ -22,7 +23,7 @@ class RoleModule extends Module {
 
                     message.react("✅");
                 });
-            }).catch(console.error);
+            }).catch(logger.error);
     }
 
     event(name, args) {
@@ -55,7 +56,7 @@ class RoleModule extends Module {
                 return;
 
             member.addRole(role);
-        }).catch(console.error);
+        }).catch(logger.error);
     }
 
     reactionRemove(reactionMessage, user) {
@@ -77,7 +78,7 @@ class RoleModule extends Module {
                 return;
 
             member.removeRole(role);
-        }).catch(console.error);
+        }).catch(logger.error);
     }
 
     updateRole(user, role, channel) {
@@ -90,25 +91,25 @@ class RoleModule extends Module {
             const roleId = this.roles.assignable[role];
 
             if (member.roles.find(r => r.id == roleId) != undefined) {
-                member.removeRole(roleId).catch(console.error);
+                member.removeRole(roleId).catch(logger.error);
 
                 const embed = new Discord.RichEmbed()
                     .setTitle("✅ | " + Translation.translate("module.role.deleted"))
                     .setDescription("")
-                    .setColor(0xbadc58);
+                    .setColor(Config.getColor("SUCCESS"));
 
                 channel.send(embed);
             } else {
-                member.addRole(roleId).catch(console.error);
+                member.addRole(roleId).catch(logger.error);
 
                 const embed = new Discord.RichEmbed()
                     .setTitle("✅ | " + Translation.translate("module.role.added"))
                     .setDescription("")
-                    .setColor(0xbadc58);
+                    .setColor(Config.getColor("SUCCESS"));
 
                 channel.send(embed);
             }
-        }).catch(console.error);
+        }).catch(logger.error);
     }
 
     printRoleList(channel) {
@@ -116,7 +117,7 @@ class RoleModule extends Module {
 
         const embed = new Discord.RichEmbed()
             .setTitle("👥 | " + Translation.translate("module.role.list"))
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         Object.keys(this.roles).forEach(groupName => {
             let list = "";

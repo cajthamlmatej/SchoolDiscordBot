@@ -105,7 +105,7 @@ class SupplementationModule extends Module {
                     const embed = new Discord.RichEmbed()
                         .setTitle("👓 | " + Translation.translate("module.supplementation.new") + " " + dayName)
                         .setDescription(suppleString)
-                        .setColor(0xbadc58);
+                        .setColor(Config.getColor("SUCCESS"));
 
                     const supplementationEntity = await supplementationRepository.getSupplementationByDay(dayName);
                     if(supplementationEntity != null) 
@@ -162,7 +162,7 @@ class SupplementationModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("👓 | " + Translation.translate("module.supplementation.refreshed.title"))
             .setDescription(Translation.translate("module.supplementation.refreshed"))
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         channel.send(embed);
     }

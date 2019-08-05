@@ -2,6 +2,7 @@ const SubsCommand = require("./SubsCommand");
 const Discord = require("discord.js");
 const moment = require("moment");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class SupplementationCommand extends SubsCommand {
 
@@ -50,7 +51,7 @@ class SupplementationCommand extends SubsCommand {
 
         const embed = new Discord.RichEmbed()
             .setTitle("👓 | " + Translation.translate("command.supplementation.lastcheck.title"))
-            .setColor(0xbadc58)
+            .setColor(Config.getColor("SUCCESS"))
             .setDescription(Translation.translate("command.supplementation.lastcheck", moment().diff(this.supplementationModule.lastCheck, "minutes")));
 
         channel.send(embed);

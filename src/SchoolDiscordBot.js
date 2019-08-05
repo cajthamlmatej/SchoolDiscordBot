@@ -199,7 +199,7 @@ class SchoolDiscordBot {
         logger.info("Sending message to server moderators.");
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("bot.started"))
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         const adminChannel = this.client.channels.find(c => c.id == Config.get("channels.bot-info"));
         adminChannel.send(embed);
@@ -230,7 +230,7 @@ class SchoolDiscordBot {
         if (this.recentCommandsUsage.has(authorId)) {
             const embed = new Discord.RichEmbed()
                 .setTitle("❗ | " + Translation.translate("spam.alert.title"))
-                .setColor(0xd63031)
+                .setColor(Config.getColor("WARNING"))
                 .setDescription(Translation.translate("spam.alert"));
 
             message.channel.send(embed);
@@ -264,7 +264,7 @@ class SchoolDiscordBot {
 
                 if (deleteMessage)
                     message.delete();
-            }).catch(console.error);
+            }).catch(logger.error);
     }
 }
 

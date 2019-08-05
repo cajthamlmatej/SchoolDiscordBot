@@ -93,14 +93,14 @@ class BakalariModule extends Module {
             const embed = new Discord.RichEmbed()
                 .setTitle("📚 | Nový úkol ze systému Bakalářů" + (group == undefined ? "" : " pro " + group + ". skupinu"))
                 .setDescription("Předmět a konec: **" + title.replace(/ÚKOL -/g, "") + "**\n\n" + description)
-                .setColor(0xbadc58);
+                .setColor(Config.getColor("SUCCESS"));
 
             return embed;
         } else {
             const embed = new Discord.RichEmbed()
                 .setTitle("📚 | Nová informace ze systému Bakalářů" + (group == undefined ? "" : " pro " + group + ". skupinu"))
                 .setDescription("Titulek: **" + title + "**\n\n" + description)
-                .setColor(0xbadc58);
+                .setColor(Config.getColor("SUCCESS"));
 
             return embed;
         }

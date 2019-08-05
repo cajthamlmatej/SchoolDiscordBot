@@ -1,6 +1,7 @@
 const Command = require("./Command");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class SayCommand extends Command {
 
@@ -33,7 +34,7 @@ class SayCommand extends Command {
             .setTitle("🤐 | " + Translation.translate("command.notice.notice"))
             .setDescription(msg)
             .setFooter(message.author.username, message.author.avatarURL)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         channelSay.send(embed);
 

@@ -124,7 +124,7 @@ class SayCommand extends Command {
             .setTitle("🤐 | " + Translation.translate("command.notice.notice"))
             .setDescription(msg)
             .setFooter(message.author.username, message.author.avatarURL)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         channelSay.send(embed);
 

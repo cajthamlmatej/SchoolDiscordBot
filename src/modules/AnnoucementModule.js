@@ -36,7 +36,7 @@ class AnnoucementModule extends Module {
             .setTitle("📢 | " + values.title)
             .setDescription(values.annoucement)
             .setFooter(member.nickname, member.user.avatarURL)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
     }
 
     async deleteAnnoucement(channel, name) {
@@ -51,7 +51,7 @@ class AnnoucementModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📢 | " + Translation.translate("module.annoucement.deleted"))
             .setDescription("")
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         channel.send(embed);
     }
@@ -83,7 +83,7 @@ class AnnoucementModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📢 | " + Translation.translate("module.annoucement.list"))
             .setDescription(list)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         member.user.createDM().then(dm => dm.send(embed)).catch(error => { });
     }

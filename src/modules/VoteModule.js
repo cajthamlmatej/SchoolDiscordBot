@@ -2,6 +2,7 @@ const Module = require("./Module");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
 const Config = require("../Config");
+const logger = require("../Logger");
 
 const voteRepository = require("../database/Database").getRepository("vote");
 
@@ -45,9 +46,9 @@ class VoteModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.vote.list"))
             .setDescription(list)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
-        user.createDM().then(dm => dm.send(embed)).catch(console.error);
+        user.createDM().then(dm => dm.send(embed)).catch(logger.error);
     }
 
     async deleteVote(name, channel) {
@@ -61,7 +62,7 @@ class VoteModule extends Module {
             const embed = new Discord.RichEmbed()
                 .setTitle("📆 | " + Translation.translate("module.vote.deleted.title"))
                 .setDescription(Translation.translate("module.vote.deleted"))
-                .setColor(0xbadc58);
+                .setColor(Config.getColor("SUCCESS"));
 
             channel.send(embed);
         }).catch(error => {
@@ -79,7 +80,7 @@ class VoteModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.vote.new"))
             .setDescription(description + "\n\n" + Translation.translate("module.vote.vote") + ": \n" + optionsString)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         let voteChannel;
 
@@ -107,7 +108,7 @@ class VoteModule extends Module {
                 options: decodedOptions,
                 channel: voteChannel.id
             });
-        }).catch(console.error);
+        }).catch(logger.error);
     }
 
     async endVote(name) {
@@ -154,7 +155,7 @@ class VoteModule extends Module {
 
             let winningChoice = "";
 
-            console.log(winners[0]);
+            logger.log(winners[0]);
 
             if (winners.length === 1) 
                 winningChoice = Translation.translate("module.vote.option-won") + " **" + winners[0] + " " + vote.options.get(winners[0].codePointAt(0) + "") + "**";
@@ -174,14 +175,14 @@ class VoteModule extends Module {
             const embed = new Discord.RichEmbed()
                 .setTitle("📆 | " + Translation.translate("module.vote.end") + " \"" + name + "\"")
                 .setDescription(vote.description)
-                .setColor(0xbadc58)
+                .setColor(Config.getColor("SUCCESS"))
                 .addField("☝ " + Translation.translate("module.vote.options-votes"), votesString, true)
                 .addBlankField()
                 .addField("🖐 " + Translation.translate("module.vote.stats"), "**" + Translation.translate("module.vote.votes-count") + "**: " + reactionCount + "\n**" + Translation.translate("module.vote.vote-weight") + "**: " + weight + "%\n", true)
                 .addField("👍 " + Translation.translate("module.vote.result"), winningChoice, true);
 
             channel.send(embed);
-        }).catch(console.error);
+        }).catch(logger.error);
     }
 
     addZero(i) {
