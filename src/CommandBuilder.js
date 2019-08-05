@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const Translation = require("./Translation");
 const Config = require("./Config");
 
-let activeBuilders = {};
+const activeBuilders = {};
 
 class CommandBuilder {
 
@@ -26,10 +26,10 @@ class CommandBuilder {
             if(activeBuilders[this.build.user.id] == undefined)
                 activeBuilders[this.build.user.id] = [this.build.channel.id];
             else 
-                if(activeBuilders[this.build.user.id].includes(this.build.channel.id)) 
-                    this.collector.stop("forced-builder-exist");
-                else
-                    activeBuilders[this.build.user.id].push(this.build.channel.id);
+            if(activeBuilders[this.build.user.id].includes(this.build.channel.id)) 
+                this.collector.stop("forced-builder-exist");
+            else
+                activeBuilders[this.build.user.id].push(this.build.channel.id);
         });
         
     }
