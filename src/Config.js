@@ -20,9 +20,9 @@ class Config {
         };
 
         colors.forEach(color => {
-            if(config.has("colors." + color)){
+            if(config.has("colors." + color)) 
                 this.colors[color.toUpperCase()] = config.get("colors." + color);
-            }
+            
         });
     }
 

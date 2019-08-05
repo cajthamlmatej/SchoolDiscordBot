@@ -28,7 +28,7 @@ class AutomaticReactionModule extends Module {
             this.checkRulesForChannel(this.channels[message.channel.id], message);
     }
 
-    async checkRulesForChannel(rules, message){
+    async checkRulesForChannel(rules, message) {
         let promise = Promise.resolve();
 
         const content = message.content;
@@ -39,78 +39,78 @@ class AutomaticReactionModule extends Module {
     
                 let triggerPassed = false;
                 Object.keys(triggers).forEach(trigger => {
-                    switch (trigger){
-                        case "contains": {
-                            const triggerValue = triggers[trigger];
+                    switch (trigger) {
+                    case "contains": {
+                        const triggerValue = triggers[trigger];
     
-                            if(Array.isArray(triggerValue)) {
-                                let tempContent = content;
+                        if(Array.isArray(triggerValue)) {
+                            let tempContent = content;
     
-                                triggerPassed = true;
+                            triggerPassed = true;
     
-                                triggerValue.forEach(value => {
-                                    if(!tempContent.includes(value))
-                                        triggerPassed = false;
+                            triggerValue.forEach(value => {
+                                if(!tempContent.includes(value))
+                                    triggerPassed = false;
     
-                                    tempContent = tempContent.replace(new RegExp(value, "g"), "");
-                                });
+                                tempContent = tempContent.replace(new RegExp(value, "g"), "");
+                            });
     
-                            } else {
-                                if(content.includes(triggerValue))
-                                    triggerPassed = true;
-                            }
-                            break;
-                        }
-                        case "contains-or": {
-                            const triggerValue = triggers[trigger];
-    
-                            if(Array.isArray(triggerValue)) {
-                                triggerValue.forEach(value => {
-                                    if(content.includes(value))
-                                        triggerPassed = true;
-                                });
-                            } else {
-                                if(content.includes(triggerValue))
-                                    triggerPassed = true;
-                            }
-                            break;
-                        }
-                        case "attachments": {
-                            const triggerValue = triggers[trigger];
-
-                            if (message.attachments.size >= triggerValue)
-                                triggerPassed = true;
+                        } else 
+                        if(content.includes(triggerValue))
+                            triggerPassed = true;
                             
-                            break;
-                        }
+                        break;
+                    }
+                    case "contains-or": {
+                        const triggerValue = triggers[trigger];
+    
+                        if(Array.isArray(triggerValue)) 
+                            triggerValue.forEach(value => {
+                                if(content.includes(value))
+                                    triggerPassed = true;
+                            });
+                        else 
+                        if(content.includes(triggerValue))
+                            triggerPassed = true;
+                            
+                        break;
+                    }
+                    case "attachments": {
+                        const triggerValue = triggers[trigger];
+
+                        if (message.attachments.size >= triggerValue)
+                            triggerPassed = true;
+                            
+                        break;
+                    }
                     }
                 });
     
-                if(triggerPassed) {
+                if(triggerPassed) 
                     reactions.forEach(reaction => {
                         const reactionType = reaction.type;
                         const reactionValue = reaction.value;
     
-                        switch (reactionType){
-                            case "reaction": {
-                                promise = promise.then(async () => {
-                                    await message.react(reactionValue);
-                                });
-                                break;
-                            }
-                            case "text-reply": {
-                                promise = promise.then(async () => {
-                                    await message.channel.send(reactionValue);
-                                });
-                                break;
-                            }
+                        switch (reactionType) {
+                        case "reaction": {
+                            promise = promise.then(async () => {
+                                await message.react(reactionValue);
+                            });
+                            break;
+                        }
+                        case "text-reply": {
+                            promise = promise.then(async () => {
+                                await message.channel.send(reactionValue);
+                            });
+                            break;
+                        }
                         }
                     });
-                }
+                
             });
         });
     }
 
 }
 
-module.exports = AutomaticReactionModule
+module.exports = AutomaticReactionModule;

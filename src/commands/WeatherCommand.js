@@ -24,7 +24,8 @@ class WeatherCommand extends Command {
     }
 
     call(args, message) {
-        Weather.find({ search: args.join(" "), degreeType: this.unit }, (err, result) => {
+        const searchLocation = args.join(" ");
+        Weather.find({ search: searchLocation, degreeType: this.unit }, (err, result) => {
             if (result[0] != undefined) {
                 const resultBase = result[0];
                 const resultForToday = resultBase.forecast[1];
@@ -61,7 +62,7 @@ class WeatherCommand extends Command {
                 message.channel.send(weatherEmbedTomorrow);
 
             } else
-                message.channel.send("🛑 | " + Translation.translate("command.weather.error", currentLocation));
+                message.channel.send("🛑 | " + Translation.translate("command.weather.error", searchLocation));
         });
     }
 }
