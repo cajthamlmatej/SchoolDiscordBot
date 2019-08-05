@@ -10,20 +10,26 @@ class Config {
             if (!config.has(path))
                 throw new Error("Path " + path + " is required in config.");
         });
+
+        const colors = ["success", "fail", "warning", "special"];
+        this.colors = {
+            SUCCESS: 0xb8e994,
+            FAIL: 0xe55039,
+            WARNING: 0xfa983a,
+            SPECIAL: 0x000000
+        };
+
+        colors.forEach(color => {
+            if(config.has("colors." + color)){
+                this.colors[color.toUpperCase()] = config.get("colors." + color);
+            }
+        });
     }
 
     getColor(type) {
         type = type.toUpperCase();
-        switch (type) {
-        case "SUCCESS": 
-            return 0xb8e994;
-        case "FAIL":
-            return 0xe55039;
-        case "WARNING":
-            return 0xfa983a;
-        case "SPECIAL":
-            return 0x000000;
-        }
+        
+        return this.colors[type];
     }
 
     getRequiredPaths() {
