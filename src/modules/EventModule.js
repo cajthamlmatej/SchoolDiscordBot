@@ -20,8 +20,13 @@ class EventModule extends Module {
         this.daysToArchive = Config.get("modules.event.archive-days");
 
         this.tick();
-        setInterval(() => this.tick(), Config.get("modules.event.check-time"));
+        this.interval = setInterval(() => this.tick(), Config.get("modules.event.check-time"));
     }
+
+    uninit(){
+        clearTimeout(this.interval)
+    }
+
 
     async tick() {
         const events = await this.getEvents();

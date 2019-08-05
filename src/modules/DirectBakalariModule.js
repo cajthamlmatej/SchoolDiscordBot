@@ -21,8 +21,13 @@ class DirectBakalariModule extends Module {
         this.bot = bot;
 
         this.tick();
-        setInterval(() => this.tick(), Config.get("modules.bakalari.check-time"));
+        this.interval = setInterval(() => this.tick(), Config.get("modules.bakalari.check-time"));
     }
+
+    uninit(){
+        clearTimeout(this.interval)
+    }
+
     
     async tick() {
         (await directBakalariRepository.getAllUsers()).forEach(directBakalari => {

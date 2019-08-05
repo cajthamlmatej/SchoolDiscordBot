@@ -28,8 +28,13 @@ class SupplementationModule extends Module {
         this.channel = Config.get("channels.supplementation");
 
         this.tick();
-        setInterval(() => this.tick(), this.supplementationConfig.refresh);
+        this.interval = setInterval(() => this.tick(), this.supplementationConfig.refresh);
     }
+
+    uninit(){
+        clearTimeout(this.interval)
+    }
+
 
     async tick() {
         this.lastCheck = moment();

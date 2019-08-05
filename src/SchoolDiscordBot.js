@@ -136,6 +136,39 @@ class SchoolDiscordBot {
         this.modules = modules;
     }
 
+    disableCommand(name) {
+        logger.warn("Disabling command " + name + " and their subcommands.");
+        const command = this.commands[name];
+
+        command.fetchAliases().forEach(alias => {
+            delete this.commandsAliases[alias];
+        });
+        delete this.commandsAliases[name];
+
+        this.disabledCommands.push(command);
+        delete this.commands[name];
+        logger.warn("Command " + name + " disabled.");
+    }
+
+    disableModule(name) {
+        logger.warn("Disabling module " + name + " and command dependencies.");
+        const moduleClass = this.modules[name];
+        
+        if(moduleClass.uninit != undefined)
+            moduleClass.uninit();
+
+        Object.keys(this.commands).forEach(commandName => {
+            if(this.commands[commandName].getDependencies().includes(name)) {   
+                logger.warn("Disabling command " + commandName + " beacause required module " + name + " dependency.");
+                this.disableCommand(commandName);
+            }
+        });
+
+        this.disabledModules.push(name);
+        delete this.modules[name];
+        logger.warn("Module " + name + " disabled.");
+    }
+
     ready() {
         Translation.setLanguage(Config.get("bot.language"));
 
@@ -175,7 +208,7 @@ class SchoolDiscordBot {
 
             if (!canBeEnabled) {
                 logger.warn("  Command " + commandName + " is disabled because dependencies modules (" + command.getDependencies() + ") are not loaded.");
-                this.disabledCommands.push(commandName);
+                this.disabledCommands.push(command);
                 delete this.commands[commandName];
                 return;
             }

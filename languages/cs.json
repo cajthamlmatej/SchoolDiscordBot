@@ -55,6 +55,10 @@
     "commands.help.bakalari": "Zvolí RSS token pro aktuálního uživatele",
     "commands.help.weather": "Zobrazí přehled počasí pro dnešek a zítřek",
     "commands.help.math": "Vypočítá zadaný příklad",
+    "commands.help.command": "Správa příkazů",
+    "commands.help.command.disable": "Vypne příkaz",
+    "commands.help.module": "Správa modulů",
+    "commands.help.module.disable": "Vypne modul",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check> <...>",
@@ -96,6 +100,10 @@
     "commands.usage.bakalari": "<rss token>",
     "commands.usage.weather": "<město, místo>",
     "commands.usage.math": "<příklad>",
+    "commands.usage.command": "<list/disable> <...>",
+    "commands.usage.command.disable": "<jméno příkazu>",
+    "commands.usage.module": "<list/disable> <...>",
+    "commands.usage.module.disable": "<jméno modulu>",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
@@ -240,6 +248,16 @@
     "command.math.request": "Spočítáno pro {0}",
     "command.math.description.error": "Zadaný příklad ({0}) nebylo možné vypočítat. Nenapsali jste něco špatně?",
     "command.math.zerodividedbyzero.request": "Jaké to tajemství?",
+
+    "command.command.command-not-found": "Příkaz ({0}) nenalezen.",
+    "command.command.list": "Seznam příkazů.",
+    "command.command.disabled.title": "Příkaz byl vypnut",
+    "command.command.disabled.description": "Příkaz byl do dalšího zapnutí bota vypnut.",
+
+    "command.module.module-not-found": "Modul ({0}) nenalezen.",
+    "command.module.list": "Seznam modulů.",
+    "command.module.disabled.title": "Modul byl vypnut",
+    "command.module.disabled.description": "Modul byl do dalšího zapnutí bota vypnut.",
 
     "module.event.new-event": "Nová událost",
     "module.event.new-task": "Nový úkol",
