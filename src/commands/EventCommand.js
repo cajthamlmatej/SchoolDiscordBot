@@ -207,7 +207,7 @@ class EventCommand extends SubsCommand {
             }
         }
         ], (values) => {
-            logger.info("User " + message.author.username + " created event with name " + values["name"] + ".");
+            logger.info("User " + message.member.displayName + " created event with name " + values["name"] + ".");
 
             let start = values["start"];
             let end = values["end"];
@@ -272,7 +272,7 @@ class EventCommand extends SubsCommand {
             }
         }
         ], (values) => {
-            logger.info("User " + message.author.username + " edited event with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
+            logger.info("User " + message.member.displayName + " edited event with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
 
             this.eventModule.editEvent(values["name"], values["type"], values["value"], message.author.id);
         });

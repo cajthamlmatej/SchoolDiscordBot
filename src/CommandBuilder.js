@@ -10,16 +10,16 @@ class CommandBuilder {
         this.field = 0;
         this.values = {};
         this.endFunction = end;
-        
+
         this.stopWord = Config.get("bot.builder.stop-word");
     }
 
-    start() {
+    async start() {
         this.collector = new Discord.MessageCollector(this.build.channel, m => m.author.id === this.build.user.id && m.channel.id === this.build.channel.id);
         this.collector.on("collect", (message) => { this.collect(message); });
         this.collector.on("end", (messages, reason) => { this.end(messages, reason); });
 
-        this.build.channel.send(this.generateHelpEmbed(this.build.fields[this.field])).then(message => {
+        this.build.channel.send(await this.generateHelpEmbed(this.build.fields[this.field])).then(message => {
             this.message = message;
         });
     }
@@ -44,17 +44,17 @@ class CommandBuilder {
                 else {
                     this.field += 1;
 
-                    this.message.edit(this.generateHelpEmbed(this.build.fields[this.field]));
+                    this.message.edit(await this.generateHelpEmbed(this.build.fields[this.field]));
                 }
             } else 
-                this.message.edit(this.generateHelpEmbed(this.build.fields[this.field], passed));
+                this.message.edit(await this.generateHelpEmbed(this.build.fields[this.field], passed));
             
             message.delete();
         }
     }
 
-    end(messages, reason) {
-        this.message.edit(this.generateEndEmbed(reason));
+    async end(messages, reason) {
+        this.message.edit(await this.generateEndEmbed(reason));
 
         switch (reason) {
         case "forced":
@@ -65,7 +65,7 @@ class CommandBuilder {
         }
     }
 
-    generateEndEmbed(reason) {
+    async generateEndEmbed(reason) {
         let description = "";
 
         switch (reason) {
@@ -77,16 +77,22 @@ class CommandBuilder {
             break;
         }
 
+        if(this.build.member == undefined){
+            await this.build.channel.guild.fetchMember(this.build.user).then(member => { 
+                this.build.member = member;
+            });
+        }
+
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("builder." + this.name + ".title"))
             .setDescription(description)
             .setColor(Config.getColor("SUCCESS"))
-            .setFooter(this.build.user.username, this.build.user.avatarURL);
+            .setFooter(this.build.member.displayName, this.build.user.avatarURL);
 
         return embed;
     }
 
-    generateHelpEmbed(field, error) {
+    async generateHelpEmbed(field, error) {
         const fieldName = field.name;
         let description = "";
 
@@ -106,11 +112,17 @@ class CommandBuilder {
 
         description += "\n\n" + Translation.translate("builder.stop", this.stopWord);
 
+        if(this.build.member == undefined){
+            await this.build.channel.guild.fetchMember(this.build.user).then(member => { 
+                this.build.member = member;
+            });
+        }
+
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("builder." + this.name + ".title"))
             .setDescription(description)
             .setColor(Config.getColor("SUCCESS"))
-            .setFooter(this.build.user.username, this.build.user.avatarURL);
+            .setFooter(this.build.member.displayName, this.build.user.avatarURL);
 
         if (error != undefined && error != true) {
             let errorMessage = "";

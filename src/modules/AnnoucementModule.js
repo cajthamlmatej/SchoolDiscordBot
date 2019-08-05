@@ -35,7 +35,7 @@ class AnnoucementModule extends Module {
         return new Discord.RichEmbed()
             .setTitle("📢 | " + values.title)
             .setDescription(values.annoucement)
-            .setFooter(member.nickname, member.user.avatarURL)
+            .setFooter(member.displayName, member.user.avatarURL)
             .setColor(Config.getColor("SUCCESS"));
     }
 
@@ -57,14 +57,16 @@ class AnnoucementModule extends Module {
     }
 
     async editAnnoucement(member, name, type, value) {
-        const annoucement = await annoucementRepository.getAnnoucementByName(name, "message");
+        const annoucement = await annoucementRepository.getAnnoucementByName(name, "message author");
         const change = {};
         change[type] = value;
         
         await annoucementRepository.editAnnoucement(name, change);
 
         this.channel.fetchMessage(annoucement.message).then(message => {
-            message.edit(this.generateAnnoucementEmbed(annoucement, member));
+            this.channel.guild.fetchMember(annoucement.author).then(author => {
+                message.edit(this.generateAnnoucementEmbed(annoucement, author));
+            });
         }).catch(error => { });
     }
 

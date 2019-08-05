@@ -122,7 +122,7 @@ class EventModule extends Module {
         embed.addField(Translation.translate("module.event.place"), event.place);
         embed.addField(Translation.translate("module.event.calendar.calendar"), this.generateGoogleCalendarLink(event));
 
-        embed.setFooter(author.nickname == undefined ? author.user.username : author.nickname, author.user.avatarURL);
+        embed.setFooter(author.displayName, author.user.avatarURL);
 
         return embed;
     }
