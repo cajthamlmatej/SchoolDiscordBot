@@ -312,6 +312,7 @@
     "builder.stop": "K ukončení napište \"{0}\"",
     "builder.error": "Chyba",
     "builder.end": "Builder byl ukončen, žádná z hodnot nebyla uložena.",
+    "builder.end.exist": "Builder byl ukončen protože builder již existuje v tomto kanálu pro tohoto uživatele, žádná z hodnot nebyla uložena.",
 
     "builder.event.create.title": "Přidání nové události / úkolu",
     "builder.event.create.ok": "Událost / úkol byl přidán.",

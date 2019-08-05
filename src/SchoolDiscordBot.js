@@ -262,8 +262,8 @@ class SchoolDiscordBot {
                 logger.info("User " + message.author.username + (member.nickname != undefined ? " (" + member.nickname + ")" : "") + " used command " + message.content + ".");
                 const deleteMessage = await command.call(args, message);
 
-                if (deleteMessage)
-                    message.delete();
+                if (deleteMessage)  
+                    message.delete().catch(() => {});
             }).catch(logger.error);
     }
 }

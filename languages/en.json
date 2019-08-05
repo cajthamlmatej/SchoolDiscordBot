@@ -311,6 +311,7 @@
     "builder.stop": "For stop, enter \"{0}\"",
     "builder.error": "Error",
     "builder.end": "Builder was ended, nothing was saved.",
+    "builder.end.exist": "Builder was ended because builder already exist in this channel for this user, nothing was saved.",
 
     "builder.event.create.title": "Adding new event / task",
     "builder.event.create.ok": "Event / task was added.",

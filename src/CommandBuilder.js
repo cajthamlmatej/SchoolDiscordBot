@@ -2,6 +2,8 @@ const Discord = require("discord.js");
 const Translation = require("./Translation");
 const Config = require("./Config");
 
+let activeBuilders = {};
+
 class CommandBuilder {
 
     constructor(name, user, channel, fields, end) {
@@ -15,13 +17,21 @@ class CommandBuilder {
     }
 
     async start() {
-        this.collector = new Discord.MessageCollector(this.build.channel, m => m.author.id === this.build.user.id && m.channel.id === this.build.channel.id);
-        this.collector.on("collect", (message) => { this.collect(message); });
-        this.collector.on("end", (messages, reason) => { this.end(messages, reason); });
-
-        this.build.channel.send(await this.generateHelpEmbed(this.build.fields[this.field])).then(message => {
+        await this.build.channel.send(await this.generateHelpEmbed(this.build.fields[this.field])).then(message => {
             this.message = message;
+            this.collector = new Discord.MessageCollector(this.build.channel, m => m.author.id === this.build.user.id && m.channel.id === this.build.channel.id);
+            this.collector.on("collect", (message) => { this.collect(message); });
+            this.collector.on("end", (messages, reason) => { this.end(messages, reason); });
+
+            if(activeBuilders[this.build.user.id] == undefined)
+                activeBuilders[this.build.user.id] = [this.build.channel.id];
+            else 
+                if(activeBuilders[this.build.user.id].includes(this.build.channel.id)) 
+                    this.collector.stop("forced-builder-exist");
+                else
+                    activeBuilders[this.build.user.id].push(this.build.channel.id);
         });
+        
     }
 
     async collect(message) {
@@ -48,8 +58,8 @@ class CommandBuilder {
                 }
             } else 
                 this.message.edit(await this.generateHelpEmbed(this.build.fields[this.field], passed));
-            
-            message.delete();
+
+            message.delete().catch(() => {});
         }
     }
 
@@ -57,9 +67,17 @@ class CommandBuilder {
         this.message.edit(await this.generateEndEmbed(reason));
 
         switch (reason) {
+        case "forced-builder-exist":
+            break;
         case "forced":
+            activeBuilders[this.build.user.id] = activeBuilders[this.build.user.id].filter((item) => { 
+                return item !== this.build.channel.id;
+            });
             break;
         case "fieldEnd":
+            activeBuilders[this.build.user.id] = activeBuilders[this.build.user.id].filter((item) => { 
+                return item !== this.build.channel.id;
+            });
             this.endFunction(this.values);
             break;
         }
@@ -69,6 +87,9 @@ class CommandBuilder {
         let description = "";
 
         switch (reason) {
+        case "forced-builder-exist": 
+            description += Translation.translate("builder.end.exist");
+            break;
         case "forced":
             description += Translation.translate("builder.end");
             break;
@@ -77,11 +98,10 @@ class CommandBuilder {
             break;
         }
 
-        if(this.build.member == undefined){
+        if(this.build.member == undefined) 
             await this.build.channel.guild.fetchMember(this.build.user).then(member => { 
                 this.build.member = member;
             });
-        }
 
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("builder." + this.name + ".title"))
@@ -112,11 +132,10 @@ class CommandBuilder {
 
         description += "\n\n" + Translation.translate("builder.stop", this.stopWord);
 
-        if(this.build.member == undefined){
+        if(this.build.member == undefined) 
             await this.build.channel.guild.fetchMember(this.build.user).then(member => { 
                 this.build.member = member;
             });
-        }
 
         const embed = new Discord.RichEmbed()
             .setTitle(Translation.translate("builder." + this.name + ".title"))
