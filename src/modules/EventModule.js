@@ -169,8 +169,8 @@ class EventModule extends Module {
         await eventRepository.deleteEvent(name);
     }
 
-    async getEvents(fields = null) {
-        return await eventRepository.getEvents(fields);
+    async getEvents(archived = false, fields = null) {
+        return await eventRepository.getEvents(archived, fields);
     }
 
     isMentionableRole(roleName) {
@@ -191,7 +191,7 @@ class EventModule extends Module {
 
     async printEventList(user) {
         let list = "";
-        const events = await this.getEvents("name title");
+        const events = await this.getEvents(false, "name title");
 
         events.forEach(event => {
             list += "\n**" + event.name + " (" + event.title + ")**";
@@ -210,10 +210,10 @@ class EventModule extends Module {
         user.createDM().then(dm => dm.send(embed)).catch(logger.error);
     }
 
-    async getEventThatStartsInEnteredDay(dateMoment) {
+    async getEventThatStartsInEnteredDay(dateMoment, archived = false) {
         const startsEvents = [];
 
-        const events = await this.getEvents();
+        const events = await this.getEvents(archived);
         events.forEach(event => {
             let dateStart = moment(event.start, "D. M. YYYY");
             if (!dateStart.isValid())
@@ -231,10 +231,10 @@ class EventModule extends Module {
         return startsEvents;
     }
 
-    async getEventThatEndsInEnteredDay(dateMoment) {
+    async getEventThatEndsInEnteredDay(dateMoment, archived = false) {
         const endsEvents = [];
 
-        const events = await this.getEvents();
+        const events = await this.getEvents(archived);
         events.forEach(event => {
             let dateEnd = moment(event.end, "D. M. YYYY");
             if (!dateEnd.isValid())
@@ -252,10 +252,10 @@ class EventModule extends Module {
         return endsEvents;
     }
 
-    async getEventThatGoingInEnteredDay(dateMoment) {
+    async getEventThatGoingInEnteredDay(dateMoment, archived = false) {
         const goingEvents = [];
 
-        const events = await this.getEvents();
+        const events = await this.getEvents(archived);
         events.forEach(event => {
             let dateStart = moment(event.start, "D. M. YYYY");
             if (!dateStart.isValid())

@@ -15,11 +15,11 @@ class EventRepository extends Repository {
         return entity != null;
     }
 
-    async getEvents(fields = null) {
+    async getEvents(archived = false, fields = null) {
         if(fields != null)
-            return await this.entity.find({ archived: false, deleted: false }, fields);
+            return await this.entity.find({ archived: archived, deleted: false }, fields);
     
-        return await this.entity.find({ archived: false, deleted: false });
+        return await this.entity.find({ archived: archived, deleted: false });
     }
 
     async getEventByName(name) {

@@ -301,7 +301,7 @@ class EventCommand extends SubsCommand {
 
     async callCheck(args, message) {
         const channel = message.channel;
-        const dateString = args[0];
+        const dateString = args.join(" ");
 
         let date;
 
@@ -323,14 +323,14 @@ class EventCommand extends SubsCommand {
             }
         }
 
-        const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
+        const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date, true);
         let starts = "";
 
         startsEvents.forEach(event => {
             starts += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
-        const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
+        const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date, true);
         const ends = "";
 
         endsEvents.forEach(event => {
@@ -338,7 +338,7 @@ class EventCommand extends SubsCommand {
             ends += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
-        const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
+        const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date, true);
         let going = "";
 
         goingEvents.forEach(event => {
