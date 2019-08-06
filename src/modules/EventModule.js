@@ -282,6 +282,10 @@ class EventModule extends Module {
         return await eventRepository.getEventsNames();
     }
 
+    async getEvent(name, archived = false) {
+        return await eventRepository.getEventByName(name, archived);
+    }
+
     event(name, args) {}
 
 }

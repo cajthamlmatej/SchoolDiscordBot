@@ -41,6 +41,10 @@ class EventCommand extends SubsCommand {
             "refresh": {
                 "arguments": 1,
                 "roles": ["owner"]
+            },
+            "info": {
+                "arguments": 1,
+                "roles": ["member"]
             }
         };
     }
@@ -490,6 +494,65 @@ class EventCommand extends SubsCommand {
             return arr;
 
         return this.getRangeOfDates(next, end, key, arr.concat(next));
+    }
+
+    async callInfo(args, message){
+        const eventName = args[0];
+
+        if (!(await this.eventModule.exists(eventName))) {
+            this.sendError(message.channel, "command.event.dont-exist.edit", (await this.eventModule.getEventNames()).join(", ").substring(0, 500) + "...");
+            return;
+        }
+
+        const event = await this.eventModule.getEvent(eventName, null);
+        const historyTexts = [];
+        let historyText = "";
+
+        await this.asyncForEach(event.history, async (history) => {
+            const text = "```[" + moment(history.changed).format("D. M. YYYY HH:MM:ss") + " | " + history.type + "] " + (await message.guild.fetchMember(history.author)).displayName + "\n" + history.value.old + " -> " + history.value.new + "```\n";
+            
+            if((historyText + text).length > 2048) {
+                historyTexts.push(historyText);
+                historyText = "";
+            }
+
+            historyText += text;
+        });
+
+        if(historyText != "")
+            historyTexts.push(historyText);
+        
+        const embed = new Discord.RichEmbed()
+            .setTitle("🕜 | " + Translation.translate("command.event.info.title." + event.type, event.title))
+            .setDescription("")
+            .addField(Translation.translate("module.event.name"), event.name, true)
+            .addField(Translation.translate("module.event.title"), event.title, true)
+            .addField(Translation.translate("module.event.start"), event.start, true)
+            .addField(Translation.translate("module.event.end"), event.end, true)
+            .addField(Translation.translate("module.event.group"), message.guild.roles.get(Config.get("roles.mentionable." + event.role)), true)
+            .addField(Translation.translate("module.event.place"), event.place, true)
+            .addField(Translation.translate("module.event.subject"), event.subject, true)
+            .addField(Translation.translate("module.event.description"), event.description)
+            .addField(Translation.translate("module.event.created"), moment(event.created).format("D. M. YYYY HH:MM:ss"), true)
+            .addField(Translation.translate("module.event.archived"), event.archived ? ":white_check_mark:" : ":x:", true)
+            .addField(Translation.translate("module.event.author"), (await message.guild.fetchMember(event.author)).toString(), true)
+            .addField(Translation.translate("module.event.message"), "[" + Translation.translate("module.event.message") + "](https://discordapp.com/channels/" + Config.get("bot.guild") + "/" + Config.get("channels.event") + "/" + event.message + ")", true)
+            .addField(Translation.translate("module.event.calendar"), this.eventModule.generateGoogleCalendarLink(event), true)
+            .setColor(Config.getColor("SUCCESS"));
+
+        let promise = Promise.resolve();
+        promise = promise.then(async () => await message.channel.send(embed));
+
+        let count = 1;
+        historyTexts.forEach((history) => {
+            const historyEmbed = new Discord.RichEmbed()
+                .setTitle("🕜 | " + Translation.translate("command.event.info.history.title." + event.type, event.title, count))
+                .setDescription(history)
+                .setColor(Config.getColor("SUCCESS"));    
+
+            promise = promise.then(async () => await message.channel.send(historyEmbed));
+            count++;
+        });
     }
 
 }
