@@ -198,12 +198,15 @@
     "command.status.supplementation.last-check": "before {0}m",
 
     "command.stats.title": "Events stats",
-    "command.stats.number-of-events": "Total number of events",
+    "command.stats.number-of-events": "Total number of events and tasks",
     "command.stats.authors": "Authors of events",
     "command.stats.for-groups": "Number of events for groups",
     "command.stats.for-subjects": "Number of events for subjects",
     "command.stats.for": "{0} events for {1}",
     "command.stats.from": "{0} events from {1}",
+    "command.stats.types": "Number of events for types",
+    "command.stats.count-all": "**Overall**: {0} ({1} archived)\n**For one school day**: {2}",
+    "command.stats.count-types": "**Events**: {0} ({1} archived)\n**Tasks**: {2} ({3} archived)",
 
     "command.weather.currentdate": "Current weather condition in {0}",
     "command.weather.temperature": "Temperature",

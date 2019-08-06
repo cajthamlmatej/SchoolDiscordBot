@@ -54,6 +54,53 @@ class EventRepository extends Repository {
 
         return names;
     }
+    
+    async countEvents(archived = null){
+        if(archived == true)
+            return await this.entity.countDocuments({archived: true, deleted: false})
+        else if (archived == false)
+            return await this.entity.countDocuments({archived: false, deleted: false})
+            
+        return await this.entity.countDocuments({deleted: false});
+    }
+
+    async countEventsByType(type, archived = null){
+        if(archived == true)
+            return await this.entity.countDocuments({archived: true, type: type, deleted: false})
+        else if (archived == false)
+            return await this.entity.countDocuments({archived: false, type: type, deleted: false})
+            
+        return await this.entity.countDocuments({type: type, deleted: false});
+    }
+    
+    async getEventsAuthors(){
+        return await this.entity.find({deleted: false}).distinct("author");
+    }
+
+    async countEventsByAuthor(author, archived = null){
+        if(archived == true)
+            return await this.entity.countDocuments({archived: true, author: author, deleted: false})
+        else if (archived == false)
+            return await this.entity.countDocuments({archived: false, author: author, deleted: false})
+            
+        return await this.entity.countDocuments({author: author, deleted: false});
+    }
+
+    async getEventsSubjects(){
+        return await this.entity.find({deleted: false}).distinct("subject");
+    }
+
+    async countEventsBySubject(subject){
+        return await this.entity.countDocuments({subject: subject, deleted: false});
+    }
+
+    async getEventsRoles(){
+        return await this.entity.find({deleted: false}).distinct("role");
+    }
+
+    async countEventsByRole(role){
+        return await this.entity.countDocuments({role: role, deleted: false});
+    }
 
 }
 
