@@ -35,18 +35,18 @@ class StatsCommand extends Command {
 
         const eventCount = {
             all: await eventRepository.countEvents(),
-            //active: await eventRepository.countEvents(false),
+            // active: await eventRepository.countEvents(false),
             archived: await eventRepository.countEvents(true),
             
             eventAll: await eventRepository.countEventsByType("event"),
             taskAll: await eventRepository.countEventsByType("task"),
 
-            //eventActive: await eventRepository.countEventsByType("event", false),
-            //taskActive: await eventRepository.countEventsByType("task", false),
+            // eventActive: await eventRepository.countEventsByType("event", false),
+            // taskActive: await eventRepository.countEventsByType("task", false),
             
             eventArchived: await eventRepository.countEventsByType("event", true),
             taskArchived: await eventRepository.countEventsByType("task", true),
-        }
+        };
 
         const members = [];
         
@@ -55,8 +55,8 @@ class StatsCommand extends Command {
                 member: await channel.guild.fetchMember(author).then((member) => {return member;}),
                 count: {
                     all: await eventRepository.countEventsByAuthor(author),
-                    //active: await eventRepository.countEventsByAuthor(author, false),
-                    //archived: await eventRepository.countEventsByAuthor(author, true)
+                    // active: await eventRepository.countEventsByAuthor(author, false),
+                    // archived: await eventRepository.countEventsByAuthor(author, true)
                 }
             });
         });
@@ -73,7 +73,7 @@ class StatsCommand extends Command {
             subjects.push({
                 subject: subject,
                 count: await eventRepository.countEventsBySubject(subject)
-            })
+            });
         });
 
         let subjectsText = "";
@@ -91,7 +91,7 @@ class StatsCommand extends Command {
                     role: await channel.guild.roles.get(Config.get("roles.mentionable." + role)) 
                 },
                 count: await eventRepository.countEventsByRole(role)
-            })
+            });
         });
 
         let rolesText = "";
