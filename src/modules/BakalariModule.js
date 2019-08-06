@@ -23,10 +23,9 @@ class BakalariModule extends Module {
         this.interval = setInterval(() => this.tick(), this.config["check-time"]);
     }
 
-    uninit(){
-        clearTimeout(this.interval)
+    uninit() {
+        clearTimeout(this.interval);
     }
-
 
     tick() {
         let first = true;

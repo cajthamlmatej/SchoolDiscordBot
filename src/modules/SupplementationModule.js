@@ -31,10 +31,9 @@ class SupplementationModule extends Module {
         this.interval = setInterval(() => this.tick(), this.supplementationConfig.refresh);
     }
 
-    uninit(){
-        clearTimeout(this.interval)
+    uninit() {
+        clearTimeout(this.interval);
     }
-
 
     async tick() {
         this.lastCheck = moment();

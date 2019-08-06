@@ -24,10 +24,9 @@ class DirectBakalariModule extends Module {
         this.interval = setInterval(() => this.tick(), Config.get("modules.bakalari.check-time"));
     }
 
-    uninit(){
-        clearTimeout(this.interval)
+    uninit() {
+        clearTimeout(this.interval);
     }
-
     
     async tick() {
         (await directBakalariRepository.getAllUsers()).forEach(directBakalari => {

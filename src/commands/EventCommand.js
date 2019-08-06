@@ -496,7 +496,7 @@ class EventCommand extends SubsCommand {
         return this.getRangeOfDates(next, end, key, arr.concat(next));
     }
 
-    async callInfo(args, message){
+    async callInfo(args, message) {
         const eventName = args[0];
 
         if (!(await this.eventModule.exists(eventName))) {

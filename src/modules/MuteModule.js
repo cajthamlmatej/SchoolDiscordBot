@@ -22,10 +22,9 @@ class MuteModule extends Module {
         this.interval = setInterval(() => this.tick(), 10000);
     }
 
-    uninit(){
-        clearTimeout(this.interval)
+    uninit() {
+        clearTimeout(this.interval);
     }
-
 
     async tick() {
         const mutes = await this.getMutes();

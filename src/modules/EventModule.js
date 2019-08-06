@@ -23,10 +23,9 @@ class EventModule extends Module {
         this.interval = setInterval(() => this.tick(), Config.get("modules.event.check-time"));
     }
 
-    uninit(){
-        clearTimeout(this.interval)
+    uninit() {
+        clearTimeout(this.interval);
     }
-
 
     async tick() {
         const events = await this.getEvents();

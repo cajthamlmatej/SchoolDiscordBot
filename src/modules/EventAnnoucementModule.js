@@ -21,8 +21,8 @@ class EventAnnoucementModule extends Module {
             this.interval = setInterval(() => this.tick(), 5000);
     }
 
-    uninit(){
-        clearTimeout(this.interval)
+    uninit() {
+        clearTimeout(this.interval);
     }
 
     tick() {
