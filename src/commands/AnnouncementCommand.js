@@ -1,5 +1,6 @@
 const SubsCommand = require("./SubsCommand");
 const CommandBuilder = require("../CommandBuilder");
+const logger = require("../Logger");
 
 class AnnouncementCommand extends SubsCommand {
 
@@ -35,29 +36,31 @@ class AnnouncementCommand extends SubsCommand {
     getAliases() {
         return ["annouce"];
     }
+    
+    getDependencies() {
+        return ["annoucementmodule"];
+    }
 
     init(bot) {
         this.annoucementModule = bot.modules["annoucementmodule"];
-        this.stopWord = bot.settings.modules.builder.stopWord;
     }
 
     callList(args, message) {
         this.annoucementModule.listAnnoucements(message.member);
 
         message.react("✅");
-        return false;
     }
 
-    callEdit(args, message) {
+    async callEdit(args, message) {
         const channel = message.channel;
-        const types = ["title", "annoucement"];
+        const types = ["title", "annoucement", "name"];
 
         const builder = new CommandBuilder("annoucement.edit", message.author, channel, [
             {
                 "name": "name",
                 "example": ["2392018", "botchanges"],
-                "validate": (content) => {
-                    if (!this.annoucementModule.annoucementExist(content)) 
+                "validate": async (content) => {
+                    if (!await this.annoucementModule.annoucementExist(content)) 
                         return "command.annoucement.dont-exist";
                     else 
                         return true;
@@ -82,38 +85,38 @@ class AnnouncementCommand extends SubsCommand {
                 }
             }
         ], (values) => {
-            console.log("User " + message.author.username + " edited annoucement with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
+            logger.info("User " + message.member.displayName + " edited annoucement with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
 
             this.annoucementModule.editAnnoucement(message.member, values["name"], values["type"], values["value"]);
-        }, this.stopWord);
+        });
 
         builder.start();
         return true;
     }
 
-    callDelete(args, message) {
+    async callDelete(args, message) {
         const channel = message.channel;
         const name = args[0];
 
-        if (!this.annoucementModule.annoucementExist(name)) {
+        if (!await this.annoucementModule.annoucementExist(name)) {
             this.sendError(channel, "command.annoucement.dont-exist");
             return;
         }
 
-        this.annoucementModule.deleteAnnoucement(channel, name);
+        await this.annoucementModule.deleteAnnoucement(channel, name);
 
         return false;
     }
 
-    callCreate(args, message) {
+    async callCreate(args, message) {
         const channel = message.channel;
 
         const builder = new CommandBuilder("annoucement.create", message.author, channel, [
             {
                 "name": "name",
                 "example": ["2392018", "botchanges"],
-                "validate": (content) => {
-                    if (this.annoucementModule.annoucementExist(content)) 
+                "validate": async (content) => {
+                    if (await this.annoucementModule.annoucementExist(content)) 
                         return "command.annoucement.already-exists";
                     else 
                         return true;
@@ -134,11 +137,11 @@ class AnnouncementCommand extends SubsCommand {
                     return true;
                 }
             }
-        ], (values) => {
-            console.log("User " + message.author.username + " created annoucement with name " + values["name"] + ".");
+        ], async (values) => {
+            logger.info("User " + message.member.displayName + " created annoucement with name " + values["name"] + ".");
 
-            this.annoucementModule.addAnnoucement(message.member, values["name"], values["title"], values["annoucement"]);
-        }, this.stopWord);
+            await this.annoucementModule.addAnnoucement(message.member, values["name"], values["title"], values["annoucement"]);
+        });
 
         builder.start();
         return true;

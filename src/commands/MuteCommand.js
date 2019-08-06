@@ -1,6 +1,7 @@
 const SubsCommand = require("./SubsCommand");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class MuteCommand extends SubsCommand {
 
@@ -34,22 +35,22 @@ class MuteCommand extends SubsCommand {
     }
 
     init(bot) {
-        this.maxMuteLength = bot.settings.modules.mute.max;
+        this.maxMuteLength = Config.get("modules.mute.max");
         this.muteModule = bot.modules.mutemodule;
     }
 
-    callList(args, message) {
+    async callList(args, message) {
         const channel = message.channel;
 
-        this.muteModule.printRoleList(channel);
+        await this.muteModule.printRoleList(channel);
     }
 
-    callAdd(args, message) {
+    async callAdd(args, message) {
         const channel = message.channel;
 
         const valid = [];
         channel.guild.members.forEach(member => {
-            const name = member.nickname == undefined ? member.user.username : member.nickname;
+            const name = member.displayName;
 
             if (name.toLowerCase().includes(args[0].toLowerCase())) 
                 valid.push(member);
@@ -60,8 +61,7 @@ class MuteCommand extends SubsCommand {
             let list = "";
 
             valid.forEach(member => {
-                const name = member.nickname == undefined ? member.user.username : member.nickname;
-                list += "\n**" + name + "**";
+                list += "\n**" + member.displayName + "**";
             });
 
             list += "\n";
@@ -69,7 +69,7 @@ class MuteCommand extends SubsCommand {
             const embed = new Discord.RichEmbed()
                 .setTitle("🔇 | " + Translation.translate("command.mute.user-list.title"))
                 .setDescription(Translation.translate("command.mute.user-list") + ".\n" + list)
-                .setColor(0xe67e22);
+                .setColor(Config.getColor("WARNING"));
 
             channel.send(embed);
             return;
@@ -91,12 +91,12 @@ class MuteCommand extends SubsCommand {
             return;
         }
 
-        if (this.muteModule.isMuted(member)) {
+        if (await this.muteModule.isMuted(member)) {
             this.sendError(channel, "command.mute.already-muted");
             return;
         }
 
-        if (!this.muteModule.canBeMuted(member)) {
+        if (!await this.muteModule.canBeMuted(member)) {
             this.sendError(channel, "command.mute.moderator");
             return;
         }
@@ -106,14 +106,14 @@ class MuteCommand extends SubsCommand {
         const embedDM = new Discord.RichEmbed()
             .setTitle("🔇 | " + Translation.translate("command.mute.user-muted-self.title"))
             .setDescription(Translation.translate("command.mute.user-muted-self"))
-            .setColor(0xf0932b)
+            .setColor(Config.getColor("SUCCESS"))
             .addField(Translation.translate("command.mute.time"), Translation.translate("command.mute.minutes", minutes), true)
             .addField(Translation.translate("command.mute.reason"), reason, false);
 
         const embed = new Discord.RichEmbed()
-            .setTitle("🔇 | " + Translation.translate("command.mute.user-muted.title", member.user.username))
-            .setDescription(Translation.translate("command.mute.user-muted", member.user.username))
-            .setColor(0xf0932b)
+            .setTitle("🔇 | " + Translation.translate("command.mute.user-muted.title", member.displayName))
+            .setDescription(Translation.translate("command.mute.user-muted", member.displayName))
+            .setColor(Config.getColor("WARNING"))
             .addField(Translation.translate("command.mute.time"), Translation.translate("command.mute.minutes", minutes), true)
             .addField(Translation.translate("command.mute.reason"), reason, false);
 
@@ -123,12 +123,10 @@ class MuteCommand extends SubsCommand {
 
         channel.send(embed);
 
-        this.muteModule.addMute(member, minutes, reason);
-
-        return true;
+        await this.muteModule.addMute(member, minutes, reason);
     }
 
-    callRemove(args, message) {
+    async callRemove(args, message) {
         const channel = message.channel;
         if (args.length != 1) {
             this.sendHelp(channel);
@@ -137,7 +135,7 @@ class MuteCommand extends SubsCommand {
 
         const valid = [];
         channel.guild.members.forEach(member => {
-            const name = member.nickname == undefined ? member.user.username : member.nickname;
+            const name = member.displayName;
 
             if (name.toLowerCase().includes(args[0].toLowerCase())) 
                 valid.push(member);
@@ -148,8 +146,7 @@ class MuteCommand extends SubsCommand {
             let list = "";
 
             valid.forEach(member => {
-                const name = member.nickname == undefined ? member.user.username : member.nickname;
-                list += "\n**" + name + "**";
+                list += "\n**" + member.displayName + "**";
             });
 
             list += "\n";
@@ -157,7 +154,7 @@ class MuteCommand extends SubsCommand {
             const embed = new Discord.RichEmbed()
                 .setTitle("🔇 | " + Translation.translate("command.mute.user-list.title"))
                 .setDescription(Translation.translate("command.mute.user-list") + ".\n" + list)
-                .setColor(0xe67e22);
+                .setColor(Config.getColor("WARNING"));
 
             channel.send(embed);
             return;
@@ -168,20 +165,19 @@ class MuteCommand extends SubsCommand {
 
         const member = valid[0];
 
-        if (!this.muteModule.isMuted(member)) {
+        if (!await this.muteModule.isMuted(member)) {
             this.sendError(channel, "command.mute.not-muted");
             return;
         }
 
-        this.muteModule.removeMute(member);
+        await this.muteModule.removeMute(member);
 
         const embed = new Discord.RichEmbed()
-            .setTitle("🔇 | " + Translation.translate("command.mute.unmuted.title", member.user.username))
-            .setDescription(Translation.translate("command.mute.unmuted", member.user.username))
-            .setColor(0xbadc58);
+            .setTitle("🔇 | " + Translation.translate("command.mute.unmuted.title", member.displayName))
+            .setDescription(Translation.translate("command.mute.unmuted", member.displayName))
+            .setColor(Config.getColor("SUCCESS"));
 
         channel.send(embed);
-        return true;
     }
 
 }

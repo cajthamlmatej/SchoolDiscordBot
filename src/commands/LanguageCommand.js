@@ -1,6 +1,7 @@
 const SubsCommand = require("./SubsCommand");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class LanguageCommand extends SubsCommand {
 
@@ -34,8 +35,7 @@ class LanguageCommand extends SubsCommand {
     }
 
     callList(args, message) {
-        const channel = message.channel;
-        const languages = Translation.languageList();
+        const languages = Translation.getLanguages();
 
         let list = "";
 
@@ -48,7 +48,7 @@ class LanguageCommand extends SubsCommand {
         const embed = new Discord.RichEmbed()
             .setTitle("🗣️ | " + Translation.translate("command.language.language-list"))
             .setDescription(list)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         message.author.createDM().then(dm => dm.send(embed)).catch(error => { });
 
@@ -59,7 +59,7 @@ class LanguageCommand extends SubsCommand {
         const channel = message.channel;
         const language = args[0];
 
-        if (!Translation.languageExists(language)) {
+        if (!Translation.isValidLanguage(language)) {
             this.sendError(channel, "command.language.language-not-found");
             return;
         }
@@ -68,7 +68,7 @@ class LanguageCommand extends SubsCommand {
         const embed = new Discord.RichEmbed()
             .setTitle("🗣️ | " + Translation.translate("command.language.language-changed.title"))
             .setDescription(Translation.translate("command.language.language-changed"))
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         channel.send(embed);
         return false;

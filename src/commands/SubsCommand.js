@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const Command = require("./Command");
 const Translation = require("../Translation");
+const Config = require("../Config");
 
 class SubsCommand extends Command {
 
@@ -31,7 +32,7 @@ class SubsCommand extends Command {
         throw new Error("You have to implement the method getSubCommands!");
     }
 
-    call(args, message) {
+    async call(args, message) {
         const channel = message.channel;
 
         if (args.length <= 0) {
@@ -55,7 +56,7 @@ class SubsCommand extends Command {
 
         const realArgs = args.slice(1);
 
-        return this["call" + subCommandName[0].toUpperCase() + subCommandName.slice(1)](realArgs, message);
+        return await this["call" + subCommandName[0].toUpperCase() + subCommandName.slice(1)](realArgs, message);
     }
 
     sendHelp(channel, subCommandName) {
@@ -64,12 +65,12 @@ class SubsCommand extends Command {
             embed = new Discord.RichEmbed()
                 .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
                 .setDescription(Translation.translate("command.usage") + " `" + this.getUsage() + "`")
-                .setColor(0xf0932b);
+                .setColor(Config.getColor("WARNING"));
         else 
             embed = new Discord.RichEmbed()
                 .setTitle("❗ | " + Translation.translate("command.too-few-arguments"))
                 .setDescription(Translation.translate("command.usage") + " `" + this.getName() + " " + subCommandName + " " + Translation.translate("commands.usage." + this.getName() + "." + subCommandName) + "` - " + Translation.translate("commands.help." + this.getName() + "." + subCommandName))
-                .setColor(0xf0932b);
+                .setColor(Config.getColor("WARNING"));
 
         channel.send(embed);
     }

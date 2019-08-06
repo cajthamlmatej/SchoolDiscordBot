@@ -4,12 +4,15 @@
   "description": "School discord bot for mananging discord server",
   "main": "src/index.js",
   "dependencies": {
-    "discord.js": "^11.4.2",
+    "config": "^3.2.2",
+    "discord.js": "^11.5.1",
     "eslint": "^5.16.0",
-    "jsdom": "^12.0.0",
+    "jsdom": "^12.2.0",
     "mathjs": "^6.0.1",
-    "moment": "^2.22.2",
-    "weather-js": "^2.0.0"
+    "moment": "^2.24.0",
+    "mongoose": "^5.6.7",
+    "weather-js": "^2.0.0",
+    "winston": "^3.2.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

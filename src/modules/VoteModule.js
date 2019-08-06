@@ -1,7 +1,10 @@
 const Module = require("./Module");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
-const fs = require("fs");
+const Config = require("../Config");
+const logger = require("../Logger");
+
+const voteRepository = require("../database/Database").getRepository("vote");
 
 class VoteModule extends Module {
 
@@ -10,39 +13,29 @@ class VoteModule extends Module {
     }
 
     init(bot) {
-        this.tempFile = "./temp/votes.json";
         this.optionsEmojis = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣", "🔟"];
-        this.voteChannel = bot.client.channels.find(channel => channel.id === bot.settings.channels.vote);
+        this.voteChannel = bot.client.channels.find(channel => channel.id === Config.get("channels.annoucement"));
         this.client = bot.client;
     }
 
-    exists(name) {
-        const votes = fs.readFileSync(this.tempFile, "utf8");
-        const votesObject = JSON.parse(votes);
-
-        return votesObject["votes"][name] != undefined;
+    async exists(name) {
+        return await voteRepository.doesVoteExistsWithName(name);
     }
 
-    getVote(name) {
-        const votes = fs.readFileSync(this.tempFile, "utf8");
-        const votesObject = JSON.parse(votes);
-
-        return votesObject["votes"][name];
+    async getVote(name) {
+        return await voteRepository.getVote(name);
     }
 
-    getVotes() {
-        const votes = fs.readFileSync(this.tempFile, "utf8");
-        const votesObject = JSON.parse(votes);
-
-        return votesObject["votes"];
+    async getVotes() {
+        return await voteRepository.getVotes();
     }
 
-    printVoteList(user) {
+    async printVoteList(user) {
         let list = "";
-        const votes = this.getVotes();
+        const votes = await this.getVotes();
 
-        Object.keys(votes).forEach(voteKey => {
-            list += "\n**" + voteKey + "**";
+        votes.forEach(vote => {
+            list += "\n**" + vote.name + "**";
         });
 
         if (list == "")
@@ -53,38 +46,31 @@ class VoteModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.vote.list"))
             .setDescription(list)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
-        user.createDM().then(dm => dm.send(embed)).catch(console.error);
+        user.createDM().then(dm => dm.send(embed)).catch(logger.error);
     }
 
-    deleteVote(name, channel) {
-        const votes = fs.readFileSync(this.tempFile, "utf8");
-        const votesObject = JSON.parse(votes);
-        const vote = votesObject["votes"][name];
+    async deleteVote(name, channel) {
+        const vote = await voteRepository.getVote(name);
 
-        const voteChannel = this.client.channels.find(c => c.id == vote["channel"]);
-        voteChannel.fetchMessage(vote["id"]).then(message => {
+        const voteChannel = this.client.channels.find(c => c.id == vote.channel);
+        voteChannel.fetchMessage(vote.message).then(async (message) => {
             message.delete();
-            delete votesObject["votes"][name];
+            await voteRepository.deleteVote(name);
 
             const embed = new Discord.RichEmbed()
                 .setTitle("📆 | " + Translation.translate("module.vote.deleted.title"))
                 .setDescription(Translation.translate("module.vote.deleted"))
-                .setColor(0xbadc58);
+                .setColor(Config.getColor("SUCCESS"));
 
             channel.send(embed);
-
-            fs.writeFileSync(this.tempFile, JSON.stringify(votesObject));
         }).catch(error => {
             // Message not found, dont log anything
         });
     }
 
     startVote(type, name, description, options, channel) {
-        const votes = fs.readFileSync(this.tempFile, "utf8");
-        const votesObject = JSON.parse(votes);
-
         let optionsString = "";
 
         Object.keys(options).forEach(optionEmoji => {
@@ -94,7 +80,7 @@ class VoteModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.vote.new"))
             .setDescription(description + "\n\n" + Translation.translate("module.vote.vote") + ": \n" + optionsString)
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         let voteChannel;
 
@@ -103,28 +89,39 @@ class VoteModule extends Module {
         else
             voteChannel = channel;
 
-        voteChannel.send(embed).then(message => {
+        voteChannel.send(embed).then(async (message) => {
             let result = Promise.resolve();
             Object.keys(options).forEach(option => {
                 result = result.then(() => message.react(option));
             });
 
-            votesObject["votes"][name] = { "id": message.id, "description": description, "options": options, "channel": voteChannel.id };
+            const decodedOptions = {};
 
-            fs.writeFileSync(this.tempFile, JSON.stringify(votesObject));
-        }).catch(console.error);
+            Object.keys(options).forEach(option => {
+                decodedOptions[option.codePointAt(0)] = options[option]; 
+            });
+
+            await voteRepository.insert({
+                name: name,
+                description: description,
+                message: message.id,
+                options: decodedOptions,
+                channel: voteChannel.id
+            });
+        }).catch(logger.error);
     }
 
-    endVote(name) {
-        const vote = this.getVote(name);
-        const voteMessageId = vote["id"];
-        const channel = this.client.channels.find(c => c.id == vote["channel"]);
+    async endVote(name) {
+        const vote = await this.getVote(name);
+        const voteMessageId = vote.message;
+        const channel = this.client.channels.find(c => c.id == vote.channel);
+
         channel.fetchMessage(voteMessageId).then(message => {
             const reactions = message.reactions;
             let reactionCount = 0;
 
             reactions.forEach(reaction => {
-                if (vote["options"][reaction.emoji] == undefined)
+                if (!vote.options.has(reaction.emoji.name.codePointAt(0) + ""))
                     return;
 
                 reactionCount += reaction.count - 1;
@@ -136,14 +133,14 @@ class VoteModule extends Module {
             const votes = {};
 
             reactions.forEach(reaction => {
-                if (vote["options"][reaction.emoji] == undefined)
+                if (!vote.options.has(reaction.emoji.name.codePointAt(0) + ""))
                     return;
 
                 const count = reaction.count - 1;
 
                 votes[reaction.emoji] = count;
 
-                votesString += "`" + (count) + " " + Translation.translate("module.vote.votes") + " (" + this.addZero(((count) * weight)) + "%)` " + reaction.emoji + " " + vote["options"][reaction.emoji] + "\n";
+                votesString += "`" + (count) + " " + Translation.translate("module.vote.votes") + " (" + this.addZero(((count) * weight)) + "%)` " + reaction.emoji + " " + vote.options.get(reaction.emoji.name.codePointAt(0) + "") + "\n";
             });
 
             const sortedVotes = Object.keys(votes).sort(function (a, b) { return votes[b] - votes[a]; });
@@ -158,13 +155,15 @@ class VoteModule extends Module {
 
             let winningChoice = "";
 
+            logger.log(winners[0]);
+
             if (winners.length === 1) 
-                winningChoice = Translation.translate("module.vote.option-won") + " **" + winners[0] + " " + vote["options"][winners[0]] + "**";
+                winningChoice = Translation.translate("module.vote.option-won") + " **" + winners[0] + " " + vote.options.get(winners[0].codePointAt(0) + "") + "**";
             else {
                 let choiceString = "";
 
                 winners.forEach(winner => {
-                    choiceString += winner + " " + vote["options"][winner];
+                    choiceString += winner + " " + vote.options.get(winner.codePointAt(0) + "");
                     if (winners[winners.length - 1] != winner) 
                         choiceString += ", ";
                     
@@ -175,15 +174,15 @@ class VoteModule extends Module {
 
             const embed = new Discord.RichEmbed()
                 .setTitle("📆 | " + Translation.translate("module.vote.end") + " \"" + name + "\"")
-                .setDescription(vote["description"])
-                .setColor(0xbadc58)
+                .setDescription(vote.description)
+                .setColor(Config.getColor("SUCCESS"))
                 .addField("☝ " + Translation.translate("module.vote.options-votes"), votesString, true)
                 .addBlankField()
                 .addField("🖐 " + Translation.translate("module.vote.stats"), "**" + Translation.translate("module.vote.votes-count") + "**: " + reactionCount + "\n**" + Translation.translate("module.vote.vote-weight") + "**: " + weight + "%\n", true)
                 .addField("👍 " + Translation.translate("module.vote.result"), winningChoice, true);
 
             channel.send(embed);
-        }).catch(console.error);
+        }).catch(logger.error);
     }
 
     addZero(i) {

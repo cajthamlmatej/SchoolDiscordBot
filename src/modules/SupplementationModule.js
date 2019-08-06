@@ -1,11 +1,14 @@
 const Module = require("./Module");
 const http = require("https");
 const Translation = require("../Translation");
-const fs = require("fs");
 const jsdom = require("jsdom");
 const Discord = require("discord.js");
 const { JSDOM } = jsdom;
 const moment = require("moment");
+const Config = require("../Config");
+const logger = require("../Logger");
+
+const supplementationRepository = require("../database/Database").getRepository("supplementation");
 
 class SupplementationModule extends Module {
 
@@ -21,21 +24,25 @@ class SupplementationModule extends Module {
         };
 
         this.client = bot.client;
-        this.supplementationConfig = bot.settings.modules.supplementation;
-        this.channel = bot.settings.channels.supplementation;
+        this.supplementationConfig = Config.get("modules.supplementation");
+        this.channel = Config.get("channels.supplementation");
 
         this.tick();
-        setInterval(() => this.tick(), this.supplementationConfig.refresh);
+        this.interval = setInterval(() => this.tick(), this.supplementationConfig.refresh);
     }
 
-    tick() {
+    uninit() {
+        clearTimeout(this.interval);
+    }
+
+    async tick() {
         this.lastCheck = moment();
-        const request = http.request(this.webOptions, (res) => {
+        const request = http.request(this.webOptions, async (res) => {
             let data = "";
             res.on("data", function (chunk) {
                 data += chunk;
             });
-            res.on("end", () => {
+            res.on("end", async () => {
                 const dom = new JSDOM(data, {
                     url: "https://ssps.cz/student/",
                     referrer: "https://ssps.cz/student/",
@@ -68,15 +75,8 @@ class SupplementationModule extends Module {
                     });
                 });
 
-                const supplementations = fs.readFileSync("./temp/supplementations.json", "utf8");
-                const supplementationsObject = JSON.parse(supplementations);
-
                 const channel = this.client.channels.find(c => c.id == this.channel);
-
-                let count = 0;
-                Object.keys(supples).forEach(dayName => {
-                    count++;
-
+                await this.asyncForEach(Object.keys(supples), async (dayName) => {
                     let containsHighlight = false;
                     const supplesList = supples[dayName];
                     let suppleString = "";
@@ -109,37 +109,30 @@ class SupplementationModule extends Module {
                     const embed = new Discord.RichEmbed()
                         .setTitle("👓 | " + Translation.translate("module.supplementation.new") + " " + dayName)
                         .setDescription(suppleString)
-                        .setColor(0xbadc58);
+                        .setColor(Config.getColor("SUCCESS"));
 
-                    if (supplementationsObject["supplementations"][dayName] != undefined) {
-                        const messageId = supplementationsObject["supplementations"][dayName];
-
-                        channel.fetchMessage(messageId).then(message => {
+                    const supplementationEntity = await supplementationRepository.getSupplementationByDay(dayName);
+                    if(supplementationEntity != null) 
+                        channel.fetchMessage(supplementationEntity.message).then(async (message) => {
                             if (message.embeds[0].description !== suppleString) 
-                                message.edit(containsHighlight == true ? "@everyone" : "", embed).catch(error => {
-                                    console.log("Error while editing supplementation message. Message is probably above 2048 char limit.");
-                                });
-                            
-                        });
-                    } else 
-                        channel.send(containsHighlight == true ? "@everyone" : "", embed).then(message => {
-                            supplementationsObject["supplementations"][dayName] = message.id;
+                                supplementationEntity.text = suppleString;
+                            await supplementationEntity.save();
 
-                            if (Object.keys(supples).length == count) 
-                                fs.writeFileSync("./temp/supplementations.json", JSON.stringify(supplementationsObject));
-                            
+                            message.edit(containsHighlight == true ? "@everyone" : "", embed).catch(error => {
+                                logger.error("Error while editing supplementation message. Message is probably above 2048 char limit.");
+                            });
+                        });
+                    else 
+                        channel.send(containsHighlight == true ? "@everyone" : "", embed).then(async (message) => {
+                            await supplementationRepository.insert({name: dayName, message: message.id, text: suppleString});
                         }).catch(error => {
-                            console.log("Error while editing supplementation message. Message is probably above 2048 char limit.");
-                        });
-                    
+                            logger.error("Error while editing supplementation message. Message is probably above 2048 char limit.");
+                        }); 
                 });
-
-                // pins
-                Object.keys(supplementationsObject["supplementations"]).forEach(day => {
-                    const messageId = supplementationsObject["supplementations"][day];
-
-                    channel.fetchMessage(messageId).then(message => {
-                        if (supples[day] != undefined) {
+                
+                await this.asyncForEach(await supplementationRepository.getSupplementations(), async (supplementation) => {
+                    channel.fetchMessage(supplementation.message).then(async (message) => {
+                        if (supples[supplementation.name] != undefined) {
                             if (!message.pinned) 
                                 message.pin();
                             
@@ -147,19 +140,24 @@ class SupplementationModule extends Module {
                             if (message.pinned) 
                                 message.unpin();
 
-                            console.log("Removing supplementation for day " + day);
+                            logger.info("Archiving supplementation for day " + supplementation.name);
 
-                            delete supplementationsObject["supplementations"][day];
-                            fs.writeFileSync("./temp/supplementations.json", JSON.stringify(supplementationsObject));
+                            await supplementationRepository.archiveSupplementation(supplementation.name);
                         }
                     });
                 });
             });
         });
         request.on("error", function (e) {
-            console.log(e.message);
+            logger.error(e.message);
         });
         request.end();
+    }
+
+    async asyncForEach(array, callback) {
+        for (let index = 0; index < array.length; index++) 
+            await callback(array[index], index, array);
+        
     }
 
     refresh(channel) {
@@ -168,7 +166,7 @@ class SupplementationModule extends Module {
         const embed = new Discord.RichEmbed()
             .setTitle("👓 | " + Translation.translate("module.supplementation.refreshed.title"))
             .setDescription(Translation.translate("module.supplementation.refreshed"))
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         channel.send(embed);
     }

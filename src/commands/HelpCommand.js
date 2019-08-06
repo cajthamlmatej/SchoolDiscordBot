@@ -1,6 +1,8 @@
 const Command = require("./Command");
 const Discord = require("discord.js");
 const Translation = require("../Translation");
+const Config = require("../Config");
+const logger = require("../Logger");
 
 class HelpCommand extends Command {
 
@@ -17,9 +19,8 @@ class HelpCommand extends Command {
     }
 
     init(bot) {
-        this.commandsGroups = bot.settings.commands.groups;
-        this.prefix = bot.settings.prefix;
-        this.roles = bot.settings.roles.permission;
+        this.prefix = Config.get("bot.prefix");
+        this.roles = Config.get("roles.permissions");
         this.commands = bot.commands;
     }
 
@@ -27,7 +28,7 @@ class HelpCommand extends Command {
         const channel = message.channel;
         const embed = new Discord.RichEmbed()
             .setTitle("💼 | " + Translation.translate("command.help.title"))
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         const groups = {};
 
@@ -85,7 +86,7 @@ class HelpCommand extends Command {
 
         embed.setDescription(help);
 
-        channel.send(embed).catch(console.error);
+        channel.send(embed).catch( logger.error);
         return false;
     }
 

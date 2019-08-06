@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const Translation = require("../Translation");
 const fs = require("fs");
 const moment = require("moment");
+const Config = require("../Config");
 
 class EventAnnoucementModule extends Module {
 
@@ -12,18 +13,21 @@ class EventAnnoucementModule extends Module {
 
     init(bot) {
         this.eventModule = bot.modules.eventmodule;
-        this.channel = bot.client.channels.find(ch => ch.id == bot.settings.channels.eventannoucement);
-        this.checkTime = bot.settings.modules.eventannoucement.checkTime;
-        this.tempFile = "./temp/eventannoucement.json";
+        this.channel = bot.client.channels.find(ch => ch.id == Config.get("channels.annoucement"));
+        this.checkTime = Config.get("modules.event-annoucement.check-time");
+        this.tempFile = "./eventannoucement-lastcheck.json";
 
-        if (this.eventModule != undefined) 
-            setInterval(() => this.tick(), 5000);
-        
+        if (this.eventModule != undefined)
+            this.interval = setInterval(() => this.tick(), 5000);
+    }
+
+    uninit() {
+        clearTimeout(this.interval);
     }
 
     tick() {
         const time = moment();
-        const checkTime = moment(this.checkTime[moment().isoWeekday()-1], "HH:mm");
+        const checkTime = moment(this.checkTime[moment().isoWeekday() - 1], "HH:mm");
 
         const diff = time.diff(checkTime, "seconds");
 
@@ -41,11 +45,11 @@ class EventAnnoucementModule extends Module {
             const eventValues = event.values;
 
             let dateEnd = moment(eventValues.end, "D. M. YYYY");
-            if (!dateEnd.isValid()) 
+            if (!dateEnd.isValid())
                 dateEnd = moment(eventValues.end, "D. M. YYYY HH:mm");
 
             let dateStart = moment(eventValues.start, "D. M. YYYY");
-            if (!dateStart.isValid()) 
+            if (!dateStart.isValid())
                 dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
 
             let name = "";
@@ -59,15 +63,29 @@ class EventAnnoucementModule extends Module {
             if (name == "")
                 return;
 
+            const dmembed = new Discord.RichEmbed()
+                .setTitle("👁 " + Translation.translate("module.eventannoucement." + eventValues.type + ".title." + name))
+                .setColor(Config.getColor("SUCCESS"))
+                .setDescription(Translation.translate("module.eventannoucement." + eventValues.type + ".description." + name, time.format("D. M. YYYY"), eventValues.title))
+                .addField(Translation.translate("module.eventannoucement.informations"), eventValues.description)
+                .addField(Translation.translate("module.eventannoucement.role"), eventValues.role, true)
+                .addField(Translation.translate("module.eventannoucement.subject"), eventValues.subject, true)
+                .addField(Translation.translate("module.eventannoucement.place"), eventValues.place, true);
+
             const embed = new Discord.RichEmbed()
-                .setTitle(Translation.translate("module.eventannoucement.title." + name))
-                .setColor(0xbadc58)
-                .setDescription(Translation.translate("module.eventannoucement.description." + name, time.format("D. M. YYYY"), eventName))
+                .setTitle(("👁 " + Translation.translate("module.eventannoucement." + eventValues.type + ".title." + name)))
+                .setColor(Config.getColor("SUCCESS"))
+                .setDescription(Translation.translate("module.eventannoucement." + eventValues.type + ".description." + name, time.format("D. M. YYYY"), eventValues.title))
                 .addField(Translation.translate("module.eventannoucement.informations"), eventValues.description)
                 .addField(Translation.translate("module.eventannoucement.role"), this.channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[eventValues.role]), true)
                 .addField(Translation.translate("module.eventannoucement.subject"), eventValues.subject, true)
                 .addField(Translation.translate("module.eventannoucement.place"), eventValues.place, true);
 
+            this.channel.guild.members.forEach((member) => {
+                if (member.roles.has(this.eventModule.getMentionableRolesIds()[eventValues.role]))
+                    member.createDM().then(dm => dm.send(dmembed));
+
+            });
             this.channel.send(embed);
         });
     }
@@ -83,8 +101,7 @@ class EventAnnoucementModule extends Module {
         fs.writeFileSync(this.tempFile, JSON.stringify({ "lastcheck": lastcheck }));
     }
 
-    event(name, args) {
-    }
+    event(name, args) {}
 
 }
 

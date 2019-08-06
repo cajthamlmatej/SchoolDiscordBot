@@ -51,11 +51,9 @@ class VoteCommand extends SubsCommand {
         }
 
         this.voteModule.endVote(name);
-
-        return true;
     }
 
-    callStart(args, message) {
+    async callStart(args, message) {
         const channel = message.channel;
         const [type, name, description] = args;
 
@@ -67,7 +65,7 @@ class VoteCommand extends SubsCommand {
             return;
         }
 
-        if (this.voteModule.exists(name)) {
+        if (await this.voteModule.exists(name)) {
             this.sendError(channel, "command.vote.already-exists");
             return;
         }
@@ -90,26 +88,24 @@ class VoteCommand extends SubsCommand {
             });
         }
 
-        this.voteModule.startVote(type, name, description, options, channel);
-
-        return true;
+        await this.voteModule.startVote(type, name, description, options, channel);
     }
 
-    callList(args, message) {
-        this.voteModule.printVoteList(message.author);
+    async callList(args, message) {
+        await this.voteModule.printVoteList(message.author);
         message.react("✅");
     }
 
-    callDelete(args, message) {
+    async callDelete(args, message) {
         const channel = message.channel;
         const name = args[0];
 
-        if (!this.voteModule.exists(name)) {
+        if (!await this.voteModule.exists(name)) {
             this.sendError(channel, "command.vote.dont-exist");
             return;
         }
 
-        this.voteModule.deleteVote(name, channel);
+        await this.voteModule.deleteVote(name, channel);
         return true;
     }
 }

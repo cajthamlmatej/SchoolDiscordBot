@@ -1,6 +1,6 @@
 const DirectCommand = require("./DirectCommand");
 const Discord = require("discord.js");
-const Translation = require("../Translation");
+const Config = require("../Config");
 
 class BakalariCommand extends DirectCommand {
 
@@ -15,13 +15,17 @@ class BakalariCommand extends DirectCommand {
     getRoles() {
         return ["member"];
     }
+    
+    getDependencies() {
+        return ["directbakalarimodule"];
+    }
 
     init(bot) {
         this.client = bot.client;
         this.directBakalariModule = bot.modules["directbakalarimodule"];
     }
 
-    call(args, message) {
+    async call(args, message) {
         const channel = message.channel;
 
         if(args.length == 0) {
@@ -31,16 +35,14 @@ class BakalariCommand extends DirectCommand {
 
         const rssToken = args[0];
 
-        this.directBakalariModule.addRssTokenForUser(message.author.id, rssToken);
+        await this.directBakalariModule.addRssTokenForUser(message.author.id, rssToken);
 
         const embed = new Discord.RichEmbed()
             .setTitle("📣 | RSS token změněn.")
             .setDescription("RSS token byl změněn. Během pár minut dostanete upozornění o známkách. Pokuď se tak nestane do hodiny a bot je online, nejspíše jste zadali špatný token - proto jej zadejte znovu a správně (vše za ?bk=).")
-            .setColor(0xe67e22);
+            .setColor(Config.getColor("SUCCESS"));
 
         channel.send(embed);
-
-        return false;
     }
 
 }

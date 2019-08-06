@@ -123,8 +123,8 @@ class SayCommand extends Command {
         const embed = new Discord.RichEmbed()
             .setTitle("🤐 | " + Translation.translate("command.notice.notice"))
             .setDescription(msg)
-            .setFooter(message.author.username, message.author.avatarURL)
-            .setColor(0xbadc58);
+            .setFooter(message.member.displayName, message.author.avatarURL)
+            .setColor(Config.getColor("SUCCESS"));
 
         channelSay.send(embed);
 

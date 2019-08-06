@@ -1,8 +1,11 @@
 const Module = require("./Module");
-const fs = require("fs");
 const Discord = require("discord.js");
 const moment = require("moment");
 const Translation = require("../Translation");
+const Config = require("../Config");
+const logger = require("../Logger");
+
+const muteRepository = require("../database/Database").getRepository("mute");
 
 class MuteModule extends Module {
 
@@ -11,48 +14,47 @@ class MuteModule extends Module {
     }
 
     init(bot) {
-        this.guild = bot.client.channels.find(channel => channel.id === bot.settings.channels.vote).guild;
-        this.muteRole = bot.settings.modules.mute.role;
-        this.moderatorRole = bot.settings.roles.permission.moderator;
-
-        this.tempFile = "./temp/mutes.json";
+        this.guild = bot.client.guilds.get(Config.get("bot.guild"));
+        this.muteRole = Config.get("roles.special.mute");
+        this.moderatorRole = Config.get("roles.permissions.moderator");
 
         this.tick();
-        setInterval(() => this.tick(), 10000);
+        this.interval = setInterval(() => this.tick(), 10000);
     }
 
-    tick() {
-        const mutes = this.getMutes();
+    uninit() {
+        clearTimeout(this.interval);
+    }
+
+    async tick() {
+        const mutes = await this.getMutes();
         const toRemove = [];
 
-        Object.keys(mutes).forEach(userId => {
-            const mute = mutes[userId];
+        mutes.forEach(mute => {
             const current = moment().format("X");
-            const expiration = mute.expiration;
-
+            const expiration = mute.expire;
             if (current > expiration) {
-                toRemove.push(userId);
+                toRemove.push(mute.user);
 
-                this.setMuteRoles(userId, mute.roles);
+                this.setMuteRoles(mute.user, mute.roles);
             }
         });
 
-        this.removeMutesFromFile(toRemove);
+        this.removeMutesFromDatabase(toRemove);
     }
 
-    printRoleList(channel) {
-        const mutes = this.getMutes();
+    async printRoleList(channel) {
+        const mutes = await this.getMutes();
 
         const embed = new Discord.RichEmbed()
             .setTitle("🔇 | " + Translation.translate("module.mute.list"))
-            .setColor(0xbadc58);
+            .setColor(Config.getColor("SUCCESS"));
 
         let result = Promise.resolve();
-        Object.keys(mutes).forEach(userId => {
-            const mute = mutes[userId];
+        mutes.forEach(mute => {
             result = result.then(() => {
-                this.guild.fetchMember(userId).then(member => {
-                    embed.addField(member.nickname, Translation.translate("module.mute.reason") + ": " + mute.reason + "\n" + Translation.translate("module.mute.expiration") + ": " + moment(mute.expiration, "X").format("D. M. Y H:m:s"));
+                this.guild.fetchMember(mute.user).then(member => {
+                    embed.addField(member.displayName, Translation.translate("module.mute.reason") + ": " + mute.reason + "\n" + Translation.translate("module.mute.expiration") + ": " + moment(mute.expiration, "X").format("D. M. Y H:m:s"));
                 });
             });
         });
@@ -66,9 +68,6 @@ class MuteModule extends Module {
     }
 
     addMute(member, lengthInMinutes, reason) {
-        const mutes = fs.readFileSync(this.tempFile, "utf8");
-        const mutesObject = JSON.parse(mutes);
-
         const expiration = moment().add(lengthInMinutes, "m").format("X");
         const roles = [];
 
@@ -76,66 +75,49 @@ class MuteModule extends Module {
             roles.push(role.id);
         });
 
-        member.setRoles([this.muteRole]).then(member => {
-            mutesObject["mutes"][member.user.id] = { expiration: expiration, reason: reason, roles: roles };
-
-            fs.writeFileSync(this.tempFile, JSON.stringify(mutesObject));
-        }).catch(console.error);
+        member.setRoles([this.muteRole]).then(async (member) => {
+            await muteRepository.insert({
+                expire: expiration,
+                user: member.user.id,
+                roles: roles,
+                reason: reason
+            });
+        }).catch(logger.error);
     }
 
-    setMuteRoles(userId, muteRoles) {
-        this.guild.fetchMember(userId).then(member => {
+    setMuteRoles(user, muteRoles) {
+        this.guild.fetchMember(user).then(member => {
             member.setRoles(muteRoles);
         });
-
     }
 
-    removeMute(member) {
-        const mute = this.getMute(member.user.id);
+    async removeMute(member) {
+        const mute = await this.getMute(member.user.id);
         this.setMuteRoles(member.user.id, mute.roles);
 
-        this.removeMuteFromFile(member.user.id);
+        await this.removeMuteFromDatabase(member.user.id);
     }
 
-    getMutes() {
-        const mutes = fs.readFileSync(this.tempFile, "utf8");
-        const mutesObject = JSON.parse(mutes);
-
-        return mutesObject["mutes"];
+    async getMutes() {
+        return await muteRepository.getMutes();
     }
 
-    getMute(userId) {
-        const mutes = fs.readFileSync(this.tempFile, "utf8");
-        const mutesObject = JSON.parse(mutes);
-
-        return mutesObject["mutes"][userId];
+    async getMute(user) {
+        return await muteRepository.getMute(user);
     }
 
-    removeMuteFromFile(userId) {
-        const mutes = fs.readFileSync(this.tempFile, "utf8");
-        const mutesObject = JSON.parse(mutes);
-
-        delete mutesObject["mutes"][userId];
-
-        fs.writeFileSync(this.tempFile, JSON.stringify(mutesObject));
+    async removeMuteFromDatabase(user) {
+        await muteRepository.deleteMute(user);
     }
 
-    removeMutesFromFile(ms) {
-        const mutes = fs.readFileSync(this.tempFile, "utf8");
-        const mutesObject = JSON.parse(mutes);
-
-        ms.forEach(mute => {
-            delete mutesObject["mutes"][mute];
+    async removeMutesFromDatabase(users) {
+        users.forEach(async (user) => {
+            await this.removeMuteFromDatabase(user);
         });
-
-        fs.writeFileSync(this.tempFile, JSON.stringify(mutesObject));
     }
 
-    isMuted(member) {
-        const mutes = fs.readFileSync(this.tempFile, "utf8");
-        const mutesObject = JSON.parse(mutes);
-
-        return mutesObject["mutes"][member.user.id] != undefined;
+    async isMuted(member) {
+        return await muteRepository.isMuted(member.user.id);
     }
 
     canBeMuted(member) {
