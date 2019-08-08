@@ -81,11 +81,11 @@ class EventAnnoucementModule extends Module {
                 .addField(Translation.translate("module.eventannoucement.subject"), eventValues.subject, true)
                 .addField(Translation.translate("module.eventannoucement.place"), eventValues.place, true);
 
-            this.channel.guild.members.forEach((member) => {
+           /* this.channel.guild.members.forEach((member) => {
                 if (member.roles.has(this.eventModule.getMentionableRolesIds()[eventValues.role]))
                     member.createDM().then(dm => dm.send(dmembed));
 
-            });
+            });*/
             this.channel.send(embed);
         });
     }
