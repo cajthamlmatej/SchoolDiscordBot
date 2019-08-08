@@ -469,7 +469,7 @@ class EventCommand extends SubsCommand {
         const eventName = args[0];
 
         if (eventName == "all") {
-            const events = this.eventModule.getEvents();
+            const events = await this.eventModule.getEvents();
 
             events.forEach(event => {
                 this.eventModule.editEvent(event.name, "refresh", undefined);
