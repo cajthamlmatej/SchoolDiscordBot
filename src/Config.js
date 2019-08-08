@@ -20,9 +20,9 @@ class Config {
         };
 
         colors.forEach(color => {
-            if(config.has("colors." + color)){
+            if(config.has("colors." + color)) 
                 this.colors[color.toUpperCase()] = config.get("colors." + color);
-            }
+            
         });
     }
 
@@ -69,21 +69,9 @@ class Config {
             "modules.event.check-time",
             "modules.event.placeholders",
 
-            "modules.auto-reaction.text-text",
-            "modules.auto-reaction.channels-attachments",
-            "modules.auto-reaction.text",
-            "modules.auto-reaction.series-text",
-
-            "modules.bakalari.check-time",
-            "modules.bakalari.members",
-            "modules.bakalari.subjects.ignored",
-            "modules.bakalari.subjects.separated",
+            "modules.automatic-reaction",
 
             "modules.event-annoucement.check-time",
-
-            "modules.supplementation.highlights",
-            "modules.supplementation.replace",
-            "modules.supplementation.refresh",
 
             "modules.mute.max",
 

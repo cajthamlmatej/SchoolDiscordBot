@@ -41,6 +41,10 @@ class EventCommand extends SubsCommand {
             "refresh": {
                 "arguments": 1,
                 "roles": ["owner"]
+            },
+            "info": {
+                "arguments": 1,
+                "roles": ["member"]
             }
         };
     }
@@ -207,7 +211,7 @@ class EventCommand extends SubsCommand {
             }
         }
         ], (values) => {
-            logger.info("User " + message.author.username + " created event with name " + values["name"] + ".");
+            logger.info("User " + message.member.displayName + " created event with name " + values["name"] + ".");
 
             let start = values["start"];
             let end = values["end"];
@@ -272,7 +276,7 @@ class EventCommand extends SubsCommand {
             }
         }
         ], (values) => {
-            logger.info("User " + message.author.username + " edited event with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
+            logger.info("User " + message.member.displayName + " edited event with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
 
             this.eventModule.editEvent(values["name"], values["type"], values["value"], message.author.id);
         });
@@ -301,7 +305,7 @@ class EventCommand extends SubsCommand {
 
     async callCheck(args, message) {
         const channel = message.channel;
-        const dateString = args[0];
+        const dateString = args.join(" ");
 
         let date;
 
@@ -323,14 +327,14 @@ class EventCommand extends SubsCommand {
             }
         }
 
-        const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
+        const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date, true);
         let starts = "";
 
         startsEvents.forEach(event => {
             starts += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
-        const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
+        const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date, true);
         const ends = "";
 
         endsEvents.forEach(event => {
@@ -338,7 +342,7 @@ class EventCommand extends SubsCommand {
             ends += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
-        const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
+        const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date, true);
         let going = "";
 
         goingEvents.forEach(event => {
@@ -370,19 +374,21 @@ class EventCommand extends SubsCommand {
     async callWeek(args, message) {
         const channel = message.channel;
 
-        const startDay = moment();
+        const mondayDay = moment();
+        while (mondayDay.weekday() !== moment().day("Monday").weekday())
+            mondayDay.subtract(1, "day");
 
-        const sundayDay = startDay.clone();
+        const sundayDay = mondayDay.clone();
         while (sundayDay.weekday() !== moment().day("Sunday").weekday())
             sundayDay.add(1, "day");
 
-        const dates = this.getRangeOfDates(startDay, sundayDay, "day");
-
+        const dates = this.getRangeOfDates(mondayDay, sundayDay, "day");
+        
         const datesInfo = {};
         await this.asyncForEach(dates, async (date) => {
-            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
-            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
-            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
+            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date, true);
+            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date, true);
+            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date, true);
             const events = startsEvents.concat(endsEvents).concat(goingEvents);
 
             let string = "";
@@ -424,9 +430,9 @@ class EventCommand extends SubsCommand {
 
         const datesInfo = {};
         await this.asyncForEach(dates, async (date) => {
-            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
-            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
-            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
+            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date, true);
+            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date, true);
+            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date, true);
             const events = startsEvents.concat(endsEvents).concat(goingEvents);
 
             let string = "";
@@ -463,7 +469,7 @@ class EventCommand extends SubsCommand {
         const eventName = args[0];
 
         if (eventName == "all") {
-            const events = this.eventModule.getEvents();
+            const events = await this.eventModule.getEvents();
 
             events.forEach(event => {
                 this.eventModule.editEvent(event.name, "refresh", undefined);
@@ -490,6 +496,65 @@ class EventCommand extends SubsCommand {
             return arr;
 
         return this.getRangeOfDates(next, end, key, arr.concat(next));
+    }
+
+    async callInfo(args, message) {
+        const eventName = args[0];
+
+        if (!(await this.eventModule.exists(eventName))) {
+            this.sendError(message.channel, "command.event.dont-exist.edit", (await this.eventModule.getEventNames()).join(", ").substring(0, 500) + "...");
+            return;
+        }
+
+        const event = await this.eventModule.getEvent(eventName, null);
+        const historyTexts = [];
+        let historyText = "";
+
+        await this.asyncForEach(event.history, async (history) => {
+            const text = "```[" + moment(history.changed).format("D. M. YYYY HH:MM:ss") + " | " + history.type + "] " + (await message.guild.fetchMember(history.author)).displayName + "\n" + history.value.old + " -> " + history.value.new + "```\n";
+            
+            if((historyText + text).length > 2048) {
+                historyTexts.push(historyText);
+                historyText = "";
+            }
+
+            historyText += text;
+        });
+
+        if(historyText != "")
+            historyTexts.push(historyText);
+        
+        const embed = new Discord.RichEmbed()
+            .setTitle("🕜 | " + Translation.translate("command.event.info.title." + event.type, event.title))
+            .setDescription("")
+            .addField(Translation.translate("module.event.name"), event.name, true)
+            .addField(Translation.translate("module.event.title"), event.title, true)
+            .addField(Translation.translate("module.event.start"), event.start, true)
+            .addField(Translation.translate("module.event.end"), event.end, true)
+            .addField(Translation.translate("module.event.group"), message.guild.roles.get(Config.get("roles.mentionable." + event.role)), true)
+            .addField(Translation.translate("module.event.place"), event.place, true)
+            .addField(Translation.translate("module.event.subject"), event.subject, true)
+            .addField(Translation.translate("module.event.description"), event.description)
+            .addField(Translation.translate("module.event.created"), moment(event.created).format("D. M. YYYY HH:MM:ss"), true)
+            .addField(Translation.translate("module.event.archived"), event.archived ? ":white_check_mark:" : ":x:", true)
+            .addField(Translation.translate("module.event.author"), (await message.guild.fetchMember(event.author)).toString(), true)
+            .addField(Translation.translate("module.event.message"), "[" + Translation.translate("module.event.message") + "](https://discordapp.com/channels/" + Config.get("bot.guild") + "/" + Config.get("channels.event") + "/" + event.message + ")", true)
+            .addField(Translation.translate("module.event.calendar"), this.eventModule.generateGoogleCalendarLink(event), true)
+            .setColor(Config.getColor("SUCCESS"));
+
+        let promise = Promise.resolve();
+        promise = promise.then(async () => await message.channel.send(embed));
+
+        let count = 1;
+        historyTexts.forEach((history) => {
+            const historyEmbed = new Discord.RichEmbed()
+                .setTitle("🕜 | " + Translation.translate("command.event.info.history.title." + event.type, event.title, count))
+                .setDescription(history)
+                .setColor(Config.getColor("SUCCESS"));    
+
+            promise = promise.then(async () => await message.channel.send(historyEmbed));
+            count++;
+        });
     }
 
 }

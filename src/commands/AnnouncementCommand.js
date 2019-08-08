@@ -85,7 +85,7 @@ class AnnouncementCommand extends SubsCommand {
                 }
             }
         ], (values) => {
-            logger.info("User " + message.author.username + " edited annoucement with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
+            logger.info("User " + message.member.displayName + " edited annoucement with name " + values["name"] + ", edited " + values["type"] + " to " + values["value"] + ".");
 
             this.annoucementModule.editAnnoucement(message.member, values["name"], values["type"], values["value"]);
         });
@@ -138,7 +138,7 @@ class AnnouncementCommand extends SubsCommand {
                 }
             }
         ], async (values) => {
-            logger.info("User " + message.author.username + " created annoucement with name " + values["name"] + ".");
+            logger.info("User " + message.member.displayName + " created annoucement with name " + values["name"] + ".");
 
             await this.annoucementModule.addAnnoucement(message.member, values["name"], values["title"], values["annoucement"]);
         });

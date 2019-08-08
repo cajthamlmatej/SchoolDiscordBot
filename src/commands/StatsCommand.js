@@ -3,6 +3,8 @@ const Discord = require("discord.js");
 const Config = require("../Config");
 const Translation = require("../Translation");
 
+const eventRepository = require("../database/Database").getRepository("event");
+
 class StatsCommand extends Command {
 
     getName() {
@@ -14,7 +16,7 @@ class StatsCommand extends Command {
     }
 
     getRoles() {
-        return ["owner"];
+        return ["moderator"];
     }
 
     init(bot) {
@@ -23,123 +25,92 @@ class StatsCommand extends Command {
         this.eventChannel = bot.client.channels.find(ch => ch.id == Config.get("channels.event"));
     }
 
-    call(args, message) {
+    async asyncForEach(array, callback) {
+        for (let index = 0; index < array.length; index++) 
+            await callback(array[index], index, array);
+    }
+
+    async call(args, message) {
         const channel = message.channel;
 
-        this.next(null, this.eventChannel).then(currentMessages => {
-            this.next(null, this.eventArchiveChannel).then(currentMessagesArchive => {
-                const messages = currentMessages.concat(currentMessagesArchive);
-                const subjects = {};
-                const authors = {};
-                const groups = {};
+        const eventCount = {
+            all: await eventRepository.countEvents(),
+            // active: await eventRepository.countEvents(false),
+            archived: await eventRepository.countEvents(true),
+            
+            eventAll: await eventRepository.countEventsByType("event"),
+            taskAll: await eventRepository.countEventsByType("task"),
 
-                messages.forEach(message => {
-                    if (message.embeds.length > 0) 
-                        message.embeds.forEach(embed => {
-                            embed.fields.forEach(field => {
-                                if (field.name == "Předmět" || field.name == "Subject") 
-                                    if (subjects[field.value] == undefined) {
-                                        subjects[field.value] = 1;
-                                    } else {
-                                        subjects[field.value] += 1;
-                                    }
-                                else if (field.name == "Skupina" || field.name == "Group") 
-                                    if (groups[field.value] == undefined) {
-                                        groups[field.value] = 1;
-                                    } else {
-                                        groups[field.value] += 1;
-                                    }
+            // eventActive: await eventRepository.countEventsByType("event", false),
+            // taskActive: await eventRepository.countEventsByType("task", false),
+            
+            eventArchived: await eventRepository.countEventsByType("event", true),
+            taskArchived: await eventRepository.countEventsByType("task", true),
+        };
 
-                            });
-
-                            if (embed.footer != null && embed.footer.text != "null") 
-                                if (authors[embed.footer.text] == undefined) {
-                                    authors[embed.footer.text] = 1;
-                                } else {
-                                    authors[embed.footer.text] += 1;
-                                }
-                            else 
-                            if (authors["?"] == undefined) 
-                                authors["?"] = 1;
-                            else 
-                                authors["?"] += 1;
-                            
-                        });
-                    
-                });
-
-                const sortedSubjectsKeys = Object.keys(subjects).sort(function (a, b) { return subjects[a] - subjects[b]; }).reverse();
-
-                let subjectsStr = "";
-
-                sortedSubjectsKeys.forEach(name => {
-                    subjectsStr += Translation.translate("command.stats.for", "**" + (subjects[name] + "").padStart(2, "0") + "**", "**" + name + "**") + "\n";
-                });
-
-                const sortedAuthorsKeys = Object.keys(authors).sort(function (a, b) { return authors[a] - authors[b]; }).reverse();
-
-                let authorsStr = "";
-
-                sortedAuthorsKeys.forEach(name => {
-                    authorsStr += Translation.translate("command.stats.from", "**" + (authors[name] + "").padStart(2, "0") + "**", "*" + name + "*") + "\n";
-                });
-
-                const sortedGroupsKeys = Object.keys(groups).sort(function (a, b) { return groups[a] - groups[b]; }).reverse();
-
-                let groupsStr = "";
-
-                sortedGroupsKeys.forEach(name => {
-                    groupsStr += Translation.translate("command.stats.for", "**" + (groups[name] + "").padStart(2, "0") + "**", name) + "\n";
-                });
-
-                const embed = new Discord.RichEmbed()
-                    .setTitle("📜 | " + Translation.translate("command.stats.title"))
-                    .addField(Translation.translate("command.stats.number-of-events"), "**" + messages.size + "**", false)
-                    .addField(Translation.translate("command.stats.authors"), authorsStr, true)
-                    .addField(Translation.translate("command.stats.for-groups"), groupsStr, true)
-                    .addField(Translation.translate("command.stats.for-subjects"), subjectsStr, true)
-                    .setColor(Config.getColor("SUCCESS"));
-
-                channel.send(embed);
+        const members = [];
+        
+        await this.asyncForEach(await eventRepository.getEventsAuthors(), async (author) => {
+            members.push({
+                member: await channel.guild.fetchMember(author).then((member) => {return member;}),
+                count: {
+                    all: await eventRepository.countEventsByAuthor(author),
+                    // active: await eventRepository.countEventsByAuthor(author, false),
+                    // archived: await eventRepository.countEventsByAuthor(author, true)
+                }
             });
         });
 
-        return false;
-    }
+        let membersText = "";
 
-    getMessages(last, channel) {
-        if (last != null) 
-            return channel.fetchMessages({ limit: 100, before: last });
-        else 
-            return channel.fetchMessages({ limit: 100 });
-        
-    }
-
-    next(messages, channel) {
-        const self = this;
-        let promise = null;
-
-        if (messages == null) 
-            promise = this.getMessages(null, channel);
-        else 
-            promise = this.getMessages(messages.last().id, channel);
-
-        return promise.then(currentMessages => {
-            if (currentMessages.size == 100) {
-                if (messages == null) {
-                    messages = currentMessages;
-                    return self.next(messages, channel);
-                }
-                return self.next(messages.concat(currentMessages), channel);
-            } else {
-
-                if (messages == null) {
-                    messages = currentMessages;
-                    return messages;
-                }
-                return messages.concat(currentMessages);
-            }
+        members.forEach(member => {
+            membersText += Translation.translate("command.stats.from", "**" + (member.count.all + "").padStart(2, "0") + "**", "*" + member.member.toString() + "*") + "\n";
         });
+
+        const subjects = [];
+
+        await this.asyncForEach(await eventRepository.getEventsSubjects(), async (subject) => {
+            subjects.push({
+                subject: subject,
+                count: await eventRepository.countEventsBySubject(subject)
+            });
+        });
+
+        let subjectsText = "";
+        
+        subjects.forEach(subject => {
+            subjectsText += Translation.translate("command.stats.for", "**" + (subject.count + "").padStart(2, "0") + "**", "**" + subject.subject + "**") + "\n";
+        });
+
+        const roles = [];
+
+        await this.asyncForEach(await eventRepository.getEventsRoles(), async (role) => {
+            roles.push({
+                role: {
+                    name: role,
+                    role: await channel.guild.roles.get(Config.get("roles.mentionable." + role)) 
+                },
+                count: await eventRepository.countEventsByRole(role)
+            });
+        });
+
+        let rolesText = "";
+        
+        roles.forEach(role => {
+            rolesText += Translation.translate("command.stats.for", "**" + (role.count + "").padStart(2, "0") + "**", role.role.role.toString()) + "\n";
+        });
+
+        const embed = new Discord.RichEmbed()
+            .setTitle("📜 | " + Translation.translate("command.stats.title"))
+            .addField(Translation.translate("command.stats.number-of-events"), Translation.translate("command.stats.count-all", eventCount.all, eventCount.archived, Math.round(eventCount.all / 193 * 100) / 100), true)
+            .addField(Translation.translate("command.stats.types"), Translation.translate("command.stats.count-all", eventCount.eventAll, eventCount.eventArchived, eventCount.taskAll, eventCount.taskArchived), true)
+            .addBlankField()
+            .addField(Translation.translate("command.stats.for-subjects"), subjectsText, true)
+            .addField(Translation.translate("command.stats.for-groups"), rolesText, true)
+            .addField(Translation.translate("command.stats.authors"), membersText, true)
+            .setColor(Config.getColor("SUCCESS"));
+
+        channel.send(embed);
     }
 
 }

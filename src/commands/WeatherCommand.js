@@ -24,7 +24,8 @@ class WeatherCommand extends Command {
     }
 
     call(args, message) {
-        Weather.find({ search: args.join(" "), degreeType: this.unit }, (err, result) => {
+        const searchLocation = args.join(" ");
+        Weather.find({ search: searchLocation, degreeType: this.unit }, (err, result) => {
             if (result[0] != undefined) {
                 const resultBase = result[0];
                 const resultForToday = resultBase.forecast[1];
@@ -46,7 +47,7 @@ class WeatherCommand extends Command {
                     .addField(Translation.translate("command.weather.precipitation"), resultForToday.precip + "%", true)
                     .addField(Translation.translate("command.weather.lastchecked"), resultBase.current.observationtime, true)
                     .setTimestamp()
-                    .setFooter(Translation.translate("command.weather.request", message.member.nickname), message.author.avatarURL);
+                    .setFooter(Translation.translate("command.weather.request", message.member.displayName), message.author.avatarURL);
 
                 const weatherEmbedTomorrow = new Discord.RichEmbed()
                     .setColor(Config.getColor("SUCCESS"))
@@ -55,13 +56,13 @@ class WeatherCommand extends Command {
                     .addField(Translation.translate("command.weather.condition"), Translation.translate("command.weather.skytext." + resultTomorrowSkytext), true)
                     .addField(Translation.translate("command.weather.precipitation"), resultForTomorrow.precip + "%", true)
                     .setTimestamp()
-                    .setFooter(Translation.translate("command.weather.request", message.member.nickname), message.author.avatarURL);
+                    .setFooter(Translation.translate("command.weather.request", message.member.displayName), message.author.avatarURL);
 
                 message.channel.send(weatherEmbedToday);
                 message.channel.send(weatherEmbedTomorrow);
 
             } else
-                message.channel.send("🛑 | " + Translation.translate("command.weather.error", currentLocation));
+                message.channel.send("🛑 | " + Translation.translate("command.weather.error", searchLocation));
         });
     }
 }

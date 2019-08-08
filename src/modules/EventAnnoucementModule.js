@@ -18,7 +18,11 @@ class EventAnnoucementModule extends Module {
         this.tempFile = "./eventannoucement-lastcheck.json";
 
         if (this.eventModule != undefined)
-            setInterval(() => this.tick(), 5000);
+            this.interval = setInterval(() => this.tick(), 5000);
+    }
+
+    uninit() {
+        clearTimeout(this.interval);
     }
 
     tick() {

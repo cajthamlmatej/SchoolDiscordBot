@@ -42,7 +42,7 @@ class PurgeCommand extends Command {
                 .setColor(Config.getColor("SUCCESS"));
 
             channel.send(embed).then(message => {
-                message.delete(5000);
+                message.delete(5000).catch(() => {});
             }).catch();
         });
 

@@ -19,7 +19,11 @@ class MuteModule extends Module {
         this.moderatorRole = Config.get("roles.permissions.moderator");
 
         this.tick();
-        setInterval(() => this.tick(), 10000);
+        this.interval = setInterval(() => this.tick(), 10000);
+    }
+
+    uninit() {
+        clearTimeout(this.interval);
     }
 
     async tick() {
@@ -50,7 +54,7 @@ class MuteModule extends Module {
         mutes.forEach(mute => {
             result = result.then(() => {
                 this.guild.fetchMember(mute.user).then(member => {
-                    embed.addField(member.nickname, Translation.translate("module.mute.reason") + ": " + mute.reason + "\n" + Translation.translate("module.mute.expiration") + ": " + moment(mute.expiration, "X").format("D. M. Y H:m:s"));
+                    embed.addField(member.displayName, Translation.translate("module.mute.reason") + ": " + mute.reason + "\n" + Translation.translate("module.mute.expiration") + ": " + moment(mute.expiration, "X").format("D. M. Y H:m:s"));
                 });
             });
         });

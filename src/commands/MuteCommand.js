@@ -50,7 +50,7 @@ class MuteCommand extends SubsCommand {
 
         const valid = [];
         channel.guild.members.forEach(member => {
-            const name = member.nickname == undefined ? member.user.username : member.nickname;
+            const name = member.displayName;
 
             if (name.toLowerCase().includes(args[0].toLowerCase())) 
                 valid.push(member);
@@ -61,8 +61,7 @@ class MuteCommand extends SubsCommand {
             let list = "";
 
             valid.forEach(member => {
-                const name = member.nickname == undefined ? member.user.username : member.nickname;
-                list += "\n**" + name + "**";
+                list += "\n**" + member.displayName + "**";
             });
 
             list += "\n";
@@ -112,8 +111,8 @@ class MuteCommand extends SubsCommand {
             .addField(Translation.translate("command.mute.reason"), reason, false);
 
         const embed = new Discord.RichEmbed()
-            .setTitle("🔇 | " + Translation.translate("command.mute.user-muted.title", member.user.username))
-            .setDescription(Translation.translate("command.mute.user-muted", member.user.username))
+            .setTitle("🔇 | " + Translation.translate("command.mute.user-muted.title", member.displayName))
+            .setDescription(Translation.translate("command.mute.user-muted", member.displayName))
             .setColor(Config.getColor("WARNING"))
             .addField(Translation.translate("command.mute.time"), Translation.translate("command.mute.minutes", minutes), true)
             .addField(Translation.translate("command.mute.reason"), reason, false);
@@ -136,7 +135,7 @@ class MuteCommand extends SubsCommand {
 
         const valid = [];
         channel.guild.members.forEach(member => {
-            const name = member.nickname == undefined ? member.user.username : member.nickname;
+            const name = member.displayName;
 
             if (name.toLowerCase().includes(args[0].toLowerCase())) 
                 valid.push(member);
@@ -147,8 +146,7 @@ class MuteCommand extends SubsCommand {
             let list = "";
 
             valid.forEach(member => {
-                const name = member.nickname == undefined ? member.user.username : member.nickname;
-                list += "\n**" + name + "**";
+                list += "\n**" + member.displayName + "**";
             });
 
             list += "\n";
@@ -175,8 +173,8 @@ class MuteCommand extends SubsCommand {
         await this.muteModule.removeMute(member);
 
         const embed = new Discord.RichEmbed()
-            .setTitle("🔇 | " + Translation.translate("command.mute.unmuted.title", member.user.username))
-            .setDescription(Translation.translate("command.mute.unmuted", member.user.username))
+            .setTitle("🔇 | " + Translation.translate("command.mute.unmuted.title", member.displayName))
+            .setDescription(Translation.translate("command.mute.unmuted", member.displayName))
             .setColor(Config.getColor("SUCCESS"));
 
         channel.send(embed);
