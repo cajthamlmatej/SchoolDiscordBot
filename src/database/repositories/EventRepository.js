@@ -22,6 +22,10 @@ class EventRepository extends Repository {
         return await this.entity.find({ archived: archived, deleted: false });
     }
 
+    async getAllEvents() {
+        return await this.entity.find({ deleted: false });
+    }
+
     async getEventByName(name, archived = false) {
         if(archived == null)
             return await this.entity.findOne({ name: name, deleted: false });

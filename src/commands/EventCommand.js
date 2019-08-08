@@ -374,19 +374,21 @@ class EventCommand extends SubsCommand {
     async callWeek(args, message) {
         const channel = message.channel;
 
-        const startDay = moment();
+        const mondayDay = moment();
+        while (mondayDay.weekday() !== moment().day("Monday").weekday())
+            mondayDay.subtract(1, "day");
 
-        const sundayDay = startDay.clone();
+        const sundayDay = mondayDay.clone();
         while (sundayDay.weekday() !== moment().day("Sunday").weekday())
             sundayDay.add(1, "day");
 
-        const dates = this.getRangeOfDates(startDay, sundayDay, "day");
-
+        const dates = this.getRangeOfDates(mondayDay, sundayDay, "day");
+        
         const datesInfo = {};
         await this.asyncForEach(dates, async (date) => {
-            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
-            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
-            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
+            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date, true);
+            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date, true);
+            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date, true);
             const events = startsEvents.concat(endsEvents).concat(goingEvents);
 
             let string = "";
@@ -428,9 +430,9 @@ class EventCommand extends SubsCommand {
 
         const datesInfo = {};
         await this.asyncForEach(dates, async (date) => {
-            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
-            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
-            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
+            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date, true);
+            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date, true);
+            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date, true);
             const events = startsEvents.concat(endsEvents).concat(goingEvents);
 
             let string = "";

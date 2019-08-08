@@ -18,6 +18,7 @@ class EventModule extends Module {
         this.archiveChannel = bot.client.channels.find(channel => channel.id === Config.get("channels.event-archive"));
         this.roles = Config.get("roles.mentionable");
         this.daysToArchive = Config.get("modules.event.archive-days");
+        this.timetableModule = bot.modules.eventtimetablemodule;
 
         this.tick();
         this.interval = setInterval(() => this.tick(), Config.get("modules.event.check-time"));
@@ -70,10 +71,13 @@ class EventModule extends Module {
         this.channel.send({
             embed: this.generateEmbed(values, author),
             files: attachments
-        }).then(message => {
+        }).then(async (message) => {
             values.message = message.id;
 
-            eventRepository.insert(values);
+            await eventRepository.insert(values);
+
+            if(this.timetableModule != undefined)
+                this.timetableModule.update();
         });
     }
 
@@ -98,6 +102,9 @@ class EventModule extends Module {
                 message.edit({
                     embed: this.generateEmbed(event, author)
                 });
+
+                if(this.timetableModule != undefined)
+                    this.timetableModule.update();
             });
         });
     }
@@ -171,6 +178,9 @@ class EventModule extends Module {
         });
 
         await eventRepository.deleteEvent(name);
+
+        if(this.timetableModule != undefined)
+            this.timetableModule.update();
     }
 
     async getEvents(archived = false, fields = null) {
@@ -217,7 +227,12 @@ class EventModule extends Module {
     async getEventThatStartsInEnteredDay(dateMoment, archived = false) {
         const startsEvents = [];
 
-        const events = await this.getEvents(archived);
+        let events;
+        if(archived)
+            events = await eventRepository.getAllEvents();
+        else 
+            events = await this.getEvents();
+        
         events.forEach(event => {
             let dateStart = moment(event.start, "D. M. YYYY");
             if (!dateStart.isValid())
@@ -238,7 +253,12 @@ class EventModule extends Module {
     async getEventThatEndsInEnteredDay(dateMoment, archived = false) {
         const endsEvents = [];
 
-        const events = await this.getEvents(archived);
+        let events;
+        if(archived)
+            events = await eventRepository.getAllEvents();
+        else 
+            events = await this.getEvents();
+
         events.forEach(event => {
             let dateEnd = moment(event.end, "D. M. YYYY");
             if (!dateEnd.isValid())
@@ -259,7 +279,12 @@ class EventModule extends Module {
     async getEventThatGoingInEnteredDay(dateMoment, archived = false) {
         const goingEvents = [];
 
-        const events = await this.getEvents(archived);
+        let events;
+        if(archived)
+            events = await eventRepository.getAllEvents();
+        else 
+            events = await this.getEvents();
+
         events.forEach(event => {
             let dateStart = moment(event.start, "D. M. YYYY");
             if (!dateStart.isValid())
