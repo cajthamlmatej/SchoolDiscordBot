@@ -103,7 +103,7 @@ class EventTimetableModule extends Module {
 
                 if(dateStart.hours() < 8) {
                     dateStart.set("hour", 8);
-                    dateEnd.set("minutes", 00);
+                    dateEnd.set("minutes", 0);
                 }
                 if(dateEnd.hours() > 17) {
                     dateEnd.set("hour", 17);

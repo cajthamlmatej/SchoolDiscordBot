@@ -59,6 +59,7 @@
     "commands.help.module": "Module managment",
     "commands.help.module.disable": "Disables module",
     "commands.help.chladkova": "Print proverb",
+    "commands.help.timetable": "Timetable managment",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
@@ -105,6 +106,7 @@
     "commands.usage.module": "<list/disable> <...>",
     "commands.usage.module.disable": "<name of module>",
     "commands.usage.chladkova": "",
+    "commands.usage.timetable": "<refresh>",
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",

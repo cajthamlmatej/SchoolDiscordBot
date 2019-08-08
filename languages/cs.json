@@ -59,6 +59,7 @@
     "commands.help.module": "Správa modulů",
     "commands.help.module.disable": "Vypne modul",
     "commands.help.chladkova": "Napíše přísloví",
+    "commands.help.timetable": "Správa rozvrhu",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
@@ -105,6 +106,7 @@
     "commands.usage.module": "<list/disable> <...>",
     "commands.usage.module.disable": "<jméno modulu>",
     "commands.usage.chladkova": "",
+    "commands.usage.timetable": "<refresh>",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
