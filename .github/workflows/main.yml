@@ -11,6 +11,7 @@ jobs:
     - uses: actions/checkout@v1
     - uses: "Ilshidur/actions/discord@master"
       with:
-        secrets: ["DISCORD_WEBHOOK"]
+        secrets:
+          - DISCORD_WEBHOOK
         args: "The project has been deployed."
 
