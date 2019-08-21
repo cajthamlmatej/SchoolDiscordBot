@@ -139,6 +139,7 @@
     "command.event.info.title.task": "Informace o úkolu {0}",
     "command.event.info.history.title.event": "Historie události {0} #{1}",
     "command.event.info.history.title.task": "Historie úkolu {0} #{1}",
+    "command.event.wrong-subject-format": "Formát předmětu musí být ? nebo mít přesně 3 znaky bez diakritiky, mezer a čátek.",
 
     "command.help.title": "Nápověda k používání bota",
     "command.help.can-execute": "Seznam příkazů, které můžete použít.",
@@ -375,7 +376,7 @@
     "builder.event.create.place.example": "Škola,Arbesovo náměstí,Václavské náměstí",
     "builder.event.create.subject.title": "Předmět pro event",
     "builder.event.create.subject.help": "Zadejte předmět pro který event je.",
-    "builder.event.create.subject.example": "PVA,Matematika",
+    "builder.event.create.subject.example": "PVA,MAT,CJL",
     "builder.event.create.description.title": "Popis eventu",
     "builder.event.create.description.help": "Zadejte jakékoliv další informace, které o eventu víte.",
     "builder.event.create.description.example": "Popis eventu",

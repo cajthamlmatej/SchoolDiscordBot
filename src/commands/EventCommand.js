@@ -182,7 +182,37 @@ class EventCommand extends SubsCommand {
             "name": "subject",
             "example": Translation.translate("builder.event.create.subject.example").split(","),
             "validate": (content) => {
+                if(content === "?")
+                    return true;
+
+                if(content.length < 3 || content.length > 3)
+                    return "command.event.wrong-subject-format"
+
+                const validCharacters ='abcdefghijklmnopqrstuvwxyz'.toUpperCase().split("");
+
+                let passed = true;
+
+                content.split("").forEach(char => {
+                    if(!passed)
+                        return;
+
+                    if(!validCharacters.includes(char))
+                        passed = false;
+                })
+
+                if(!passed)
+                    return "command.event.wrong-subject-format"
+
                 return true;
+            },
+            "value": (content) => {
+                return content.toLowerCase().split("").map(function(letter) {
+                    const i = this.accents.indexOf(letter);
+                    return (i !== -1) ? this.acceOut[i] : letter;
+                }.bind({
+                    accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž",
+                    acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz"
+                })).join("").toUpperCase();
             }
         },
         {
