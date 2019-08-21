@@ -77,6 +77,16 @@ class EventCommand extends SubsCommand {
         const builder = new CommandBuilder("event.create", message.author, channel, [{
             "name": "type",
             "example": types,
+            "commands": [
+                {
+                    reaction: "🇪",
+                    value: "event"
+                },
+                {
+                    reaction: "🇹",
+                    value: "task"
+                }
+            ],
             "validate": (content) => {
                 if (!types.includes(content))
                     return ["command.event.type-not-valid", types.join(", ")];
@@ -94,6 +104,12 @@ class EventCommand extends SubsCommand {
         {
             "name": "name",
             "example": Translation.translate("builder.event.create.name.example").split(","),
+            "commands": [
+                {
+                    reaction: "➖",
+                    value: "-"
+                }
+            ],
             "validate": async (content) => {
                 if (await this.eventModule.exists(content))
                     return "command.event.already-exists";
@@ -136,6 +152,12 @@ class EventCommand extends SubsCommand {
         {
             "name": "end",
             "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "commands": [
+                {
+                    reaction: "➖",
+                    value: "-"
+                }
+            ],
             "validate": (content) => {
                 if (content == "-")
                     return true;
@@ -174,6 +196,12 @@ class EventCommand extends SubsCommand {
         {
             "name": "place",
             "example": Translation.translate("builder.event.create.place.example").split(","),
+            "commands": [
+                {
+                    reaction: "❓",
+                    value: "?"
+                }
+            ],
             "validate": (content) => {
                 return true;
             }
@@ -181,6 +209,12 @@ class EventCommand extends SubsCommand {
         {
             "name": "subject",
             "example": Translation.translate("builder.event.create.subject.example").split(","),
+            "commands": [
+                {
+                    reaction: "❓",
+                    value: "?"
+                }
+            ],
             "validate": (content) => {
                 if(content === "?")
                     return true;
@@ -225,6 +259,12 @@ class EventCommand extends SubsCommand {
         {
             "name": "files",
             "example": "",
+            "commands": [
+                {
+                    reaction: "❓",
+                    value: "?"
+                }
+            ],
             "validate": (content) => {
                 return true;
             },

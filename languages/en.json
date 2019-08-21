@@ -350,7 +350,7 @@
     "module.eventannoucement.place": "Place",
 
     "builder.example": "Example of usage: {0}",
-    "builder.stop": "For stop, enter \"{0}\"",
+    "builder.stop": "For stop, enter \"{0}\" or react to first reaction.",
     "builder.error": "Error",
     "builder.end": "Builder was ended, nothing was saved.",
     "builder.end.exist": "Builder was ended because builder already exist in this channel for this user, nothing was saved.",

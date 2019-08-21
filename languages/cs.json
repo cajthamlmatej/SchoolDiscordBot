@@ -350,7 +350,7 @@
     "module.eventannoucement.place": "Místo",
 
     "builder.example": "Ukázka použítí: {0}",
-    "builder.stop": "K ukončení napište \"{0}\"",
+    "builder.stop": "K ukončení napište \"{0}\" nebo zareagujte na první reakci.",
     "builder.error": "Chyba",
     "builder.end": "Builder byl ukončen, žádná z hodnot nebyla uložena.",
     "builder.end.exist": "Builder byl ukončen protože builder již existuje v tomto kanálu pro tohoto uživatele, žádná z hodnot nebyla uložena.",
