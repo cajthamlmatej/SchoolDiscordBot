@@ -158,7 +158,6 @@ class EventTimetableModule extends Module {
         const events = await eventRepository.getAllEvents();
         let eventsText = "";
 
-        this.getTimetable(moment());
         events.forEach(event => {
             const startDate = moment(event.start, "D. M. YYYY HH:mm").toDate()
             const endDate = moment(event.end, "D. M. YYYY HH:mm").toDate()
