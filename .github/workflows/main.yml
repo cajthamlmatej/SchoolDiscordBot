@@ -9,9 +9,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: "Discord Message"
-    uses: "Ilshidur/actions/discord@master"
-    with:
+    - uses: "Ilshidur/actions/discord@master"
+      with:
         secrets = ["DISCORD_WEBHOOK"]
         args = "The project has been deployed."
 
