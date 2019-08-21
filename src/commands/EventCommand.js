@@ -247,11 +247,13 @@ class EventCommand extends SubsCommand {
             let end = values["end"];
 
             Object.keys(this.placeholders).forEach(placeholder => {
+                const placeholderObj = this.placeholders[placeholder];
+
                 if (values["start"].toLowerCase().includes(placeholder))
-                    start = moment().add(this.placeholders[placeholder], "days").format("D. M. YYYY");
+                    start = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
 
                 if (values["end"].toLowerCase().includes(placeholder))
-                    end = moment().add(this.placeholders[placeholder], "days").format("D. M. YYYY");
+                    end = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
             });
 
             this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, values["files"]);
@@ -341,8 +343,7 @@ class EventCommand extends SubsCommand {
 
         Object.keys(this.placeholders).forEach(placeholder => {
             if (dateString.includes(placeholder))
-                date = moment().add(this.placeholders[placeholder], "days");
-
+                date = moment().add(this.placeholders[placeholder].quantity, this.placeholders[placeholder].unit);
         });
 
         if (date == undefined)
