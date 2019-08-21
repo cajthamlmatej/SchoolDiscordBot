@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - uses: actions/checkout@v1
     - name: "Discord Message"
     uses: "Ilshidur/actions/discord@master"
     with:
