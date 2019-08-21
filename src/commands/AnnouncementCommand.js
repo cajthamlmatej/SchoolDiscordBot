@@ -70,6 +70,20 @@ class AnnouncementCommand extends SubsCommand {
             {
                 "name": "type",
                 "example": types,
+                "commands": [
+                    {
+                        reaction: "🇹",
+                        value: "title"
+                    },
+                    {
+                        reaction: "🇦",
+                        value: "annoucement"
+                    },
+                    {
+                        reaction: "🇳",
+                        value: "name"
+                    }
+                ],
                 "validate": (content) => {
                     if (!types.includes(content)) 
                         return ["command.annoucement.edit-type-not-valid", types.join(", ")];

@@ -347,7 +347,7 @@
     "module.eventannoucement.place": "Místo",
 
     "builder.example": "Ukázka použítí: {0}",
-    "builder.stop": "K ukončení napište \"{0}\"",
+    "builder.stop": "K ukončení napište \"{0}\" nebo zareagujte na první reakci.",
     "builder.error": "Chyba",
     "builder.end": "Builder byl ukončen, žádná z hodnot nebyla uložena.",
     "builder.end.exist": "Builder byl ukončen protože builder již existuje v tomto kanálu pro tohoto uživatele, žádná z hodnot nebyla uložena.",
@@ -373,7 +373,7 @@
     "builder.event.create.place.example": "Škola,Arbesovo náměstí,Václavské náměstí",
     "builder.event.create.subject.title": "Předmět pro event",
     "builder.event.create.subject.help": "Zadejte předmět pro který event je.",
-    "builder.event.create.subject.example": "PVA,Matematika",
+    "builder.event.create.subject.example": "PVA,MAT,CJL",
     "builder.event.create.description.title": "Popis eventu",
     "builder.event.create.description.help": "Zadejte jakékoliv další informace, které o eventu víte.",
     "builder.event.create.description.example": "Popis eventu",

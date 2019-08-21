@@ -347,7 +347,7 @@
     "module.eventannoucement.place": "Place",
 
     "builder.example": "Example of usage: {0}",
-    "builder.stop": "For stop, enter \"{0}\"",
+    "builder.stop": "For stop, enter \"{0}\" or react to first reaction.",
     "builder.error": "Error",
     "builder.end": "Builder was ended, nothing was saved.",
     "builder.end.exist": "Builder was ended because builder already exist in this channel for this user, nothing was saved.",
@@ -373,7 +373,7 @@
     "builder.event.create.place.example": "School,Wall Street,Wenceslas Square",
     "builder.event.create.subject.title": "Subject of event",
     "builder.event.create.subject.help": "Enter subject of the event.",
-    "builder.event.create.subject.example": "ICT,Math",
+    "builder.event.create.subject.example": "ICT,MAT",
     "builder.event.create.description.title": "Description of event",
     "builder.event.create.description.help": "Enter decription and other informations about event.",
     "builder.event.create.description.example": "Description of the event",
