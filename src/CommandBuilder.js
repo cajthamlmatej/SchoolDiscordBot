@@ -25,11 +25,11 @@ class CommandBuilder {
             this.messageCollector.on("collect", (message) => { this.collectMessage(message); });
             this.messageCollector.on("end", (messages, reason) => { this.endMessage(messages, reason); });
 
-            await this.refreshReactions()
+            await this.refreshReactions();
 
-            const filter = (reaction, user) => user.id === this.build.user.id
+            const filter = (reaction, user) => user.id === this.build.user.id;
             this.reactionCollector = message.createReactionCollector(filter);
-            this.reactionCollector.on('collect', reaction => this.collectReaction(reaction) );
+            this.reactionCollector.on("collect", reaction => this.collectReaction(reaction) );
 
             if(activeBuilders[this.build.user.id] == undefined)
                 activeBuilders[this.build.user.id] = [this.build.channel.id];
@@ -60,7 +60,7 @@ class CommandBuilder {
 
         result = result.then(async () => {
             await this.message.react(STOP_EMOTE);
-        })
+        });
 
         if (field.commands === undefined)
             return;
@@ -128,7 +128,7 @@ class CommandBuilder {
 
     async collectReaction(reaction) {
         if (reaction.emoji.name === STOP_EMOTE)
-            return this.messageCollector.stop("forced")
+            return this.messageCollector.stop("forced");
 
         const field = this.build.fields[this.field];
 

@@ -220,9 +220,9 @@ class EventCommand extends SubsCommand {
                     return true;
 
                 if(content.length < 3 || content.length > 3)
-                    return "command.event.wrong-subject-format"
+                    return "command.event.wrong-subject-format";
 
-                const validCharacters ='abcdefghijklmnopqrstuvwxyz'.toUpperCase().split("");
+                const validCharacters ="abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
 
                 let passed = true;
 
@@ -232,10 +232,10 @@ class EventCommand extends SubsCommand {
 
                     if(!validCharacters.includes(char))
                         passed = false;
-                })
+                });
 
                 if(!passed)
-                    return "command.event.wrong-subject-format"
+                    return "command.event.wrong-subject-format";
 
                 return true;
             },
@@ -340,19 +340,19 @@ class EventCommand extends SubsCommand {
                         return ["command.event.type-not-valid", eventTypes.join(", ")];
 
                 } else if (type == "role") {
-                    if (!this.eventModule.isMentionableRole(content)) {
+                    if (!this.eventModule.isMentionableRole(content)) 
                         return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
-                    }
+                    
                 } else if (type == "subject") {
-                    content = content.toUpperCase()
+                    content = content.toUpperCase();
 
                     if(content === "?")
                         return true;
 
                     if(content.length < 3 || content.length > 3)
-                        return "command.event.wrong-subject-format"
+                        return "command.event.wrong-subject-format";
 
-                    const validCharacters ='abcdefghijklmnopqrstuvwxyz'.toUpperCase().split("");
+                    const validCharacters ="abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
 
                     let passed = true;
 
@@ -362,10 +362,10 @@ class EventCommand extends SubsCommand {
 
                         if(!validCharacters.includes(char))
                             passed = false;
-                    })
+                    });
 
                     if(!passed)
-                        return "command.event.wrong-subject-format"
+                        return "command.event.wrong-subject-format";
 
                     return true;
                 }

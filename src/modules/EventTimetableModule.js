@@ -48,72 +48,72 @@ class EventTimetableModule extends Module {
     }
 
     getTimetable(day) {
-        let timeTableString = "";
+        const timeTableString = "";
 
-        let events = []
+        let events = [];
         switch (day.weekday()) {
-            case 1:
-                events = [
-                    {
-                        title: "Matematika",
-                        start: "08:00",
-                        end: "08:45"
-                    }
-                ]
-                break;
-            case 2:
+        case 1:
+            events = [
+                {
+                    title: "Matematika",
+                    start: "08:00",
+                    end: "08:45"
+                }
+            ];
+            break;
+        case 2:
 
-                events = [
-                    {
-                        title: "Matematika",
-                        start: "08:00",
-                        end: "08:45"
-                    }
-                ]
-                break;
-            case 3:
-                events = [
-                    {
-                        title: "Matematika",
-                        start: "08:00",
-                        end: "08:45"
-                    },
-                    {
-                        title: "Čeština",
-                        start: "08:55",
-                        end: "09:40"
-                    },
-                    {
-                        title: "Občanská nauka",
-                        start: "10:00",
-                        end: "10:45"
-                    }
-                ]
-                break;
-            case 4:
+            events = [
+                {
+                    title: "Matematika",
+                    start: "08:00",
+                    end: "08:45"
+                }
+            ];
+            break;
+        case 3:
+            events = [
+                {
+                    title: "Matematika",
+                    start: "08:00",
+                    end: "08:45"
+                },
+                {
+                    title: "Čeština",
+                    start: "08:55",
+                    end: "09:40"
+                },
+                {
+                    title: "Občanská nauka",
+                    start: "10:00",
+                    end: "10:45"
+                }
+            ];
+            break;
+        case 4:
 
-                events = [
-                    {
-                        title: "Matematika",
-                        start: "08:00",
-                        end: "08:45"
-                    }
-                ]
-                break;
-            case 5:
+            events = [
+                {
+                    title: "Matematika",
+                    start: "08:00",
+                    end: "08:45"
+                }
+            ];
+            break;
+        case 5:
 
-                events = [
-                    {
-                        title: "Matematika",
-                        start: "08:00",
-                        end: "08:45"
-                    }
-                ]
-                break;
+            events = [
+                {
+                    title: "Matematika",
+                    start: "08:00",
+                    end: "08:45"
+                }
+            ];
+            break;
         }
         let eventsText = "";
 
-        const today = day.format("YYYY-MM-DD")
+        const today = day.format("YYYY-MM-DD");
         events.forEach(event => {
             eventsText += `
                 {
@@ -131,27 +131,27 @@ class EventTimetableModule extends Module {
 
     getIconForSubject(subject) {
         switch (subject) {
-            case "CJL":
-                return "book-reader"
-            case "MAT":
-                return "divide"
-            case "EKO":
-                return "ghost"
-            case "PRO":
-                return "balance-scale"
-            case "FYZ":
-                return "apple-alt"
-            case "ANG":
-                return "comments"
-            case "TEV":
-                return "weight-hanging"
-            case "OSY":
-                return "network-wired"
-            case "PVA":
-                return "keyboard"
+        case "CJL":
+            return "book-reader";
+        case "MAT":
+            return "divide";
+        case "EKO":
+            return "ghost";
+        case "PRO":
+            return "balance-scale";
+        case "FYZ":
+            return "apple-alt";
+        case "ANG":
+            return "comments";
+        case "TEV":
+            return "weight-hanging";
+        case "OSY":
+            return "network-wired";
+        case "PVA":
+            return "keyboard";
         }
 
-        return "question"
+        return "question";
     }
 
     async printTimetable(channel, mondayDay) {
@@ -159,19 +159,19 @@ class EventTimetableModule extends Module {
         let eventsText = "";
 
         events.forEach(event => {
-            const startDate = moment(event.start, "D. M. YYYY HH:mm").toDate()
-            const endDate = moment(event.end, "D. M. YYYY HH:mm").toDate()
+            const startDate = moment(event.start, "D. M. YYYY HH:mm").toDate();
+            const endDate = moment(event.end, "D. M. YYYY HH:mm").toDate();
             eventsText += `
                 {
                     startDate: new Date("` + startDate + `"),
                     endDate: new Date("` + endDate + `"),
                     title: "` + event.title + `",
-                    content: "<i class='fas fa-` + this.getIconForSubject(event.subject) + `'></i> ` + event.subject + `",
+                    content: "<i class='fas fa-` + this.getIconForSubject(event.subject) + "'></i> " + event.subject + `",
                     class: "` + event.role + `",
                     allDay: ` + (endDate.toString() == startDate.toString()) + `
                 },
             `;
-        })
+        });
 
         const sundayDay = mondayDay.clone();
         while (sundayDay.weekday() !== moment().day("Sunday").weekday())
@@ -181,7 +181,7 @@ class EventTimetableModule extends Module {
 
         dates.forEach(date => {
             eventsText += this.getTimetable(date);
-        })
+        });
 
         const browser = await puppeteer.launch({ args: ["--no-sandbox", "--disable-setuid-sandbox"] });
         const page = await browser.newPage();
