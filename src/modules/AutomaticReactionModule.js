@@ -40,6 +40,21 @@ class AutomaticReactionModule extends Module {
                 let triggerPassed = false;
                 Object.keys(triggers).forEach(trigger => {
                     switch (trigger) {
+                    case "is": {
+                        const triggerValue = triggers[trigger];
+    
+                        if(Array.isArray(triggerValue)) {
+                            triggerValue.forEach(value => {
+                                if(content.toLowerCase() === value.toLowerCase())
+                                    triggerPassed = true;
+                            });
+    
+                        } else 
+                            if(content.toLowerCase() === triggerValue.toLowerCase())
+                                triggerPassed = true;
+                            
+                        break;
+                    }
                     case "contains": {
                         const triggerValue = triggers[trigger];
     
