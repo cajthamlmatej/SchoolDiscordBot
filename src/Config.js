@@ -49,8 +49,6 @@ class Config {
             
             "roles.assignable",
 
-            "roles.mentionable.member",
-
             "roles.special.mute",
             "roles.special.rolelock",
 
