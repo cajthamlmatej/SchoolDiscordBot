@@ -164,7 +164,7 @@ class EventTimetableModule extends Module {
                     startDate: new Date("` + startDate + `"),
                     endDate: new Date("` + endDate + `"),
                     title: "` + event.title + `",
-                    content: "<i class='fas fa-` + this.getIconForSubject(event.subject) + "'></i> " + event.subject + `",
+                    content: "<i class='fas fa-` + this.getIconForSubject(event.subject) + "'></i> " + (event.subject === "?" ? "" : event.subject) + `",
                     class: "` + event.role + `",
                     allDay: ` + (endDate.toString() == startDate.toString()) + `
                 },
