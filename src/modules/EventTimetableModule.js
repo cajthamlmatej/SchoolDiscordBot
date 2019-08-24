@@ -18,7 +18,7 @@ class EventTimetableModule extends Module {
         this.channel = bot.client.channels.find(channel => channel.id === Config.get("channels.timetable"));
         this.eventModule = bot.modules.eventmodule;
 
-        this.update();
+        await this.update();
     }
 
     async update() {
@@ -26,7 +26,7 @@ class EventTimetableModule extends Module {
             return;
 
         const channel = this.channel;
-        channel.bulkDelete(50).catch(e => { });
+        await channel.bulkDelete(50).catch(e => { });
 
         let mondayDay = moment();
         while (mondayDay.weekday() !== moment().day("Monday").weekday())
@@ -193,11 +193,13 @@ class EventTimetableModule extends Module {
         await page.setContent((await fs.readFileSync("./src/graphic/timetable.html") + "")
             .replace("__EVENTS__", eventsText)
             .replace("__SELECTED_DATE__", mondayDay.format("YYYY-MM-DD")));
+
+        await page.waitFor(4000)
         await page.screenshot({ path: "timetable.png" });
-        await browser.close();
 
         await channel.send(new Discord.Attachment("timetable.png"));
-
+        
+        await browser.close();
     }
 
     getRangeOfDates(start, end, key, arr = [start.startOf(key)]) {
