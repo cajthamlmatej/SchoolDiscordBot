@@ -63,7 +63,7 @@ class EventTimetableModule extends Module {
 
             events = [
                 {
-                    title: "Matematika",
+                    title: "Nějaký předmět. UKÁZKA",
                     start: "08:00",
                     end: "08:45"
                 }
@@ -72,17 +72,17 @@ class EventTimetableModule extends Module {
         case 3:
             events = [
                 {
-                    title: "Matematika",
+                    title: "Nějaký předmět. UKÁZKA",
                     start: "08:00",
                     end: "08:45"
                 },
                 {
-                    title: "Čeština",
+                    title: "Čeština. UKÁZKA",
                     start: "08:55",
                     end: "09:40"
                 },
                 {
-                    title: "Občanská nauka",
+                    title: "Občanská nauka. UKÁZKA",
                     start: "10:00",
                     end: "10:45"
                 }
@@ -92,7 +92,7 @@ class EventTimetableModule extends Module {
 
             events = [
                 {
-                    title: "Matematika",
+                    title: "Nějaký předmět. UKÁZKA",
                     start: "08:00",
                     end: "08:45"
                 }
@@ -102,7 +102,7 @@ class EventTimetableModule extends Module {
 
             events = [
                 {
-                    title: "Matematika",
+                    title: "Nějaký předmět. UKÁZKA",
                     start: "08:00",
                     end: "08:45"
                 }
