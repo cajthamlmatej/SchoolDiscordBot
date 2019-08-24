@@ -20,7 +20,7 @@ class EventAnnoucementModule extends Module {
         if (this.eventModule != undefined)
             this.interval = setInterval(() => this.tick(), 5000);
 
-        this.eventTimetableModule = bot.modules.eventtimetablemodule
+        this.eventTimetableModule = bot.modules.eventtimetablemodule;
     }
 
     uninit() {
@@ -38,7 +38,7 @@ class EventAnnoucementModule extends Module {
 
         this.saveLastCheck(time.format("D. M. YYYY"));
 
-        this.eventTimetableModule.update()
+        this.eventTimetableModule.update();
 
         // tomorrow
         time.add(1, "days");

@@ -192,7 +192,7 @@ class EventTimetableModule extends Module {
             .replace("__EVENTS__", eventsText)
             .replace("__SELECTED_DATE__", mondayDay.format("YYYY-MM-DD")));
 
-        await page.waitFor(4000)
+        await page.waitFor(4000);
         await page.screenshot({ path: "timetable.png" });
 
         await channel.send(new Discord.Attachment("timetable.png"));
