@@ -48,14 +48,12 @@ class EventTimetableModule extends Module {
     }
 
     getTimetable(day) {
-        const timeTableString = "";
-
         let events = [];
         switch (day.weekday()) {
         case 1:
             events = [
                 {
-                    title: "Matematika",
+                    title: "Nějaký předmět. UKÁZKA",
                     start: "08:00",
                     end: "08:45"
                 }
