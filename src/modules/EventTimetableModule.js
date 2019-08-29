@@ -53,59 +53,145 @@ class EventTimetableModule extends Module {
         case 1:
             events = [
                 {
-                    title: "Nějaký předmět. UKÁZKA",
+                    title: "ANG",
                     start: "08:00",
                     end: "08:45"
+                },
+                {
+                    title: "MAT",
+                    start: "08:55",
+                    end: "09:40"
+                },
+                {
+                    title: "OSC & PVA",
+                    start: "10:00",
+                    end: "11:40"
+                },
+                {
+                    title: "PRA",
+                    start: "11:50",
+                    end: "12:35"
+                },
+
+                {
+                    title: "TEV",
+                    start: "13:40",
+                    end: "15:20"
                 }
             ];
             break;
         case 2:
-
             events = [
                 {
-                    title: "Nějaký předmět. UKÁZKA",
+                    title: "MAP",
                     start: "08:00",
-                    end: "08:45"
-                }
+                    end: "09:40"
+                },
+                {
+                    title: "MAT",
+                    start: "10:00",
+                    end: "10:45"
+                },
+                {
+                    title: "CJL",
+                    start: "10:55",
+                    end: "11:40"
+                },
+                {
+                    title: "FYZ",
+                    start: "11:50",
+                    end: "12:35"
+                },
             ];
             break;
         case 3:
             events = [
                 {
-                    title: "Nějaký předmět. UKÁZKA",
+                    title: "VYT",
                     start: "08:00",
-                    end: "08:45"
-                },
-                {
-                    title: "Čeština. UKÁZKA",
-                    start: "08:55",
                     end: "09:40"
                 },
                 {
-                    title: "Občanská nauka. UKÁZKA",
+                    title: "ANG",
                     start: "10:00",
                     end: "10:45"
-                }
+                },
+                {
+                    title: "MAT",
+                    start: "10:55",
+                    end: "11:40"
+                },
+                {
+                    title: "CJL",
+                    start: "11:50",
+                    end: "12:35"
+                },
+                {
+                    title: "EKO",
+                    start: "12:45",
+                    end: "13:30"
+                },
             ];
             break;
         case 4:
 
             events = [
                 {
-                    title: "Nějaký předmět. UKÁZKA",
+                    title: "MAT",
                     start: "08:00",
                     end: "08:45"
-                }
+                },
+                {
+                    title: "ONA",
+                    start: "08:55",
+                    end: "09:40"
+                },
+                {
+                    title: "ANG & CJL",
+                    start: "10:00",
+                    end: "10:45"
+                },
+                {
+                    title: "OSY",
+                    start: "10:55",
+                    end: "11:40"
+                },
+                {
+                    title: "PVA & OSC",
+                    start: "11:50",
+                    end: "13:30"
+                },
             ];
             break;
         case 5:
 
             events = [
                 {
-                    title: "Nějaký předmět. UKÁZKA",
+                    title: "MAT",
                     start: "08:00",
                     end: "08:45"
-                }
+                },
+                {
+                    title: "CJL & ANG",
+                    start: "08:55",
+                    end: "09:40"
+                },
+
+                {
+                    title: "EKO",
+                    start: "10:00",
+                    end: "10:45"
+                },
+                {
+                    title: "FYZ",
+                    start: "10:55",
+                    end: "11:40"
+                },
+                {
+                    title: "VOP",
+                    start: "11:50",
+                    end: "14:25"
+                },
             ];
             break;
         }
