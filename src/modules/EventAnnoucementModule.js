@@ -27,7 +27,7 @@ class EventAnnoucementModule extends Module {
         clearTimeout(this.interval);
     }
 
-    tick() {
+    async tick() {
         const time = moment();
         const checkTime = moment(this.checkTime[moment().isoWeekday() - 1], "HH:mm");
 
@@ -43,23 +43,20 @@ class EventAnnoucementModule extends Module {
         // tomorrow
         time.add(1, "days");
 
-        const events = this.eventModule.getEvents();
-        Object.keys(events).forEach(eventName => {
-            const event = events[eventName];
-            const eventValues = event.values;
-
-            let dateEnd = moment(eventValues.end, "D. M. YYYY");
+        const events = await this.eventModule.getEvents();
+        events.forEach(event => {
+            let dateEnd = moment(event.end, "D. M. YYYY");
             if (!dateEnd.isValid())
-                dateEnd = moment(eventValues.end, "D. M. YYYY HH:mm");
+                dateEnd = moment(event.end, "D. M. YYYY HH:mm");
 
-            let dateStart = moment(eventValues.start, "D. M. YYYY");
+            let dateStart = moment(event.start, "D. M. YYYY");
             if (!dateStart.isValid())
-                dateStart = moment(eventValues.start, "D. M. YYYY HH:mm");
+                dateStart = moment(event.start, "D. M. YYYY HH:mm");
 
             let name = "";
-            if (dateEnd.date() == time.date() && dateEnd.month() == time.month() && eventValues.end != eventValues.start)
+            if (dateEnd.date() == time.date() && dateEnd.month() == time.month() && event.end != event.start)
                 name = "ends";
-            else if (dateEnd.date() == time.date() && dateEnd.month() == time.month() && eventValues.end == eventValues.start)
+            else if (dateEnd.date() == time.date() && dateEnd.month() == time.month() && event.end == event.start)
                 name = "going";
             else if (dateStart.date() == time.date() && dateStart.month() == time.month())
                 name = "starts";
@@ -68,25 +65,25 @@ class EventAnnoucementModule extends Module {
                 return;
 
             const dmembed = new Discord.RichEmbed()
-                .setTitle("👁 " + Translation.translate("module.eventannoucement." + eventValues.type + ".title." + name))
+                .setTitle("👁 | " + Translation.translate("module.eventannoucement." + event.type + ".title." + name))
                 .setColor(Config.getColor("SUCCESS"))
-                .setDescription(Translation.translate("module.eventannoucement." + eventValues.type + ".description." + name, time.format("D. M. YYYY"), eventValues.title))
-                .addField(Translation.translate("module.eventannoucement.informations"), eventValues.description)
-                .addField(Translation.translate("module.eventannoucement.role"), eventValues.role, true)
-                .addField(Translation.translate("module.eventannoucement.subject"), eventValues.subject, true)
-                .addField(Translation.translate("module.eventannoucement.place"), eventValues.place, true);
+                .setDescription(Translation.translate("module.eventannoucement." + event.type + ".description." + name, time.format("D. M. YYYY"), event.title))
+                .addField(Translation.translate("module.eventannoucement.informations"), event.description)
+                .addField(Translation.translate("module.eventannoucement.role"), event.role, true)
+                .addField(Translation.translate("module.eventannoucement.subject"), event.subject, true)
+                .addField(Translation.translate("module.eventannoucement.place"), event.place, true);
 
             const embed = new Discord.RichEmbed()
-                .setTitle(("👁 " + Translation.translate("module.eventannoucement." + eventValues.type + ".title." + name)))
+                .setTitle(("👁 | " + Translation.translate("module.eventannoucement." + event.type + ".title." + name)))
                 .setColor(Config.getColor("SUCCESS"))
-                .setDescription(Translation.translate("module.eventannoucement." + eventValues.type + ".description." + name, time.format("D. M. YYYY"), eventValues.title))
-                .addField(Translation.translate("module.eventannoucement.informations"), eventValues.description)
-                .addField(Translation.translate("module.eventannoucement.role"), this.channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[eventValues.role]), true)
-                .addField(Translation.translate("module.eventannoucement.subject"), eventValues.subject, true)
-                .addField(Translation.translate("module.eventannoucement.place"), eventValues.place, true);
+                .setDescription(Translation.translate("module.eventannoucement." + event.type + ".description." + name, time.format("D. M. YYYY"), event.title))
+                .addField(Translation.translate("module.eventannoucement.informations"), event.description)
+                .addField(Translation.translate("module.eventannoucement.role"), this.channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]), true)
+                .addField(Translation.translate("module.eventannoucement.subject"), event.subject, true)
+                .addField(Translation.translate("module.eventannoucement.place"), event.place, true);
 
             /* this.channel.guild.members.forEach((member) => {
-                if (member.roles.has(this.eventModule.getMentionableRolesIds()[eventValues.role]))
+                if (member.roles.has(this.eventModule.getMentionableRolesIds()[event.role]))
                     member.createDM().then(dm => dm.send(dmembed));
 
             });*/
