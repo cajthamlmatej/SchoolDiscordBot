@@ -77,6 +77,16 @@ class EventCommand extends SubsCommand {
         const builder = new CommandBuilder("event.create", message.author, channel, [{
             "name": "type",
             "example": types,
+            "commands": [
+                {
+                    reaction: "🇪",
+                    value: "event"
+                },
+                {
+                    reaction: "🇹",
+                    value: "task"
+                }
+            ],
             "validate": (content) => {
                 if (!types.includes(content))
                     return ["command.event.type-not-valid", types.join(", ")];
@@ -94,6 +104,12 @@ class EventCommand extends SubsCommand {
         {
             "name": "name",
             "example": Translation.translate("builder.event.create.name.example").split(","),
+            "commands": [
+                {
+                    reaction: "➖",
+                    value: "-"
+                }
+            ],
             "validate": async (content) => {
                 if (await this.eventModule.exists(content))
                     return "command.event.already-exists";
@@ -136,6 +152,12 @@ class EventCommand extends SubsCommand {
         {
             "name": "end",
             "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "commands": [
+                {
+                    reaction: "➖",
+                    value: "-"
+                }
+            ],
             "validate": (content) => {
                 if (content == "-")
                     return true;
@@ -174,6 +196,12 @@ class EventCommand extends SubsCommand {
         {
             "name": "place",
             "example": Translation.translate("builder.event.create.place.example").split(","),
+            "commands": [
+                {
+                    reaction: "❓",
+                    value: "?"
+                }
+            ],
             "validate": (content) => {
                 return true;
             }
@@ -181,8 +209,44 @@ class EventCommand extends SubsCommand {
         {
             "name": "subject",
             "example": Translation.translate("builder.event.create.subject.example").split(","),
+            "commands": [
+                {
+                    reaction: "❓",
+                    value: "?"
+                }
+            ],
             "validate": (content) => {
+                if(content === "?")
+                    return true;
+
+                if(content.length < 3 || content.length > 3)
+                    return "command.event.wrong-subject-format";
+
+                const validCharacters ="abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
+
+                let passed = true;
+
+                content.split("").forEach(char => {
+                    if(!passed)
+                        return;
+
+                    if(!validCharacters.includes(char))
+                        passed = false;
+                });
+
+                if(!passed)
+                    return "command.event.wrong-subject-format";
+
                 return true;
+            },
+            "value": (content) => {
+                return content.toLowerCase().split("").map(function(letter) {
+                    const i = this.accents.indexOf(letter);
+                    return (i !== -1) ? this.acceOut[i] : letter;
+                }.bind({
+                    accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž",
+                    acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz"
+                })).join("").toUpperCase();
             }
         },
         {
@@ -195,6 +259,12 @@ class EventCommand extends SubsCommand {
         {
             "name": "files",
             "example": "",
+            "commands": [
+                {
+                    reaction: "❓",
+                    value: "?"
+                }
+            ],
             "validate": (content) => {
                 return true;
             },
@@ -217,11 +287,13 @@ class EventCommand extends SubsCommand {
             let end = values["end"];
 
             Object.keys(this.placeholders).forEach(placeholder => {
+                const placeholderObj = this.placeholders[placeholder];
+
                 if (values["start"].toLowerCase().includes(placeholder))
-                    start = moment().add(this.placeholders[placeholder], "days").format("D. M. YYYY");
+                    start = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
 
                 if (values["end"].toLowerCase().includes(placeholder))
-                    end = moment().add(this.placeholders[placeholder], "days").format("D. M. YYYY");
+                    end = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
             });
 
             this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, values["files"]);
@@ -267,10 +339,36 @@ class EventCommand extends SubsCommand {
                     if (!eventTypes.includes(content))
                         return ["command.event.type-not-valid", eventTypes.join(", ")];
 
-                } else if (type == "role")
-                    if (!this.eventModule.isMentionableRole(content)) {
+                } else if (type == "role") {
+                    if (!this.eventModule.isMentionableRole(content)) 
                         return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
-                    }
+                    
+                } else if (type == "subject") {
+                    content = content.toUpperCase();
+
+                    if(content === "?")
+                        return true;
+
+                    if(content.length < 3 || content.length > 3)
+                        return "command.event.wrong-subject-format";
+
+                    const validCharacters ="abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
+
+                    let passed = true;
+
+                    content.split("").forEach(char => {
+                        if(!passed)
+                            return;
+
+                        if(!validCharacters.includes(char))
+                            passed = false;
+                    });
+
+                    if(!passed)
+                        return "command.event.wrong-subject-format";
+
+                    return true;
+                }
 
                 return true;
             }
@@ -311,8 +409,7 @@ class EventCommand extends SubsCommand {
 
         Object.keys(this.placeholders).forEach(placeholder => {
             if (dateString.includes(placeholder))
-                date = moment().add(this.placeholders[placeholder], "days");
-
+                date = moment().add(this.placeholders[placeholder].quantity, this.placeholders[placeholder].unit);
         });
 
         if (date == undefined)

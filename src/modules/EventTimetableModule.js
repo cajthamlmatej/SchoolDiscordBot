@@ -18,266 +18,272 @@ class EventTimetableModule extends Module {
         this.channel = bot.client.channels.find(channel => channel.id === Config.get("channels.timetable"));
         this.eventModule = bot.modules.eventmodule;
 
-        this.update();
+        await this.update();
     }
 
     async update() {
-        if(this.eventModule == undefined)
+        if (this.eventModule == undefined)
             return;
 
         const channel = this.channel;
-        channel.bulkDelete(50).catch(e => {});
+        await channel.bulkDelete(50).catch(e => { });
 
-        // Week
-        await this.printWeek(channel);
-        await this.printNextWeek(channel);
-        // Timetable
-        await this.printTimetable(channel);
-    }
-
-    async printTimetable(channel) {
-        const events = await eventRepository.getAllEvents();
-        const eventsDates = {};
-
-        const mondayDay = moment();
-        if(mondayDay.weekday() == "Saturday" || mondayDay.weekday() == "Sunday") 
-            while (mondayDay.weekday() !== moment().day("Monday").weekday())
-                mondayDay.add(1, "day");
-        else 
-            while (mondayDay.weekday() !== moment().day("Monday").weekday())
-                mondayDay.subtract(1, "day");
-
-        const fridayDay = mondayDay.clone();
-        while (fridayDay.weekday() !== moment().day("Friday").weekday())
-            fridayDay.add(1, "day");
-
-        const dates = this.getRangeOfDates(mondayDay, fridayDay, "day");
-
-        dates.forEach(date => {
-            eventsDates[date.format("D. M. YYYY")] = {full: [], others: []};
-        });
-        events.forEach(event => {
-            let dateEnd = moment(event.end, "D. M. YYYY");
-            if (!dateEnd.isValid())
-                dateEnd = moment(event.end, "D. M. YYYY HH:mm");
-
-            let dateStart = moment(event.start, "D. M. YYYY");
-            if (!dateStart.isValid())
-                dateStart = moment(event.start, "D. M. YYYY HH:mm");
-
-            if(dateStart.format("D. M. YYYY") != dateEnd.format("D. M. YYYY")) {
-                if (eventsDates[dateStart.format("D. M. YYYY")] != undefined)
-                    eventsDates[dateStart.format("D. M. YYYY")].full.push(event);
-                    
-                if (eventsDates[dateEnd.format("D. M. YYYY")] != undefined)
-                    eventsDates[dateEnd.format("D. M. YYYY")].full.push(event);
-            } else 
-            if (eventsDates[dateEnd.format("D. M. YYYY")] != undefined)
-                eventsDates[dateEnd.format("D. M. YYYY")].others.push(event);
-            
-        });
-
-        let eventsText = "";
-        const days = ["Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek"];
-        let daysCounter = 0;
-        let counter = 0;
-        const groups = {};
-
-        Object.keys(eventsDates).forEach((date) => {
-            const events = eventsDates[date];
-
-            eventsText += "<li class=\"events-group\"><div class=\"top-info\"><span>" + days[daysCounter++] + "</span></div><ul>";
-
-            let lastDate = moment(date, "D. M. YYYY").set("hours", 8);
-            events.others.forEach((event) => {
-                counter++;
-
-                let dateEnd = moment(event.end, "D. M. YYYY HH:mm");
-                if (!dateEnd.isValid())
-                    dateEnd = moment(event.end, "D. M. YYYY");
-    
-                let dateStart = moment(event.start, "D. M. YYYY HH:mm");
-                if (!dateStart.isValid())
-                    dateStart = moment(event.start, "D. M. YYYY");
-
-                if(dateStart.hours() < 8) {
-                    dateStart.set("hour", 8);
-                    dateEnd.set("minutes", 0);
-                }
-                if(dateEnd.hours() > 17) {
-                    dateEnd.set("hour", 17);
-                    dateEnd.set("minutes", 30);
-                }
-                
-                lastDate = dateEnd.clone();
-
-                eventsText += `
-                <li class="single-event" data-start="` + dateStart.format("HH:mm") + "\" data-end=\"" + dateEnd.format("HH:mm") + `"
-                    data-event="event-` + counter + "\" data-group=\"" + event.role + `">
-                    <a href="#0">
-                        <em class="event-name">` + event.subject + " | " + (event.title == event.title.substring(0, 16) ? event.title : event.title.substring(0, 16)) + `</em>
-                    </a>
-                </li>`;
-
-                if(groups[event.role] == undefined) 
-                    groups[event.role] = channel.guild.roles.get(Config.get("roles.mentionable." + event.role)).hexColor;
-                
-            });
-
-            events.full.forEach((event) => {
-                counter++;
-
-                let dateEnd = moment(event.end, "D. M. YYYY HH:mm");
-                if (!dateEnd.isValid())
-                    dateEnd = moment(event.end, "D. M. YYYY");
-    
-                let dateStart = moment(event.start, "D. M. YYYY HH:mm");
-                if (!dateStart.isValid())
-                    dateStart = moment(event.start, "D. M. YYYY");
-
-                let title;
-                if(dateEnd.format("D. M. YYYY") == date) 
-                    title = "KONEC";
-                
-                if(dateStart.format("D. M. YYYY") == date) 
-                    title = "ZAČÁTEK";
-
-                dateStart = lastDate.clone();
-                lastDate = lastDate.add(45, "minutes");
-                dateEnd = lastDate.clone();
-
-                eventsText += `
-                <li class="single-event" data-time="` + title + "\" data-start=\"" + dateStart.format("HH:mm") + "\" data-end=\"" + dateEnd.format("HH:mm") + `"
-                    data-event="event-` + counter + "\" data-group=\"" + event.role + `">
-                    <a href="#0">
-                        <em class="event-name">` + event.subject + " | " + (event.title == event.title.substring(0, 16) ? event.title : event.title.substring(0, 16)) + `</em>
-                    </a>
-                </li>`;
-
-                if(groups[event.role] == undefined) 
-                    groups[event.role] = channel.guild.roles.get(Config.get("roles.mentionable." + event.role)).hexColor;
-                
-            });
-
-            eventsText += "</ul></li>";
-        });
-
-        let groupText = "";
-
-        Object.keys(groups).forEach(group => {
-            groupText += `
-            .cd-schedule .single-event[data-group="`+group+`"],
-            .cd-schedule [data-event="`+group+`"] .header-bg {
-              background: `+groups[group]+`;
-            }`;
-        });
-
-        const browser = await puppeteer.launch({args: ["--no-sandbox", "--disable-setuid-sandbox"]});
-        const page = await browser.newPage();
-        await page.setViewport({
-            width: 1440,
-            height: 1100,
-            deviceScaleFactor: 1,
-        });            
-        await page.setContent((await fs.readFileSync("./src/graphic/timetable.html") + "")
-            .replace("{events}", eventsText)
-            .replace("{groups}", groupText)
-            .replace("{week_number}", moment().weeksInYear())
-            .replace("{start_date}", mondayDay.format("D. M. YYYY"))
-            .replace("{end_date}", fridayDay.format("D. M. YYYY")));
-        const session = await page.target().createCDPSession();
-        await session.send("Emulation.setPageScaleFactor", {
-            pageScaleFactor: 1,
-        });
-        await page.screenshot({path: "timetable.png"});// , fullPage: true})
-        await browser.close();
-
-        await channel.send(new Discord.Attachment("timetable.png"));
-
-    }
-
-    async printWeek(channel) {
-        const mondayDay = moment();
+        let mondayDay = moment();
         while (mondayDay.weekday() !== moment().day("Monday").weekday())
             mondayDay.subtract(1, "day");
-
-        const sundayDay = mondayDay.clone();
-        while (sundayDay.weekday() !== moment().day("Sunday").weekday())
-            sundayDay.add(1, "day");
-
-        const dates = this.getRangeOfDates(mondayDay, sundayDay, "day");
-
-        const datesInfo = {};
-        await this.asyncForEach(dates, async (date) => {
-            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date, true);
-            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date, true);
-            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date, true);
-            const events = startsEvents.concat(endsEvents).concat(goingEvents);
-
-            let string = "";
-            if (events != null)
-                events.forEach(event => {
-                    string += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + "\n";
-                });
-
-            if (string == "")
-                string = Translation.translate("command.event.check.week.no-event-found");
-
-            datesInfo[date] = { "date": date, "data": string };
-        });
-
-        const embed = new Discord.RichEmbed()
-            .setTitle(Translation.translate("command.event.check.week.title", ""))
-            .setColor(Config.getColor("SUCCESS"))
-            .setDescription(Translation.translate("command.event.check.description"));
-
-        Object.keys(datesInfo).forEach(date => {
-            embed.addField(Translation.translate("command.event.check.week." + datesInfo[date].date.isoWeekday()) + " " + datesInfo[date].date.format("D. M."), datesInfo[date].data);
-        });
-
-        await channel.send(embed);
-    }
-
-    async printNextWeek(channel) {
-        const mondayDay = moment();
+        await this.printTimetable(channel, mondayDay);
+        
+        mondayDay = moment();
+        mondayDay.add(1, "day");
         while (mondayDay.weekday() !== moment().day("Monday").weekday())
             mondayDay.add(1, "day");
 
+        await this.printTimetable(channel, mondayDay);
+        
+        mondayDay.add(1, "day");
+        while (mondayDay.weekday() !== moment().day("Monday").weekday())
+            mondayDay.add(1, "day");
+
+        await this.printTimetable(channel, mondayDay);
+    }
+
+    getTimetable(day) {
+        let events = [];
+        switch (day.weekday()) {
+        case 1:
+            events = [
+                {
+                    title: "ANG",
+                    start: "08:00",
+                    end: "08:45"
+                },
+                {
+                    title: "MAT",
+                    start: "08:55",
+                    end: "09:40"
+                },
+                {
+                    title: "OSC & PVA",
+                    start: "10:00",
+                    end: "11:40"
+                },
+                {
+                    title: "PRA",
+                    start: "11:50",
+                    end: "12:35"
+                },
+
+                {
+                    title: "TEV",
+                    start: "13:40",
+                    end: "15:20"
+                }
+            ];
+            break;
+        case 2:
+            events = [
+                {
+                    title: "MAP",
+                    start: "08:00",
+                    end: "09:40"
+                },
+                {
+                    title: "MAT",
+                    start: "10:00",
+                    end: "10:45"
+                },
+                {
+                    title: "CJL",
+                    start: "10:55",
+                    end: "11:40"
+                },
+                {
+                    title: "FYZ",
+                    start: "11:50",
+                    end: "12:35"
+                },
+            ];
+            break;
+        case 3:
+            events = [
+                {
+                    title: "VYT",
+                    start: "08:00",
+                    end: "09:40"
+                },
+                {
+                    title: "ANG",
+                    start: "10:00",
+                    end: "10:45"
+                },
+                {
+                    title: "MAT",
+                    start: "10:55",
+                    end: "11:40"
+                },
+                {
+                    title: "CJL",
+                    start: "11:50",
+                    end: "12:35"
+                },
+                {
+                    title: "EKO",
+                    start: "12:45",
+                    end: "13:30"
+                },
+            ];
+            break;
+        case 4:
+
+            events = [
+                {
+                    title: "MAT",
+                    start: "08:00",
+                    end: "08:45"
+                },
+                {
+                    title: "ONA",
+                    start: "08:55",
+                    end: "09:40"
+                },
+                {
+                    title: "ANG & CJL",
+                    start: "10:00",
+                    end: "10:45"
+                },
+                {
+                    title: "OSY",
+                    start: "10:55",
+                    end: "11:40"
+                },
+                {
+                    title: "PVA & OSC",
+                    start: "11:50",
+                    end: "13:30"
+                },
+            ];
+            break;
+        case 5:
+
+            events = [
+                {
+                    title: "MAT",
+                    start: "08:00",
+                    end: "08:45"
+                },
+                {
+                    title: "CJL & ANG",
+                    start: "08:55",
+                    end: "09:40"
+                },
+
+                {
+                    title: "EKO",
+                    start: "10:00",
+                    end: "10:45"
+                },
+                {
+                    title: "FYZ",
+                    start: "10:55",
+                    end: "11:40"
+                },
+                {
+                    title: "VOP",
+                    start: "11:50",
+                    end: "14:25"
+                },
+            ];
+            break;
+        }
+        let eventsText = "";
+
+        const today = day.format("YYYY-MM-DD");
+        events.forEach(event => {
+            eventsText += `
+                {
+                    startDate: new Date("` + moment(today + " " + event.start).toDate() + `"),
+                    endDate: new Date("` + moment(today + " " + event.end).toDate() + `"),
+                    title: "` + event.title + `",
+                    class: "school",
+                    background: "true",
+                },
+            `;
+        });
+
+        return eventsText;
+    }
+
+    getIconForSubject(subject) {
+        switch (subject) {
+        case "CJL":
+            return "book-reader";
+        case "MAT":
+            return "divide";
+        case "EKO":
+            return "ghost";
+        case "PRO":
+            return "balance-scale";
+        case "FYZ":
+            return "apple-alt";
+        case "ANG":
+            return "comments";
+        case "TEV":
+            return "weight-hanging";
+        case "OSY":
+            return "network-wired";
+        case "PVA":
+            return "keyboard";
+        }
+
+        return "question";
+    }
+
+    async printTimetable(channel, mondayDay) {
+        const events = await eventRepository.getAllEvents();
+        let eventsText = "";
+
+        events.forEach(event => {
+            const startDate = moment(event.start, "D. M. YYYY HH:mm").toDate();
+            const endDate = moment(event.end, "D. M. YYYY HH:mm").toDate();
+            eventsText += `
+                {
+                    startDate: new Date("` + startDate + `"),
+                    endDate: new Date("` + endDate + `"),
+                    title: "` + event.title + `",
+                    content: "<i class='fas fa-` + this.getIconForSubject(event.subject) + "'></i> " + (event.subject === "?" ? "" : event.subject) + `",
+                    class: "` + event.role + `",
+                    allDay: ` + (endDate.toString() == startDate.toString()) + `
+                },
+            `;
+        });
+
         const sundayDay = mondayDay.clone();
         while (sundayDay.weekday() !== moment().day("Sunday").weekday())
             sundayDay.add(1, "day");
 
         const dates = this.getRangeOfDates(mondayDay, sundayDay, "day");
 
-        const datesInfo = {};
-        await this.asyncForEach(dates, async (date) => {
-            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date, true);
-            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date, true);
-            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date, true);
-            const events = startsEvents.concat(endsEvents).concat(goingEvents);
-
-            let string = "";
-            if (events != null)
-                events.forEach(event => {
-                    string += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + "\n";
-                });
-
-            if (string == "")
-                string = Translation.translate("command.event.check.nextweek.no-event-found");
-
-            datesInfo[date] = { "date": date, "data": string };
+        dates.forEach(date => {
+            eventsText += this.getTimetable(date);
         });
 
-        const embed = new Discord.RichEmbed()
-            .setTitle(Translation.translate("command.event.check.nextweek.title", ""))
-            .setColor(Config.getColor("SUCCESS"))
-            .setDescription(Translation.translate("command.event.check.description"));
-
-        Object.keys(datesInfo).forEach(date => {
-            embed.addField(Translation.translate("command.event.check.week." + datesInfo[date].date.isoWeekday()) + " " + datesInfo[date].date.format("D. M."), datesInfo[date].data);
+        const browser = await puppeteer.launch({ args: ["--no-sandbox", "--disable-setuid-sandbox"] });
+        const page = await browser.newPage();
+        await page.setViewport({
+            width: 1440,
+            height: 1400,
+            deviceScaleFactor: 1,
         });
+        await page.setContent((await fs.readFileSync("./src/graphic/timetable.html") + "")
+            .replace("__EVENTS__", eventsText)
+            .replace("__SELECTED_DATE__", mondayDay.format("YYYY-MM-DD")));
 
-        await channel.send(embed);
+        await page.waitFor(4000);
+        await page.screenshot({ path: "timetable.png" });
+
+        await channel.send(new Discord.Attachment("timetable.png"));
+        
+        await browser.close();
     }
 
     getRangeOfDates(start, end, key, arr = [start.startOf(key)]) {
@@ -292,13 +298,7 @@ class EventTimetableModule extends Module {
         return this.getRangeOfDates(next, end, key, arr.concat(next));
     }
 
-    async asyncForEach(array, callback) {
-        for (let index = 0; index < array.length; index++) 
-            await callback(array[index], index, array);
-        
-    }
-
-    event(name, args) {}
+    event(name, args) { }
 
 }
 

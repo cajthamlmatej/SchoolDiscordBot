@@ -4,6 +4,8 @@ const Config = require("./Config");
 
 const activeBuilders = {};
 
+const STOP_EMOTE = "🛑";
+
 class CommandBuilder {
 
     constructor(name, user, channel, fields, end) {
@@ -17,28 +19,64 @@ class CommandBuilder {
     }
 
     async start() {
-        await this.build.channel.send(await this.generateHelpEmbed(this.build.fields[this.field])).then(message => {
+        await this.build.channel.send(await this.generateHelpEmbed(this.build.fields[this.field])).then(async (message) => {
             this.message = message;
-            this.collector = new Discord.MessageCollector(this.build.channel, m => m.author.id === this.build.user.id && m.channel.id === this.build.channel.id);
-            this.collector.on("collect", (message) => { this.collect(message); });
-            this.collector.on("end", (messages, reason) => { this.end(messages, reason); });
+            this.messageCollector = new Discord.MessageCollector(this.build.channel, m => m.author.id === this.build.user.id && m.channel.id === this.build.channel.id);
+            this.messageCollector.on("collect", (message) => { this.collectMessage(message); });
+            this.messageCollector.on("end", (messages, reason) => { this.endMessage(messages, reason); });
+
+            await this.refreshReactions();
+
+            const filter = (reaction, user) => user.id === this.build.user.id;
+            this.reactionCollector = message.createReactionCollector(filter);
+            this.reactionCollector.on("collect", reaction => this.collectReaction(reaction) );
 
             if(activeBuilders[this.build.user.id] == undefined)
                 activeBuilders[this.build.user.id] = [this.build.channel.id];
             else 
             if(activeBuilders[this.build.user.id].includes(this.build.channel.id)) 
-                this.collector.stop("forced-builder-exist");
+                this.messageCollector.stop("forced-builder-exist");
             else
                 activeBuilders[this.build.user.id].push(this.build.channel.id);
         });
         
     }
 
-    async collect(message) {
+    async refreshReactions() {
+        const field = this.build.fields[this.field];
+
+        let result = Promise.resolve();
+
+        result = result.then(async () => {
+            await this.message.clearReactions();
+        });
+        /*
+        console.log(this.message.reactions.map(r => r.emoji))
+
+        this.message.reactions.forEach(reaction => {
+            if(reaction.emoji.name != STOP_EMOTE)
+                result = result.then(reaction.remove());
+        });*/
+
+        result = result.then(async () => {
+            await this.message.react(STOP_EMOTE);
+        });
+
+        if (field.commands === undefined)
+            return;
+        
+        const reactions = field["commands"].map(cmd => cmd.reaction);
+
+        reactions.forEach(async (option) => {
+            result = result.then(async () => await this.message.react(option));
+        });
+    }
+
+    async collectMessage(message) {
         let messageContent = message.content;
 
         if (messageContent.toLowerCase() == this.stopWord.toLowerCase()) 
-            this.collector.stop("forced");
+            this.messageCollector.stop("forced");
         else {
             const field = this.build.fields[this.field];
             if (field.value != undefined) 
@@ -50,21 +88,26 @@ class CommandBuilder {
                 this.values[field.name] = messageContent;
 
                 if (this.build.fields[this.field + 1] == undefined) 
-                    this.collector.stop("fieldEnd");
+                    this.messageCollector.stop("fieldEnd");
                 else {
                     this.field += 1;
 
-                    this.message.edit(await this.generateHelpEmbed(this.build.fields[this.field]));
+                    await this.message.edit(await this.generateHelpEmbed(this.build.fields[this.field]));
+                    await this.refreshReactions();
                 }
             } else 
-                this.message.edit(await this.generateHelpEmbed(this.build.fields[this.field], passed));
+                await this.message.edit(await this.generateHelpEmbed(this.build.fields[this.field], passed));
 
             message.delete().catch(() => {});
         }
     }
 
-    async end(messages, reason) {
-        this.message.edit(await this.generateEndEmbed(reason));
+    async endMessage(messages, reason) {
+        await this.message.edit(await this.generateEndEmbed(reason));
+        await this.refreshReactions();
+        
+        await this.message.clearReactions();
+        this.reactionCollector.stop();
 
         switch (reason) {
         case "forced-builder-exist":
@@ -80,6 +123,35 @@ class CommandBuilder {
             });
             this.endFunction(this.values);
             break;
+        }
+    }
+
+    async collectReaction(reaction) {
+        if (reaction.emoji.name === STOP_EMOTE)
+            return this.messageCollector.stop("forced");
+
+        const field = this.build.fields[this.field];
+
+        if (field.commands != undefined) {
+            const reactions = field.commands.map(cmd => cmd.reaction);
+
+            if(!reactions.includes(reaction.emoji.name))
+                return;
+            
+            let value = field.commands.find(cmd => cmd.reaction === reaction.emoji.name).value;
+            if (field.value != undefined) 
+                value = await field.value(value, this.values, []);
+
+            this.values[field.name] = value;
+
+            if (this.build.fields[this.field + 1] == undefined) 
+                this.messageCollector.stop("fieldEnd");
+            else {
+                this.field += 1;
+
+                await this.message.edit(await this.generateHelpEmbed(this.build.fields[this.field]));
+                await this.refreshReactions();
+            }
         }
     }
 

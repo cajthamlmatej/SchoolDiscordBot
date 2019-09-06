@@ -4,7 +4,7 @@
     "roles.group.mentionable": "📢 Mentionable roles",
     "roles.group.assignable": "📛 Assignable roles",
     "roles.group.special": "☢ Special roles",
-    "roles.group.permission": "🚫 Roles for permissions",
+    "roles.group.permissions": "🚫 Roles for permissions",
 
     "spam.alert.title": "Wait please!",
     "spam.alert": "You are sending commands too fast, please wait a few seconds before sending another command.",
@@ -139,6 +139,7 @@
     "command.event.info.title.task": "Information about task {0}",
     "command.event.info.history.title.event": "History of event {0} #{1}",
     "command.event.info.history.title.task": "History of task {0} #{1}",
+    "command.event.wrong-subject-format": "The subject format must be? or have exactly 3 characters without diacritics, spaces, or commas.",
 
     "command.help.title": "Bot help",
     "command.help.can-execute": "List of commands that you can execute.",
@@ -349,7 +350,7 @@
     "module.eventannoucement.place": "Place",
 
     "builder.example": "Example of usage: {0}",
-    "builder.stop": "For stop, enter \"{0}\"",
+    "builder.stop": "For stop, enter \"{0}\" or react to first reaction.",
     "builder.error": "Error",
     "builder.end": "Builder was ended, nothing was saved.",
     "builder.end.exist": "Builder was ended because builder already exist in this channel for this user, nothing was saved.",
@@ -375,7 +376,7 @@
     "builder.event.create.place.example": "School,Wall Street,Wenceslas Square",
     "builder.event.create.subject.title": "Subject of event",
     "builder.event.create.subject.help": "Enter subject of the event.",
-    "builder.event.create.subject.example": "ICT,Math",
+    "builder.event.create.subject.example": "ICT,MAT",
     "builder.event.create.description.title": "Description of event",
     "builder.event.create.description.help": "Enter decription and other informations about event.",
     "builder.event.create.description.example": "Description of the event",
