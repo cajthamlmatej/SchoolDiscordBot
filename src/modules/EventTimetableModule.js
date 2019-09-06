@@ -53,28 +53,28 @@ class EventTimetableModule extends Module {
         case 1:
             events = [
                 {
-                    title: "ANG",
+                    title: "ANG (308 & 113)",
                     start: "08:00",
                     end: "08:45"
                 },
                 {
-                    title: "MAT",
+                    title: "MAT (113)",
                     start: "08:55",
                     end: "09:40"
                 },
                 {
-                    title: "OSC & PVA",
+                    title: "OSC & PVA (102 & 402)",
                     start: "10:00",
                     end: "11:40"
                 },
                 {
-                    title: "PRA",
+                    title: "PRA (113)",
                     start: "11:50",
                     end: "12:35"
                 },
 
                 {
-                    title: "TEV",
+                    title: "TEV (114)",
                     start: "13:40",
                     end: "15:20"
                 }
@@ -83,22 +83,22 @@ class EventTimetableModule extends Module {
         case 2:
             events = [
                 {
-                    title: "MAP",
+                    title: "MAP (402 & 6)",
                     start: "08:00",
                     end: "09:40"
                 },
                 {
-                    title: "MAT",
+                    title: "MAT  (111)",
                     start: "10:00",
                     end: "10:45"
                 },
                 {
-                    title: "CJL",
+                    title: "CJL  (111)",
                     start: "10:55",
                     end: "11:40"
                 },
                 {
-                    title: "FYZ",
+                    title: "FYZ  (111)",
                     start: "11:50",
                     end: "12:35"
                 },
@@ -107,27 +107,27 @@ class EventTimetableModule extends Module {
         case 3:
             events = [
                 {
-                    title: "VYT",
+                    title: "VYT (404 & 410)",
                     start: "08:00",
                     end: "09:40"
                 },
                 {
-                    title: "ANG",
+                    title: "ANG (308 & 216)",
                     start: "10:00",
                     end: "10:45"
                 },
                 {
-                    title: "MAT",
+                    title: "MAT (216)",
                     start: "10:55",
                     end: "11:40"
                 },
                 {
-                    title: "CJL",
+                    title: "CJL  (216)",
                     start: "11:50",
                     end: "12:35"
                 },
                 {
-                    title: "EKO",
+                    title: "EKO  (216)",
                     start: "12:45",
                     end: "13:30"
                 },
@@ -137,27 +137,27 @@ class EventTimetableModule extends Module {
 
             events = [
                 {
-                    title: "MAT",
+                    title: "MAT (110)",
                     start: "08:00",
                     end: "08:45"
                 },
                 {
-                    title: "ONA",
+                    title: "ONA (110)",
                     start: "08:55",
                     end: "09:40"
                 },
                 {
-                    title: "ANG & CJL",
+                    title: "ANG & CJL (308 & 110)",
                     start: "10:00",
                     end: "10:45"
                 },
                 {
-                    title: "OSY",
+                    title: "OSY (110)",
                     start: "10:55",
                     end: "11:40"
                 },
                 {
-                    title: "PVA & OSC",
+                    title: "PVA & OSC (408 & 6)",
                     start: "11:50",
                     end: "13:30"
                 },
@@ -167,23 +167,23 @@ class EventTimetableModule extends Module {
 
             events = [
                 {
-                    title: "MAT",
+                    title: "MAT (213)",
                     start: "08:00",
                     end: "08:45"
                 },
                 {
-                    title: "CJL & ANG",
+                    title: "CJL & ANG (213 & 307)",
                     start: "08:55",
                     end: "09:40"
                 },
 
                 {
-                    title: "EKO",
+                    title: "EKO (213)",
                     start: "10:00",
                     end: "10:45"
                 },
                 {
-                    title: "FYZ",
+                    title: "FYZ (213)",
                     start: "10:55",
                     end: "11:40"
                 },
