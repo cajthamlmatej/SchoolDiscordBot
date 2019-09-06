@@ -98,7 +98,7 @@ class EventTimetableModule extends Module {
                     end: "11:40"
                 },
                 {
-                    title: "FYZ  (111)",
+                    title: "FYZ (111)",
                     start: "11:50",
                     end: "12:35"
                 },
