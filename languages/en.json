@@ -60,6 +60,7 @@
     "commands.help.module.disable": "Disables module",
     "commands.help.chladkova": "Print proverb",
     "commands.help.timetable": "Timetable managment",
+    "commands.help.event.info": "Information about the selected event",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
