@@ -393,6 +393,8 @@ class EventCommand extends SubsCommand {
         }
 
         await this.eventModule.deleteEvent(name);
+        
+        message.react("✅");
     }
 
     callList(args, message) {

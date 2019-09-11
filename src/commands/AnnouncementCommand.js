@@ -8,19 +8,19 @@ class AnnouncementCommand extends SubsCommand {
         return {
             "create": {
                 "arguments": 0,
-                "roles": ["admin"]
+                "roles": ["moderator"]
             },
             "list": {
                 "arguments": 0,
-                "roles": ["admin"]
+                "roles": ["moderator"]
             },
             "edit": {
                 "arguments": 0,
-                "roles": ["admin"]
+                "roles": ["moderator"]
             },
             "delete": {
                 "arguments": 1,
-                "roles": ["admin"]
+                "roles": ["moderator"]
             }
         };
     }

@@ -60,6 +60,7 @@
     "commands.help.module.disable": "Vypne modul",
     "commands.help.chladkova": "Napíše přísloví",
     "commands.help.timetable": "Správa rozvrhu",
+    "commands.help.event.info": "Informace o zvoleném eventu",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
