@@ -63,7 +63,7 @@ class EventTimetableModule extends Module {
                     end: "09:40"
                 },
                 {
-                    title: "OSC & PVA (102 & 402)",
+                    title: "OSY (102)",
                     start: "10:00",
                     end: "11:40"
                 },
@@ -126,11 +126,6 @@ class EventTimetableModule extends Module {
                     start: "11:50",
                     end: "12:35"
                 },
-                {
-                    title: "EKO (216)",
-                    start: "12:45",
-                    end: "13:30"
-                },
             ];
             break;
         case 4:
@@ -152,12 +147,12 @@ class EventTimetableModule extends Module {
                     end: "10:45"
                 },
                 {
-                    title: "OSY (110)",
+                    title: "EKO (110)",
                     start: "10:55",
                     end: "11:40"
                 },
                 {
-                    title: "PVA & OSC (408 & 6)",
+                    title: "PVA (408 & 6)",
                     start: "11:50",
                     end: "13:30"
                 },
