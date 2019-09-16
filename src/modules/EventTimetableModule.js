@@ -53,7 +53,7 @@ class EventTimetableModule extends Module {
         case 1:
             events = [
                 {
-                    title: "ANG (308 & 113)",
+                    title: "ANG (308 & 306)",
                     start: "08:00",
                     end: "08:45"
                 },
