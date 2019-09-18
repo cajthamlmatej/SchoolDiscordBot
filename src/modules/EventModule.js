@@ -103,7 +103,7 @@ class EventModule extends Module {
                     embed: this.generateEmbed(event, author)
                 });
 
-                if(!["name", "place", "type"].includes(type) && this.timetableModule != undefined)
+                if(["title", "start", "end", "role", "subject"].includes(type) && this.timetableModule != undefined)
                     this.timetableModule.update();
             });
         });
