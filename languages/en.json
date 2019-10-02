@@ -409,5 +409,14 @@
     "builder.annoucement.edit.type.title": "Type of editing",
     "builder.annoucement.edit.type.help": "Enter type of values that you want to edit.",
     "builder.annoucement.edit.value.title": "Valei",
-    "builder.annoucement.edit.value.help": "Enter value of type that you want to edit."
+    "builder.annoucement.edit.value.help": "Enter value of type that you want to edit.",
+
+    "builder.mute.add.member.title": "Name of member",
+    "builder.mute.add.member.help": "Enter name of member",
+    "builder.mute.add.title": "Mute a member",
+    "builder.mute.add.minutes.title": "Period of mute",
+    "builder.mute.add.minutes.help": "Enter in minutes for how long you want to mute a member",
+    "builder.mute.add.reason.title": "Reason of mute",
+    "builder.mute.add.reason.help": "Enter a reason for muting member",
+    "builder.mute.add.ok": "Builder is complete. Member is muted"
 }
