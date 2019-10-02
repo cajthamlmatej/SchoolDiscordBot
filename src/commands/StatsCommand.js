@@ -103,7 +103,7 @@ class StatsCommand extends Command {
         const embed = new Discord.RichEmbed()
             .setTitle("📜 | " + Translation.translate("command.stats.title"))
             .addField(Translation.translate("command.stats.number-of-events"), Translation.translate("command.stats.count-all", eventCount.all, eventCount.archived, Math.round(eventCount.all / 193 * 100) / 100), true)
-            .addField(Translation.translate("command.stats.types"), Translation.translate("command.stats.count-all", eventCount.eventAll, eventCount.eventArchived, eventCount.taskAll, eventCount.taskArchived), true)
+            .addField(Translation.translate("command.stats.types"), Translation.translate("command.stats.count-types", eventCount.eventAll, eventCount.eventArchived, eventCount.taskAll, eventCount.taskArchived), true)
             .addBlankField()
             .addField(Translation.translate("command.stats.for-subjects"), subjectsText, true)
             .addField(Translation.translate("command.stats.for-groups"), rolesText, true)
