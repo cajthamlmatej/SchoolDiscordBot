@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[BUG] [branch]"
+title: "[BUG]"
 labels: ''
 assignees: cajthamlmatej
 
@@ -9,9 +9,6 @@ assignees: cajthamlmatej
 
 **Describe the bug**
 A clear and concise description of what the bug is.
-
-**Branch / version**
-In what branch the bug exists? (ALL, ssps, master)
 
 **To Reproduce**
 Steps to reproduce the behavior:
