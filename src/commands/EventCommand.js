@@ -426,14 +426,14 @@ class EventCommand extends SubsCommand {
             }
         }
 
-        const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date, true);
+        const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
         let starts = "";
 
         startsEvents.forEach(event => {
             starts += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
-        const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date, true);
+        const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
         const ends = "";
 
         endsEvents.forEach(event => {
@@ -441,7 +441,7 @@ class EventCommand extends SubsCommand {
             ends += "**" + event.title + "** - " + channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]) + " - *" + event.description + "*\n";
         });
 
-        const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date, true);
+        const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
         let going = "";
 
         goingEvents.forEach(event => {
@@ -485,9 +485,9 @@ class EventCommand extends SubsCommand {
         
         const datesInfo = {};
         await this.asyncForEach(dates, async (date) => {
-            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date, true);
-            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date, true);
-            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date, true);
+            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
+            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
+            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
             const events = startsEvents.concat(endsEvents).concat(goingEvents);
 
             let string = "";
@@ -529,9 +529,9 @@ class EventCommand extends SubsCommand {
 
         const datesInfo = {};
         await this.asyncForEach(dates, async (date) => {
-            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date, true);
-            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date, true);
-            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date, true);
+            const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
+            const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
+            const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
             const events = startsEvents.concat(endsEvents).concat(goingEvents);
 
             let string = "";
