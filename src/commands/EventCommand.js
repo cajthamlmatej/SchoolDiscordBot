@@ -216,7 +216,37 @@ class EventCommand extends SubsCommand {
                 }
             ],
             "validate": (content) => {
+                if(content === "?")
+                    return true;
+
+                if(content.length < 3 || content.length > 3)
+                    return "command.event.wrong-subject-format";
+
+                const validCharacters ="abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
+
+                let passed = true;
+
+                content.split("").forEach(char => {
+                    if(!passed)
+                        return;
+
+                    if(!validCharacters.includes(char))
+                        passed = false;
+                });
+
+                if(!passed)
+                    return "command.event.wrong-subject-format";
+
                 return true;
+            },
+            "value": (content) => {
+                return content.toLowerCase().split("").map(function(letter) {
+                    const i = this.accents.indexOf(letter);
+                    return (i !== -1) ? this.acceOut[i] : letter;
+                }.bind({
+                    accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž",
+                    acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz"
+                })).join("").toUpperCase();
             }
         },
         {
@@ -309,10 +339,36 @@ class EventCommand extends SubsCommand {
                     if (!eventTypes.includes(content))
                         return ["command.event.type-not-valid", eventTypes.join(", ")];
 
-                } else if (type == "role")
-                    if (!this.eventModule.isMentionableRole(content)) {
+                } else if (type == "role") {
+                    if (!this.eventModule.isMentionableRole(content)) 
                         return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
-                    }
+                    
+                } else if (type == "subject") {
+                    content = content.toUpperCase();
+
+                    if(content === "?")
+                        return true;
+
+                    if(content.length < 3 || content.length > 3)
+                        return "command.event.wrong-subject-format";
+
+                    const validCharacters ="abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
+
+                    let passed = true;
+
+                    content.split("").forEach(char => {
+                        if(!passed)
+                            return;
+
+                        if(!validCharacters.includes(char))
+                            passed = false;
+                    });
+
+                    if(!passed)
+                        return "command.event.wrong-subject-format";
+
+                    return true;
+                }
 
                 return true;
             }
@@ -337,6 +393,8 @@ class EventCommand extends SubsCommand {
         }
 
         await this.eventModule.deleteEvent(name);
+        
+        message.react("✅");
     }
 
     callList(args, message) {

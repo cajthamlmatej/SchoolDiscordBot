@@ -59,6 +59,8 @@
     "commands.help.module": "Správa modulů",
     "commands.help.module.disable": "Vypne modul",
     "commands.help.chladkova": "Napíše přísloví",
+    "commands.help.timetable": "Správa rozvrhu",
+    "commands.help.event.info": "Informace o zvoleném eventu",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
@@ -105,6 +107,7 @@
     "commands.usage.module": "<list/disable> <...>",
     "commands.usage.module.disable": "<jméno modulu>",
     "commands.usage.chladkova": "",
+    "commands.usage.timetable": "<refresh>",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
@@ -137,6 +140,7 @@
     "command.event.info.title.task": "Informace o úkolu {0}",
     "command.event.info.history.title.event": "Historie události {0} #{1}",
     "command.event.info.history.title.task": "Historie úkolu {0} #{1}",
+    "command.event.wrong-subject-format": "Formát předmětu musí být ? nebo mít přesně 3 znaky bez diakritiky, mezer a čátek.",
 
     "command.help.title": "Nápověda k používání bota",
     "command.help.can-execute": "Seznam příkazů, které můžete použít.",

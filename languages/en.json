@@ -59,6 +59,8 @@
     "commands.help.module": "Module managment",
     "commands.help.module.disable": "Disables module",
     "commands.help.chladkova": "Print proverb",
+    "commands.help.timetable": "Timetable managment",
+    "commands.help.event.info": "Information about the selected event",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
@@ -105,6 +107,7 @@
     "commands.usage.module": "<list/disable> <...>",
     "commands.usage.module.disable": "<name of module>",
     "commands.usage.chladkova": "",
+    "commands.usage.timetable": "<refresh>",
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",
@@ -137,6 +140,7 @@
     "command.event.info.title.task": "Information about task {0}",
     "command.event.info.history.title.event": "History of event {0} #{1}",
     "command.event.info.history.title.task": "History of task {0} #{1}",
+    "command.event.wrong-subject-format": "The subject format must be? or have exactly 3 characters without diacritics, spaces, or commas.",
 
     "command.help.title": "Bot help",
     "command.help.can-execute": "List of commands that you can execute.",

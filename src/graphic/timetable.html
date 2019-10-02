@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link href="https://unpkg.com/vue-cal/dist/vuecal.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css?family=Livvic:700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      height: 100vh;
+      width: 100%;
+    }
+    * {
+      padding: 0;
+      margin: 0;
+      font-family: 'Livvic', sans-serif;
+    }
+
+    #app  {
+      height: 100vh !important;
+      padding: 10px;
+    } 
+    
+    .vuecal {
+      height: 100vh !important;
+    }
+
+    .vuecal__event {
+      padding: 5px;
+      font-size: 1.2em;
+      flex-direction: column;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    } 
+    .vuecal__event .vuecal__event-title {
+      margin-top: 5Px;
+      margin-top: 5px;
+      width: 100%;
+    } 
+    .vuecal__event .vuecal__event-time {
+      margin-top: 5Px;
+      margin-top: 5px;
+      width: 100%;
+    } 
+    .vuecal__event .vuecal__event-content {
+      margin-top: 5Px;
+      margin-top: 5px;
+      width: 100%;
+    } 
+
+    .vuecal__event.school {
+      background: repeating-linear-gradient(45deg, transparent, transparent 10px, #f2f2f2 10px, #f2f2f2 20px);/* IE 10+ */
+      color: #999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .vuecal__event.school .vuecal__event-time {display: none;align-items: center;}
+
+    .vuecal__event.clen {background-color: rgba(250, 211, 144, 0.9); border-bottom: 4px solid rgba(246, 185, 59,1.0); color: #fff;}
+    .vuecal__event.sku1 {background-color: rgba(130, 204, 221, 0.9); border-bottom: 4px solid rgba(96, 163, 188, 1.0); color: #fff;}
+    .vuecal__event.sku2 {background-color: rgba(96, 163, 188, 0.9); border-bottom: 4px solid rgba(83, 150, 175, 1.0); color: #fff;}
+    .vuecal__event.anglepsi {background-color: rgba(184, 233, 148, 0.9); border-bottom: 4px solid rgba(120, 224, 143, 1.0); color: #fff;}
+    .vuecal__event.anghorsi {background-color: rgba(120, 224, 143, 0.9); border-bottom: 4px solid rgba(107, 211, 130, 1.0); color: #fff;}
+
+    .selected {
+      background-color: rgba(255, 255, 255) !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <vue-cal
+      selected-date="__SELECTED_DATE__"
+      :events="events"
+      show-all-day-events="true"
+      locale="cs"
+      hide-view-selector
+      hide-title-bar
+      time-cell-height="70"
+      :time-from="480" :time-to="16 * 60" :time-step="30"></vue-cal>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-cal"></script>
+  <script src="https://unpkg.com/vue-cal@2.4.0/dist/i18n/cs.js"></script>
+  <!--script src="https://cdn.jsdelivr.net/npm/vue"></script-->
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        events: [
+          __EVENTS__
+        ]
+      },
+      components: { 'vue-cal': vuecal },
+    })
+  </script>
+</body>
+</html>

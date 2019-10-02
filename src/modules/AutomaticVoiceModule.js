@@ -1,5 +1,6 @@
 const Module = require("./Module");
 const Config = require("../Config");
+const logger = require("../Logger");
 
 class AutomaticVoiceModule extends Module {
 
@@ -25,6 +26,7 @@ class AutomaticVoiceModule extends Module {
                 return;
 
             channel.delete();
+            logger.info("Deleting voice channel.");
         });
     }
 
@@ -38,6 +40,8 @@ class AutomaticVoiceModule extends Module {
                     args.newMember.setVoiceChannel(channel);
                 });
             });
+
+            logger.info("Created voice channel for " + args.newMember.displayName + ".");
 
             return;
         }
@@ -53,6 +57,7 @@ class AutomaticVoiceModule extends Module {
                     return;
 
                 voiceChannel.delete();
+                logger.info("Deleting voice channel.");
             }
         }
     }
