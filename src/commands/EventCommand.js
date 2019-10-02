@@ -74,7 +74,8 @@ class EventCommand extends SubsCommand {
         const channel = message.channel;
         const types = ["event", "task"];
 
-        const builder = new CommandBuilder("event.create", message.author, channel, [{
+        const builder = new CommandBuilder("event.create", message.author, channel, [
+        {
             "name": "type",
             "example": types,
             "commands": [
@@ -256,7 +257,7 @@ class EventCommand extends SubsCommand {
                 return true;
             }
         },
-        {
+        /*{
             "name": "files",
             "example": "",
             "commands": [
@@ -274,12 +275,13 @@ class EventCommand extends SubsCommand {
 
                 const files = [];
                 attachments.forEach(messageAttachment => {
+                    console.log(messageAttachment.proxyURL);
                     files.push(messageAttachment.url);
                 });
 
                 return files;
             }
-        }
+        }*/
         ], (values) => {
             logger.info("User " + message.member.displayName + " created event with name " + values["name"] + ".");
 
@@ -296,7 +298,7 @@ class EventCommand extends SubsCommand {
                     end = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
             });
 
-            this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, values["files"]);
+            this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, [] /*values["files"]*/);
         });
 
         builder.start();
