@@ -5,6 +5,7 @@ const Config = require("./Config");
 const activeBuilders = {};
 
 const STOP_EMOTE = "🛑";
+const BACK_EMOTE = "◀";
 
 class CommandBuilder {
 
@@ -58,6 +59,9 @@ class CommandBuilder {
                 result = result.then(reaction.remove());
         });*/
 
+        result = result.then(async () => {
+            await this.message.react(BACK_EMOTE);
+        });
         result = result.then(async () => {
             await this.message.react(STOP_EMOTE);
         });
@@ -129,6 +133,17 @@ class CommandBuilder {
     async collectReaction(reaction) {
         if (reaction.emoji.name === STOP_EMOTE)
             return this.messageCollector.stop("forced");
+
+        if (reaction.emoji.name === BACK_EMOTE) {
+            if (this.field != 0) {
+                this.field -= 1;
+
+                await this.message.edit(await this.generateHelpEmbed(this.build.fields[this.field]));
+                await this.refreshReactions();
+            }
+
+            return;
+        }
 
         const field = this.build.fields[this.field];
 
