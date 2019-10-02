@@ -15,6 +15,7 @@ class CommandBuilder {
         this.field = 0;
         this.values = {};
         this.endFunction = end;
+        this.reactionPromise = Promise.resolve();
 
         this.stopWord = Config.get("bot.builder.stop-word");
     }
@@ -46,23 +47,15 @@ class CommandBuilder {
     async refreshReactions() {
         const field = this.build.fields[this.field];
 
-        let result = Promise.resolve();
-
-        result = result.then(async () => {
+        this.reactionPromise = this.reactionPromise.then(async () => {
             await this.message.clearReactions();
         });
-        /*
-        console.log(this.message.reactions.map(r => r.emoji))
 
-        this.message.reactions.forEach(reaction => {
-            if(reaction.emoji.name != STOP_EMOTE)
-                result = result.then(reaction.remove());
-        });*/
-
-        result = result.then(async () => {
+        this.reactionPromise = this.reactionPromise.then(async () => {
             await this.message.react(BACK_EMOTE);
         });
-        result = result.then(async () => {
+
+        this.reactionPromise = this.reactionPromise.then(async () => {
             await this.message.react(STOP_EMOTE);
         });
 
@@ -72,7 +65,7 @@ class CommandBuilder {
         const reactions = field["commands"].map(cmd => cmd.reaction);
 
         reactions.forEach(async (option) => {
-            result = result.then(async () => await this.message.react(option));
+            this.reactionPromise = this.reactionPromise.then(async () => await this.message.react(option));
         });
     }
 
@@ -108,9 +101,15 @@ class CommandBuilder {
 
     async endMessage(messages, reason) {
         await this.message.edit(await this.generateEndEmbed(reason));
-        await this.refreshReactions();
+
+        this.reactionPromise = this.reactionPromise.then(async () => {
+            await this.refreshReactions();
+        });
         
-        await this.message.clearReactions();
+        this.reactionPromise = this.reactionPromise.then(async () => {
+            await this.message.clearReactions();
+        });
+        
         this.reactionCollector.stop();
 
         switch (reason) {
