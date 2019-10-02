@@ -409,5 +409,14 @@
     "builder.annoucement.edit.type.title": "Typ úpravy",
     "builder.annoucement.edit.type.help": "Zadejte typ hodnoty který chcete upravovat.",
     "builder.annoucement.edit.value.title": "Hodnota",
-    "builder.annoucement.edit.value.help": "Zadejte hodnotu typu kterou chcete upravit."
+    "builder.annoucement.edit.value.help": "Zadejte hodnotu typu kterou chcete upravit.",
+
+    "builder.mute.add.member.title": "Jméno člena",
+    "builder.mute.add.member.help": "Zadejte jméno člena.",
+    "builder.mute.add.title": "Umlčení člena",
+    "builder.mute.add.minutes.title": "Doba umlčení",
+    "builder.mute.add.minutes.help": "Zadejte, na jak dlouho chcete v minutách umlčet člena.",
+    "builder.mute.add.reason.title": "Důvod umlčení",
+    "builder.mute.add.reason.help": "Zadejte důvod, proč byl člen umlčen.",
+    "builder.mute.add.ok": "Builder je ukončen. Člen byl umlčen."
 }
