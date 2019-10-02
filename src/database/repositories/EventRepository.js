@@ -110,21 +110,21 @@ class EventRepository extends Repository {
         return await this.entity.find({
             end: { $regex: "^" + day },
             start: { $regex: "!^" + day}
-        })
+        });
     }
 
     async getEventsThatStartAtDay(day) {
         return await this.entity.find({
             end: { $regex: "!^" + day },
             start: { $regex: "^" + day}
-        })
+        });
     }
 
     async getEventsThatGoingAtDay(day) {
         return await this.entity.find({
             end: { $regex: "^" + day },
             start: { $regex: "^" + day}
-        })
+        });
     }
 
 }
