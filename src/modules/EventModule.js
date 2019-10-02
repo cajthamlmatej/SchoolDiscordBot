@@ -103,7 +103,7 @@ class EventModule extends Module {
                     embed: this.generateEmbed(event, author)
                 });
 
-                if(this.timetableModule != undefined)
+                if(["title", "start", "end", "role", "subject"].includes(type) && this.timetableModule != undefined)
                     this.timetableModule.update();
             });
         });
@@ -224,82 +224,16 @@ class EventModule extends Module {
         user.createDM().then(dm => dm.send(embed)).catch(logger.error);
     }
 
-    async getEventThatStartsInEnteredDay(dateMoment, archived = false) {
-        const startsEvents = [];
-
-        let events;
-        if(archived)
-            events = await eventRepository.getAllEvents();
-        else 
-            events = await this.getEvents();
-        
-        events.forEach(event => {
-            let dateStart = moment(event.start, "D. M. YYYY");
-            if (!dateStart.isValid())
-                dateStart = moment(event.start, "D. M. YYYY HH:mm");
-
-            if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
-                return;
-
-            if (event.end == event.start)
-                return;
-
-            startsEvents.push(event);
-        });
-
-        return startsEvents;
+    async getEventThatStartsInEnteredDay(dateMoment) {
+        return await eventRepository.getEventsThatStartAtDay(dateMoment.format("D. M. YYYY"));
     }
 
-    async getEventThatEndsInEnteredDay(dateMoment, archived = false) {
-        const endsEvents = [];
-
-        let events;
-        if(archived)
-            events = await eventRepository.getAllEvents();
-        else 
-            events = await this.getEvents();
-
-        events.forEach(event => {
-            let dateEnd = moment(event.end, "D. M. YYYY");
-            if (!dateEnd.isValid())
-                dateEnd = moment(event.end, "D. M. YYYY HH:mm");
-
-            if (!(dateMoment.date() == dateEnd.date() && dateMoment.month() == dateEnd.month() && dateMoment.year() == dateEnd.year()))
-                return;
-
-            if (event.end == event.start)
-                return;
-
-            endsEvents.push(event);
-        });
-
-        return endsEvents;
+    async getEventThatEndsInEnteredDay(dateMoment) {
+        return await eventRepository.getEventsThatEndAtDay(dateMoment.format("D. M. YYYY"));
     }
 
-    async getEventThatGoingInEnteredDay(dateMoment, archived = false) {
-        const goingEvents = [];
-
-        let events;
-        if(archived)
-            events = await eventRepository.getAllEvents();
-        else 
-            events = await this.getEvents();
-
-        events.forEach(event => {
-            let dateStart = moment(event.start, "D. M. YYYY");
-            if (!dateStart.isValid())
-                dateStart = moment(event.start, "D. M. YYYY HH:mm");
-
-            if (!(dateMoment.date() == dateStart.date() && dateMoment.month() == dateStart.month() && dateMoment.year() == dateStart.year()))
-                return;
-
-            if (event.end != event.start)
-                return;
-
-            goingEvents.push(event);
-        });
-
-        return goingEvents;
+    async getEventThatGoingInEnteredDay(dateMoment) {
+        return await eventRepository.getEventsThatGoingAtDay(dateMoment.format("D. M. YYYY"));
     }
 
     async getEventNames() {

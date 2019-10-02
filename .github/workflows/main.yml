@@ -1,0 +1,16 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - uses: "Ilshidur/actions/discord@master"
+      with:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        args: "The project has been deployed."
+
