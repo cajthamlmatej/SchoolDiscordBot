@@ -171,6 +171,8 @@ class SchoolDiscordBot {
 
     ready() {
         Translation.setLanguage(Config.get("bot.language"));
+        
+        this.client.user.setActivity(Config.get("bot.prefix") + "help");
 
         this.name = this.client.user.username;
 
