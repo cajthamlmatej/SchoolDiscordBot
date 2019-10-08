@@ -113,7 +113,6 @@ class CommandBuilder {
         this.reactionPromise = this.reactionPromise.then(async () => {
             await this.message.clearReactions();
         });
-        
 
         switch (reason) {
         case "forced-builder-exist":
