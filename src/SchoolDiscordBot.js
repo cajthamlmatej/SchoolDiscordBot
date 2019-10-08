@@ -172,8 +172,7 @@ class SchoolDiscordBot {
     ready() {
         Translation.setLanguage(Config.get("bot.language"));
         
-        const prefix = Config.get("bot.prefix");
-        this.client.user.setActivity(prefix + "help");
+        this.client.user.setActivity(Config.get("bot.prefix") + "help");
 
         this.name = this.client.user.username;
 
