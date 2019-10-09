@@ -273,7 +273,7 @@
     "command.module.disabled.title": "Modul byl vypnut",
     "command.module.disabled.description": "Modul byl do dalšího zapnutí bota vypnut.",
 
-    "command.activity.error": "Text musí obsahovat více než 2 znaky a musí být menší než 128 znaků.",
+    "command.activity.error": "Text musí obsahovat více než 2 znaky a musí být kratší než 128 znaků.",
 
     "module.event.new-event": "Nová událost",
     "module.event.new-task": "Nový úkol",
