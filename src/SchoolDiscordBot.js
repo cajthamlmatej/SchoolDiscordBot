@@ -153,12 +153,12 @@ class SchoolDiscordBot {
     disableModule(name) {
         logger.warn("Disabling module " + name + " and command dependencies.");
         const moduleClass = this.modules[name];
-        
-        if(moduleClass.uninit != undefined)
+
+        if (moduleClass.uninit != undefined)
             moduleClass.uninit();
 
         Object.keys(this.commands).forEach(commandName => {
-            if(this.commands[commandName].getDependencies().includes(name)) {   
+            if (this.commands[commandName].getDependencies().includes(name)) {
                 logger.warn("Disabling command " + commandName + " beacause required module " + name + " dependency.");
                 this.disableCommand(commandName);
             }
@@ -171,9 +171,17 @@ class SchoolDiscordBot {
 
     ready() {
         Translation.setLanguage(Config.get("bot.language"));
-        
-        this.client.user.setActivity(Config.get("bot.prefix") + "help");
 
+        const fileContents = fs.readFileSync("activity.json", "utf8");
+        const json = JSON.parse(fileContents);
+
+        if (json.activityString == "" || json.activityString == undefined) {
+            this.client.user.setActivity(Config.get("bot.prefix") + "help");
+            logger.info("Game activity is " + Config.get("bot.prefix") + "help");
+        } else {
+            this.client.user.setActivity(json.activityString);
+            logger.info("Game activity is " + json.activityString);
+        }
         this.name = this.client.user.username;
 
         logger.info("Loading bot modules...");
@@ -203,9 +211,9 @@ class SchoolDiscordBot {
             let canBeEnabled = true;
 
             command.getDependencies().forEach(module => {
-                if (this.modules[module] == undefined) 
+                if (this.modules[module] == undefined)
                     canBeEnabled = false;
-                
+
             });
 
             if (!canBeEnabled) {
@@ -224,7 +232,7 @@ class SchoolDiscordBot {
             command.init(this);
             logger.info(" Command " + commandName + " loaded.");
 
-            if(command instanceof SubsCommand)
+            if (command instanceof SubsCommand)
                 Object.keys(command.getSubCommands()).forEach(name => {
                     logger.info("  Sub-command " + name + " loaded.");
                 });
@@ -255,7 +263,7 @@ class SchoolDiscordBot {
         const cmd = args[0].replace(prefix, "").toLowerCase();
         const command = this.commands[this.commandsAliases[cmd]];
 
-        if(!(command instanceof DirectCommand))
+        if (!(command instanceof DirectCommand))
             if (message.guild == null || message.guild.id != Config.get("bot.guild"))
                 return;
 
@@ -279,9 +287,9 @@ class SchoolDiscordBot {
         }, Config.get("bot.limit.command-usage") * 1000);
 
         this.client.guilds.get(Config.get("bot.guild")).fetchMember(message.author)
-            .then(async (member) => {
+            .then(async(member) => {
                 args.shift();
-                for (let i = 0; i < args.length; i++) 
+                for (let i = 0; i < args.length; i++)
                     args[i] = args[i].replace(/"/gm, "").replace(/'/gm, "");
 
                 let havePermissions = false;
@@ -297,7 +305,7 @@ class SchoolDiscordBot {
                 logger.info("User " + message.author.username + (member.nickname != undefined ? " (" + member.nickname + ")" : "") + " used command " + message.content + ".");
                 const deleteMessage = await command.call(args, message);
 
-                if (deleteMessage)  
+                if (deleteMessage)
                     message.delete().catch(() => {});
             }).catch(logger.error);
     }

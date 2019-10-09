@@ -61,6 +61,7 @@
     "commands.help.chladkova": "Print proverb",
     "commands.help.timetable": "Timetable managment",
     "commands.help.event.info": "Information about the selected event",
+    "commands.help.activity": "Changes activity of bot",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
@@ -108,6 +109,8 @@
     "commands.usage.module.disable": "<name of module>",
     "commands.usage.chladkova": "",
     "commands.usage.timetable": "<refresh>",
+    "commands.usage.activity": "<text>",
+
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",
@@ -270,6 +273,8 @@
     "command.module.list": "List of modules.",
     "command.module.disabled.title": "Module was disabled",
     "command.module.disabled.description": "Command was disabled until next bot restart.",
+
+    "command.activity.error": "Text must contain more than two characters and less than 128 characters.",
 
     "module.event.new-event": "New event",
     "module.event.new-task": "New task",

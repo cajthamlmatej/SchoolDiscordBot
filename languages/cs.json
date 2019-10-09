@@ -61,6 +61,7 @@
     "commands.help.chladkova": "Napíše přísloví",
     "commands.help.timetable": "Správa rozvrhu",
     "commands.help.event.info": "Informace o zvoleném eventu",
+    "commands.help.activity": "Změní aktivitu bota",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
@@ -108,6 +109,7 @@
     "commands.usage.module.disable": "<jméno modulu>",
     "commands.usage.chladkova": "",
     "commands.usage.timetable": "<refresh>",
+    "commands.usage.activity": "<text>",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
@@ -270,6 +272,8 @@
     "command.module.list": "Seznam modulů.",
     "command.module.disabled.title": "Modul byl vypnut",
     "command.module.disabled.description": "Modul byl do dalšího zapnutí bota vypnut.",
+
+    "command.activity.error": "Text musí obsahovat více než 2 znaky a musí být kratší než 128 znaků.",
 
     "module.event.new-event": "Nová událost",
     "module.event.new-task": "Nový úkol",
