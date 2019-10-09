@@ -171,17 +171,17 @@ class SchoolDiscordBot {
 
     ready() {
         Translation.setLanguage(Config.get("bot.language"));
-        
-        this.client.user.setActivity(Config.get("bot.prefix") + "help");
-
-        const prefix = Config.get("bot.prefix");
-        this.client.user.setActivity(prefix + "help");
 
         const fileContents = fs.readFileSync("activity.json", "utf8");
         const json = JSON.parse(fileContents);
 
-        this.client.user.setActivity(json.activityString);
-
+        if (json.activityString == "" || json.activityString == undefined) {
+            this.client.user.setActivity(Config.get("bot.prefix") + "help");
+            logger.info("Game activity is " + Config.get("bot.prefix") + "help");
+        } else {
+            this.client.user.setActivity(json.activityString);
+            logger.info("Game activity is " + json.activityString);
+        }
         this.name = this.client.user.username;
 
         logger.info("Loading bot modules...");

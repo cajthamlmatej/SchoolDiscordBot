@@ -4,7 +4,6 @@ const Translation = require("../Translation");
 const fs = require("fs");
 const Config = require("../Config");
 
-
 class ActivityCommand extends Command {
 
     getName() {
@@ -36,7 +35,6 @@ class ActivityCommand extends Command {
             message.react("✅");
         }
     }
-
 
     saveActivity(activityString) {
         fs.writeFileSync(this.activityTempFile, JSON.stringify({ "activityString": activityString }));
