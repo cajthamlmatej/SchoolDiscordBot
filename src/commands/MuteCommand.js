@@ -68,17 +68,14 @@ class MuteCommand extends SubsCommand {
                     if (!found)
                         return "command.mute.user-not-found";
 
-                    if (member.user.id == message.author.id) {
+                    if (member.user.id == message.author.id) 
                         return "command.mute.self";
-                    }
 
-                    if (await this.muteModule.isMuted(member)) {
+                    if (await this.muteModule.isMuted(member)) 
                         return "command.mute.already-muted";
-                    }
 
-                    if (!(await this.muteModule.canBeMuted(member))) {
+                    if (!(await this.muteModule.canBeMuted(member))) 
                         return "command.mute.moderator";
-                    }
 
                     return true;
                 }
@@ -89,9 +86,8 @@ class MuteCommand extends SubsCommand {
                 "validate": (content) => {
                     const minutes = parseInt(content);
 
-                    if (minutes <= 0 || minutes >= this.maxMuteLength) {
+                    if (minutes <= 0 || minutes >= this.maxMuteLength) 
                         return "command.mute.wrong-mute-length", this.maxMuteLength;
-                    }
 
                     return true;
                 }
@@ -107,9 +103,9 @@ class MuteCommand extends SubsCommand {
             let member = null;
 
             channel.guild.members.forEach(m => {
-                if (m.displayName.toLowerCase() === values.member.toLowerCase()) {
+                if (m.displayName.toLowerCase() === values.member.toLowerCase()) 
                     member = m;
-                }
+                
             });
 
             const minutes = values.minutes;
