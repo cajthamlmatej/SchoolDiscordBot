@@ -274,7 +274,7 @@
     "command.module.disabled.title": "Module was disabled",
     "command.module.disabled.description": "Command was disabled until next bot restart.",
 
-    "command.activity.error": "Argument must contain more than two characters and less than 128 characters.",
+    "command.activity.error": "Text must contain more than two characters and less than 128 characters.",
 
     "module.event.new-event": "New event",
     "module.event.new-task": "New task",
