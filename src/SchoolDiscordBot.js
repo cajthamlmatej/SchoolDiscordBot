@@ -171,6 +171,11 @@ class SchoolDiscordBot {
 
     ready() {
         Translation.setLanguage(Config.get("bot.language"));
+        
+        this.client.user.setActivity(Config.get("bot.prefix") + "help");
+
+        const prefix = Config.get("bot.prefix");
+        this.client.user.setActivity(prefix + "help");
 
         const fileContents = fs.readFileSync("activity.json", "utf8");
         const json = JSON.parse(fileContents);
