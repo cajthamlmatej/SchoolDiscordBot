@@ -74,214 +74,208 @@ class EventCommand extends SubsCommand {
         const channel = message.channel;
         const types = ["event", "task"];
 
-        const builder = new CommandBuilder("event.create", message.author, channel, [
-            {
-                "name": "type",
-                "example": types,
-                "commands": [
-                    {
-                        reaction: "🇪",
-                        value: "event"
-                    },
-                    {
-                        reaction: "🇹",
-                        value: "task"
-                    }
-                ],
-                "validate": (content) => {
-                    if (!types.includes(content))
-                        return ["command.event.type-not-valid", types.join(", ")];
-                    else
-                        return true;
-                }
+        const builder = new CommandBuilder("event.create", message.author, channel, [{
+            "name": "type",
+            "example": types,
+            "commands": [{
+                reaction: "🇪",
+                value: "event"
             },
             {
-                "name": "title",
-                "example": Translation.translate("builder.event.create.title.example"),
-                "validate": (content) => {
+                reaction: "🇹",
+                value: "task"
+            }
+            ],
+            "validate": (content) => {
+                if (!types.includes(content))
+                    return ["command.event.type-not-valid", types.join(", ")];
+                else
                     return true;
-                }
-            },
-            {
-                "name": "name",
-                "example": Translation.translate("builder.event.create.name.example").split(","),
-                "commands": [
-                    {
-                        reaction: "➖",
-                        value: "-"
-                    }
-                ],
-                "validate": async (content) => {
-                    if (await this.eventModule.exists(content))
-                        return "command.event.already-exists";
-                    else
-                        return true;
-                },
-                "value": (content, values) => {
-                    if (content == "-")
-                        return values["title"].toLowerCase().split("").map(function(letter) {
-                            const i = this.accents.indexOf(letter);
-                            return (i !== -1) ? this.acceOut[i] : letter;
-                        }.bind({
-                            accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž- ",
-                            acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz__"
-                        })).join("");
-                    else
-                        return content;
-                }
-            },
-
-            {
-                "name": "start",
-                "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
-                "validate": (content) => {
-                    let found = false;
-                    Object.keys(this.placeholders).forEach(placeholder => {
-                        if (content.toLowerCase().includes(placeholder))
-                            found = true;
-                    });
-
-                    if (found)
-                        return true;
-
-                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
-                        return "command.event.wrong-date-format";
-                    else
-                        return true;
-                }
-            },
-            {
-                "name": "end",
-                "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
-                "commands": [
-                    {
-                        reaction: "➖",
-                        value: "-"
-                    }
-                ],
-                "validate": (content) => {
-                    if (content == "-")
-                        return true;
-
-                    let found = false;
-                    Object.keys(this.placeholders).forEach(placeholder => {
-                        if (content.toLowerCase().includes(placeholder))
-                            found = true;
-                    });
-
-                    if (found)
-                        return true;
-
-                    if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
-                        return "command.event.wrong-date-format";
-                    else
-                        return true;
-                },
-                "value": (content, values) => {
-                    if (content == "-")
-                        return values["start"];
-                    else
-                        return content;
-                }
-            },
-            {
-                "name": "role",
-                "example": this.eventModule.getMentionableRoles()[0],
-                "validate": (content) => {
-                    if (!this.eventModule.isMentionableRole(content))
-                        return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
-                    else
-                        return true;
-                }
-            },
-            {
-                "name": "place",
-                "example": Translation.translate("builder.event.create.place.example").split(","),
-                "commands": [
-                    {
-                        reaction: "❓",
-                        value: "?"
-                    }
-                ],
-                "validate": (content) => {
+            }
+        },
+        {
+            "name": "title",
+            "example": Translation.translate("builder.event.create.title.example"),
+            "validate": (content) => {
+                return true;
+            }
+        },
+        {
+            "name": "name",
+            "example": Translation.translate("builder.event.create.name.example").split(","),
+            "commands": [{
+                reaction: "➖",
+                value: "-"
+            }],
+            "validate": async(content) => {
+                if (await this.eventModule.exists(content))
+                    return "command.event.already-exists";
+                else
                     return true;
-                }
             },
-            {
-                "name": "subject",
-                "example": Translation.translate("builder.event.create.subject.example").split(","),
-                "commands": [
-                    {
-                        reaction: "❓",
-                        value: "?"
-                    }
-                ],
-                "validate": (content) => {
-                    if(content === "?")
-                        return true;
-
-                    if(content.length < 3 || content.length > 3)
-                        return "command.event.wrong-subject-format";
-
-                    const validCharacters ="abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
-
-                    let passed = true;
-
-                    content.split("").forEach(char => {
-                        if(!passed)
-                            return;
-
-                        if(!validCharacters.includes(char))
-                            passed = false;
-                    });
-
-                    if(!passed)
-                        return "command.event.wrong-subject-format";
-
-                    return true;
-                },
-                "value": (content) => {
-                    return content.toLowerCase().split("").map(function(letter) {
+            "value": (content, values) => {
+                if (content == "-")
+                    return values["title"].toLowerCase().split("").map(function(letter) {
                         const i = this.accents.indexOf(letter);
                         return (i !== -1) ? this.acceOut[i] : letter;
                     }.bind({
-                        accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž",
-                        acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz"
-                    })).join("").toUpperCase();
-                }
-            },
-            {
-                "name": "description",
-                "example": Translation.translate("builder.event.create.description.example"),
-                "validate": (content) => {
-                    return true;
-                }
-            },
-        /* {
-            "name": "files",
-            "example": "",
-            "commands": [
-                {
-                    reaction: "❓",
-                    value: "?"
-                }
-            ],
-            "validate": (content) => {
-                return true;
-            },
-            "value": (content, values, attachments) => {
-                if (content == "-")
-                    return [];
+                        accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž- ",
+                        acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz__"
+                    })).join("");
+                else
+                    return content;
+            }
+        },
 
-                const files = [];
-                attachments.forEach(messageAttachment => {
-                    console.log(messageAttachment.proxyURL);
-                    files.push(messageAttachment.url);
+        {
+            "name": "start",
+            "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "validate": (content) => {
+                let found = false;
+                Object.keys(this.placeholders).forEach(placeholder => {
+                    if (content.toLowerCase().includes(placeholder))
+                        found = true;
                 });
 
-                return files;
+                if (found)
+                    return true;
+
+                if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
+                    return "command.event.wrong-date-format";
+                else
+                    return true;
             }
-        }*/
+        },
+        {
+            "name": "end",
+            "example": ["-", "+45", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "commands": [{
+                reaction: "➖",
+                value: "-"
+            }],
+            "validate": (content) => {
+                if (content == "-" || content == "+45")
+                    return true;
+
+                let found = false;
+                Object.keys(this.placeholders).forEach(placeholder => {
+                    if (content.toLowerCase().includes(placeholder))
+                        found = true;
+                });
+
+                if (found)
+                    return true;
+
+                if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
+                    return "command.event.wrong-date-format";
+                else
+                    return true;
+            },
+            "value": (content, values) => {
+                if (content == "-")
+                    return values["start"];
+
+                else if (content == "+45") 
+                    return moment(values["start"], "D. M. YYYY HH:mm").add(45, "m").format("D. M. YYYY HH:mm");
+
+                else
+                    return content;
+            }
+        },
+        {
+            "name": "role",
+            "example": this.eventModule.getMentionableRoles()[0],
+            "validate": (content) => {
+                if (!this.eventModule.isMentionableRole(content))
+                    return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
+                else
+                    return true;
+            }
+        },
+        {
+            "name": "place",
+            "example": Translation.translate("builder.event.create.place.example").split(","),
+            "commands": [{
+                reaction: "❓",
+                value: "?"
+            }],
+            "validate": (content) => {
+                return true;
+            }
+        },
+        {
+            "name": "subject",
+            "example": Translation.translate("builder.event.create.subject.example").split(","),
+            "commands": [{
+                reaction: "❓",
+                value: "?"
+            }],
+            "validate": (content) => {
+                if (content === "?")
+                    return true;
+
+                if (content.length < 3 || content.length > 3)
+                    return "command.event.wrong-subject-format";
+
+                const validCharacters = "abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
+
+                let passed = true;
+
+                content.split("").forEach(char => {
+                    if (!passed)
+                        return;
+
+                    if (!validCharacters.includes(char))
+                        passed = false;
+                });
+
+                if (!passed)
+                    return "command.event.wrong-subject-format";
+
+                return true;
+            },
+            "value": (content) => {
+                return content.toLowerCase().split("").map(function(letter) {
+                    const i = this.accents.indexOf(letter);
+                    return (i !== -1) ? this.acceOut[i] : letter;
+                }.bind({
+                    accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž",
+                    acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz"
+                })).join("").toUpperCase();
+            }
+        },
+        {
+            "name": "description",
+            "example": Translation.translate("builder.event.create.description.example"),
+            "validate": (content) => {
+                return true;
+            }
+        },
+            /* {
+                "name": "files",
+                "example": "",
+                "commands": [
+                    {
+                        reaction: "❓",
+                        value: "?"
+                    }
+                ],
+                "validate": (content) => {
+                    return true;
+                },
+                "value": (content, values, attachments) => {
+                    if (content == "-")
+                        return [];
+
+                    const files = [];
+                    attachments.forEach(messageAttachment => {
+                        console.log(messageAttachment.proxyURL);
+                        files.push(messageAttachment.url);
+                    });
+
+                    return files;
+                }
+            }*/
         ], (values) => {
             logger.info("User " + message.member.displayName + " created event with name " + values["name"] + ".");
 
@@ -298,7 +292,7 @@ class EventCommand extends SubsCommand {
                     end = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
             });
 
-            this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, [] /* values["files"]*/);
+            this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, [] /* values["files"]*/ );
         });
 
         builder.start();
@@ -313,7 +307,7 @@ class EventCommand extends SubsCommand {
         const builder = new CommandBuilder("event.edit", message.author, channel, [{
             "name": "name",
             "example": "eko_ukol_potreby",
-            "validate": async (content) => {
+            "validate": async(content) => {
                 if (!(await this.eventModule.exists(content)))
                     return ["command.event.dont-exist.edit", (await this.eventModule.getEventNames()).join(", ").substring(0, 500) + "..."];
                 else
@@ -342,31 +336,31 @@ class EventCommand extends SubsCommand {
                         return ["command.event.type-not-valid", eventTypes.join(", ")];
 
                 } else if (type == "role") {
-                    if (!this.eventModule.isMentionableRole(content)) 
+                    if (!this.eventModule.isMentionableRole(content))
                         return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
-                    
+
                 } else if (type == "subject") {
                     content = content.toUpperCase();
 
-                    if(content === "?")
+                    if (content === "?")
                         return true;
 
-                    if(content.length < 3 || content.length > 3)
+                    if (content.length < 3 || content.length > 3)
                         return "command.event.wrong-subject-format";
 
-                    const validCharacters ="abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
+                    const validCharacters = "abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
 
                     let passed = true;
 
                     content.split("").forEach(char => {
-                        if(!passed)
+                        if (!passed)
                             return;
 
-                        if(!validCharacters.includes(char))
+                        if (!validCharacters.includes(char))
                             passed = false;
                     });
 
-                    if(!passed)
+                    if (!passed)
                         return "command.event.wrong-subject-format";
 
                     return true;
@@ -395,7 +389,7 @@ class EventCommand extends SubsCommand {
         }
 
         await this.eventModule.deleteEvent(name);
-        
+
         message.react("✅");
     }
 
@@ -484,9 +478,9 @@ class EventCommand extends SubsCommand {
             sundayDay.add(1, "day");
 
         const dates = this.getRangeOfDates(mondayDay, sundayDay, "day");
-        
+
         const datesInfo = {};
-        await this.asyncForEach(dates, async (date) => {
+        await this.asyncForEach(dates, async(date) => {
             const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
             const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
             const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
@@ -530,7 +524,7 @@ class EventCommand extends SubsCommand {
         const dates = this.getRangeOfDates(mondayDay, sundayDay, "day");
 
         const datesInfo = {};
-        await this.asyncForEach(dates, async (date) => {
+        await this.asyncForEach(dates, async(date) => {
             const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
             const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
             const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
@@ -561,9 +555,9 @@ class EventCommand extends SubsCommand {
     }
 
     async asyncForEach(array, callback) {
-        for (let index = 0; index < array.length; index++) 
+        for (let index = 0; index < array.length; index++)
             await callback(array[index], index, array);
-        
+
     }
 
     async callRefresh(args, message) {
@@ -611,10 +605,10 @@ class EventCommand extends SubsCommand {
         const historyTexts = [];
         let historyText = "";
 
-        await this.asyncForEach(event.history, async (history) => {
+        await this.asyncForEach(event.history, async(history) => {
             const text = "```[" + moment(history.changed).format("D. M. YYYY HH:MM:ss") + " | " + history.type + "] " + (await message.guild.fetchMember(history.author)).displayName + "\n" + history.value.old + " -> " + history.value.new + "```\n";
-            
-            if((historyText + text).length > 2048) {
+
+            if ((historyText + text).length > 2048) {
                 historyTexts.push(historyText);
                 historyText = "";
             }
@@ -622,9 +616,9 @@ class EventCommand extends SubsCommand {
             historyText += text;
         });
 
-        if(historyText != "")
+        if (historyText != "")
             historyTexts.push(historyText);
-        
+
         const embed = new Discord.RichEmbed()
             .setTitle("🕜 | " + Translation.translate("command.event.info.title." + event.type, event.title))
             .setDescription("")
@@ -644,16 +638,16 @@ class EventCommand extends SubsCommand {
             .setColor(Config.getColor("SUCCESS"));
 
         let promise = Promise.resolve();
-        promise = promise.then(async () => await message.channel.send(embed));
+        promise = promise.then(async() => await message.channel.send(embed));
 
         let count = 1;
         historyTexts.forEach((history) => {
             const historyEmbed = new Discord.RichEmbed()
                 .setTitle("🕜 | " + Translation.translate("command.event.info.history.title." + event.type, event.title, count))
                 .setDescription(history)
-                .setColor(Config.getColor("SUCCESS"));    
+                .setColor(Config.getColor("SUCCESS"));
 
-            promise = promise.then(async () => await message.channel.send(historyEmbed));
+            promise = promise.then(async() => await message.channel.send(historyEmbed));
             count++;
         });
     }
