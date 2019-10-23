@@ -123,10 +123,10 @@ class EventModule extends Module {
 
         if (event.start == event.end) {
             dateTitle = Translation.translate("module.event.date");
-            date = event.start;
+            date = moment(event.start, "D. M. YYYY").format("D. M. YYYY");
         } else {
             dateTitle = Translation.translate("module.event.from-date-to-date");
-            date = event.start + " " + Translation.translate("module.event.to") + " " + event.end;
+            date = moment(event.start, "D. M. YYYY HH:mm").format("D. M. YYYY HH:mm") + " " + Translation.translate("module.event.to") + " " + moment(event.end, "D. M. YYYY HH:mm").format("D. M. YYYY HH:mm");
         }
 
         embed.addField(dateTitle, date, true);
