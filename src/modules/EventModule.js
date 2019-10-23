@@ -31,26 +31,26 @@ class EventModule extends Module {
     async tick() {
         const events = await this.getEvents();
 
-        events.forEach(async (event) => {
+        events.forEach(async(event) => {
             const messageId = event.message;
             const end = event.end;
             const todayDate = moment();
             const eventDate = moment(end, "D. M. YYYY");
 
-            if (todayDate.diff(eventDate, "days") >= this.daysToArchive) 
+            if (todayDate.diff(eventDate, "days") >= this.daysToArchive)
                 this.channel.fetchMessage(messageId).then(message => {
                     const embed = new Discord.RichEmbed(message.embeds[0]);
 
                     this.archiveChannel.send(embed);
-                    message.delete().then(async () => {
+                    message.delete().then(async() => {
                         await eventRepository.archiveEvent(event.name);
                     });
-                }).catch(async (error) => {
+                }).catch(async(error) => {
                     logger.error("Message with id " + event.message + " not found for event with name " + event.name + ". Assuming that message is deleted. Archiving event.");
-                    
+
                     await eventRepository.archiveEvent(event.name);
                 });
-            
+
         });
     }
 
@@ -71,12 +71,12 @@ class EventModule extends Module {
         this.channel.send({
             embed: this.generateEmbed(values, author),
             files: attachments
-        }).then(async (message) => {
+        }).then(async(message) => {
             values.message = message.id;
 
             await eventRepository.insert(values);
 
-            if(this.timetableModule != undefined)
+            if (this.timetableModule != undefined)
                 this.timetableModule.update();
         });
     }
@@ -103,7 +103,7 @@ class EventModule extends Module {
                     embed: this.generateEmbed(event, author)
                 });
 
-                if(["title", "start", "end", "role", "subject"].includes(type) && this.timetableModule != undefined)
+                if (["title", "start", "end", "role", "subject"].includes(type) && this.timetableModule != undefined)
                     this.timetableModule.update();
             });
         });
@@ -139,14 +139,14 @@ class EventModule extends Module {
     }
 
     generateGoogleCalendarLink(event) {
-        const startDate = moment(event.start, "D. M. YYYY");
-        const endDate = moment(event.end, "D. M. YYYY");
+        const startDate = moment(event.start, ["D. M. YYYY HH:mm", "D. M. YYYY"]);
+        const endDate = moment(event.end, ["D. M. YYYY HH:mm", "D. M. YYYY"]);
 
         if (startDate.format("D. M. YYYY HH:mm") == endDate.format("D. M. YYYY HH:mm"))
             endDate.add(1, "d");
 
-        let startDateFormat = "YMMDD[T]HHmmS";
-        let endDateFormat = "YMMDD[T]HHmmS";
+        let startDateFormat = "YMMDD[T]HHmm";
+        let endDateFormat = "YMMDD[T]HHmm";
 
         if (startDate.hour() == 0 && startDate.minute() == 0)
             startDateFormat = "YMMDD";
@@ -157,12 +157,12 @@ class EventModule extends Module {
         const text = "[" + Translation.translate("module.event.calendar.add-to-calendar") + "]";
 
         let link = "(https://www.google.com/calendar/event?action=TEMPLATE";
-        
+
         link += "&text=" + encodeURIComponent(event.subject + " | " + event.title.replace(/[*_`\\/~]/g, ""));
         link += "&details=" + encodeURIComponent(Translation.translate("module.event.calendar.details"));
         link += "&location=" + encodeURIComponent(event.place);
-        link += "&dates=" + encodeURI(startDate.format(startDateFormat) + "/" + endDate.format(endDateFormat));
-        
+        link += "&dates=" + encodeURI(startDate.format(startDateFormat) + "00" + "/" + endDate.format(endDateFormat) + "00");
+
         link += ")";
 
         return text + link;
@@ -179,7 +179,7 @@ class EventModule extends Module {
 
         await eventRepository.deleteEvent(name);
 
-        if(this.timetableModule != undefined)
+        if (this.timetableModule != undefined)
             this.timetableModule.update();
     }
 
