@@ -145,8 +145,8 @@ class EventModule extends Module {
         if (startDate.format("D. M. YYYY HH:mm") == endDate.format("D. M. YYYY HH:mm"))
             endDate.add(1, "d");
 
-        let startDateFormat = "YMMDD[T]HHmm";
-        let endDateFormat = "YMMDD[T]HHmm";
+        let startDateFormat = "YMMDD[T]HHmm[00]";
+        let endDateFormat = "YMMDD[T]HHmm[00]";
 
         if (startDate.hour() == 0 && startDate.minute() == 0)
             startDateFormat = "YMMDD";
@@ -161,7 +161,7 @@ class EventModule extends Module {
         link += "&text=" + encodeURIComponent(event.subject + " | " + event.title.replace(/[*_`\\/~]/g, ""));
         link += "&details=" + encodeURIComponent(Translation.translate("module.event.calendar.details"));
         link += "&location=" + encodeURIComponent(event.place);
-        link += "&dates=" + encodeURI(startDate.format(startDateFormat) + "00" + "/" + endDate.format(endDateFormat) + "00");
+        link += "&dates=" + encodeURI(startDate.format(startDateFormat) + "/" + endDate.format(endDateFormat));
 
         link += ")";
 
