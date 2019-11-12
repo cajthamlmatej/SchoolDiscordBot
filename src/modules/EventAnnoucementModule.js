@@ -69,7 +69,7 @@ class EventAnnoucementModule extends Module {
                 .setColor(Config.getColor("SUCCESS"))
                 .setDescription(Translation.translate("module.eventannoucement." + event.type + ".description." + name, time.format("D. M. YYYY"), event.title))
                 .addField(Translation.translate("module.eventannoucement.informations"), event.description)
-                .addField(Translation.translate("module.eventannoucement.role"), event.role, true)
+                .addField(Translation.translate("module.eventannoucement.role"), this.channel.guild.roles.find(r => r.id == this.eventModule.getMentionableRolesIds()[event.role]).name, true)
                 .addField(Translation.translate("module.eventannoucement.subject"), event.subject, true)
                 .addField(Translation.translate("module.eventannoucement.place"), event.place, true);
 
@@ -82,11 +82,11 @@ class EventAnnoucementModule extends Module {
                 .addField(Translation.translate("module.eventannoucement.subject"), event.subject, true)
                 .addField(Translation.translate("module.eventannoucement.place"), event.place, true);
 
-            /* this.channel.guild.members.forEach((member) => {
+            this.channel.guild.members.forEach((member) => {
                 if (member.roles.has(this.eventModule.getMentionableRolesIds()[event.role]))
                     member.createDM().then(dm => dm.send(dmembed));
 
-            });*/
+            });
             this.channel.send(embed);
         });
     }
