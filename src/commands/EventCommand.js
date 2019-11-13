@@ -119,8 +119,8 @@ class EventCommand extends SubsCommand {
                         const i = this.accents.indexOf(letter);
                         return (i !== -1) ? this.acceOut[i] : letter;
                     }.bind({
-                        accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž- ",
-                        acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz__"
+                        accents: "àáâãäåąßòóôőõöøďdžěèéêëęðçčćìíîïùűúûüůľĺłňñńŕřšśťÿýžżźž ",
+                        acceOut: "aaaaaaasoooooooddzeeeeeeeccciiiiuuuuuulllnnnrrsstyyzzzz_"
                     })).join("");
                 else
                     return content;
