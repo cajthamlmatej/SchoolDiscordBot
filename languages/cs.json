@@ -62,6 +62,7 @@
     "commands.help.timetable": "Správa rozvrhu",
     "commands.help.event.info": "Informace o zvoleném eventu",
     "commands.help.activity": "Změní aktivitu bota",
+    "commands.help.senddm": "Odešle specifikované roli přímou zprávu",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
@@ -110,6 +111,7 @@
     "commands.usage.chladkova": "",
     "commands.usage.timetable": "<refresh>",
     "commands.usage.activity": "<text>",
+    "commands.usage.senddm": "",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
@@ -422,5 +424,16 @@
     "builder.mute.add.minutes.help": "Zadejte, na jak dlouho chcete v minutách umlčet člena.",
     "builder.mute.add.reason.title": "Důvod umlčení",
     "builder.mute.add.reason.help": "Zadejte důvod, proč byl člen umlčen.",
-    "builder.mute.add.ok": "Builder je ukončen. Člen byl umlčen."
+    "builder.mute.add.ok": "Builder je ukončen. Člen byl umlčen.",
+
+    "builder.senddm.title.title": "Zadejte nadpis",
+    "builder.senddm.title.help": "Zadejte nadpis hromadné přímé zprávy",
+    "builder.senddm.title": "Odeslání přímé zprávy",
+    "builder.senddm.role.title": "Zadejte roli",
+    "builder.senddm.role.help": "Zadejte jméno role, pro kterou je přímá zpráva určena.",
+    "builder.senddm.message.title": "Zadejte obsah sdělení",
+    "builder.senddm.message.help": "Zadejte informace, které chcete posyktnout",
+    "builder.senddm.ok": "Builder je ukončen. Zpráva byla odeslána",
+    "builder.senddm.title.example": "Chyba v oznámení",
+    "builder.senddm.message.example": "Obsah sdělení"
 }

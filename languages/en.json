@@ -62,6 +62,7 @@
     "commands.help.timetable": "Timetable managment",
     "commands.help.event.info": "Information about the selected event",
     "commands.help.activity": "Changes activity of bot",
+    "commands.help.senddm": "Sends message to specified role",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
@@ -110,7 +111,7 @@
     "commands.usage.chladkova": "",
     "commands.usage.timetable": "<refresh>",
     "commands.usage.activity": "<text>",
-
+    "commands.usage.senddm": "",
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",
@@ -423,5 +424,16 @@
     "builder.mute.add.minutes.help": "Enter in minutes for how long you want to mute a member",
     "builder.mute.add.reason.title": "Reason of mute",
     "builder.mute.add.reason.help": "Enter a reason for muting member",
-    "builder.mute.add.ok": "Builder is complete. Member is muted"
+    "builder.mute.add.ok": "Builder is complete. Member is muted",
+
+    "builder.senddm.title.title": "Title of direct message",
+    "builder.senddm.title.help": "Enter title of direct message",
+    "builder.senddm.title": "Direct messages sender",
+    "builder.senddm.role.title": "Role for direct message",
+    "builder.senddm.role.help": "Enter name of the role, which you want to be selected for sending direct message",
+    "builder.senddm.message.title": "Content of direct message",
+    "builder.senddm.message.help": "Enter content, which will be sent in direct message",
+    "builder.senddm.ok": "Builder is complete. The message was sent",
+    "builder.senddm.title.example": "Mistake in annoucement",
+    "builder.senddm.message.example": "Content of direct message"
 }
