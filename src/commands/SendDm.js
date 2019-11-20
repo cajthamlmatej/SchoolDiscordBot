@@ -25,7 +25,6 @@ class SendDmCommand extends Command {
 
     init(bot) {
         this.eventModule = bot.modules.eventmodule;
-        this.channel = bot.client.channels.find(ch => ch.id == Config.get("channels.annoucement"));
     }
 
     call(args, message) {
@@ -33,7 +32,7 @@ class SendDmCommand extends Command {
 
         const builder = new CommandBuilder("senddm", message.author, channel, [{
             "name": "title",
-            "example": Translation.translate("builder.event.create.title.example"),
+            "example": Translation.translate("builder.senddm.title.example"),
             "validate": (content) => {
                 return true;
             }
@@ -50,7 +49,7 @@ class SendDmCommand extends Command {
         },
         {
             "name": "message",
-            "example": Translation.translate("builder.event.create.description.example"),
+            "example": Translation.translate("builder.senddm.message.example"),
             "validate": (content) => {
                 return true;
             }
@@ -65,7 +64,7 @@ class SendDmCommand extends Command {
                 .setDescription(values["message"])
                 .setFooter(message.member.displayName, message.author.avatarURL);
 
-            this.channel.guild.members.forEach((member) => {
+            message.channel.guild.members.forEach((member) => {
                 if (member.roles.has(this.eventModule.getMentionableRolesIds()[values["role"]]))
                     member.createDM().then(dm => dm.send(dmembed));
             });

@@ -433,5 +433,7 @@
     "builder.senddm.role.help": "Enter name of the role, which you want to be selected for sending direct message",
     "builder.senddm.message.title": "Content of direct message",
     "builder.senddm.message.help": "Enter content, which will be sent in direct message",
-    "builder.senddm.ok": "Builder is complete. The message was sent"
+    "builder.senddm.ok": "Builder is complete. The message was sent",
+    "builder.senddm.title.example": "Mistake in annoucement",
+    "builder.senddm.message.example": "Content of direct message"
 }

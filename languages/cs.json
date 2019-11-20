@@ -433,5 +433,7 @@
     "builder.senddm.role.help": "Zadejte jméno role, pro kterou je přímá zpráva určena.",
     "builder.senddm.message.title": "Zadejte obsah sdělení",
     "builder.senddm.message.help": "Zadejte informace, které chcete posyktnout",
-    "builder.senddm.ok": "Builder je ukončen. Zpráva byla odeslána"
+    "builder.senddm.ok": "Builder je ukončen. Zpráva byla odeslána",
+    "builder.senddm.title.example": "Chyba v oznámení",
+    "builder.senddm.message.example": "Obsah sdělení"
 }
