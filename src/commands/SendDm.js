@@ -24,7 +24,6 @@ class SendDmCommand extends Command {
     }
 
     init(bot) {
-        this.client = bot.client;
         this.eventModule = bot.modules.eventmodule;
         this.channel = bot.client.channels.find(ch => ch.id == Config.get("channels.annoucement"));
     }
@@ -65,8 +64,6 @@ class SendDmCommand extends Command {
                 .setColor(Config.getColor("SUCCESS"))
                 .setDescription(values["message"])
                 .setFooter(message.member.displayName, message.author.avatarURL);
-
-            message.channel.send(dmembed);
 
             this.channel.guild.members.forEach((member) => {
                 if (member.roles.has(this.eventModule.getMentionableRolesIds()[values["role"]]))
