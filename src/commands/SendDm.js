@@ -33,29 +33,29 @@ class SendDmCommand extends Command {
         const channel = message.channel;
 
         const builder = new CommandBuilder("senddm", message.author, channel, [{
-                "name": "title",
-                "example": Translation.translate("builder.event.create.title.example"),
-                "validate": (content) => {
-                    return true;
-                }
-            },
-            {
-                "name": "role",
-                "example": this.eventModule.getMentionableRoles(),
-                "validate": (content) => {
-                    if (!this.eventModule.isMentionableRole(content))
-                        return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
-                    else
-                        return true;
-                }
-            },
-            {
-                "name": "message",
-                "example": Translation.translate("builder.event.create.description.example"),
-                "validate": (content) => {
-                    return true;
-                }
+            "name": "title",
+            "example": Translation.translate("builder.event.create.title.example"),
+            "validate": (content) => {
+                return true;
             }
+        },
+        {
+            "name": "role",
+            "example": this.eventModule.getMentionableRoles(),
+            "validate": (content) => {
+                if (!this.eventModule.isMentionableRole(content))
+                    return ["command.event.role-not-valid", this.eventModule.getMentionableRoles().join(", ")];
+                else
+                    return true;
+            }
+        },
+        {
+            "name": "message",
+            "example": Translation.translate("builder.event.create.description.example"),
+            "validate": (content) => {
+                return true;
+            }
+        }
 
         ], (values) => {
             logger.info("User " + message.member.displayName + " sent dms to " + values["role"] + ". Content of message is \"" + values["message"] + "\"");

@@ -64,7 +64,6 @@
     "commands.help.activity": "Changes activity of bot",
     "commands.help.senddm": "Sends message to specified role",
 
-
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
     "commands.usage.event.create": "",
