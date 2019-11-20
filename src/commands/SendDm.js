@@ -2,7 +2,6 @@ const Command = require("./Command");
 const Discord = require("discord.js");
 const CommandBuilder = require("../CommandBuilder");
 const Translation = require("../Translation");
-const Config = require("../Config");
 const logger = require("../Logger");
 
 class SendDmCommand extends Command {
