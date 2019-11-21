@@ -63,6 +63,7 @@
     "commands.help.event.info": "Information about the selected event",
     "commands.help.activity": "Changes activity of bot",
     "commands.help.senddm": "Sends message to specified role",
+    "commands.help.economic": "Calculates the net wage",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
@@ -112,6 +113,7 @@
     "commands.usage.timetable": "<refresh>",
     "commands.usage.activity": "<text>",
     "commands.usage.senddm": "",
+    "commands.usage.economic": "",
 
     "command.too-few-arguments": "Too few arguments",
     "command.usage": "Command usage:",
@@ -264,6 +266,15 @@
     "command.math.request": "Calculated for {0}",
     "command.math.description.error": "The specified example ({0}) could not be calculated. Didn't you write something wrong?",
     "command.math.zerodividedbyzero.request": "What a mystery?",
+
+    "command.economic.title": "Calculator of net wage",
+    "command.economic.social_and_health_insurance": "Social and health insurance",
+    "command.economic.supergross_wage": "Supergross wage",
+    "command.economic.tax_from_icome": "Income tax",
+    "command.economic.net_wage": "Net wage",
+    "command.economic.gross_wage": "Gross wage",
+    "command.economic.isnotanumber": "The input you entered is not a number",
+    "command.economic.toolow": "The input you entered is too low",
 
     "command.command.command-not-found": "Command ({0}) not found.",
     "command.command.list": "List of commands.",
@@ -435,5 +446,14 @@
     "builder.senddm.message.help": "Enter content, which will be sent in direct message",
     "builder.senddm.ok": "Builder is complete. The message was sent",
     "builder.senddm.title.example": "Mistake in annoucement",
-    "builder.senddm.message.example": "Content of direct message"
+    "builder.senddm.message.example": "Content of direct message",
+
+    "builder.economic.tax_discount.title": "Enter discount on tax",
+    "builder.economic.tax_discount.help": "Enter any tax credit. Discount 2070 is already included",
+    "builder.economic.title": "Calculation of net wages",
+    "builder.economic.ok": "Builder is complete. The net wage was calculated",
+    "builder.economic.gross_wage.example": "10000",
+    "builder.economic.tax_discount.example": "1000",
+    "builder.economic.gross_wage.title": "Enter the gross wage",
+    "builder.economic.gross_wage.help": "Enter the gross wage, which must be equal or bigger than 10000"
 }
