@@ -63,6 +63,7 @@
     "commands.help.event.info": "Informace o zvoleném eventu",
     "commands.help.activity": "Změní aktivitu bota",
     "commands.help.senddm": "Odešle specifikované roli přímou zprávu",
+    "commands.help.economic": "Vypočítá čistou mzdu",
 
     "commands.usage.help": "",
     "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
@@ -112,6 +113,7 @@
     "commands.usage.timetable": "<refresh>",
     "commands.usage.activity": "<text>",
     "commands.usage.senddm": "",
+    "commands.usage.economic": "",
 
     "command.too-few-arguments": "Příliš málo argumentů",
     "command.usage": "Použití příkazu:",
@@ -264,6 +266,15 @@
     "command.math.request": "Spočítáno pro {0}",
     "command.math.description.error": "Zadaný příklad ({0}) nebylo možné vypočítat. Nenapsali jste něco špatně?",
     "command.math.zerodividedbyzero.request": "Jaké to tajemství?",
+
+    "command.economic.title": "Kalkulačka čisté mzdy",
+    "command.economic.social_and_health_insurance": "Sociální a zdravotní pojíštění",
+    "command.economic.supergross_wage": "Super hrubá mzda",
+    "command.economic.tax_from_icome": "Daň z příjmu",
+    "command.economic.net_wage": "Čistá mzda",
+    "command.economic.gross_wage": "Hrubá mzda",
+    "command.economic.isnotanumber": "Zadaný vstup není číslo",
+    "command.economic.toolow": "Zadaný vstup je moc nízký.",
 
     "command.command.command-not-found": "Příkaz ({0}) nenalezen.",
     "command.command.list": "Seznam příkazů.",
@@ -435,5 +446,14 @@
     "builder.senddm.message.help": "Zadejte informace, které chcete posyktnout",
     "builder.senddm.ok": "Builder je ukončen. Zpráva byla odeslána",
     "builder.senddm.title.example": "Chyba v oznámení",
-    "builder.senddm.message.example": "Obsah sdělení"
+    "builder.senddm.message.example": "Obsah sdělení",
+
+    "builder.economic.tax_discount.title": "Zadejte slevu na dani",
+    "builder.economic.tax_discount.help": "Zadejte jakoukoliv slevu na dani. Sleva 2070 je již započítána",
+    "builder.economic.title": "Výpočet čisté mzdy",
+    "builder.economic.ok": "Builder je ukončen. Čistá mzda byla vypočítána",
+    "builder.economic.gross_wage.example": "10000",
+    "builder.economic.tax_discount.example": "1000",
+    "builder.economic.gross_wage.title": "Zadejte hrubou mzdu",
+    "builder.economic.gross_wage.help": "Zadejte hrubou mzdu, která musí být rovna, nebo větší než 10000"
 }
