@@ -151,13 +151,13 @@ class EventCommand extends SubsCommand {
         },
         {
             "name": "end",
-            "example": ["-", "+45", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
             "commands": [{
                 reaction: "➖",
                 value: "-"
             }],
             "validate": (content) => {
-                if (content == "-" || content == "+45")
+                if (content == "-")
                     return true;
 
                 let found = false;
@@ -413,13 +413,13 @@ class EventCommand extends SubsCommand {
         },
         {
             "name": "end",
-            "example": ["-", "+45", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
             "commands": [{
                 reaction: "➖",
                 value: "-"
             }],
             "validate": (content) => {
-                if (content == "-" || content == "+45")
+                if (content == "-")
                     return true;
 
                 let found = false;
