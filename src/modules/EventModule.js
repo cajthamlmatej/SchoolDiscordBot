@@ -246,7 +246,7 @@ class EventModule extends Module {
 
     async printArchivedList(user) {
         let list = "";
-        const events = await eventRepository.getArchivedEvents(true, "name title");
+        const events = await eventRepository.getEvents(true, "name title");
 
         events.forEach(event => {
             list += "\n**" + event.name + " (" + event.title + ")**";
