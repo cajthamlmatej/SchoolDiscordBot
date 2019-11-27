@@ -18,6 +18,10 @@ class EventCommand extends SubsCommand {
                 "arguments": 0,
                 "roles": ["moderator"]
             },
+            "unarchive": {
+                "arguments": 0,
+                "roles": ["moderator"]
+            },
             "delete": {
                 "arguments": 1,
                 "roles": ["moderator"]
@@ -126,7 +130,6 @@ class EventCommand extends SubsCommand {
                     return content;
             }
         },
-
         {
             "name": "start",
             "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
@@ -148,13 +151,13 @@ class EventCommand extends SubsCommand {
         },
         {
             "name": "end",
-            "example": ["-", "+45", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
             "commands": [{
                 reaction: "➖",
                 value: "-"
             }],
             "validate": (content) => {
-                if (content == "-" || content == "+45")
+                if (content == "-")
                     return true;
 
                 let found = false;
@@ -174,9 +177,6 @@ class EventCommand extends SubsCommand {
             "value": (content, values) => {
                 if (content == "-")
                     return values["start"];
-
-                else if (content == "+45") 
-                    return moment(values["start"], "D. M. YYYY HH:mm").add(45, "m").format("D. M. YYYY HH:mm");
 
                 else
                     return content;
@@ -306,7 +306,7 @@ class EventCommand extends SubsCommand {
 
         const builder = new CommandBuilder("event.edit", message.author, channel, [{
             "name": "name",
-            "example": "eko_ukol_potreby",
+            "example": Translation.translate("builder.event.create.name.example"),
             "validate": async(content) => {
                 if (!(await this.eventModule.exists(content)))
                     return ["command.event.dont-exist.edit", (await this.eventModule.getEventNames()).join(", ").substring(0, 500) + "..."];
@@ -378,6 +378,93 @@ class EventCommand extends SubsCommand {
         builder.start();
         return true;
     }
+    callUnarchive(args, message) {
+        const channel = message.channel;
+
+        const builder = new CommandBuilder("event.unarchive", message.author, channel, [{
+            "name": "name",
+            "example": Translation.translate("builder.event.create.name.example"),
+            "validate": async(content) => {
+                if (!(await this.eventModule.archiveexists(content)))
+                    return "command.event.dont-exist.edit";
+                else
+                    return true;
+
+            }
+        },
+        {
+            "name": "start",
+            "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "validate": (content) => {
+                let found = false;
+                Object.keys(this.placeholders).forEach(placeholder => {
+                    if (content.toLowerCase().includes(placeholder))
+                        found = true;
+                });
+
+                if (found)
+                    return true;
+
+                if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
+                    return "command.event.wrong-date-format";
+                else
+                    return true;
+            }
+        },
+        {
+            "name": "end",
+            "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "commands": [{
+                reaction: "➖",
+                value: "-"
+            }],
+            "validate": (content) => {
+                if (content == "-")
+                    return true;
+
+                let found = false;
+                Object.keys(this.placeholders).forEach(placeholder => {
+                    if (content.toLowerCase().includes(placeholder))
+                        found = true;
+                });
+
+                if (found)
+                    return true;
+
+                if (!(moment(content, "D. M. YYYY").isValid() || moment(content, "D. M. YYYY HH:mm").isValid()))
+                    return "command.event.wrong-date-format";
+                else
+                    return true;
+            },
+            "value": (content, values) => {
+                if (content == "-")
+                    return values["start"];
+
+                else
+                    return content;
+            }
+        },
+
+        ], (values) => {
+            logger.info("User " + message.member.displayName + " unarchived event with name " + values["name"] + ".");
+            let start = values["start"];
+            let end = values["end"];
+
+            Object.keys(this.placeholders).forEach(placeholder => {
+                const placeholderObj = this.placeholders[placeholder];
+
+                if (values["start"].toLowerCase().includes(placeholder))
+                    start = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
+
+                if (values["end"].toLowerCase().includes(placeholder))
+                    end = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
+            });
+            this.eventModule.unarchiveEvent(values["name"], values["start"], values["end"], message.author.id);
+        });
+
+        builder.start();
+        return true;
+    }
 
     async callDelete(args, message) {
         const channel = message.channel;
@@ -395,7 +482,7 @@ class EventCommand extends SubsCommand {
 
     callList(args, message) {
         this.eventModule.printEventList(message.author);
-
+        this.eventModule.printArchivedList(message.author);
         message.react("✅");
     }
 

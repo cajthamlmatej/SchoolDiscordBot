@@ -66,7 +66,7 @@
     "commands.help.economic": "Calculates the net wage",
 
     "commands.usage.help": "",
-    "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info> <...>",
+    "commands.usage.event": "<create/edit/delete/list/week/nextweek/refresh/check/info/unarchive> <...>",
     "commands.usage.event.create": "",
     "commands.usage.event.edit": "",
     "commands.usage.event.delete": "<name>",
@@ -313,6 +313,7 @@
     "module.event.author": "Author",
     "module.event.message": "Link to message",
     "module.event.calendar": "Link to calendar",
+    "module.event.archivedlist": "List of archived events",
 
     "module.role.deleted": "Role was removed",
     "module.role.added": "Role was added",
@@ -409,6 +410,15 @@
     "builder.event.edit.type.help": "Enter type of values that you want to edit.",
     "builder.event.edit.value.title": "Value",
     "builder.event.edit.value.help": "Enter value of type that you want to edit.",
+
+    "builder.event.unarchive.name.title": "Name of the event",
+    "builder.event.unarchive.name.help": "Enter unique name for the event for future editing.",
+    "builder.event.unarchive.title": "Moving event out of the archive",
+    "builder.event.unarchive.start.title": "Start of the event",
+    "builder.event.unarchive.start.help": "Enter date (and time) for event start.",
+    "builder.event.unarchive.end.title": "End of the event",
+    "builder.event.unarchive.end.help": "Enter date (and time) for event end or dont enter anything (and enter \"-\").",
+    "builder.event.unarchive.ok": "Builder is complete and event was moved.",
 
     "builder.annoucement.create.title": "Adding new annoucement",
     "builder.annoucement.create.ok": "Oznámení bylo přidáno.",

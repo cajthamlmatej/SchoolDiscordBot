@@ -11,7 +11,7 @@ class EventRepository extends Repository {
     }
 
     async doesEventExistsWithName(name) {
-        const entity = await this.entity.findOne({ name: name, archived: false, deleted: false });
+        const entity = await this.entity.findOne({ name: name, deleted: false });
         return entity != null;
     }
 
@@ -41,6 +41,11 @@ class EventRepository extends Repository {
     async archiveEvent(name) {
         await this.entity.updateOne({ name: name, archived: false, deleted: false }, {
             archived: true
+        });
+    }
+    async unarchiveEvent(name) {
+        await this.entity.updateOne({ name: name, archived: true, deleted: false }, {
+            archived: false
         });
     }
 
@@ -128,6 +133,17 @@ class EventRepository extends Repository {
             end: { $regex: "^" + day },
             start: { $regex: "^" + day }
         });
+    }
+
+    async doesArchivedEventExistsWithName(name) {
+        const entity = await this.entity.findOne({ name: name, archived: true, deleted: false });
+        return entity != null;
+    }
+
+    async getArchivedEventByName(name, archived = true) {
+        if (archived == null)
+            return await this.entity.findOne({ name: name, deleted: false });
+        return await this.entity.findOne({ name: name, archived: true, deleted: false });
     }
 
 }
