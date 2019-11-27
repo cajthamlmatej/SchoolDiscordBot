@@ -109,6 +109,22 @@ class EventModule extends Module {
         });
     }
 
+    async unarchiveEvent(name, start, end) {
+        const event = await eventRepository.getArchivedEventByName(name);
+        event[start] = start;
+        event[end] = end;
+        await eventRepository.unarchiveEvent(name);
+
+        this.channel.guild.fetchMember(event.author).then(author => {
+            event.history.push({ type: "archived", value: { old: "archived", new: "unarchived" }, author: author.id });
+            this.channel.send(this.generateEmbed(event, author))
+                .then(async(msg) => {
+                    event.message = msg.id;
+                    await event.save();
+                });
+        });
+    }
+
     generateEmbed(event, author) {
         const embed = new Discord.RichEmbed()
             .setTitle("🕜 | " + ((event.type == "event") ? Translation.translate("module.event.new-event") : Translation.translate("module.event.new-task")) + " | " + event.title)
@@ -203,6 +219,10 @@ class EventModule extends Module {
         return await eventRepository.doesEventExistsWithName(name);
     }
 
+    async archiveexists(name) {
+        return await eventRepository.doesArchivedEventExistsWithName(name);
+    }
+
     async printEventList(user) {
         let list = "";
         const events = await this.getEvents(false, "name title");
@@ -218,6 +238,27 @@ class EventModule extends Module {
 
         const embed = new Discord.RichEmbed()
             .setTitle("📆 | " + Translation.translate("module.event.list"))
+            .setDescription(list)
+            .setColor(Config.getColor("SUCCESS"));
+
+        user.createDM().then(dm => dm.send(embed)).catch(logger.error);
+    }
+
+    async printArchivedList(user) {
+        let list = "";
+        const events = await eventRepository.getArchivedEvents(true, "name title");
+
+        events.forEach(event => {
+            list += "\n**" + event.name + " (" + event.title + ")**";
+        });
+
+        if (list == "")
+            list = Translation.translate("module.event.no-event-exists");
+        else
+            list += "\n";
+
+        const embed = new Discord.RichEmbed()
+            .setTitle("📆 | " + Translation.translate("module.event.archivedlist"))
             .setDescription(list)
             .setColor(Config.getColor("SUCCESS"));
 
