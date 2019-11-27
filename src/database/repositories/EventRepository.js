@@ -15,7 +15,7 @@ class EventRepository extends Repository {
         return entity != null;
     }
 
-    async getEvents(archived = false, fields = null) {
+    async getEvents(archived = true, fields = null) {
         if (fields != null)
             return await this.entity.find({ archived: archived, deleted: false }, fields);
 
@@ -133,12 +133,6 @@ class EventRepository extends Repository {
             end: { $regex: "^" + day },
             start: { $regex: "^" + day }
         });
-    }
-    async getArchivedEvents(archived = true, fields = null) {
-        if (fields != null)
-            return await this.entity.find({ archived: archived, deleted: false }, fields);
-
-        return await this.entity.find({ archived: archived, deleted: false });
     }
 
     async doesArchivedEventExistsWithName(name) {

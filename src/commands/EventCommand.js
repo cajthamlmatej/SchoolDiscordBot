@@ -178,9 +178,6 @@ class EventCommand extends SubsCommand {
                 if (content == "-")
                     return values["start"];
 
-                else if (content == "+45")
-                    return moment(values["start"], "D. M. YYYY HH:mm").add(45, "m").format("D. M. YYYY HH:mm");
-
                 else
                     return content;
             }
@@ -443,9 +440,6 @@ class EventCommand extends SubsCommand {
                 if (content == "-")
                     return values["start"];
 
-                else if (content == "+45")
-                    return moment(values["start"], "D. M. YYYY HH:mm").add(45, "m").format("D. M. YYYY HH:mm");
-
                 else
                     return content;
             }
@@ -453,7 +447,18 @@ class EventCommand extends SubsCommand {
 
         ], (values) => {
             logger.info("User " + message.member.displayName + " unarchived event with name " + values["name"] + ".");
+            let start = values["start"];
+            let end = values["end"];
 
+            Object.keys(this.placeholders).forEach(placeholder => {
+                const placeholderObj = this.placeholders[placeholder];
+
+                if (values["start"].toLowerCase().includes(placeholder))
+                    start = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
+
+                if (values["end"].toLowerCase().includes(placeholder))
+                    end = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
+            });
             this.eventModule.unarchiveEvent(values["name"], values["start"], values["end"], message.author.id);
         });
 
