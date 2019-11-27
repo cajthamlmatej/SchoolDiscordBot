@@ -219,7 +219,7 @@ class EventModule extends Module {
         return await eventRepository.doesEventExistsWithName(name);
     }
 
-    async archiveexists(name) {
+    async archiveExists(name) {
         return await eventRepository.doesArchivedEventExistsWithName(name);
     }
 
