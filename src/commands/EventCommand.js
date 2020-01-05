@@ -481,9 +481,7 @@ class EventCommand extends SubsCommand {
     }
 
     callList(args, message) {
-        this.eventModule.printEventList(message.author);
-        this.eventModule.printArchivedList(message.author);
-        message.react("✅");
+        this.eventModule.printEventList(message.author).then(() => this.eventModule.printArchivedList(message.author)).then(() => message.react("✅"));
     }
 
     async callCheck(args, message) {
