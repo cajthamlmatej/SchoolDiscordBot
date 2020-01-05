@@ -31,7 +31,7 @@ class EventModule extends Module {
     async tick() {
         const events = await this.getEvents();
 
-        events.forEach(async(event) => {
+        events.forEach(async (event) => {
             const messageId = event.message;
             const end = event.end;
             const todayDate = moment();
@@ -42,10 +42,10 @@ class EventModule extends Module {
                     const embed = new Discord.RichEmbed(message.embeds[0]);
 
                     this.archiveChannel.send(embed);
-                    message.delete().then(async() => {
+                    message.delete().then(async () => {
                         await eventRepository.archiveEvent(event.name);
                     });
-                }).catch(async(error) => {
+                }).catch(async (error) => {
                     logger.error("Message with id " + event.message + " not found for event with name " + event.name + ". Assuming that message is deleted. Archiving event.");
 
                     await eventRepository.archiveEvent(event.name);
@@ -71,7 +71,7 @@ class EventModule extends Module {
         this.channel.send({
             embed: this.generateEmbed(values, author),
             files: attachments
-        }).then(async(message) => {
+        }).then(async (message) => {
             values.message = message.id;
 
             await eventRepository.insert(values);
@@ -118,7 +118,7 @@ class EventModule extends Module {
         this.channel.guild.fetchMember(event.author).then(author => {
             event.history.push({ type: "archived", value: { old: "archived", new: "unarchived" }, author: author.id });
             this.channel.send(this.generateEmbed(event, author))
-                .then(async(msg) => {
+                .then(async (msg) => {
                     event.message = msg.id;
                     await event.save();
                 });
@@ -224,45 +224,73 @@ class EventModule extends Module {
     }
 
     async printEventList(user) {
-        let list = "";
         const events = await this.getEvents(false, "name title");
+        const embedsTexts = [];
+        let text = "";
 
         events.forEach(event => {
-            list += "\n**" + event.name + " (" + event.title + ")**";
+            if ((text + "\n**" + event.name + " (" + event.title + ")**").length > 1900) {
+                embedsTexts.push(text);
+                text = "";
+            }
+
+            text += "\n**" + event.name + " (" + event.title + ")**";
         });
 
-        if (list == "")
-            list = Translation.translate("module.event.no-event-exists");
-        else
-            list += "\n";
+        if (text != "")
+            embedsTexts.push(text);
 
-        const embed = new Discord.RichEmbed()
-            .setTitle("📆 | " + Translation.translate("module.event.list"))
-            .setDescription(list)
-            .setColor(Config.getColor("SUCCESS"));
+        if (embedsTexts.length == 0)
+            embedsTexts.push(Translation.translate("module.event.no-event-exists"));
 
-        user.createDM().then(dm => dm.send(embed)).catch(logger.error);
+        let promise = Promise.resolve();
+
+        let count = 1;
+        embedsTexts.forEach((name) => {
+            const embed = new Discord.RichEmbed()
+                .setTitle("📆 | " + Translation.translate("module.event.list") + " | #" + count)
+                .setDescription(name)
+                .setColor(Config.getColor("SUCCESS"));
+
+            promise = promise.then(async () => await user.createDM().then(dm => dm.send(embed)));
+            count++;
+        });
+        return promise;
     }
 
     async printArchivedList(user) {
-        let list = "";
         const events = await eventRepository.getEvents(true, "name title");
+        const embedsTexts = [];
+        let text = "";
 
         events.forEach(event => {
-            list += "\n**" + event.name + " (" + event.title + ")**";
+            if ((text + "\n**" + event.name + " (" + event.title + ")**").length > 1900) {
+                embedsTexts.push(text);
+                text = "";
+            }
+
+            text += "\n**" + event.name + " (" + event.title + ")**";
         });
 
-        if (list == "")
-            list = Translation.translate("module.event.no-event-exists");
-        else
-            list += "\n";
+        if (text != "")
+            embedsTexts.push(text);
 
-        const embed = new Discord.RichEmbed()
-            .setTitle("📆 | " + Translation.translate("module.event.archivedlist"))
-            .setDescription(list)
-            .setColor(Config.getColor("SUCCESS"));
+        if (embedsTexts.length == 0)
+            embedsTexts.push(Translation.translate("module.event.no-event-exists"));
 
-        user.createDM().then(dm => dm.send(embed)).catch(logger.error);
+        let promise = Promise.resolve();
+
+        let count = 1;
+        embedsTexts.forEach((name) => {
+            const embed = new Discord.RichEmbed()
+                .setTitle("📆 | " + Translation.translate("module.event.archivedlist") + " | #" + count)
+                .setDescription(name)
+                .setColor(Config.getColor("SUCCESS"));
+
+            promise = promise.then(async () => await user.createDM().then(dm => dm.send(embed)));
+            count++;
+        });
+        return promise;
     }
 
     async getEventThatStartsInEnteredDay(dateMoment) {
@@ -285,7 +313,7 @@ class EventModule extends Module {
         return await eventRepository.getEventByName(name, archived);
     }
 
-    event(name, args) {}
+    event(name, args) { }
 
 }
 
