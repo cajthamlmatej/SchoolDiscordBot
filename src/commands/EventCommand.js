@@ -111,7 +111,7 @@ class EventCommand extends SubsCommand {
                 reaction: "➖",
                 value: "-"
             }],
-            "validate": async(content) => {
+            "validate": async (content) => {
                 if (await this.eventModule.exists(content))
                     return "command.event.already-exists";
                 else
@@ -119,7 +119,7 @@ class EventCommand extends SubsCommand {
             },
             "value": (content, values) => {
                 if (content == "-")
-                    return values["title"].toLowerCase().split("").map(function(letter) {
+                    return values["title"].toLowerCase().split("").map(function (letter) {
                         const i = this.accents.indexOf(letter);
                         return (i !== -1) ? this.acceOut[i] : letter;
                     }.bind({
@@ -235,7 +235,7 @@ class EventCommand extends SubsCommand {
                 return true;
             },
             "value": (content) => {
-                return content.toLowerCase().split("").map(function(letter) {
+                return content.toLowerCase().split("").map(function (letter) {
                     const i = this.accents.indexOf(letter);
                     return (i !== -1) ? this.acceOut[i] : letter;
                 }.bind({
@@ -292,7 +292,7 @@ class EventCommand extends SubsCommand {
                     end = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
             });
 
-            this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, [] /* values["files"]*/ );
+            this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, [] /* values["files"]*/);
         });
 
         builder.start();
@@ -307,7 +307,7 @@ class EventCommand extends SubsCommand {
         const builder = new CommandBuilder("event.edit", message.author, channel, [{
             "name": "name",
             "example": Translation.translate("builder.event.create.name.example"),
-            "validate": async(content) => {
+            "validate": async (content) => {
                 if (!(await this.eventModule.exists(content)))
                     return ["command.event.dont-exist.edit", (await this.eventModule.getEventNames()).join(", ").substring(0, 500) + "..."];
                 else
@@ -384,7 +384,7 @@ class EventCommand extends SubsCommand {
         const builder = new CommandBuilder("event.unarchive", message.author, channel, [{
             "name": "name",
             "example": Translation.translate("builder.event.create.name.example"),
-            "validate": async(content) => {
+            "validate": async (content) => {
                 if (!(await this.eventModule.archiveexists(content)))
                     return "command.event.dont-exist.edit";
                 else
@@ -565,7 +565,7 @@ class EventCommand extends SubsCommand {
         const dates = this.getRangeOfDates(mondayDay, sundayDay, "day");
 
         const datesInfo = {};
-        await this.asyncForEach(dates, async(date) => {
+        await this.asyncForEach(dates, async (date) => {
             const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
             const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
             const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
@@ -609,7 +609,7 @@ class EventCommand extends SubsCommand {
         const dates = this.getRangeOfDates(mondayDay, sundayDay, "day");
 
         const datesInfo = {};
-        await this.asyncForEach(dates, async(date) => {
+        await this.asyncForEach(dates, async (date) => {
             const startsEvents = await this.eventModule.getEventThatStartsInEnteredDay(date);
             const endsEvents = await this.eventModule.getEventThatEndsInEnteredDay(date);
             const goingEvents = await this.eventModule.getEventThatGoingInEnteredDay(date);
@@ -690,7 +690,7 @@ class EventCommand extends SubsCommand {
         const historyTexts = [];
         let historyText = "";
 
-        await this.asyncForEach(event.history, async(history) => {
+        await this.asyncForEach(event.history, async (history) => {
             const text = "```[" + moment(history.changed).format("D. M. YYYY HH:MM:ss") + " | " + history.type + "] " + (await message.guild.fetchMember(history.author)).displayName + "\n" + history.value.old + " -> " + history.value.new + "```\n";
 
             if ((historyText + text).length > 2048) {
@@ -723,7 +723,7 @@ class EventCommand extends SubsCommand {
             .setColor(Config.getColor("SUCCESS"));
 
         let promise = Promise.resolve();
-        promise = promise.then(async() => await message.channel.send(embed));
+        promise = promise.then(async () => await message.channel.send(embed));
 
         let count = 1;
         historyTexts.forEach((history) => {
@@ -732,7 +732,7 @@ class EventCommand extends SubsCommand {
                 .setDescription(history)
                 .setColor(Config.getColor("SUCCESS"));
 
-            promise = promise.then(async() => await message.channel.send(historyEmbed));
+            promise = promise.then(async () => await message.channel.send(historyEmbed));
             count++;
         });
     }
