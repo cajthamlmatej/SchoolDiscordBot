@@ -111,8 +111,8 @@ class EventModule extends Module {
 
     async unarchiveEvent(name, start, end) {
         const event = await eventRepository.getArchivedEventByName(name);
-        event[start] = start;
-        event[end] = end;
+        event["start"] = start;
+        event["end"] = end;
         await eventRepository.unarchiveEvent(name);
 
         this.channel.guild.fetchMember(event.author).then(author => {
@@ -307,6 +307,10 @@ class EventModule extends Module {
 
     async getEventNames() {
         return await eventRepository.getEventsNames();
+    }
+
+    async getArchivedEventsNames() {
+        return await eventRepository.getArchivedEventsNames();
     }
 
     async getEvent(name, archived = false) {
