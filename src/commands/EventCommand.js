@@ -132,7 +132,7 @@ class EventCommand extends SubsCommand {
         },
         {
             "name": "start",
-            "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ...Object.keys(this.placeholders)],
             "validate": (content) => {
                 let found = false;
                 Object.keys(this.placeholders).forEach(placeholder => {
@@ -151,7 +151,7 @@ class EventCommand extends SubsCommand {
         },
         {
             "name": "end",
-            "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ...Object.keys(this.placeholders)],
             "commands": [{
                 reaction: "➖",
                 value: "-"
@@ -285,11 +285,13 @@ class EventCommand extends SubsCommand {
             Object.keys(this.placeholders).forEach(placeholder => {
                 const placeholderObj = this.placeholders[placeholder];
 
-                if (values["start"].toLowerCase().includes(placeholder))
-                    start = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
+                if (values["start"].toLowerCase().includes(placeholder)) {
+                    start = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY HH:mm");
+                }
 
-                if (values["end"].toLowerCase().includes(placeholder))
-                    end = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
+                if (values["end"].toLowerCase().includes(placeholder)) {
+                    end = moment(start, ["D. M. YYYY HH:mm", "D. M. YYYY"]).add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY HH:mm");
+                }
             });
 
             this.eventModule.addEvent(values["name"], values["type"], values["title"], start, end, values["role"], values["place"], values["subject"], values["description"], message.member, [] /* values["files"]*/);
@@ -385,8 +387,8 @@ class EventCommand extends SubsCommand {
             "name": "name",
             "example": Translation.translate("builder.event.create.name.example"),
             "validate": async (content) => {
-                if (!(await this.eventModule.archiveexists(content)))
-                    return "command.event.dont-exist.edit";
+                if (!(await this.eventModule.archiveExists(content)))
+                    return ["command.event.dont-exist.edit", (await this.eventModule.getArchivedEventsNames()).join(", ").substring(0, 500) + "..."];
                 else
                     return true;
 
@@ -394,7 +396,7 @@ class EventCommand extends SubsCommand {
         },
         {
             "name": "start",
-            "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "example": [moment().format("D. M. YYYY"), moment().format("D. M. YYYY HH:mm"), ...Object.keys(this.placeholders)],
             "validate": (content) => {
                 let found = false;
                 Object.keys(this.placeholders).forEach(placeholder => {
@@ -413,7 +415,7 @@ class EventCommand extends SubsCommand {
         },
         {
             "name": "end",
-            "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ... Object.keys(this.placeholders)],
+            "example": ["-", moment().add(3, "days").format("D. M. YYYY"), moment().add(3, "days").format("D. M. YYYY HH:mm"), ...Object.keys(this.placeholders)],
             "commands": [{
                 reaction: "➖",
                 value: "-"
@@ -453,13 +455,15 @@ class EventCommand extends SubsCommand {
             Object.keys(this.placeholders).forEach(placeholder => {
                 const placeholderObj = this.placeholders[placeholder];
 
-                if (values["start"].toLowerCase().includes(placeholder))
-                    start = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
+                if (values["start"].toLowerCase().includes(placeholder)) {
+                    start = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY HH:mm");
+                }
 
-                if (values["end"].toLowerCase().includes(placeholder))
-                    end = moment().add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY");
+                if (values["end"].toLowerCase().includes(placeholder)) {
+                    end = moment(start, ["D. M. YYYY HH:mm", "D. M. YYYY"]).add(placeholderObj.quantity, placeholderObj.unit).format("D. M. YYYY HH:mm");
+                }
             });
-            this.eventModule.unarchiveEvent(values["name"], values["start"], values["end"], message.author.id);
+            this.eventModule.unarchiveEvent(values["name"], start, end, message.author.id);
         });
 
         builder.start();

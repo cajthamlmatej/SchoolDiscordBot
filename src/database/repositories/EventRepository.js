@@ -64,6 +64,17 @@ class EventRepository extends Repository {
         return names;
     }
 
+    async getArchivedEventsNames() {
+        const names = [];
+        const entites = await this.entity.find({ archived: true, deleted: false }, "name");
+
+        entites.forEach(entity => {
+            names.push(entity.name);
+        });
+
+        return names;
+    }
+
     async countEvents(archived = null) {
         if (archived == true)
             return await this.entity.countDocuments({ archived: true, deleted: false });
